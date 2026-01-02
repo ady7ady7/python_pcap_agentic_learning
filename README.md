@@ -15,6 +15,8 @@ PLEASE NOTE: WHILE I USE AGENT AS MY TUTOR, I AM NOT USING AI to complete any of
 As for the commits in this repository, most likely they will be structured and done by the agent, and I will only be pushing them.
 As for the agentic flow, while I truly appreciate the current tech advances, I still review all of the proposed changes and accept them manually, so all of the commits etc. will be approved by me and pushed manually.
 
+As for the agent's instructions, I am not planning to publish them as of now, but this might change in the future.
+
 -------------------------------------------
 
 Planned start: 5.01.2026
