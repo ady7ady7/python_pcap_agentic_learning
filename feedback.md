@@ -1,8 +1,8 @@
 # Daily Feedback Template
 
-**Date:** 2026-01-06
-**Week:** 1 | **Day:** 2
-**Topic:** Strings, Exceptions & File I/O
+**Date:** 2026-01-07
+**Week:** 1 | **Day:** 3
+**Topic:** OOP Fundamentals (Classes, Objects, Methods)
 
 ---
 
@@ -33,7 +33,7 @@
 **4. Did you encounter any bugs/errors that taught you something?**
 
 
-**5. Project Progress: How does the DataLoader class feel?**
+**5. Project Progress: How does building classes feel compared to functions?**
 
 
 ---
