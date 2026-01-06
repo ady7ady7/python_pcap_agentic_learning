@@ -1,0 +1,108 @@
+
+
+'''
+Data loading module for AlgoBacktest
+'''
+
+
+from typing import Optional
+import pandas as pd
+
+
+class DataLoader:
+    '''
+    Class used to load and validate data
+    
+    Attributes:
+        file_path: path to the csv file with trading data
+    
+    '''
+
+    def __init__(self, file_path: str) -> None:
+        '''Initialize the DataLoader class with file path'''
+        print('DataLoader initialized.')
+        self.filepath = file_path
+    
+    
+    def load_data(self) -> Optional[pd.DataFrame]:
+        '''
+        Load CSV data with error handling.
+
+        Returns:
+            DataFrame with columns: timestamp, ticker, open, high, low, close, volume (and DF index)
+            Returns None if file not found.
+
+        Raises:
+            ValueError: If CSV format is invalid or missing required columns.
+            FileNotFoundError: If file is missing or file name is wrong.
+            Pandas Parser Error: If there are any issues with data parsing.
+        '''
+        
+        try:
+            data = pd.read_csv(self.filepath)
+            data.columns = ['timestamp', 'ticker', 'open', 'high', 'low', 'close', 'volume']
+            
+        
+        except FileNotFoundError as e:
+            print(f'File not found: {str(e)}')
+            return None
+        except ValueError as e:
+            print(f'Value Error! {str(e)}')
+        except pd.errors.ParserError as e:
+            print(f'Pandas Parser Error: {str(e)}')
+            return None
+        except Exception as e:
+            print(f'Unexpected error: {str(e)}')
+            
+        
+        else:
+            print('Data loading succeeded')
+            return data
+        
+        finally:
+            print('Data loading operation ended.')
+    
+    
+    
+    def validate_data(self, df: pd.DataFrame) -> bool:
+        '''
+        Method used to check whether all rows/columns are valid.
+        
+        checks if:
+        - all the columns are in the dataframe
+        - there are no missing values
+        - High price in every row is higher than Low price
+        
+        Args:
+        - df - Pandas Dataframe with columns: ['timestamp', 'ticker', 'open', 'high', 'low', 'close', 'volume']
+        
+        Returns:
+        - is_valid - True/False, depending on the results of the check
+        '''
+        
+        req_columns = ['timestamp', 'ticker', 'open', 'high', 'low', 'close', 'volume']
+        #ohlc_columns = ['open', 'high', 'low', 'close']
+        is_valid = True
+        
+        
+        missing_columns = set(df.columns) - set(df.columns)
+        if missing_columns:
+            print(f'Missing columns: {missing_columns}')
+            is_valid = False
+        
+        # for col in df.columns:
+        #     if type(col) is not float or int:
+        #         print(f'Column {col} is not numeric')
+        #         is_valid = False
+                
+        nan_values = df[req_columns].isna().sum()
+        if nan_values.any():
+            print(f'Missing values found: {nan_values}')
+            is_valid = False
+            
+        invalid_rows = df[df['high'] < df['low']]
+        if not invalid_rows.empty:
+            print(f'Found {len(invalid_rows)} invalid rows: {invalid_rows}')
+            is_valid = False
+            
+        return is_valid
