@@ -1,8 +1,8 @@
 # Daily Feedback Template
 
-**Date:** 2026-01-07
-**Week:** 1 | **Day:** 3
-**Topic:** OOP Fundamentals (Classes, Objects, Methods)
+**Date:** 2026-01-08
+**Week:** 1 | **Day:** 4
+**Topic:** OOP Continued - Magic Methods, Pandas Basics
 
 ---
 
@@ -33,7 +33,7 @@
 **4. Did you encounter any bugs/errors that taught you something?**
 
 
-**5. Project Progress: How does building classes feel compared to functions?**
+**5. Project Progress: How does the Position class integration feel?**
 
 
 ---

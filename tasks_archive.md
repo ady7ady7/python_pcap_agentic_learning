@@ -47,3 +47,30 @@ Format: Date | Topic | Score | Difficulty | Notes
 
 ---
 
+## Week 1, Day 3 - 2026-01-07
+
+**Topic:** OOP Fundamentals - Classes, Objects & Methods
+**Score:** 9/9 tasks completed | 97.5%
+**Difficulty:** Manageable (6/10)
+
+**Tasks Completed:**
+1. Understanding `self` (predict Counter output)
+2. Instance vs class attributes (predict Dog species behavior)
+3. BankAccount class implementation
+4. Mutable class attributes trap hunt (TodoList bug)
+5. Position class for trading positions (with explicit `side` parameter)
+6. DataLoader bug fixes from Day 2 feedback
+7. PCAP multiple choice (class/instance attributes, `__init__` returns)
+8. OHLCCandle enhancement (doji detection, wick calculations)
+9. Bonus: Employee class with auto-incrementing IDs
+
+**Key Learnings:** Classes vs objects (blueprint analogy), `self` as object reference, instance attributes vs class attributes, mutable class attribute traps, connection to mutable default parameters, `__init__` constructor, methods vs functions
+
+**Student Insights:**
+- Challenged mentor's signed quantity spec (crypto-only, not industry standard)
+- Implemented explicit `side` parameter (correct for futures/CFDs/stocks)
+- Self-debugged `or` vs `and` logic error
+- Lesson structure worked - material was sufficient for task completion
+
+---
+

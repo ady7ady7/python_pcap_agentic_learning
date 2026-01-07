@@ -39,8 +39,9 @@ class DataLoader:
         '''
         
         try:
-            data = pd.read_csv(self.filepath)
-            data.columns = ['timestamp', 'ticker', 'open', 'high', 'low', 'close', 'volume']
+            with open(self.filepath, 'r') as f:
+                data = pd.read_csv(f)
+                data.columns = ['timestamp', 'ticker', 'open', 'high', 'low', 'close', 'volume']
             
         
         except FileNotFoundError as e:
@@ -48,11 +49,13 @@ class DataLoader:
             return None
         except ValueError as e:
             print(f'Value Error! {str(e)}')
+            return None
         except pd.errors.ParserError as e:
             print(f'Pandas Parser Error: {str(e)}')
             return None
         except Exception as e:
             print(f'Unexpected error: {str(e)}')
+            return None
             
         
         else:
@@ -81,23 +84,17 @@ class DataLoader:
         '''
         
         req_columns = ['timestamp', 'ticker', 'open', 'high', 'low', 'close', 'volume']
-        #ohlc_columns = ['open', 'high', 'low', 'close']
         is_valid = True
         
         
-        missing_columns = set(df.columns) - set(df.columns)
+        missing_columns = set(req_columns) - set(df.columns)
         if missing_columns:
             print(f'Missing columns: {missing_columns}')
             is_valid = False
-        
-        # for col in df.columns:
-        #     if type(col) is not float or int:
-        #         print(f'Column {col} is not numeric')
-        #         is_valid = False
                 
         nan_values = df[req_columns].isna().sum()
-        if nan_values.any():
-            print(f'Missing values found: {nan_values}')
+        if nan_values.any() > 0:
+            print(f'Missing values found: {len(nan_values)}')
             is_valid = False
             
         invalid_rows = df[df['high'] < df['low']]

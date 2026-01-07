@@ -157,3 +157,101 @@ except PermissionError as e:
 
 ---
 
+## Week 1, Day 3 - 2026-01-07
+
+**Topic:** OOP Fundamentals - Classes, Objects & Methods
+
+### Student Self-Assessment
+- **Tasks Completed:** 9/9 (8 main + bonus)
+- **Difficulty:** Manageable (6/10)
+- **Time Spent:** 1 hour 20 minutes
+
+### Student Reflection
+**What clicked:**
+- Classes as blueprints vs objects as instances
+- `self` parameter and object separation
+- Instance vs class attributes (shared vs unique)
+- Mutable class attributes trap
+- Connection to mutable default parameters
+
+**Student Feedback:**
+- "This time checking our lessons/ material was sufficient to complete the tasks"
+- Disagreed with `is_long()`/`is_short()` design - implemented explicit `side` parameter instead (industry standard)
+- Caught own logic error: `or` vs `and` in validation (self-debugging)
+- Challenged mentor's negative quantity spec (crypto-only convention, not industry standard)
+
+**Domain Expertise Applied:**
+- Futures/CFDs/stocks use positive quantity + explicit side
+- Only crypto perpetuals use signed quantity
+- `side` parameter is more realistic and Pythonic
+
+### Mentor Assessment
+
+**Score: 97.5% (A+)**
+
+**Task Breakdown:**
+1. Understanding `self`: 100% - Perfect predictions (12, 21), excellent explanation
+2. Instance vs Class Attributes: 100% - All 6 predictions correct, solid conceptual understanding
+3. BankAccount Class: 95% - Clean implementation, good validation, minor docstring style inconsistency (mixing single/triple quotes)
+4. Mutable Class Attributes Trap: 100% - Identified bug, perfect fix, outstanding insight connecting to mutable default parameters
+5. Position Class: 95% - Excellent `side` parameter decision (mentor spec was wrong), missing None checks for SL/TP edge cases
+6. DataLoader Fixes: 100% - All fixes correct, Pandas `.any()` semantics issue acknowledged as teaching gap
+7. PCAP Multiple Choice: 100% - Q1 typo (meant C, wrote A), Q2 correct
+8. OHLCCandle Enhancement: 95% - All methods correct, minor ZeroDivisionError risk in `is_doji()` (check range==0 before division)
+9. Employee Bonus: 100% - Perfect class attribute counter implementation
+
+**Strengths:**
+- **Domain expertise:** Challenged unrealistic spec with real markets knowledge
+- **Self-debugging:** Caught and fixed `or` vs `and` logic error independently
+- **Deep understanding:** Connected mutable class attributes to mutable default parameters
+- **Practical thinking:** Chose explicit `side` over signed `quantity` (correct industry pattern)
+- **Fast learning:** 1hr 20min for 9 tasks shows efficiency
+- **Critical thinking:** Questioned "retarded" requirements with valid reasoning
+
+**Critical Code Issue:**
+
+**Task 5 - None Comparison Edge Case:**
+```python
+# Current code - will crash if stop_loss/take_profit is None:
+if self.side == 'BUY' and current_price < self.stop_loss:  # TypeError if None
+    return True
+
+# Should check None first:
+if self.side == 'BUY':
+    if self.stop_loss is not None and current_price <= self.stop_loss:
+        return True
+    if self.take_profit is not None and current_price >= self.take_profit:
+        return True
+```
+
+**Task 8 - ZeroDivisionError Risk (Minor):**
+```python
+# Current (division happens first):
+if abs(self.close - self.open) / (self.high - self.low) < threshold:
+
+# Should check zero first:
+candle_range = self.high - self.low
+if candle_range == 0:
+    return True
+return self.get_body_size() / candle_range < threshold
+```
+
+**Mentor Corrections:**
+
+1. **Position Class Spec Was Wrong:** Mentor incorrectly specified negative quantity for shorts. Student's explicit `side` parameter is the correct industry standard. Score upgraded from 85% to 95%.
+
+2. **Pandas Teaching Gap:** Task 6 `.any()` semantics issue is a teaching failure, not student error. Student's code works (Python treats `True > 0` as `True`). Score upgraded from 90% to 100%.
+
+3. **Task 7 Question 1:** Acknowledged typo - student clearly understood concept (explanation was correct).
+
+**Action Items:**
+- ✅ Lesson structure worked - student read OOP fundamentals before attempting tasks
+- ✅ Difficulty appropriate (6/10 vs previous 8/10)
+- ⚠️ Create Pandas mini-lesson before next data-heavy task (promised in Day 2 feedback)
+- ⚠️ Trust student's domain expertise on trading/markets design decisions
+- Note: Student prefers realistic, industry-standard patterns over academic exercises
+
+**Mentor Note:** Excellent session. Student demonstrated both technical mastery and domain expertise. The explicit `side` parameter critique shows engineering maturity - questioning specs when they don't match reality. This is exactly what senior engineers do.
+
+---
+

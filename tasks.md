@@ -1,416 +1,473 @@
-# Week 1, Day 1 - Modules & Packages Fundamentals
+# Week 1, Day 3 - OOP Fundamentals: Classes, Objects & Methods
 
-**Date:** 2026-01-05
-**Topic:** Import Mechanisms, sys.path, Package Structure
-**Target:** 6-8 Tasks Completed
+**Date:** 2026-01-07
+**Topic:** Object-Oriented Programming - Classes, `__init__`, `self`, Attributes & Methods
+**Target:** 8 Tasks Completed
 **Rules:** PCAP Drills = Pure Python (no external libraries). Project Tasks = Pandas/NumPy allowed.
 
----
-
-## Task 1: PCAP Warm-up - Import Variants (Pure Python)
-
-Create a file `math_utils.py` with these functions following PEP 8:
-
-```python
-"""Basic mathematical utility functions for import practice."""
-
-def add(a, b):
-    """Add two numbers and return the result."""
-    return a + b
-
-def multiply(a, b):
-    """Multiply two numbers and return the result."""
-    return a * b
-
-PI = 3.14159  # Module-level constant
-```
-
-Now create `test_imports.py` that demonstrates **4 different import styles**:
-1. Import the entire module
-2. Import specific functions only
-3. Import with an alias
-4. Import everything (use wildcard)
-
-Print the result of `add(5, 3)` using each import style.
-
-**Question:** What happens if you create a variable named `PI = 999` in `test_imports.py` BEFORE doing `from math_utils import *`? Test it.
-#The pi variable is overwritten with the value imported from the module.
-
-import math_utils
-
-#task1
-x1 = math_utils.add(3, 5)
-print(x1)
-
-#1.2
-from math_utils import add
-x2 = add(6, 10)
-print(x2)
-
-#1.3
-import math_utils as mu
-x3 = mu.add(10, 25)
-print(x3)
-
-#1.4
-
-pi = 999
-from math_utils import *
-
-print(pi)
-print(dir(math_utils))
-x4 = math_utils.add(10, 7)
-print(x4)
-
-
-#The wildcard solution clearly creates issues and I'm not even able to properly execute the code with the standard logic
-#I've also used different numbers for each import type to clearly see if they work
-
-
-#Log:
-$ python test_imports.py
-16
-35
-3.14159
-Traceback (most recent call last):
-  File "C:\Users\HARDPC\Desktop\AL\projekty\python_pcap_agentic_learning\tasks_files\test_imports.py", line 24, in <module>
-    print(dir(math_utils))
-              ^^^^^^^^^^
-NameError: name 'math_utils' is not defined
-
-
+**IMPORTANT:** Read [lessons/week1_oop_fundamentals.md](lessons/week1_oop_fundamentals.md) BEFORE starting these tasks!
 
 ---
 
-## Task 2: Theory Drill - sys.path Investigation (Pure Python)
+## Task 1: PCAP Warm-up - Understanding `self` (Pure Python)
 
-Write a script `path_detective.py` that:
-1. Prints the current working directory
-2. Prints all paths in `sys.path` (one per line, numbered)
-3. Creates a module `hidden.py` in a NEW subfolder `secret/`
-4. Attempts to `import hidden` (this will FAIL)
-5. Manually adds `secret/` to `sys.path`
-6. Successfully imports `hidden`
+**Predict the output** of this code:
 
-**Deliverable:** The script should print "Success!" after the import works.
+```python
+class Counter:
+    def __init__(self, start):
+        self.value = start
 
-import sys
-print(sys.path[0]) #current dir
+    def increment(self):
+        self.value += 1
 
-num = 0
-for path in sys.path:
-    num += 1
-    print(f'{num}: {path}')
+    def get_value(self):
+        return self.value
 
-sys.path.append(r'C:\Users\HARDPC\Desktop\AL\projekty\python_pcap_agentic_learning\tasks_files\secret')
+c1 = Counter(10)
+c2 = Counter(20)
 
-mock_var = 3
-import hidden
-from hidden import * #If we use the wildcard import, we would also import the value of the mock_var in there
-from hidden import mock_var #also works if we would like to import a single variable for whatever reason
+c1.increment()
+c1.increment()
+c2.increment()
 
-num = 0
-for path in sys.path:
-    num += 1
-    print(f'{num}: {path}')
+print(c1.get_value())
+print(c2.get_value())
+```
 
-print(mock_var)
+**Your answer:**
+- Line 1 output: `___`
+- Line 2 output: `___`
 
+**Explain:** Why do `c1` and `c2` have different values even though they're both `Counter` objects?
 
-#It works, if we put print('Imported with success') in the hidden.py, it will print as we import hidden
+**Answer here:**
 
 ---
 
-## Task 3: Refactor/Debug - Find the Circular Import (Pure Python)
+## Task 2: PCAP Warm-up - Instance vs Class Attributes (Pure Python)
 
-You're given this broken package structure:
+**Predict the output** of this code:
 
-```
-broken_pkg/
-├── __init__.py
-├── engine.py
-└── utils.py
-```
-
-**engine.py:**
 ```python
-from broken_pkg.utils import helper
+class Dog:
+    species = "Canis familiaris"
 
-def start():
-    return helper()
-```
+    def __init__(self, name):
+        self.name = name
 
-**utils.py:**
-```python
-from broken_pkg.engine import start
+dog1 = Dog("Buddy")
+dog2 = Dog("Max")
 
-def helper():
-    return "Engine started: " + start()
+print(dog1.name)
+print(dog2.name)
+print(dog1.species)
+print(dog2.species)
+
+Dog.species = "Canis lupus"
+
+print(dog1.species)
+print(dog2.species)
 ```
 
-**Task:**
-1. Predict what error occurs when you run `from broken_pkg import engine`
-2. Fix the circular dependency WITHOUT changing the function behavior
-3. Explain your solution in a comment
+**Your predictions:**
+1. `dog1.name` → `___`
+2. `dog2.name` → `___`
+3. `dog1.species` (first time) → `___`
+4. `dog2.species` (first time) → `___`
+5. `dog1.species` (after change) → `___`
+6. `dog2.species` (after change) → `___`
 
-#We'd get an error, as the engine.py depends on broken_pkg, and we're trying to import what's already in there, and we're trying to select the general scope from the specific file of this very scope, which is erratic. Same for utils.py.
-# 
-**engine.py:**
-```python
-from utils import helper
+**Question:** What's the difference between `self.name` and `species` in this class?
 
-def start():
-    return helper()
-
-**utils.py:**
-```python
-from engine import start
-
-def helper():
-    return "Engine started: " + start()
-
-#We simply import the respective modules from the current folder we're in, no need to do circular imports here
-
-
+**Answer here:**
 
 ---
 
-## Task 4: PROJECT TASK - Setup AlgoBacktest Structure (Pandas/NumPy Allowed)
+## Task 3: Theory Drill - Build Your First Class (Pure Python)
 
-Create the following directory structure:
+Create a `BankAccount` class with the following requirements:
 
-```
-algo_backtest/
-├── __init__.py
-├── data/
-│   └── __init__.py
-├── engine/
-│   └── __init__.py
-├── strategies/
-│   └── __init__.py
-└── main.py
-```
-
-In `algo_backtest/__init__.py`, add:
+**Requirements:**
 ```python
-"""AlgoBacktest Core - Professional backtesting framework for algorithmic trading strategies."""
+class BankAccount:
+    """
+    Represents a simple bank account.
 
-__version__ = "0.1.0"
-__author__ = "Your Name"
+    Attributes:
+        owner: Account owner's name.
+        balance: Current account balance.
+    """
+
+    def __init__(self, owner: str, initial_balance: float = 0.0) -> None:
+        """Initialize account with owner and optional starting balance."""
+        # Your code here
+
+    def deposit(self, amount: float) -> None:
+        """
+        Deposit money into account.
+
+        Only allows positive amounts.
+        Prints confirmation message.
+        """
+        # Your code here
+
+    def withdraw(self, amount: float) -> bool:
+        """
+        Withdraw money from account.
+
+        Returns True if successful, False if insufficient funds.
+        Only allows positive amounts.
+        """
+        # Your code here
+
+    def get_balance(self) -> float:
+        """Return current balance."""
+        # Your code here
 ```
-
-In `main.py`, write code that:
-1. Imports `sys`
-2. Prints the package version by importing from `algo_backtest`
-3. Prints "AlgoBacktest Core - Ready"
-
-**PEP 8 Requirements:**
-- Add a module-level docstring at the top of `main.py`
-- Use proper spacing (2 blank lines between top-level definitions)
-- Follow naming conventions
-
-**Run it:** `python algo_backtest/main.py` should work without errors.
-
-
-main.py
-
-'''
-
-This is the main.py for my professional backtesting framework for algotrading strategies
-I'm working on this project as a part of my daily Python PCAP practice routine, using the small steps methodology
-
-'''
-
-
-import sys
-from __init__ import __version__
-
-
-if __name__ == '__main__':
-    print(f'Current version: {__version__}')
-    print('AlgoBacktest Core - Ready')
-
-$ python algo_backtest/main.py
-Current version: 0.1.0
-AlgoBacktest Core - Ready
-
-
----
-
-## Task 5: PROJECT TASK - Create requirements.txt + Dependency Checker (Industry Standard)
-
-Create `requirements.txt` in the project root with:
-```
-pandas>=2.0.0
-numpy>=1.24.0
-```
-
-**Task:** Write a script `check_deps.py` that:
-1. Attempts to import pandas and numpy
-2. Prints their `__version__` attributes
-3. If import fails, prints "Missing dependency: [name]"
 
 **Professional Standards:**
-- Add module docstring
-- Use meaningful variable names (e.g., `required_packages` not `deps`)
-- Add type hints: `def check_dependency(package_name: str) -> bool:`
-- Follow PEP 8 spacing and formatting
-- Use proper exception handling with specific exception types
+- Type hints on all methods
+- Docstrings (already provided)
+- Validation (no negative deposits/withdrawals, no overdrafts)
+- PEP 8 formatting
 
-**Hint:** Use try/except blocks for `ImportError` or `ModuleNotFoundError`.
+**Test your code in `practice.py`:**
+```python
+account = BankAccount("Alice", 100.0)
+account.deposit(50.0)
+print(account.get_balance())  # Should print 150.0
+account.withdraw(30.0)
+print(account.get_balance())  # Should print 120.0
+account.withdraw(200.0)       # Should fail (insufficient funds)
+print(account.get_balance())  # Should still be 120.0
+```
 
-$ python algo_backtest/main.py
-Imports succeeded!
-Pandas version: 2.3.2
-Numpy version: 2.2.5
-Current version: 0.1.0
-AlgoBacktest Core - Ready
-
-#Look, you wanted me to actually pass package_name, but every time I try to check an import for a given package_name, IT IMPORTS package_name literally, which sucks. I've read that we could use ImportLib to deal with that, BUT YOU HAVEN'T TAUGHT me that at all, so I simply used my way of dealing with that with basic 'hardcoded' version of check_dependencies.
-
-If you want me to deal with that using the Importlib, we can do it next time, BUT MAKE SURE YOU add it to lessons.md and explain why we use it!
-
-'''Module used to check dependencies''' 
-# /algo_backtest/check_dependencies.py
-
-def check_deps():
-    try:
-        import pandas as pd
-        import numpy as np
-        
-    except ImportError as e:
-        print(f'Import error: {str(e)}')
-    except ModuleNotFoundError as e:
-        print(f'Module not found: {str(e)}')
-    except Exception as e:
-        print(f'Unexpected error: {str(e)}')
-        
-    else:
-        print('Imports succeeded!')
-        print(f'Pandas version: {pd.__version__}')
-        print(f'Numpy version: {np.__version__}')
-
+**Paste your BankAccount class here:**
 
 ---
 
-## Task 6: Edge Case Hunt - Name Shadowing Trap (Pure Python)
+## Task 4: PCAP Trap Hunt - Mutable Class Attributes (Pure Python)
 
-Create a file named `string.py` with this code (intentionally minimal for the trap):
+**Find the bug** in this code:
+
 ```python
-"""Custom string utilities - WARNING: Shadows stdlib module."""
+class TodoList:
+    tasks = []  # Shared by all instances!
 
-def reverse(text: str) -> str:
-    """Reverse a string using slicing."""
-    return text[::-1]
+    def __init__(self, owner):
+        self.owner = owner
+
+    def add_task(self, task):
+        self.tasks.append(task)
+
+    def get_tasks(self):
+        return self.tasks
+
+alice_todos = TodoList("Alice")
+bob_todos = TodoList("Bob")
+
+alice_todos.add_task("Buy groceries")
+bob_todos.add_task("Walk dog")
+
+print(f"Alice's tasks: {alice_todos.get_tasks()}")
+print(f"Bob's tasks: {bob_todos.get_tasks()}")
 ```
 
-Now create `main_app.py` that:
-1. Tries to `import string` (stdlib module)
-2. Calls `string.ascii_lowercase` (should print alphabet)
-
 **Questions:**
-- Does it work? Why/why not?
-- How would you fix it WITHOUT renaming `string.py`?
-- Test your solution.
+1. What will this code print? (Predict the output)
+2. What's the bug?
+3. Fix the code so each TodoList has its own tasks list
+4. Explain why this happens (reference class vs instance attributes)
 
-**PEP 8 Note:** Even though this task demonstrates bad practice (shadowing), write clean code with docstrings and type hints to maintain professional habits.
+**Answer here:**
 
-1. Traceback (most recent call last):
-  File "C:\Users\HARDPC\Desktop\AL\projekty\python_pcap_agentic_learning\algo_backtest\main.py", line 20, in <module>
-    string.ascii_lowercase
-AttributeError: module 'string' has no attribute 'ascii_lowercase'
+---
 
-It causes the error, as our string DOESN'T have the ascii_lowercase module obviously, but reverse only.
+## Task 5: PROJECT TASK - Create Position Class (Pure Python + Type Hints)
 
-2. Honestly, leaving it without renaming that WOULDN'T be wise, as it's a very bad practice, and I'm NOT SURE how to fix it in the current state.
+Create a `Position` class to represent a trading position in the AlgoBacktest project.
 
-I've tried doing direct import:
-    from string import ascii_lowercase
-    print(ascii_lowercase)
-But it still drops an ImportError, ImportError: cannot import name 'ascii_lowercase' from 'string' (C:\Users\HARDPC\Desktop\AL\projekty\python_pcap_agentic_learning\algo_backtest\string.py)
+**File:** Create `algo_backtest/engine/position.py`
 
+**Requirements:**
+```python
+"""Position management for trading strategies."""
+
+from typing import Optional
+
+
+class Position:
+    """
+    Represents a single trading position.
+
+    Attributes:
+        ticker: Trading symbol (e.g., "EURUSD").
+        entry_price: Price at which position was opened.
+        quantity: Number of units (positive for long, negative for short).
+        stop_loss: Stop loss price (optional).
+        take_profit: Take profit price (optional).
+    """
+
+    def __init__(
+        self,
+        ticker: str,
+        entry_price: float,
+        quantity: int,
+        stop_loss: Optional[float] = None,
+        take_profit: Optional[float] = None
+    ) -> None:
+        """Initialize a new position."""
+        # Your code here - store all parameters as instance attributes
+        # Also calculate and store position_type: "long" if quantity > 0, "short" if < 0
+
+    def is_long(self) -> bool:
+        """Check if position is long (quantity > 0)."""
+        # Your code here
+
+    def is_short(self) -> bool:
+        """Check if position is short (quantity < 0)."""
+        # Your code here
+
+    def calculate_pnl(self, current_price: float) -> float:
+        """
+        Calculate unrealized profit/loss.
+
+        Formula:
+        - Long: (current_price - entry_price) * quantity
+        - Short: (entry_price - current_price) * abs(quantity)
+
+        Returns:
+            Unrealized P&L in currency units.
+        """
+        # Your code here
+
+    def should_close(self, current_price: float) -> bool:
+        """
+        Check if position should close (hit SL or TP).
+
+        Returns:
+            True if stop loss or take profit is hit, False otherwise.
+        """
+        # Your code here
+        # Hint: For long positions, close if price <= stop_loss OR price >= take_profit
+        #       For short positions, close if price >= stop_loss OR price <= take_profit
+```
+
+**Test your code in `practice.py`:**
+```python
+from algo_backtest.engine.position import Position
+
+# Long position
+long_pos = Position("EURUSD", entry_price=100.0, quantity=1000, stop_loss=99.0, take_profit=102.0)
+print(long_pos.is_long())  # True
+print(long_pos.calculate_pnl(101.0))  # 1000.0
+print(long_pos.should_close(98.5))  # True (hit SL)
+
+# Short position
+short_pos = Position("GBPUSD", entry_price=120.0, quantity=-500, stop_loss=121.0, take_profit=118.0)
+print(short_pos.is_short())  # True
+print(short_pos.calculate_pnl(119.0))  # 500.0
+print(short_pos.should_close(117.5))  # True (hit TP)
+```
+
+**Paste your Position class here:**
+
+---
+
+## Task 6: PROJECT TASK - Fix DataLoader Class (Pandas Allowed)
+
+Now that you understand OOP, go back and **fix the bugs** in your `DataLoader` class from Day 2.
+
+**File:** `algo_backtest/data/data_loader.py`
+
+**Issues to fix (from Day 2 feedback):**
+
+1. **Missing context manager in `load_data()`**
+   - Current: `data = pd.read_csv(self.filepath)`
+   - Required: Use `with open(...) as f:` and `pd.read_csv(f)`
+
+2. **Missing return statement in ValueError handler**
+   ```python
+   except ValueError as e:
+       print(f'Value Error! {str(e)}')
+       # Add: return None
+   ```
+
+3. **Logic error in `validate_data()` - missing columns check**
+   - Current: `missing_columns = set(df.columns) - set(df.columns)`
+   - Fix: `missing_columns = set(req_columns) - set(df.columns)`
+
+4. **Fix NaN check** (this one is tricky - we'll teach Pandas properly soon, but try to fix it)
+   - The `nan_values.any()` check doesn't properly validate
+   - Hint: You want to check if the sum is greater than 0, not just if `.any()` returns True
+
+**Test your fixes:**
+```python
+from algo_backtest.data.data_loader import DataLoader
+
+loader = DataLoader('ohlc_mock_data.csv')
+data = loader.load_data()
+if data is not None:
+    is_valid = loader.validate_data(data)
+    print(f"Data valid: {is_valid}")  # Should print True
+```
+
+**Paste your corrected methods here (just the fixed parts):**
 
 ---
 
 ## Task 7: PCAP Simulation - Multiple Choice
 
-**Question:**
+**Question 1:**
 What is the output of this code?
 
 ```python
-# package/__init__.py
-x = 10
+class Test:
+    value = 10
 
-# package/module.py
-x = 20
+    def __init__(self):
+        self.value = 20
 
-# main.py
-from package import x as a
-from package.module import x as b
-print(a, b)
+obj = Test()
+print(obj.value)
+print(Test.value)
 ```
 
 **Choices:**
-A) `10 20`
-B) `20 20`
-C) `10 10`
-D) `NameError`
+A) `20` then `20`
+B) `10` then `10`
+C) `20` then `10`
+D) `10` then `20`
 
-Write your answer in `task7_answer.txt` with a 2-sentence explanation.
-
-Asking me to write the answer in a separate file is just retarded, WE DON'T WANT TO CLUTTER our filebase with 32494329 unnecessary files. I want it to BE CLEAN AND NEAT and reduce teh number of files to the MINIMUM, and I'll be answering in tasks.md
-
-Answer: A, while the __init__ runs only once, we still get the x value saved as a, and in module.py it's different, but we save the x value in a separate object, so In my opinion it remains 10, 20 respectively.
+**Your answer with explanation:**
 
 ---
 
-## Task 8: Integration - Lazy Import Pattern (Pure Python)
+**Question 2:**
+What happens when you run this code?
 
-Create `expensive_module.py`:
 ```python
-"""Simulates a heavy module with expensive initialization."""
+class Person:
+    def __init__(self, name):
+        self.name = name
+        return self
 
-print("Heavy computation loading...")
-import time
-
-time.sleep(2)  # Simulate expensive setup
-
-
-def calculate() -> int:
-    """Perform expensive calculation."""
-    return 42
+p = Person("Alice")
 ```
 
-Now create `smart_loader.py` that:
-1. Defines a function `get_result() -> int` with type hint
-2. ONLY imports `expensive_module` INSIDE the function (lazy import)
-3. Returns the result of `calculate()`
-4. Add proper docstring explaining the lazy import pattern
+**Choices:**
+A) Works fine, `p.name` is `"Alice"`
+B) `TypeError: __init__() should return None`
+C) `AttributeError: 'NoneType' object has no attribute 'name'`
+D) `NameError: self is not defined`
 
-**Test:**
+**Your answer with explanation:**
+
+---
+
+## Task 8: Integration Challenge - OHLCCandle Class Enhancement (Pure Python)
+
+Enhance the `OHLCCandle` class from the lesson with a new method.
+
+**Starting point (from lesson):**
 ```python
-# main.py (add docstring here too!)
-from smart_loader import get_result
+class OHLCCandle:
+    """Represents a single OHLC candle."""
 
-print("App started")  # Should print IMMEDIATELY
-result = get_result()  # Now the 2-second delay happens
-print(result)
+    def __init__(self, timestamp: str, ticker: str, open_price: float,
+                 high: float, low: float, close: float, volume: int) -> None:
+        self.timestamp = timestamp
+        self.ticker = ticker
+        self.open = open_price
+        self.high = high
+        self.low = low
+        self.close = close
+        self.volume = volume
+
+    def is_bullish(self) -> bool:
+        """Check if candle closed higher than it opened."""
+        return self.close > self.open
+
+    def get_body_size(self) -> float:
+        """Calculate candle body size."""
+        return abs(self.close - self.open)
+
+    def get_range(self) -> float:
+        """Calculate candle range (high - low)."""
+        return self.high - self.low
 ```
 
-**Question:** Why is lazy importing useful? Write answer as a docstring in `smart_loader.py` explaining the pattern.
+**Add these three methods:**
 
-**Professional Note:** This is a real-world optimization technique used in production systems.
+1. **`is_doji(self, threshold: float = 0.1) -> bool`**
+   - A doji is when body size is very small compared to range
+   - Return `True` if `body_size / range < threshold`
+   - Handle edge case: if range is 0, return `True`
 
+2. **`get_upper_wick(self) -> float`**
+   - Calculate upper wick (shadow) length
+   - Formula: `high - max(open, close)`
 
-'''Simulates an easy to load smart module'''
+3. **`get_lower_wick(self) -> float`**
+   - Calculate lower wick (shadow) length
+   - Formula: `min(open, close) - low`
 
-def get_result() -> int:
-    '''It lazy imports the expensive_module and returns the result of the calculate function of that module'''
-    import expensive_module
-    return expensive_module.calculate()
+**Test your enhanced class:**
+```python
+candle = OHLCCandle(
+    timestamp="2024-01-01 09:00:00",
+    ticker="EURUSD",
+    open_price=100.5,
+    high=101.0,
+    low=100.0,
+    close=100.6,
+    volume=5000
+)
 
-I'm really unsure why this would be useful, as it seems a bit overengineered, but perhaps if we want to split two modules for whatever reason (maybe clarity or different scopes/areas that are covered by them), and then for whatever reason we need to use them together again, but we don't want to do so in main, we could use them in a separate module. But I'd still love to see your explanation for that
+print(f"Is doji? {candle.is_doji()}")  # Should be False (body is significant)
+print(f"Upper wick: {candle.get_upper_wick():.2f}")  # 101.0 - 100.6 = 0.40
+print(f"Lower wick: {candle.get_lower_wick():.2f}")  # 100.5 - 100.0 = 0.50
+```
 
+**Paste your three new methods here:**
+
+---
+
+## Bonus Challenge (Optional): Class Attribute Counter
+
+Create an `Employee` class that automatically assigns unique IDs to each employee using a **class attribute** counter.
+
+**Requirements:**
+```python
+class Employee:
+    """
+    Employee with auto-incrementing ID.
+
+    Class Attributes:
+        total_employees: Counter for total employees created.
+
+    Instance Attributes:
+        name: Employee name.
+        employee_id: Unique ID assigned automatically.
+    """
+
+    # Your code here
+```
+
+**Expected behavior:**
+```python
+emp1 = Employee("Alice")
+emp2 = Employee("Bob")
+emp3 = Employee("Charlie")
+
+print(emp1.employee_id)  # 1
+print(emp2.employee_id)  # 2
+print(emp3.employee_id)  # 3
+print(Employee.total_employees)  # 3
+```
+
+**Paste your Employee class here:**
 
 ---
 
@@ -418,14 +475,14 @@ I'm really unsure why this would be useful, as it seems a bit overengineered, bu
 
 After completing all tasks, rate yourself:
 
-- **Score:** 8/8 tasks completed
-- **Difficulty:** (Easy/Medium/Hard) - Medium - Hard (depends)
+- **Score:** ___/8 tasks completed
+- **Difficulty:** (Easy/Medium/Hard)
 - **Time Spent:** ___ hours
 - **Sticking Points:** (What was confusing?)
 
-Document this in `feedback.md` (I'll create the template next).
+Document this in `feedback.md`.
 
 ---
 
 **Next Session Preview:**
-Tomorrow we dive into **relative imports** and build the `DataLoader` class for AlgoBacktest using Pandas!
+Tomorrow (Day 4) we'll continue with OOP - building more complex classes, understanding `__str__` and `__repr__`, and creating the `Trade` class for the backtesting engine!
