@@ -1,8 +1,8 @@
 # Daily Feedback Template
 
-**Date:** 2026-01-08
-**Week:** 1 | **Day:** 4
-**Topic:** OOP Continued - Magic Methods, Pandas Basics
+**Date:** 2026-01-09
+**Week:** 1 | **Day:** 5 (Friday - Week Wrap-up)
+**Topic:** Week 1 Review & Mock PCAP Exams
 
 ---
 
@@ -33,7 +33,7 @@
 **4. Did you encounter any bugs/errors that taught you something?**
 
 
-**5. Project Progress: How does the Position class integration feel?**
+**5. Week 1 Progress: How confident do you feel about modules, strings, exceptions, OOP, and Pandas?**
 
 
 ---
@@ -43,9 +43,9 @@
 
 ---
 
-## Tomorrow's Goals
+## Weekend Goals
 
-What do you want to focus on in the next session?
+Mock exams and project polish:
 
 
 ---

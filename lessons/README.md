@@ -28,6 +28,14 @@ This directory contains all theoretical lessons organized by week and topic.
 - Practical examples (BankAccount, OHLCCandle)
 - **PCAP Traps:** Mutable class attributes, forgetting `self`, `__init__` return values
 
+### [Magic Methods & Pandas Essentials](week1_magic_methods_pandas.md)
+- `__str__` vs `__repr__` (user-friendly vs developer-friendly)
+- Making objects print nicely
+- Series vs DataFrame concepts
+- Essential DataFrame operations (accessing, filtering, NaN handling)
+- Boolean indexing and iteration
+- **PCAP Traps:** Forgetting return in `__str__`, `.any()` semantics, parentheses in filters
+
 ---
 
 ## Week 2: Object-Oriented Programming - Advanced (Coming Soon)

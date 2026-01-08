@@ -22,6 +22,13 @@ class DataLoader:
         '''Initialize the DataLoader class with file path'''
         print('DataLoader initialized.')
         self.filepath = file_path
+        
+    def __repr__(self):
+        '''
+        Unambiguous representation
+        '''
+        return f'DataLoader(filepath = {self.filepath})'
+
     
     
     def load_data(self) -> Optional[pd.DataFrame]:
@@ -103,3 +110,35 @@ class DataLoader:
             is_valid = False
             
         return is_valid
+    
+    
+    def get_candle_count(self) -> int:
+       """
+       Return total number of candles in loaded data.
+
+       Returns:
+           Number of rows in DataFrame, or 0 if data not loaded.
+       """
+       
+       data = self.load_data()
+       
+       if data is not None:
+           return len(data)
+       else:
+           return 0
+    
+    
+    def get_bullish_candles(self, data: pd.DataFrame) -> pd.DataFrame:
+       """
+       Return only bullish candles (close > open).
+
+       Args:
+           data: OHLC DataFrame.
+
+       Returns:
+           Filtered DataFrame with only bullish candles.
+       """
+       
+       bullish_candles = data[data['close'] > data['open']]
+       return bullish_candles
+       

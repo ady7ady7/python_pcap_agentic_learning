@@ -36,6 +36,15 @@ class Position:
     
         #Therefore is_long or is_short is really redundant + it's also weird.
         
+    def __str__(self) -> str:
+        '''A Python magic method used to return information about class instead of memory object'''
+        return f'{self.side} {self.quantity} @ {self.entry_price} [SL = {self.stop_loss}, TP = {self.take_profit}]'
+    
+    
+    def __repr__(self) -> str:
+        '''A Python magic method used to provide devs with useful information to recreate the object '''
+        return f'Position(ticker = {self.ticker}, side = {self.side}, entry_price = {self.entry_price}, quantity = {self.quantity}, stop_loss = {self.stop_loss}, take_profit = {self.take_profit})'
+        
     def calculate_pnl(self, current_price: float) -> float:
         
         '''

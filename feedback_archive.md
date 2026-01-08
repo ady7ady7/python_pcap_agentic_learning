@@ -255,3 +255,112 @@ return self.get_body_size() / candle_range < threshold
 
 ---
 
+## Week 1, Day 4 - 2026-01-08
+
+**Topic:** Magic Methods & Pandas Essentials
+
+### Student Self-Assessment
+- **Tasks Completed:** 9/9 (8 main + bonus)
+- **Difficulty:** Easy-Medium (5/10)
+- **Time Spent:** Not specified
+
+### Student Reflection
+**What clicked:**
+- `__str__` vs `__repr__` distinction (user-friendly vs developer-friendly)
+- Magic method fallback behavior (repr used when str missing)
+- Pandas `.any()` semantics fully understood
+- Three different approaches to NaN checking
+- Boolean indexing with proper `&` operator syntax
+
+**Student Feedback:**
+- Corrected mentor on Task 2 (TypeError IS raised, not just None return)
+- Defended PEP 8 line length compliance in multi-line f-strings (Task 6)
+- Identified correct error concept in Task 7 Q2 (Series ambiguity) but wrong exception type
+- Validated P&L calculations ($50 not $500 for 0.005 price difference)
+
+### Mentor Assessment
+
+**Score: 93.5% (A)**
+
+**Task Breakdown:**
+1. `__str__` vs `__repr__` Predictions: 95% - Predictions correct, minor repr formatting issue in answer
+2. Magic Method Trap: 100% - **Student corrected mentor**: `TypeError` IS raised when `__str__` returns None
+3. Position Magic Methods: 85% - Functional but missing "No SL/No TP" requirement, missing ticker in `__str__`, `__name__` instead of class name in `__repr__`
+4. Pandas `.any()` Understanding: 100% - All three solutions correct, perfect explanation
+5. Boolean Indexing: 95% - All solutions work, minor redundancy in Series wrapping
+6. Trade Class: 95% - **Student corrected mentor**: Multi-line f-string formatting is PEP 8 compliant for line length; only minor issues (redundant `== True`, missing commas in `__repr__`)
+7. PCAP Multiple Choice: 75% - Q1 correct (100%), Q2 wrong exception type (50% - correct concept, wrong type: ValueError not TypeError)
+8. DataLoader Enhancement: 100% - All three methods implemented perfectly
+9. Bonus Trade Statistics: 95% - Class method works, minor issue accessing `_calculate_pnl()` instead of `.pnl` attribute
+
+**Average: 93.33% → Rounded to 93.5%**
+
+**Strengths:**
+- **Critical thinking:** Corrected mentor's errors on Task 2 (TypeError) and Task 6 (PEP 8 formatting)
+- **Pandas mastery:** Teaching gap officially closed - all `.any()` approaches correct
+- **Self-validation:** Verified P&L math ($50 correct, mentor's $500 wrong)
+- **Clean implementations:** Trade and DataLoader classes well-structured
+- **Bonus completion:** Class methods understood and applied
+- **Efficiency:** 5/10 difficulty shows optimal learning zone
+
+**Mentor Corrections:**
+
+1. **Task 2 - Mentor Was Wrong:** Student correctly identified that `TypeError: __str__ returned non-string (type NoneType)` IS raised. Mentor incorrectly said it just returns None. Student score: 100%.
+
+2. **Task 6 - PEP 8 Compliance:** Student's multi-line f-string formatting is intentionally correct for PEP 8 line length limits (79-88 chars). Mentor critique withdrawn.
+
+3. **Task 7 Question 2:** Student identified correct error concept (Series truth value ambiguity) but got exception type wrong (ValueError vs TypeError). Partial credit given.
+
+**Minor Issues Identified:**
+
+**Task 3 - Position `__str__` Requirements:**
+```python
+# Current: Missing ticker, "No SL/No TP" handling
+return f'{self.side} {self.quantity} @ {self.entry_price} [SL = {self.stop_loss}, TP = {self.take_profit}]'
+
+# Required:
+sl_str = f"SL={self.stop_loss:.4f}" if self.stop_loss else "No SL"
+tp_str = f"TP={self.take_profit:.4f}" if self.take_profit else "No TP"
+return f'{self.side} {self.quantity} {self.ticker} @ {self.entry_price:.4f} [{sl_str}, {tp_str}]'
+```
+
+**Task 3 - Position `__repr__` Module Name:**
+```python
+# Current: Uses module name
+return f'{__name__}(ticker = {self.ticker}, ...'  # __name__ = 'algo_backtest.engine.position'
+
+# Should be:
+return f'Position(ticker={self.ticker!r}, side={self.side!r}, ...)'
+```
+
+**Task 6 - Trade Minor Issues:**
+```python
+# Issue 1: Redundant comparison
+if self.is_winner() == True:  # Just use: if self.is_winner():
+
+# Issue 2: Missing commas in __repr__
+return (f'Trade(ticker = {self.ticker!r}, side = {self.side!r},'  # comma here ✅
+        f'entry_price = {self.entry_price}, exit_price = {self.exit_price}'  # missing comma ❌
+        f'quantity = {self.quantity}, ...')
+```
+
+**Bonus - Trade Statistics:**
+```python
+# Current: Recalculates PnL
+trades_profits = [trade._calculate_pnl() for trade in trades]
+
+# Better: Use already-calculated pnl
+winners = [trade for trade in trades if trade.pnl > 0]
+return (len(winners) / len(trades)) * 100 if trades else 0
+```
+
+**Action Items:**
+- ✅ Pandas mini-lesson delivered and mastered
+- ✅ Magic methods understood (`__str__`, `__repr__`)
+- ✅ Student demonstrated ability to correct mentor errors (professional maturity)
+- Note: Student's Optional confusion resolved (type hints vs runtime)
+
+**Mentor Note:** Outstanding session. Student not only completed all tasks but also caught multiple mentor errors (Task 2 TypeError, Task 6 PEP 8 formatting). This demonstrates deep understanding and professional code review skills. Difficulty rated 5/10 - in the optimal learning zone (challenging but manageable).
+
+---
+

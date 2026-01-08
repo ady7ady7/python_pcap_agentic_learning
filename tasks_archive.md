@@ -74,3 +74,30 @@ Format: Date | Topic | Score | Difficulty | Notes
 
 ---
 
+## Week 1, Day 4 - 2026-01-08
+
+**Topic:** Magic Methods & Pandas Essentials
+**Score:** 9/9 tasks completed | 93.5%
+**Difficulty:** Easy-Medium (5/10)
+
+**Tasks Completed:**
+1. `__str__` vs `__repr__` output predictions
+2. Magic method trap hunt (missing return statement)
+3. Add `__str__` and `__repr__` to Position class
+4. Pandas `.any()` drill (three approaches to NaN checking)
+5. Boolean indexing practice (filtering OHLC data)
+6. Trade class with P&L calculation and magic methods
+7. PCAP multiple choice (magic methods, Pandas and/or operators)
+8. DataLoader enhancements (`__repr__`, candle counting, filtering)
+9. Bonus: Trade class method for win rate calculation
+
+**Key Learnings:** `__str__` vs `__repr__` distinction, magic method fallback behavior, Pandas `.any()` semantics, boolean indexing with `&` operator, class methods, PEP 8 line length compliance
+
+**Student Contributions:**
+- Corrected mentor on Task 2 (TypeError IS raised)
+- Defended PEP 8 formatting in multi-line f-strings
+- Validated P&L calculations ($50 correct, not $500)
+- Pandas teaching gap officially closed
+
+---
+

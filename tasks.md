@@ -1,320 +1,476 @@
-# Week 1, Day 3 - OOP Fundamentals: Classes, Objects & Methods
+# Week 1, Day 4 - Magic Methods & Pandas Essentials
 
-**Date:** 2026-01-07
-**Topic:** Object-Oriented Programming - Classes, `__init__`, `self`, Attributes & Methods
+**Date:** 2026-01-08
+**Topic:** `__str__`, `__repr__`, and Essential Pandas Operations
 **Target:** 8 Tasks Completed
 **Rules:** PCAP Drills = Pure Python (no external libraries). Project Tasks = Pandas/NumPy allowed.
 
-**IMPORTANT:** Read [lessons/week1_oop_fundamentals.md](lessons/week1_oop_fundamentals.md) BEFORE starting these tasks!
+**IMPORTANT:** Read [lessons/week1_magic_methods_pandas.md](lessons/week1_magic_methods_pandas.md) BEFORE starting these tasks!
 
 ---
 
-## Task 1: PCAP Warm-up - Understanding `self` (Pure Python)
+## Task 1: PCAP Warm-up - `__str__` vs `__repr__` (Pure Python)
 
 **Predict the output** of this code:
 
 ```python
-class Counter:
-    def __init__(self, start):
-        self.value = start
-
-    def increment(self):
-        self.value += 1
-
-    def get_value(self):
-        return self.value
-
-c1 = Counter(10)
-c2 = Counter(20)
-
-c1.increment()
-c1.increment()
-c2.increment()
-
-print(c1.get_value())
-print(c2.get_value())
-```
-
-**Your answer:**
-- Line 1 output: `___`
-- Line 2 output: `___`
-
-**Explain:** Why do `c1` and `c2` have different values even though they're both `Counter` objects?
-
-**Answer here:**
-
----
-
-## Task 2: PCAP Warm-up - Instance vs Class Attributes (Pure Python)
-
-**Predict the output** of this code:
-
-```python
-class Dog:
-    species = "Canis familiaris"
-
-    def __init__(self, name):
+class Product:
+    def __init__(self, name, price):
         self.name = name
+        self.price = price
 
-dog1 = Dog("Buddy")
-dog2 = Dog("Max")
+    def __repr__(self):
+        return f"Product(name={self.name!r}, price={self.price})"
 
-print(dog1.name)
-print(dog2.name)
-print(dog1.species)
-print(dog2.species)
+    def __str__(self):
+        return f"{self.name}: ${self.price:.2f}"
 
-Dog.species = "Canis lupus"
+product = Product("Laptop", 999.99)
 
-print(dog1.species)
-print(dog2.species)
+print(str(product))
+print(repr(product))
+print(product)
 ```
 
 **Your predictions:**
-1. `dog1.name` → `___`
-2. `dog2.name` → `___`
-3. `dog1.species` (first time) → `___`
-4. `dog2.species` (first time) → `___`
-5. `dog1.species` (after change) → `___`
-6. `dog2.species` (after change) → `___`
+1. `str(product)` → `Laptop: $999.99`
+2. `repr(product)` → `Product(name = 'Laptop'), price = 999.99`
+3. `print(product)` → `Laptop: $999.99`
 
-**Question:** What's the difference between `self.name` and `species` in this class?
+**Question:** What happens if you remove `__str__` but keep `__repr__`? What will `print(product)` output?
 
 **Answer here:**
+It will print the repr printout instead, same as str(product), which is quite interesting.
+
 
 ---
 
-## Task 3: Theory Drill - Build Your First Class (Pure Python)
-
-Create a `BankAccount` class with the following requirements:
-
-**Requirements:**
-```python
-class BankAccount:
-    """
-    Represents a simple bank account.
-
-    Attributes:
-        owner: Account owner's name.
-        balance: Current account balance.
-    """
-
-    def __init__(self, owner: str, initial_balance: float = 0.0) -> None:
-        """Initialize account with owner and optional starting balance."""
-        # Your code here
-
-    def deposit(self, amount: float) -> None:
-        """
-        Deposit money into account.
-
-        Only allows positive amounts.
-        Prints confirmation message.
-        """
-        # Your code here
-
-    def withdraw(self, amount: float) -> bool:
-        """
-        Withdraw money from account.
-
-        Returns True if successful, False if insufficient funds.
-        Only allows positive amounts.
-        """
-        # Your code here
-
-    def get_balance(self) -> float:
-        """Return current balance."""
-        # Your code here
-```
-
-**Professional Standards:**
-- Type hints on all methods
-- Docstrings (already provided)
-- Validation (no negative deposits/withdrawals, no overdrafts)
-- PEP 8 formatting
-
-**Test your code in `practice.py`:**
-```python
-account = BankAccount("Alice", 100.0)
-account.deposit(50.0)
-print(account.get_balance())  # Should print 150.0
-account.withdraw(30.0)
-print(account.get_balance())  # Should print 120.0
-account.withdraw(200.0)       # Should fail (insufficient funds)
-print(account.get_balance())  # Should still be 120.0
-```
-
-**Paste your BankAccount class here:**
-
----
-
-## Task 4: PCAP Trap Hunt - Mutable Class Attributes (Pure Python)
+## Task 2: PCAP Warm-up - Magic Method Trap (Pure Python)
 
 **Find the bug** in this code:
 
 ```python
-class TodoList:
-    tasks = []  # Shared by all instances!
+class Counter:
+    def __init__(self, value):
+        self.value = value
 
-    def __init__(self, owner):
-        self.owner = owner
+    def __str__(self):
+        print(f"Counter: {self.value}")
 
-    def add_task(self, task):
-        self.tasks.append(task)
-
-    def get_tasks(self):
-        return self.tasks
-
-alice_todos = TodoList("Alice")
-bob_todos = TodoList("Bob")
-
-alice_todos.add_task("Buy groceries")
-bob_todos.add_task("Walk dog")
-
-print(f"Alice's tasks: {alice_todos.get_tasks()}")
-print(f"Bob's tasks: {bob_todos.get_tasks()}")
+counter = Counter(10)
+result = str(counter)
+print(f"Result: {result}")
 ```
 
 **Questions:**
-1. What will this code print? (Predict the output)
+1. What will this code print?
 2. What's the bug?
-3. Fix the code so each TodoList has its own tasks list
-4. Explain why this happens (reference class vs instance attributes)
+3. Fix the code
 
 **Answer here:**
+Nothing, it will return a TypeError, as there's no return statement.
+It should be:
+
+return f"Counter: {self.value}"
+
 
 ---
 
-## Task 5: PROJECT TASK - Create Position Class (Pure Python + Type Hints)
+## Task 3: Theory Drill - Add Magic Methods to Position Class (Pure Python)
 
-Create a `Position` class to represent a trading position in the AlgoBacktest project.
+Update your `Position` class in `algo_backtest/engine/position.py` to include proper `__str__` and `__repr__` methods.
 
-**File:** Create `algo_backtest/engine/position.py`
+**Requirements:**
+
+**`__repr__`** should return a string that could recreate the object:
+```python
+Position(ticker='EURUSD', side='BUY', entry_price=1.085, quantity=10000, stop_loss=1.08, take_profit=1.095)
+```
+
+**`__str__`** should return a user-friendly trading format:
+```python
+BUY 10000 EURUSD @ 1.0850 [SL=1.0800, TP=1.0950]
+```
+
+**Special cases for `__str__`:**
+- If `stop_loss` is `None`, show "No SL" instead of "SL=None"
+- If `take_profit` is `None`, show "No TP" instead of "TP=None"
+- Format prices to 4 decimal places (`.4f`)
+
+**Test your code:**
+```python
+from algo_backtest.engine.position import Position
+
+pos = Position("EURUSD", "BUY", 1.0850, 10000, stop_loss=1.0800, take_profit=1.0950)
+print(repr(pos))  # Should show Position(ticker='EURUSD', ...)
+print(str(pos))   # Should show BUY 10000 EURUSD @ 1.0850 [SL=1.0800, TP=1.0950]
+print(pos)        # Should use __str__
+
+pos_no_sl = Position("GBPUSD", "SELL", 1.2500, 5000)
+print(pos_no_sl)  # Should show SELL 5000 GBPUSD @ 1.2500 [No SL, No TP]
+```
+
+**Paste your two magic methods here:**
+
+    def __str__(self) -> str:
+        '''A Python magic method used to return information about class instead of memory object'''
+        return f'{self.side} {self.quantity} @ {self.entry_price} [SL = {self.stop_loss}, TP = {self.take_profit}]'
+    
+    
+    def __repr__(self) -> str:
+        '''A Python magic method used to provide devs with useful information to recreate the object '''
+        return f'{__name__}(ticker = {self.ticker}, side = {self.side}, entry_price = {self.entry_price}, quantity = {self.quantity}, stop_loss = {self.stop_loss}, take_profit = {self.take_profit})'
+
+
+I've tried to use Optional for my SL/TP, but it didn't really worked and I've got a TypeError: Cannot instantiate typing.Optional.
+
+Anyway, the current application seems to work perfectly fine and I don't think there are major updates necessary, LOG BELOW:
+
+$ python practice.py
+algo_backtest.engine.position(ticker = EURUSD, side = BUY, entry_price = 1.085, quantity = 10000, stop_loss = 1.08, take_profit = 1.095)
+BUY 10000 @ 1.085 [SL = 1.08, TP = 1.095]
+BUY 10000 @ 1.085 [SL = 1.08, TP = 1.095]
+SELL 5000 @ 1.25 [SL = None, TP = None]
+
+---
+
+## Task 4: Pandas Drill - Understanding `.any()` (Pandas Allowed)
+
+Now that you've learned Pandas properly, let's fix the Task 6 issue from Day 3.
+
+**Given this code:**
+```python
+import pandas as pd
+import numpy as np
+
+df = pd.DataFrame({
+    'ticker': ['EURUSD', 'GBPUSD', 'USDJPY'],
+    'open': [1.08, 1.25, np.nan],
+    'close': [1.09, np.nan, 110.5],
+    'volume': [1000, 1500, 2000]
+})
+
+# Task: Check if DataFrame has ANY NaN values
+# Write THREE different correct ways to do this:
+```
+
+**Your three solutions:**
+
+**Solution 1 (using `.sum().sum()`):**
+```python
+# Your code here
+
+check_nan1 = df.isna().sum().sum()
+print(check_nan1)
+
+#As an output, we simply get 2, as the total sum of NaN values
+
+```
+
+**Solution 2 (using `.any().any()`):**
+```python
+# Your code here
+
+check_nan2 = df.isna().any().any() #returns True
+print(check_nan2)
+
+#As a result, we get TRUE if there are any NaN values.
+```
+
+**Solution 3 (using `.sum()` with comparison):**
+```python
+# Your code here
+
+check_nan3 = df.isna().sum()
+print(check_nan3)
+
+As a result, we see a nice breakdown of all the columns and the number of NaN values with each one - this is probably hte most informative output.
+
+```
+
+**Question:** Why was `if nan_values.any() > 0:` wrong in Day 3 Task 6?
+
+**Answer here:**
+
+As any() returns True or False, which obviously can't be compared with any numerical values.
+
+---
+
+## Task 5: Pandas Drill - Boolean Indexing (Pandas Allowed)
+
+Given this DataFrame:
+
+```python
+import pandas as pd
+
+df = pd.DataFrame({
+    'timestamp': ['2024-01-01 09:00', '2024-01-01 09:01', '2024-01-01 09:02', '2024-01-01 09:03'],
+    'ticker': ['EURUSD', 'EURUSD', 'EURUSD', 'EURUSD'],
+    'open': [1.0800, 1.0820, 1.0850, 1.0830],
+    'high': [1.0850, 1.0870, 1.0900, 1.0880],
+    'low': [1.0790, 1.0810, 1.0840, 1.0820],
+    'close': [1.0820, 1.0850, 1.0830, 1.0850],
+    'volume': [1000, 1500, 2000, 1200]
+})
+```
+
+**Write code to:**
+
+1. Filter rows where `close > open` (bullish candles)
+2. Filter rows where `volume > 1200` AND `close > 1.0840`
+3. Get the `high` values (as a Series) where `close > open`
+4. Count how many candles are bullish (close > open)
+
+**Paste your solutions here:**
+
+
+bullish_candles = df[df['close'] > df['open']]
+filtered_rows = df[(df['volume'] > 1200) & (df['close'] > 1.0840)]
+high_series = pd.Series(df['high'][df['close'] > df['open']])
+bullish_candles_count = len(df[df['close'] > df['open']])
+
+---
+
+## Task 6: PROJECT TASK - Create Trade Class (Pure Python + Type Hints)
+
+Create a `Trade` class to represent a completed trade (closed position).
+
+**File:** Create `algo_backtest/engine/trade.py`
 
 **Requirements:**
 ```python
-"""Position management for trading strategies."""
+"""Trade management for completed positions."""
 
 from typing import Optional
+from datetime import datetime
 
 
-class Position:
+class Trade:
     """
-    Represents a single trading position.
+    Represents a completed trade.
 
     Attributes:
-        ticker: Trading symbol (e.g., "EURUSD").
-        entry_price: Price at which position was opened.
-        quantity: Number of units (positive for long, negative for short).
-        stop_loss: Stop loss price (optional).
-        take_profit: Take profit price (optional).
+        ticker: Trading symbol.
+        side: 'BUY' or 'SELL'.
+        entry_price: Entry price.
+        exit_price: Exit price.
+        quantity: Number of units.
+        entry_time: Entry timestamp (string or datetime).
+        exit_time: Exit timestamp (string or datetime).
+        pnl: Profit/Loss (calculated automatically).
+        exit_reason: 'SL', 'TP', or 'MANUAL'.
     """
 
     def __init__(
         self,
         ticker: str,
+        side: str,
         entry_price: float,
-        quantity: int,
-        stop_loss: Optional[float] = None,
-        take_profit: Optional[float] = None
+        exit_price: float,
+        quantity: float,
+        entry_time: str,
+        exit_time: str,
+        exit_reason: str = 'MANUAL'
     ) -> None:
-        """Initialize a new position."""
-        # Your code here - store all parameters as instance attributes
-        # Also calculate and store position_type: "long" if quantity > 0, "short" if < 0
+        """Initialize a completed trade and calculate P&L."""
+        self.ticker = ticker
+        self.side = side.upper()
+        self.entry_price = entry_price
+        self.exit_price = exit_price
+        self.quantity = quantity
+        self.entry_time = entry_time
+        self.exit_time = exit_time
+        self.exit_reason = exit_reason.upper()
 
-    def is_long(self) -> bool:
-        """Check if position is long (quantity > 0)."""
-        # Your code here
+        # Calculate P&L automatically
+        self.pnl = self._calculate_pnl()
 
-    def is_short(self) -> bool:
-        """Check if position is short (quantity < 0)."""
-        # Your code here
-
-    def calculate_pnl(self, current_price: float) -> float:
+    def _calculate_pnl(self) -> float:
         """
-        Calculate unrealized profit/loss.
-
-        Formula:
-        - Long: (current_price - entry_price) * quantity
-        - Short: (entry_price - current_price) * abs(quantity)
+        Calculate profit/loss based on side.
 
         Returns:
-            Unrealized P&L in currency units.
+            P&L in currency units.
         """
         # Your code here
+        # Hint: Same logic as Position.calculate_pnl()
+        pass
 
-    def should_close(self, current_price: float) -> bool:
+    def is_winner(self) -> bool:
+        """Check if trade was profitable."""
+        # Your code here
+        pass
+
+    def __repr__(self) -> str:
+        """Unambiguous representation."""
+        return (
+            f"Trade(ticker={self.ticker!r}, side={self.side!r}, "
+            f"entry_price={self.entry_price}, exit_price={self.exit_price}, "
+            f"quantity={self.quantity}, pnl={self.pnl:.2f}, exit_reason={self.exit_reason!r})"
+        )
+
+    def __str__(self) -> str:
         """
-        Check if position should close (hit SL or TP).
+        User-friendly representation.
+
+        Format: [WIN/LOSS] SIDE QUANTITY TICKER: ENTRY -> EXIT (REASON) | P&L: $X.XX
+        Example: [WIN] BUY 10000 EURUSD: 1.0800 -> 1.0850 (TP) | P&L: $500.00
+        """
+        # Your code here
+        # Hint: Use [WIN] if is_winner(), else [LOSS]
+        # Format prices to 4 decimals, P&L to 2 decimals
+        pass
+```
+
+**Test your code:**
+```python
+from algo_backtest.engine.trade import Trade
+
+# Winning BUY trade
+trade1 = Trade(
+    ticker="EURUSD",
+    side="BUY",
+    entry_price=1.0800,
+    exit_price=1.0850,
+    quantity=10000,
+    entry_time="2024-01-01 09:00",
+    exit_time="2024-01-01 09:30",
+    exit_reason="TP"
+)
+
+print(trade1)
+# Expected: [WIN] BUY 10000 EURUSD: 1.0800 -> 1.0850 (TP) | P&L: $500.00
+
+# Losing SELL trade
+trade2 = Trade(
+    ticker="GBPUSD",
+    side="SELL",
+    entry_price=1.2500,
+    exit_price=1.2550,
+    quantity=5000,
+    entry_time="2024-01-01 10:00",
+    exit_time="2024-01-01 10:15",
+    exit_reason="SL"
+)
+
+print(trade2)
+# Expected: [LOSS] SELL 5000 GBPUSD: 1.2500 -> 1.2550 (SL) | P&L: $-250.00
+```
+
+**Paste your Trade class here:**
+
+
+
+"""Trade management for completed positions."""
+
+class Trade:
+    '''
+    Represents a completed trade
+    
+    Attributes:
+        ticker: Trading symbol.
+        side: 'BUY' or 'SELL'.
+        entry_price: Entry price.
+        exit_price: Exit price.
+        quantity: Number of units.
+        entry_time: Entry timestamp (string or datetime).
+        exit_time: Exit timestamp (string or datetime).
+        pnl: Profit/Loss (calculated automatically).
+        exit_reason: 'SL', 'TP', or 'MANUAL'.
+    '''
+    
+    def __init__(self,
+                 ticker: str,
+                 side: str,
+                 entry_price: float,
+                 exit_price: float,
+                 quantity: float,
+                 entry_time: str,
+                 exit_time: str,
+                 exit_reason: str) -> None:
+        
+        """Initialize a completed trade and calculate P&L."""
+        
+        self.ticker = ticker
+        self.side = side.upper()
+        self.entry_price = entry_price
+        self.exit_price = exit_price
+        self.quantity = quantity
+        self.entry_time = entry_time
+        self.exit_time = exit_time
+        self.exit_reason = exit_reason.upper()
+
+        # Calculate P&L automatically
+        self.pnl = self._calculate_pnl()
+        
+    def __str__(self):
+        """
+        User-friendly representation.
+
+        Format: [WIN/LOSS] SIDE QUANTITY TICKER: ENTRY -> EXIT (REASON) | P&L: $X.XX
+        Example: [WIN] BUY 10000 EURUSD: 1.0800 -> 1.0850 (TP) | P&L: $500.00
+        """
+        
+        if self.is_winner() == True:
+            result = '[WIN]'
+        else:
+            result = '[LOSS]'
+            
+        return (f'''{result} {self.side} {self.quantity} {self.ticker}: 
+                {self.entry_price} -> {self.exit_price} ({self.exit_reason}) 
+                | P&L: ${self.pnl:.2f}''')
+    
+    def __repr__(self):
+        """Unambiguous representation."""
+        
+        return (f'Trade(ticker = {self.ticker!r}, side = {self.side!r},'
+                f'entry_price = {self.entry_price}, exit_price = {self.exit_price}'
+                f'quantity = {self.quantity}, pnl = {self.pnl:.2f}, exit_reason = {self.exit_reason!r}'
+        )
+    
+    def _calculate_pnl(self) -> float:
+        """
+        Calculate profit/loss based on side.
 
         Returns:
-            True if stop loss or take profit is hit, False otherwise.
+            P&L in currency units.
         """
-        # Your code here
-        # Hint: For long positions, close if price <= stop_loss OR price >= take_profit
-        #       For short positions, close if price >= stop_loss OR price <= take_profit
-```
 
-**Test your code in `practice.py`:**
-```python
-from algo_backtest.engine.position import Position
+        if self.side != 'BUY' and self.side != 'SELL':
+            print('Incorrect side, it should be either BUY or SELL (case insensitive)')
+            return None
+        elif self.exit_price < 0 or self.entry_price < 0:
+            print('Incorrect exit price or entry price, it should be above 0!')
+            return None
+        
+        if self.side == 'BUY':
+            pnl = (self.exit_price - self.entry_price) * self.quantity
+            return pnl
+        elif self.side == 'SELL':
+            pnl = (self.entry_price - self.exit_price) * self.quantity
+            return pnl
+        
+        
+    def is_winner(self) -> bool:
+        """Check if trade was profitable."""
+        if self.pnl > 0:
+            return True
+        else:
+            return False
+        
+        
 
-# Long position
-long_pos = Position("EURUSD", entry_price=100.0, quantity=1000, stop_loss=99.0, take_profit=102.0)
-print(long_pos.is_long())  # True
-print(long_pos.calculate_pnl(101.0))  # 1000.0
-print(long_pos.should_close(98.5))  # True (hit SL)
+#LOG:
 
-# Short position
-short_pos = Position("GBPUSD", entry_price=120.0, quantity=-500, stop_loss=121.0, take_profit=118.0)
-print(short_pos.is_short())  # True
-print(short_pos.calculate_pnl(119.0))  # 500.0
-print(short_pos.should_close(117.5))  # True (hit TP)
-```
+[WIN] BUY 10000 EURUSD: 
+                1.08 -> 1.085 (TP)
+                | P&L: $50.00
+[LOSS] SELL 5000 GBPUSD:
+                1.25 -> 1.255 (SL)
+                | P&L: $-25.00
+(.venv) 
 
-**Paste your Position class here:**
-
----
-
-## Task 6: PROJECT TASK - Fix DataLoader Class (Pandas Allowed)
-
-Now that you understand OOP, go back and **fix the bugs** in your `DataLoader` class from Day 2.
-
-**File:** `algo_backtest/data/data_loader.py`
-
-**Issues to fix (from Day 2 feedback):**
-
-1. **Missing context manager in `load_data()`**
-   - Current: `data = pd.read_csv(self.filepath)`
-   - Required: Use `with open(...) as f:` and `pd.read_csv(f)`
-
-2. **Missing return statement in ValueError handler**
-   ```python
-   except ValueError as e:
-       print(f'Value Error! {str(e)}')
-       # Add: return None
-   ```
-
-3. **Logic error in `validate_data()` - missing columns check**
-   - Current: `missing_columns = set(df.columns) - set(df.columns)`
-   - Fix: `missing_columns = set(req_columns) - set(df.columns)`
-
-4. **Fix NaN check** (this one is tricky - we'll teach Pandas properly soon, but try to fix it)
-   - The `nan_values.any()` check doesn't properly validate
-   - Hint: You want to check if the sum is greater than 0, not just if `.any()` returns True
-
-**Test your fixes:**
-```python
-from algo_backtest.data.data_loader import DataLoader
-
-loader = DataLoader('ohlc_mock_data.csv')
-data = loader.load_data()
-if data is not None:
-    is_valid = loader.validate_data(data)
-    print(f"Data valid: {is_valid}")  # Should print True
-```
-
-**Paste your corrected methods here (just the fixed parts):**
-
+And please note, these are the correct P&L calculations for the quantities you've given.
 ---
 
 ## Task 7: PCAP Simulation - Multiple Choice
@@ -323,24 +479,26 @@ if data is not None:
 What is the output of this code?
 
 ```python
-class Test:
-    value = 10
+class Account:
+    def __repr__(self):
+        return "Account"
 
-    def __init__(self):
-        self.value = 20
+    def __str__(self):
+        return "My Account"
 
-obj = Test()
-print(obj.value)
-print(Test.value)
+acc = Account()
+print(acc)
+print(repr(acc))
 ```
 
 **Choices:**
-A) `20` then `20`
-B) `10` then `10`
-C) `20` then `10`
-D) `10` then `20`
+A) `My Account` then `My Account`
+B) `Account` then `Account`
+C) `My Account` then `Account`
+D) `Account` then `My Account`
 
 **Your answer with explanation:**
+C, as for default print, we use __str__ when available, and then we specifically ask for repr so we get the repr output.
 
 ---
 
@@ -348,126 +506,183 @@ D) `10` then `20`
 What happens when you run this code?
 
 ```python
-class Person:
-    def __init__(self, name):
-        self.name = name
-        return self
+import pandas as pd
 
-p = Person("Alice")
+df = pd.DataFrame({'a': [1, 2, 3]})
+result = df['a'] > 2 and df['a'] < 5
 ```
 
 **Choices:**
-A) Works fine, `p.name` is `"Alice"`
-B) `TypeError: __init__() should return None`
-C) `AttributeError: 'NoneType' object has no attribute 'name'`
-D) `NameError: self is not defined`
+A) Works fine, `result` is `[False, False, True]`
+B) `ValueError: The truth value of a Series is ambiguous`
+C) `TypeError: cannot use and with Series`
+D) `KeyError: 'a'`
 
 **Your answer with explanation:**
+C, TYPE ERROR!
+result = df[(df['a'] > 2) & (df['a'] < 5)] #correct application
+
 
 ---
 
-## Task 8: Integration Challenge - OHLCCandle Class Enhancement (Pure Python)
+## Task 8: Integration Challenge - DataLoader Enhancement (Pandas Allowed)
 
-Enhance the `OHLCCandle` class from the lesson with a new method.
+Update your `DataLoader` class in `algo_backtest/data/data_loader.py` to include:
 
-**Starting point (from lesson):**
+1. **Add `__repr__` method:**
+   ```python
+   DataLoader(filepath='ohlc_mock_data.csv')
+   ```
+
+2. **Add a new method `get_candle_count()`:**
+   ```python
+   def get_candle_count(self) -> int:
+       """
+       Return total number of candles in loaded data.
+
+       Returns:
+           Number of rows in DataFrame, or 0 if data not loaded.
+       """
+       pass
+   ```
+
+3. **Add a new method `get_bullish_candles()`:**
+   ```python
+   def get_bullish_candles(self, data: pd.DataFrame) -> pd.DataFrame:
+       """
+       Return only bullish candles (close > open).
+
+       Args:
+           data: OHLC DataFrame.
+
+       Returns:
+           Filtered DataFrame with only bullish candles.
+       """
+       pass
+   ```
+
+**Test your code:**
 ```python
-class OHLCCandle:
-    """Represents a single OHLC candle."""
+from algo_backtest.data.data_loader import DataLoader
 
-    def __init__(self, timestamp: str, ticker: str, open_price: float,
-                 high: float, low: float, close: float, volume: int) -> None:
-        self.timestamp = timestamp
-        self.ticker = ticker
-        self.open = open_price
-        self.high = high
-        self.low = low
-        self.close = close
-        self.volume = volume
+loader = DataLoader('ohlc_mock_data.csv')
+print(repr(loader))  # DataLoader(filepath='ohlc_mock_data.csv')
 
-    def is_bullish(self) -> bool:
-        """Check if candle closed higher than it opened."""
-        return self.close > self.open
+data = loader.load_data()
+if data is not None:
+    print(f"Total candles: {loader.get_candle_count()}")
 
-    def get_body_size(self) -> float:
-        """Calculate candle body size."""
-        return abs(self.close - self.open)
-
-    def get_range(self) -> float:
-        """Calculate candle range (high - low)."""
-        return self.high - self.low
+    bullish = loader.get_bullish_candles(data)
+    print(f"Bullish candles: {len(bullish)}")
 ```
 
-**Add these three methods:**
+**Paste your updated methods here:**
 
-1. **`is_doji(self, threshold: float = 0.1) -> bool`**
-   - A doji is when body size is very small compared to range
-   - Return `True` if `body_size / range < threshold`
-   - Handle edge case: if range is 0, return `True`
+    def __repr__(self):
+        '''
+        Unambiguous representation
+        '''
+        return f'DataLoader(filepath = {self.filepath})'
 
-2. **`get_upper_wick(self) -> float`**
-   - Calculate upper wick (shadow) length
-   - Formula: `high - max(open, close)`
 
-3. **`get_lower_wick(self) -> float`**
-   - Calculate lower wick (shadow) length
-   - Formula: `min(open, close) - low`
+    def get_candle_count(self) -> int:
+       """
+       Return total number of candles in loaded data.
 
-**Test your enhanced class:**
-```python
-candle = OHLCCandle(
-    timestamp="2024-01-01 09:00:00",
-    ticker="EURUSD",
-    open_price=100.5,
-    high=101.0,
-    low=100.0,
-    close=100.6,
-    volume=5000
-)
+       Returns:
+           Number of rows in DataFrame, or 0 if data not loaded.
+       """
+       
+       data = self.load_data()
+       
+       if data is not None:
+           return len(data)
+       else:
+           return 0
+        
+        
+    def get_bullish_candles(self, data: pd.DataFrame) -> pd.DataFrame:
+       """
+       Return only bullish candles (close > open).
 
-print(f"Is doji? {candle.is_doji()}")  # Should be False (body is significant)
-print(f"Upper wick: {candle.get_upper_wick():.2f}")  # 101.0 - 100.6 = 0.40
-print(f"Lower wick: {candle.get_lower_wick():.2f}")  # 100.5 - 100.0 = 0.50
-```
+       Args:
+           data: OHLC DataFrame.
 
-**Paste your three new methods here:**
+       Returns:
+           Filtered DataFrame with only bullish candles.
+       """
+       
+       bullish_candles = data[data['close'] > data['open']]
+       return bullish_candles
+    
+    
+
+
+
 
 ---
 
-## Bonus Challenge (Optional): Class Attribute Counter
+## Bonus Challenge (Optional): Trade Statistics
 
-Create an `Employee` class that automatically assigns unique IDs to each employee using a **class attribute** counter.
+Add a **class method** to the `Trade` class that calculates win rate from a list of trades.
 
-**Requirements:**
 ```python
-class Employee:
+@classmethod
+def calculate_win_rate(cls, trades: list['Trade']) -> float:
     """
-    Employee with auto-incrementing ID.
+    Calculate win rate from list of trades.
 
-    Class Attributes:
-        total_employees: Counter for total employees created.
+    Args:
+        trades: List of Trade objects.
 
-    Instance Attributes:
-        name: Employee name.
-        employee_id: Unique ID assigned automatically.
+    Returns:
+        Win rate as percentage (0-100).
+        Returns 0 if no trades.
     """
-
     # Your code here
+    # Hint: Count winners, divide by total, multiply by 100
+    pass
 ```
 
-**Expected behavior:**
+**Usage:**
 ```python
-emp1 = Employee("Alice")
-emp2 = Employee("Bob")
-emp3 = Employee("Charlie")
+from algo_backtest.engine.trade import Trade
 
-print(emp1.employee_id)  # 1
-print(emp2.employee_id)  # 2
-print(emp3.employee_id)  # 3
-print(Employee.total_employees)  # 3
+trade1 = Trade("EURUSD", "BUY", 1.08, 1.09, 10000, "2024-01-01 09:00", "2024-01-01 09:30", "TP")
+trade2 = Trade("GBPUSD", "SELL", 1.25, 1.26, 5000, "2024-01-01 10:00", "2024-01-01 10:15", "SL")
+trade3 = Trade("USDJPY", "BUY", 110.00, 110.50, 2000, "2024-01-01 11:00", "2024-01-01 11:45", "TP")
+
+trades = [trade1, trade2, trade3]
+win_rate = Trade.calculate_win_rate(trades)
+print(f"Win rate: {win_rate:.1f}%")  # Expected: 66.7%
 ```
 
-**Paste your Employee class here:**
+**Paste your class method here:**
+
+
+    @classmethod
+    def calculate_win_rate(cls, trades: list['Trade']) -> float:
+        """
+        Calculate win rate from list of trades.
+
+        Args:
+            trades: List of Trade objects.
+
+        Returns:
+            Win rate as percentage (0-100).
+            Returns 0 if no trades.
+        """
+
+        if trades is not None:
+            trades_profits = [trade._calculate_pnl() for trade in trades]
+            winners = [profit for profit in trades_profits if profit > 0]
+            print(trades_profits)
+            return (len(winners) / len(trades_profits)) * 100
+            
+        else:
+            return 0
+
+It was a bit unintuitive for me, but I worked it out with some tests
 
 ---
 
@@ -485,4 +700,4 @@ Document this in `feedback.md`.
 ---
 
 **Next Session Preview:**
-Tomorrow (Day 4) we'll continue with OOP - building more complex classes, understanding `__str__` and `__repr__`, and creating the `Trade` class for the backtesting engine!
+Tomorrow (Day 5) is Friday! We'll wrap up Week 1 with a comprehensive review, generate TWO mock PCAP exams for the weekend, and polish the project structure. Great work this week! 🎉
