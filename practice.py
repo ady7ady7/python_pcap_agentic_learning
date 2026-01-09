@@ -877,8 +877,7 @@ import numpy as np
 # result = df[(df['a'] > 2) & (df['a'] < 5)] #correct application
 # print(result)
 
-#W1 D4 T8 - modifying algo_backtest/data/data_loader.py
-
+#W1 D4 T8 - modifying algo_backtest/data/data_loader.py - classmethod
 
 from algo_backtest.engine.trade import Trade
 
@@ -889,3 +888,313 @@ trade3 = Trade("USDJPY", "BUY", 110.00, 110.50, 2000, "2024-01-01 11:00", "2024-
 trades = [trade1, trade2, trade3]
 win_rate = Trade.calculate_win_rate(trades)
 print(f"Win rate: {win_rate:.1f}%")  # Expected: 66.7%
+print(trades)
+
+#W1 D5 T1
+
+# **Answer these short questions to test your Week 1 retention:**
+
+# 1. What's the difference between `import math` and `from math import sqrt`?
+# 2. What does `"PCAP"[10:20]` return? (No IndexError!)
+# 3. In exception handling, why must specific exceptions come before general ones?
+# 4. What's the difference between an instance attribute and a class attribute?
+# 5. When does Python call `__repr__` vs `__str__`?
+# 6. What operator do you use for multiple conditions in Pandas filtering? (`and`/`or` or `&`/`|`?)
+
+# **Your answers:**
+
+# 1. Two differences - in the first example we import all the relevant functions from math that are set to be imported there by default if we use this general import (this is also the best practice, as we're not occupying the namespace), but to use them we have to call math.module_name; In the second example we only import the sqrt function and we can call it by naming it sqrt. It's not the best practice as we're also occupying the namespace and may cause naming conflicts, especially if our codebase is large and we import a lot of functions like that.
+# 2. Empty string
+# 3. Because otherwise we would always catch the general exception catch, and it would block the other exception handling cases (so effectively, they would be pointless)
+# 4. Instance attribute is tied to a given instance of a class, while a class attribute is shared among all instances of a given class.
+# 5. It calls __str__ by default if it's available and if we do print(class_name); __repr__ would be called instead if __str__ is not available. We can also simply explicitly call both methods as in print(repr(class_name)) or print(str(class_name))
+# 6. For single elements comparison, we use and/or operators, and for series we use & / | instead, so in this case the answer is `&`/`|`.
+
+
+#W1 D5 T2- updated algo_backtest/main.py to import data_loader and trade 
+# and do a mock backtest of 3 manually added trades
+
+#W1 D5 T3
+
+
+# class Portfolio:
+#     total_portfolios = 0
+
+#     def __init__(self, name):
+#         self.name = name
+#         Portfolio.total_portfolios += 1
+
+#     def __str__(self):
+#         return f"Portfolio: {self.name}"
+
+#     def __repr__(self):
+#         return f"Portfolio({self.name!r})"
+
+# p1 = Portfolio("Tech Stocks")
+# p2 = Portfolio("Bonds")
+
+# print(p1)
+# print(repr(p2))
+# print(f"Total: {Portfolio.total_portfolios}")
+
+# portfolios = [p1, p2]
+# print(portfolios)
+
+# **Your predictions:**
+# - Line 1 (`print(p1)`): `Portfolio: Tech Stocks`
+# - Line 2 (`print(repr(p2))`): `Portfolio('Bonds')`
+# - Line 3 (`print(f"Total: ...")`): `Total: 2`
+# - Line 4 (`print(portfolios)`): `[Portfolio('Tech Stocks'), Portfolio('Bonds')]`
+
+#W1 D5 T4
+
+# from typing import Optional, List
+# from algo_backtest.data.data_loader import DataLoader
+# from algo_backtest.engine.trade import Trade
+
+
+# def safe_backtest_runner(filepath: str) -> Optional[List[Trade]]:
+#     """
+#     Safely run backtest with error handling.
+
+#     Args:
+#         filepath: Path to OHLC data CSV.
+
+#     Returns:
+#         List of Trade objects if successful, None if any error occurs.
+
+#     Error Handling:
+#         - FileNotFoundError: Data file missing
+#         - ValueError: Invalid data format
+#         - KeyError: Missing required columns
+#         - Exception: Catch-all for unexpected errors
+#     """
+
+#     try:
+        
+#         trades = []
+#         loader = DataLoader(filepath)
+#         data = loader.load_data()
+#         x = loader.validate_data(data)
+        
+#         if x:
+#             trade1 = Trade(data.iloc[0]['ticker'],     #ticker
+#                            'BUY',                      #side     
+#                            data.iloc[15]['open'],      #entry_price
+#                            data.iloc[34]['close'],     #exit_price
+#                            15000,                      #quantity
+#                            data.iloc[15]['timestamp'], #entry_time
+#                            data.iloc[35]['timestamp'], #exit_time
+#                            '')                         #reason (nie wrzucam nic na razie)
+            
+            
+#             trade2 = Trade(data.iloc[0]['ticker'],     #jw.
+#                            'SELL',
+#                            data.iloc[18]['open'],
+#                            data.iloc[27]['close'],
+#                            15000,
+#                            data.iloc[18]['timestamp'],
+#                            data.iloc[28]['timestamp'],
+#                            '')
+#             trades = [trade1, trade2]
+
+#     except FileNotFoundError as e:
+#         print(f'File not found: {str(e)}')
+#         return None
+
+#     except ValueError as e:
+#         print(f'Wrong value: {str(e)}')
+#         return None
+
+#     except KeyError as e:
+#         print(f'Key not found: {str(e)}')
+#         return None
+    
+#     except Exception as e:
+#         print(f'Unexpected error: {str(e)}')
+#         return None
+    
+#     else:
+#         print('Trades added successfully, returning the list of trades.')
+#         return trades
+
+#     finally:
+#        print('Operation finished')
+
+# # Test 1: Valid file
+# result = safe_backtest_runner('ohlc_mock_data.csv')
+# print(f"Valid file: {result is not None}")  # Should be True
+
+# # Test 2: Missing file
+# result = safe_backtest_runner('nonexistent.csv')
+# print(f"Missing file: {result is None}")  # Should be True
+
+
+#W1 D5 T5
+# data = pd.read_csv('ohlc_mock_data.csv')
+
+# import numpy as np
+# # Question 1: What's the average close price for bullish candles only?
+# # Your code here
+# avg_bullish_close = np.mean([data['close'][data['close'] > data['open']]])
+# print(avg_bullish_close)
+# # Question 2: Find the candle with the highest volume
+# # Return the entire row as a Series
+# # Your code here
+# highest_vol = np.max([data['volume']])
+# highest_vol_candle = data[data['volume'] == highest_vol]
+# print(highest_vol_candle)
+# # Question 3: Calculate the total volume for candles where close > 100.5
+# # Your code here
+
+# total_vol_candles = sum(data['volume'][data['close'] > 100.5])
+# print(total_vol_candles)
+
+# # Question 4: Create a new column 'candle_type' with values 'bullish' or 'bearish'
+# # based on close vs open
+# # Your code here
+# for index, row in data.iterrows():
+#     row['candle_type'] = 'bullish' if row['close'] > row['open'] else 'bearish'
+#     print(row)
+# #Here we iterate, creating a copy of each row, so we don't add anything to the original df
+
+# data['candle_type'] = data.apply(lambda row: 'bullish' if row['open'] > row['close'] else 'bearish',
+#                                          axis = 1)
+# print(data)
+
+# # Question 5: Get all candles where high is in the top 10 highest values
+# # Hint: Use .nlargest()
+# # Your code here
+# top_10_highs = data.nlargest(10, 'high')
+# print(top_10_highs)
+
+
+#W1 D5 T6 - created algo_backtest/engine/position_manager to manage multiple positions
+
+# from algo_backtest.engine.position_manager import PositionManager
+# from algo_backtest.engine.position import Position
+
+# manager = PositionManager()
+
+# # Add positions
+# pos1 = Position("EURUSD", "BUY", 1.0800, 10000, stop_loss=1.0750, take_profit=1.0900)
+# pos2 = Position("GBPUSD", "SELL", 1.2500, 5000, stop_loss=1.2550, take_profit=1.2450)
+
+# manager.add_position(pos1)
+# manager.add_position(pos2)
+
+# print(manager)  # PositionManager: 2 open positions
+
+# # Check P&L at current price
+# current_price = 1.0850
+# total_pnl = manager.get_total_pnl(current_price)
+# print(total_pnl)
+
+# # Check for triggered positions
+# closed = manager.close_triggered_positions(1.0900)
+# print(f"Closed {len(closed)} positions")
+# print(manager)  # Should show 1 open position now
+
+#W1 D5 T8 - Bug hunter 
+
+#I'm leaving the original version in its oriignal form 
+
+# """Broken trading simulator - find all bugs!"""
+
+# class trade:
+#     def __init__(self, Ticker, side, entry, exit, qty):
+#         self.ticker = Ticker
+#         self.Side = side
+#         self.entry = entry
+#         self.exit = exit
+#         self.qty = qty
+
+#     def __str__(self):
+#         print(f"{self.Side} {self.ticker}")
+
+#     def calc_pnl(self):
+#         if self.Side == "BUY":
+#             return (self.exit - self.entry) * self.qty
+#         else:
+#             return (self.entry - self.exit) * self.qty
+
+# trades = []
+
+# import pandas as pd
+# df = pd.read_csv("data.csv")
+
+# for i in range(len(df)):
+#     row = df.iloc[i]
+#     t = trade(row['ticker'], 'BUY', row['open'], row['close'], 1000)
+#     trades.append(t)
+
+# total = 0
+# for t in trades:
+#     total = total + t.calc_pnl()
+
+# print(f"Total PNL: {total}")
+
+#**List of all issues I found:**
+
+# 1. uncapitalized class name - trade
+# 2. capitalized parameter name - Ticker
+# 3. capitalized self.Side 
+# 4. it would be nice to also add .upper to side to account for potential case issues
+# 5. weird __str__ representation with unclear information (missing data) AND an error - it uses print instead of return
+# 6. wrong place to import pandas module
+# 7. general lack of exception handling
+# 8. wrong total_pnl calculation
+
+#Fixed version:
+
+# '''
+# Fixed trade simulator
+# '''
+
+# import pandas as pd
+
+# class Trade:
+#     def __init__(self, ticker, side, entry, exit, qty):
+#         '''init constructor for the Trade class'''
+#         self.ticker = ticker
+#         self.side = side.upper()
+#         self.entry = entry
+#         self.exit = exit
+#         self.qty = qty
+        
+#     def __str__(self):
+#         '''A clear representation of a class if anybody decides to use print(Trade)'''
+#         return f"{self.side} {self.qty} {self.ticker} @ {self.entry}, EXIT @ {self.exit}"
+    
+#     def calc_pnl(self):
+#         '''Method used to calculate profit of a given position
+        
+#         Returns the pnl value, depending on the side (buy or sell)
+#         '''
+#         if self.qty < 0 or self.entry < 0 or self.exit < 0:
+#             print(f'Wrong value, it should be above 0!')
+#             return None
+        
+#         if self.side == "BUY":
+#             return (self.exit - self.entry) * self.qty
+#         else:
+#             return (self.entry - self.exit) * self.qty
+    
+
+# trades = []
+# filepath = 'ohlc_mock_data.csv'
+
+# df = pd.read_csv(filepath)
+
+# for i in range(len(df)):
+#     row = df.iloc[i]
+#     t = Trade(row['ticker'], 'BUY', row['open'], row['close'], 1000)
+#     trades.append(t)
+
+# total = 0
+# for t in trades:
+#     total += t.calc_pnl()
+
+# print(f"Total PNL: {total}")
+
+

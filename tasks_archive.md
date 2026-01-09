@@ -101,3 +101,37 @@ Format: Date | Topic | Score | Difficulty | Notes
 
 ---
 
+## Week 1, Day 5 - 2026-01-09
+
+**Topic:** Week 1 Review & Integration (Friday Wrap-up)
+**Score:** 8/8 tasks completed | 93.75%
+**Difficulty:** Medium (5-6/10)
+
+**Tasks Completed:**
+1. Quick fire review (6 questions covering Week 1 concepts)
+2. Integration challenge (main.py with DataLoader → Trade → PositionManager workflow)
+3. PCAP traps (predict output for 3 tricky code snippets)
+4. Exception handling (safe_backtest_runner with try/except/else/finally)
+5. Pandas advanced filtering (bullish candles, multi-condition, top-N, conditional columns)
+6. PositionManager class (multi-position management with SL/TP checking)
+7. PCAP multiple choice (class attributes, exceptions, Pandas operators)
+8. Code review challenge (find 8 issues in broken PositionManager, rewrite cleanly)
+
+**Key Learnings:** Week 1 integration (modules + strings + exceptions + OOP + magic methods + Pandas), end-to-end backtest workflow, Pandas optimization patterns (vectorized operations vs `.apply()` vs `.iterrows()`), list comprehension for safe filtering, exception handling complete structure
+
+**Student Contributions:**
+- Corrected mentor on Task 2 import paths (relative imports correct when main.py inside package)
+- Requested Pandas optimization patterns be added to lessons/pandas.md (completed)
+- Fixed PositionManager return type and list modification issues
+- Demonstrated professional code review by catching mentor error
+
+**Project Milestones:**
+- AlgoBacktest Core functional (DataLoader, Trade, Position, PositionManager)
+- End-to-end backtest execution in main.py
+- Position management system with SL/TP triggers
+
+**Week 1 Summary:**
+40 tasks completed across 5 days. Average score: **89.95% (B+)**. All foundational Python and OOP concepts covered. Project framework established and functional.
+
+---
+

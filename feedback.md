@@ -1,8 +1,8 @@
 # Daily Feedback Template
 
-**Date:** 2026-01-09
-**Week:** 1 | **Day:** 5 (Friday - Week Wrap-up)
-**Topic:** Week 1 Review & Mock PCAP Exams
+**Date:** 2026-01-10
+**Week:** 2 | **Day:** 1 (Monday)
+**Topic:** [To be filled]
 
 ---
 
@@ -33,19 +33,12 @@
 **4. Did you encounter any bugs/errors that taught you something?**
 
 
-**5. Week 1 Progress: How confident do you feel about modules, strings, exceptions, OOP, and Pandas?**
+**5. How confident do you feel about today's topic?**
 
 
 ---
 
 ## Questions for Mentor
-
-
----
-
-## Weekend Goals
-
-Mock exams and project polish:
 
 
 ---

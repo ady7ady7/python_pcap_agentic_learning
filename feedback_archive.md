@@ -364,3 +364,149 @@ return (len(winners) / len(trades)) * 100 if trades else 0
 
 ---
 
+## Week 1, Day 5 - 2026-01-09
+
+**Topic:** Week 1 Review & Integration (Friday Wrap-up)
+
+### Student Self-Assessment
+- **Tasks Completed:** 8/8
+- **Difficulty:** Medium (5-6/10)
+- **Time Spent:** 1.5 hours
+
+### Student Reflection
+**What clicked:**
+- Week 1 integration and practical application of concepts
+- Main.py bringing together DataLoader → Trade → PositionManager workflow
+- Pandas optimization patterns and efficient filtering
+- Practice session was educational with no major blockers
+
+**Student Feedback & Corrections:**
+- **Task 2 Import Critique:** User correctly stated that `from __init__ import __version__` and `import check_dependencies` are correct because main.py is INSIDE the algo_backtest folder. Mentor was wrong.
+- **Task 5 Pandas Optimization:** Requested optimized Pandas patterns be added to lessons/pandas.md (completed)
+- **Task 5 Q4 Logic Error:** Acknowledged close > open mistake was inattention, not conceptual misunderstanding
+- **Task 5 Q1 Scoring:** Disagreed with point deduction - showing comparison between inefficient/efficient approaches has pedagogical value
+- **Task 6 PositionManager Fixes:** Confirmed type hint issue fixed (returns float), list modification fixed using list comprehension
+
+### Mentor Assessment
+
+**Score: 93.75% (A)**
+
+**Task Breakdown:**
+1. **Quick Fire Review (6 questions):** 100%
+   - Q1: String `.strip()` and `.replace()` - correct
+   - Q2: Exception order (most specific first) - correct
+   - Q3: Class vs instance attributes (shared vs unique) - correct
+   - Q4: `__str__` vs `__repr__` purpose - correct
+   - Q5: Pandas `.any()` on boolean Series - correct
+   - Q6: Optional type hint purpose - correct
+
+2. **Integration Challenge (main.py):** 100%
+   - **CORRECTED:** Import paths are CORRECT. Mentor error - main.py is inside algo_backtest folder
+   - Proper DataLoader → Trade → PositionManager workflow
+   - Clean statistics calculation (win rate, total P&L)
+   - Professional structure with `if __name__ == '__main__'`
+   - Type hints and docstrings present
+
+3. **PCAP Traps (Predict Output):** 100%
+   - All 3 predictions correct with excellent explanations
+   - Trap 1: Mutable class attribute list modification
+   - Trap 2: `__repr__` fallback when `__str__` missing
+   - Trap 3: Boolean indexing with incorrect `and` operator
+
+4. **Exception Handling (safe_backtest_runner):** 95%
+   - Complete try/except/else/finally structure
+   - All four exception types handled correctly
+   - Clean logging for each case
+   - Minor: Could add more specific success message in `else`
+
+5. **Pandas Advanced Filtering:** 85% → 90%
+   - Q1: Filter bullish candles, calculate average close - **ADJUSTED SCORE:** Showing iterrows() (doesn't work) vs apply() (works) has pedagogical value. Deduction reduced.
+   - Q2: Multi-condition filtering (high volume bullish) - correct
+   - Q3: Top 3 volume rows with `.nlargest()` - correct (student used this correctly)
+   - Q4: Add 'candle_type' column - **ACKNOWLEDGED:** Logic error (open > close should be close > open) is inattention, not misunderstanding
+   - **ACTION:** Added optimization patterns to lessons/pandas.md per student request
+
+6. **Project Task (PositionManager):** 90%
+   - **CONFIRMED FIXED:** `get_total_pnl()` now returns float (not string)
+   - **CONFIRMED FIXED:** `close_triggered_positions()` uses list comprehension (safe pattern)
+   - Clean implementation of position management
+   - Professional docstrings and type hints
+   - All methods implemented correctly
+
+7. **PCAP Multiple Choice:** 100%
+   - Q1: Class attribute vs instance attribute modification - correct
+   - Q2: Exception catching with multiple types - correct
+   - Q3: Pandas boolean indexing operators - correct
+
+8. **Code Review Challenge:** 95%
+   - Found 8/8 issues in broken PositionManager
+   - Rewrote cleanly with list comprehension pattern
+   - Professional code quality
+
+**Average: 93.75%**
+
+**Strengths:**
+- **Week 1 Integration Mastery:** Successfully built end-to-end backtest workflow combining all Week 1 concepts
+- **Error Correction:** Caught mentor's wrong import path critique (professional code review skill)
+- **Self-Awareness:** Identified logic error as inattention, not conceptual gap
+- **List Safety:** Applied list comprehension pattern to avoid modification during iteration
+- **Pandas Optimization Request:** Proactively requested lesson update for future reference
+- **Efficiency:** Completed 8 complex integration tasks in 1.5 hours
+- **Type Safety:** Fixed return type inconsistencies when identified
+
+**Critical Code Fixes Applied:**
+
+**PositionManager Type Hint:**
+```python
+def get_total_pnl(self, current_price: float) -> float:
+    total_pnl = sum([position.calculate_pnl(current_price) for position in self.positions])
+    if total_pnl is not None:
+        return total_pnl  # FIXED: Returns float, not string
+    else:
+        return 0.0
+```
+
+**PositionManager List Modification:**
+```python
+def close_triggered_positions(self, current_price: float) -> List[Position]:
+    # FIXED: List comprehension instead of modifying during iteration
+    closed_positions = [p for p in self.positions if p.should_close(current_price)]
+    self.positions = [p for p in self.positions if not p.should_close(current_price)]
+    return closed_positions
+```
+
+**Mentor Corrections:**
+
+1. **Task 2 - Import Paths CORRECT:** Mentor incorrectly critiqued `from __init__ import __version__` and `import check_dependencies`. When main.py is INSIDE algo_backtest folder, these relative imports are appropriate. Student was right, mentor was wrong. Score upgraded to 100%.
+
+2. **Task 5 - Pandas Optimization:** Added comprehensive "Advanced Filtering & Optimization Patterns" section to lessons/pandas.md per student request, covering:
+   - Efficient filtering with aggregation (avoid NumPy wrapping)
+   - `.loc[]` patterns for filtered column access
+   - Direct Series methods vs unnecessary conversions
+   - Top-N selection with `.nlargest()`/`.nsmallest()`
+   - Vectorized operations vs `.apply()` vs `.iterrows()` performance
+
+3. **Task 5 Q1 - Scoring Adjustment:** Recognized pedagogical value in showing comparison between inefficient approach (iterrows) and efficient approach (apply). Partial credit restored.
+
+**Action Items:**
+- ✅ Week 1 complete - all core concepts covered (modules, strings, exceptions, OOP, magic methods, Pandas)
+- ✅ AlgoBacktest functional with DataLoader, Trade, Position, PositionManager classes
+- ✅ Pandas optimization patterns documented in lessons/pandas.md
+- ✅ Student demonstrated ability to correct mentor errors (professional maturity)
+- 📝 Ready for Week 1 summary commit
+- 📝 Generate 2 PCAP mock exams for weekend study
+
+**Week 1 Summary:**
+Student successfully completed all 5 days (40 tasks total) covering foundational Python topics and OOP. Project milestones achieved:
+- Project structure established (packages, modules, imports)
+- Data pipeline created (DataLoader with Pandas)
+- Trading entities implemented (Position, Trade classes)
+- Position management system (PositionManager)
+- End-to-end backtest execution (main.py)
+
+Average Week 1 Score: (86.25% + 78.75% + 97.5% + 93.5% + 93.75%) / 5 = **89.95% (B+)**
+
+**Mentor Note:** Excellent Week 1 completion. Student not only mastered technical content but also demonstrated professional code review skills by correcting multiple mentor errors throughout the week (import paths, TypeError behavior, PEP 8 formatting). The 1.5-hour completion time for 8 integration tasks shows strong efficiency and deep understanding. Ready for Week 2 (Advanced OOP & Inheritance).
+
+---
+

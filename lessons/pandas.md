@@ -197,6 +197,134 @@ df['direction'] = df['change'].apply(lambda x: 'UP' if x > 0 else 'DOWN')
 
 ---
 
+### Advanced Filtering & Optimization Patterns
+
+#### Efficient Filtering with Aggregation
+
+When you need to filter rows and calculate statistics, avoid wrapping Series in lists or using NumPy unnecessarily. Pandas Series methods are optimized and cleaner.
+
+**INEFFICIENT Approach:**
+```python
+"""Avoid wrapping Series in lists with NumPy."""
+
+import pandas as pd
+import numpy as np
+
+df = pd.DataFrame({
+    'open': [100, 102, 101, 103],
+    'close': [101, 101, 102, 105]
+})
+
+# BAD: Wrapping filtered Series in list, then using NumPy
+bullish_closes = df['close'][df['close'] > df['open']]
+avg_bullish = np.mean([bullish_closes])  # Unnecessary list wrapping
+```
+
+**EFFICIENT Approach 1: Filter First, Then Aggregate**
+```python
+"""Clean and readable: filter, then use Series methods."""
+
+import pandas as pd
+
+df = pd.DataFrame({
+    'open': [100, 102, 101, 103],
+    'close': [101, 101, 102, 105]
+})
+
+# GOOD: Filter to bullish candles, then use .mean()
+bullish_data = df[df['close'] > df['open']]
+avg_bullish_close = bullish_data['close'].mean()
+
+print(avg_bullish_close)  # Direct Series method, no NumPy needed
+```
+
+**EFFICIENT Approach 2: Use `.loc[]` for Filtered Column Access**
+```python
+"""Most concise: filter rows and access column in one step."""
+
+import pandas as pd
+
+df = pd.DataFrame({
+    'open': [100, 102, 101, 103],
+    'close': [101, 101, 102, 105],
+    'volume': [1000, 1500, 1200, 1800]
+})
+
+# BEST: Use .loc[row_filter, column] for direct access
+avg_bullish_close = df.loc[df['close'] > df['open'], 'close'].mean()
+max_bullish_volume = df.loc[df['close'] > df['open'], 'volume'].max()
+
+print(f"Avg Bullish Close: {avg_bullish_close}")
+print(f"Max Bullish Volume: {max_bullish_volume}")
+```
+
+**Why This Matters:**
+- **Performance:** Pandas Series methods (`.mean()`, `.max()`, `.sum()`) are vectorized C code - much faster than Python loops or unnecessary conversions
+- **Readability:** `df.loc[condition, column].mean()` is clearer than wrapping in lists
+- **Memory:** Avoids creating intermediate lists
+
+#### Top-N Selection with `.nlargest()` and `.nsmallest()`
+
+```python
+"""Efficient top-N selection."""
+
+import pandas as pd
+
+df = pd.DataFrame({
+    'ticker': ['EURUSD', 'GBPUSD', 'USDJPY', 'AUDUSD'],
+    'volume': [1000, 1500, 1200, 1800]
+})
+
+# Get top 3 by volume
+top_3 = df.nlargest(3, 'volume')
+print(top_3)
+#    ticker  volume
+# 3  AUDUSD    1800
+# 1  GBPUSD    1500
+# 2  USDJPY    1200
+
+# Get bottom 2 by volume
+bottom_2 = df.nsmallest(2, 'volume')
+```
+
+**Note:** `.nlargest()` and `.nsmallest()` are more efficient than sorting the entire DataFrame when you only need a few rows.
+
+#### Conditional Column Creation with `.apply()` vs Vectorized Operations
+
+```python
+"""Creating columns: vectorized vs apply()."""
+
+import pandas as pd
+
+df = pd.DataFrame({
+    'open': [100, 102, 101, 103],
+    'close': [101, 101, 102, 105]
+})
+
+# APPROACH 1: Vectorized (FASTEST for simple conditions)
+df['direction_vec'] = 'bearish'  # Default value
+df.loc[df['close'] > df['open'], 'direction_vec'] = 'bullish'
+
+# APPROACH 2: .apply() (better for complex logic)
+df['direction_apply'] = df.apply(
+    lambda row: 'bullish' if row['close'] > row['open'] else 'bearish',
+    axis=1
+)
+
+# APPROACH 3: .iterrows() (SLOWEST - avoid for large DataFrames)
+directions = []
+for idx, row in df.iterrows():
+    directions.append('bullish' if row['close'] > row['open'] else 'bearish')
+df['direction_iter'] = directions
+```
+
+**Performance Ranking:**
+1. **Vectorized operations** (`.loc[]`, boolean indexing) - fastest
+2. **`.apply()`** - moderate, good for complex row-wise logic
+3. **`.iterrows()`** - slowest, avoid in production for large data
+
+---
+
 ### Common Pandas Gotchas
 
 **1. `.any()` returns boolean, not numeric**

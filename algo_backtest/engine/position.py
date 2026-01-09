@@ -63,17 +63,17 @@ class Position:
             return None
         
         if self.side == 'BUY':
-            pnl = (current_price - self.entry_price) * self.quantity
+            pnl = float((current_price - self.entry_price) * self.quantity)
             return pnl
         elif self.side == 'SELL':
-            pnl = (self.entry_price - current_price) * self.quantity
+            pnl = float((self.entry_price - current_price) * self.quantity)
             return pnl
         
     
     def should_close(self, current_price: float) -> bool:
         
         '''
-        Method used to check if position should close (hit SL or TP).
+        Method used to check if position should close (if it hit SL or TP).
         Handles incorrect current_price.
         
         Returns:
