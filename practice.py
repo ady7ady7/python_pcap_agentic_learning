@@ -1198,3 +1198,6 @@ print(trades)
 # print(f"Total PNL: {total}")
 
 
+# class Test:
+#     items = []
+
