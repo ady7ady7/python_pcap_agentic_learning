@@ -1201,3 +1201,6 @@ print(trades)
 # class Test:
 #     items = []
 
+import pandas as pd
+s = pd.Series([False, False, False])
+print(s.any())

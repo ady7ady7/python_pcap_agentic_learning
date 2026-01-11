@@ -15,6 +15,7 @@
 - This exam covers the same Week 1 topics as Exam A but with different questions
 
 ---
+#Start 12:52
 
 ## Section 1: Modules & Packages (Questions 1-6)
 
@@ -31,7 +32,7 @@ B) `False`
 C) `NameError`
 D) `ImportError`
 
-**Your answer:** ___
+**Your answer:** B
 
 ---
 
@@ -43,7 +44,7 @@ B) It can only be used at the beginning of a file
 C) It can be used inside functions
 D) It requires the module to be in the current directory
 
-**Your answer:** ___
+**Your answer:** C
 
 ---
 
@@ -60,7 +61,7 @@ B) `4.0`
 C) `16`
 D) `NameError`
 
-**Your answer:** ___
+**Your answer:** B
 
 ---
 
@@ -72,7 +73,7 @@ B) `import math.*`
 C) `from math import *`
 D) `import * from math`
 
-**Your answer:** ___
+**Your answer:** c
 
 ---
 
@@ -84,7 +85,7 @@ B) A dictionary of already imported modules
 C) The current working directory
 D) Module source code
 
-**Your answer:** ___
+**Your answer:** A
 
 ---
 
@@ -96,7 +97,7 @@ B) `SyntaxError`
 C) Python creates an empty module
 D) `ValueError`
 
-**Your answer:** ___
+**Your answer:** A
 
 ---
 
@@ -115,7 +116,7 @@ B) `"h"`
 C) `IndexError`
 D) `""`
 
-**Your answer:** ___
+**Your answer:** A
 
 ---
 
@@ -132,7 +133,7 @@ B) `['a', 'b', 'c']`
 C) `('a', 'b', 'c')`
 D) `"abc"`
 
-**Your answer:** ___
+**Your answer:** D
 
 ---
 
@@ -148,7 +149,7 @@ B) `"tho"`
 C) `"yt"`
 D) `"yth"`
 
-**Your answer:** ___
+**Your answer:** A
 
 ---
 
@@ -160,7 +161,7 @@ B) Only `.upper()` and `.lower()`
 C) Only `.replace()`
 D) None, strings are mutable
 
-**Your answer:** ___
+**Your answer:**  C
 
 ---
 
@@ -177,7 +178,7 @@ B) `8`
 C) `6`
 D) `10`
 
-**Your answer:** ___
+**Your answer:** A
 
 ---
 
@@ -189,7 +190,7 @@ B) `2`
 C) `0`
 D) `True`
 
-**Your answer:** ___
+**Your answer:** B
 
 ---
 
@@ -214,7 +215,7 @@ B) `A B D`
 C) `A D`
 D) `A B C D`
 
-**Your answer:** ___
+**Your answer:** A
 
 ---
 
@@ -235,7 +236,7 @@ B) `Success`
 C) `Error Success`
 D) No output
 
-**Your answer:** ___
+**Your answer:** B
 
 ---
 
@@ -247,7 +248,7 @@ B) `except`
 C) `else`
 D) `finally`
 
-**Your answer:** ___
+**Your answer:** D
 
 ---
 
@@ -269,7 +270,7 @@ B) `General error`
 C) `Out of range General error`
 D) `IndexError`
 
-**Your answer:** ___
+**Your answer:** A
 
 ---
 
@@ -281,7 +282,7 @@ B) Yes, if you have `else`
 C) No, `except` is required
 D) Yes, always
 
-**Your answer:** ___
+**Your answer:** A
 
 ---
 
@@ -297,7 +298,7 @@ B) `ValueError`
 C) `ConversionError`
 D) `SyntaxError`
 
-**Your answer:** ___
+**Your answer:** B
 
 ---
 
@@ -319,7 +320,7 @@ B) `0`
 C) `AttributeError`
 D) `None`
 
-**Your answer:** ___
+**Your answer:** A
 
 ---
 
@@ -339,7 +340,7 @@ B) `None`
 C) `TypeError`
 D) `Test object`
 
-**Your answer:** ___
+**Your answer:** C, init should return None
 
 ---
 
@@ -361,7 +362,7 @@ B) `34`
 C) `(3, 4)`
 D) `TypeError`
 
-**Your answer:** ___
+**Your answer:** A
 
 ---
 
@@ -373,7 +374,7 @@ B) Each instance has its own copy
 C) They must be defined in `__init__`
 D) They can't be modified
 
-**Your answer:** ___
+**Your answer:** A
 
 ---
 
@@ -396,7 +397,7 @@ B) `1`
 C) `2`
 D) `AttributeError`
 
-**Your answer:** ___
+**Your answer:** C
 
 ---
 
@@ -408,7 +409,7 @@ B) `this`
 C) `cls`
 D) No parameter is required
 
-**Your answer:** ___
+**Your answer:** A
 
 ---
 
@@ -434,7 +435,7 @@ B) `5`
 C) `<__main__.Number object at 0x...>`
 D) `TypeError`
 
-**Your answer:** ___
+**Your answer:** A
 
 ---
 
@@ -446,7 +447,7 @@ B) Any object
 C) `None`
 D) `self`
 
-**Your answer:** ___
+**Your answer:** A
 
 ---
 
@@ -464,7 +465,7 @@ B) `False`
 C) `0`
 D) `None`
 
-**Your answer:** ___
+**Your answer:** B
 
 ---
 
@@ -482,7 +483,7 @@ B) `4`
 C) `8`
 D) `TypeError`
 
-**Your answer:** ___
+**Your answer:** A
 
 ---
 
@@ -494,7 +495,7 @@ B) `df.has_nan()`
 C) `df.missing()`
 D) `len(df.isna()) > 0`
 
-**Your answer:** ___
+**Your answer:** A
 
 ---
 
@@ -513,7 +514,9 @@ B) `1`
 C) `2`
 D) `3`
 
-**Your answer:** ___
+**Your answer:** C
+
+#Finish 13:02
 
 ---
 
