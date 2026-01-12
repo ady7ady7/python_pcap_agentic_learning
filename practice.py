@@ -879,16 +879,16 @@ import numpy as np
 
 #W1 D4 T8 - modifying algo_backtest/data/data_loader.py - classmethod
 
-from algo_backtest.engine.trade import Trade
+# from algo_backtest.engine.trade import Trade
 
-trade1 = Trade("EURUSD", "BUY", 1.08, 1.09, 10000, "2024-01-01 09:00", "2024-01-01 09:30", "TP")
-trade2 = Trade("GBPUSD", "SELL", 1.25, 1.26, 5000, "2024-01-01 10:00", "2024-01-01 10:15", "SL")
-trade3 = Trade("USDJPY", "BUY", 110.00, 110.50, 2000, "2024-01-01 11:00", "2024-01-01 11:45", "TP")
+# trade1 = Trade("EURUSD", "BUY", 1.08, 1.09, 10000, "2024-01-01 09:00", "2024-01-01 09:30", "TP")
+# trade2 = Trade("GBPUSD", "SELL", 1.25, 1.26, 5000, "2024-01-01 10:00", "2024-01-01 10:15", "SL")
+# trade3 = Trade("USDJPY", "BUY", 110.00, 110.50, 2000, "2024-01-01 11:00", "2024-01-01 11:45", "TP")
 
-trades = [trade1, trade2, trade3]
-win_rate = Trade.calculate_win_rate(trades)
-print(f"Win rate: {win_rate:.1f}%")  # Expected: 66.7%
-print(trades)
+# trades = [trade1, trade2, trade3]
+# win_rate = Trade.calculate_win_rate(trades)
+# print(f"Win rate: {win_rate:.1f}%")  # Expected: 66.7%
+# print(trades)
 
 #W1 D5 T1
 
@@ -1201,6 +1201,285 @@ print(trades)
 # class Test:
 #     items = []
 
-import pandas as pd
-s = pd.Series([False, False, False])
-print(s.any())
+#Start 11:32
+#W2 D1 T1
+
+# class Animal:
+#     def __init__(self, name):
+#         self.name = name
+
+#     def speak(self):
+#         return "Some sound"
+
+# class Dog(Animal):
+#     def speak(self):
+#         return "Woof"
+
+# d = Dog("Buddy")
+# print(d.name)
+# print(d.speak())
+
+
+#W2 D1 T2 - a child class SavingsAccount adding to the class we created last week
+
+
+# class BankAccount:
+    
+#     """
+#     Represents a simple bank account.
+
+#     Attributes:
+#         owner: Account owner's name.
+#         balance: Current account balance.
+#     """
+    
+    
+#     def __init__(self, owner: str, balance: float = 0.0):
+#         """Constructor used to initialize account with owner and optional starting balance."""
+#         self.owner = owner
+#         self.balance = balance
+    
+#     def deposit(self, amount: float) -> None:
+#         '''
+#         Method used to deposit a given amount in the account
+#         Only accepts positive amount values
+#         '''
+        
+#         if amount > 0:
+#             self.balance += amount
+#         else:
+#             print(f'Only positive amounts accepted for deposit!')
+    
+#     def withdraw(self, amount: float) -> bool:
+#         '''
+#         Method used to withdraw a given amount from the account
+#         Only accepts withdraw if:
+        
+#         1. The withdrawn amount is above 0.
+#         2. There is a sufficient balance in the account.
+        
+#         Returns True if the withdraw is successful, otherwise it returns False.
+#         '''
+        
+#         if amount < 0:
+#             print('Cannot withdraw NEGATIVE amounts!')
+#             return False
+#         elif self.balance < amount:
+#             print(f'Cannot withdraw ${amount:.2f} as the current balance is below that amount!')
+#             return False
+#         else:
+#             self.balance -= amount
+#             print(f'${amount} withdrawn successfully.')
+#             return True
+    
+#     def get_balance(self) -> float:
+#         '''
+#         Checks the current balance of the account
+#         '''
+        
+#         return self.balance
+    
+    
+    
+# class SavingsAccount(BankAccount):
+        
+#     '''A child class of BankAccount with added interest_rate
+#     and add_interest method that allows for interest compounding'''
+    
+#     def __init__(self, owner: str, balance: float, interest_rate: float):
+#         super().__init__(owner, balance)
+#         self.interest_rate = interest_rate
+#         self.balance = balance
+    
+#     def __str__(self):
+#         return f'SavingsAccount(balance = ${super().get_balance()}, rate = {self.interest_rate}%)'
+        
+#     def add_interest(self):
+#         '''Compounds the interest based on set interest_rate'''
+#         self.balance += self.interest_rate * self.balance
+#         return self.balance
+        
+        
+# savings = SavingsAccount(owner="Alice", balance=1000.0, interest_rate=0.05)
+# print(savings)  # SavingsAccount(balance=$1000.00, rate=5.0%)
+# savings.add_interest()
+# print(savings.get_balance())  # 1050.0
+# savings.add_interest()
+# print(savings.get_balance())
+
+
+#W2 D1 T3
+
+# class Strategy:
+#     '''A strategy class used to generate trades based on set signals + child classes with specific strategies'''
+#     def __init__(self, name: str):
+#         self.name = name
+        
+#     def generate_signal(self, price: float) -> str:
+#         return 'HOLD'
+    
+# class LevelCrossStrategy(Strategy):
+#     def __init__(self, level: float):
+#         super().__init__('Level Cross')
+#         self.level = level
+        
+#     def generate_signal(self, price: float) -> str:
+        
+#         if price > self.level:
+#             return 'BUY'
+#         elif price < self.level:
+#             return 'SELL'
+#         else:
+#             return 'HOLD'
+        
+# strategy = LevelCrossStrategy(100.0)
+# print(strategy.generate_signal(105))  # "BUY"
+# print(strategy.generate_signal(95))   # "SELL"
+# print(strategy.generate_signal(100))  # "HOLD"
+
+
+#W2 D1 T4 - bug hunting
+
+#original
+# class Vehicle:
+#     def __init__(self, brand, year):
+#         self.brand = brand
+#         self.year = year
+
+# class Car(Vehicle):
+#     def __init__(self, brand, year, doors):
+#         self.doors = doors
+
+# car = Car("Toyota", 2023, 4)
+# print(car.brand)  # What happens here?
+
+#Bug - brand, year in child class should be plugged from the parent class with super()
+#Fix:
+
+# class Vehicle:
+#     def __init__(self, brand, year):
+#         self.brand = brand
+#         self.year = year
+
+# class Car(Vehicle):
+#     def __init__(self, brand, year, doors):
+#         super().__init__(brand, year)
+#         self.doors = doors
+        
+
+# car = Car("Toyota", 2023, 4)
+# print(car.brand)
+
+
+#W2 D1 T5
+
+# class Animal:
+#     pass
+
+# class Mammal(Animal):
+#     pass
+
+# class Dog(Mammal):
+#     pass
+
+# dog = Dog()
+
+# print(isinstance(dog, Dog))           # A  -> True
+# print(isinstance(dog, Mammal))        # B -> True
+# print(isinstance(dog, Animal))        # C -> True
+# print(isinstance(dog, object))        # D (TRICKY!) -> True
+
+# print(issubclass(Dog, Mammal))        # E -> True
+# print(issubclass(Dog, Animal))        # F -> False
+# print(issubclass(Dog, Dog))           # G (TRICKY!) -> True
+# print(issubclass(Animal, Dog))        # H -> False
+
+
+#W2 D1 T6 - abstract base class - `algo_backtest/strategies/base_strategy.py`
+
+
+# '''Abstract Method Class - base strategy'''
+
+# from abc import ABC, abstractmethod
+
+# class BaseStrategy(ABC):
+#     '''A class with abstract method used to generate trading signal'''
+#     def __init__(self, name: str):
+#         self.name = name
+        
+#     @abstractmethod
+#     def generate_signal(self, price: float) -> str:
+#         pass
+    
+#     def get_name(self) -> str:
+#         '''inherited method to fetch a given strategy name'''
+#         return self.name
+
+
+#import also added to strategies/init.py
+# from .base_strategy import BaseStrategy
+
+# __all__ = ['BaseStrategy']
+
+
+#W1 D1 T8 - code review/issue detection
+
+#original:
+# class strategy:
+#     def init(self, name):
+#         name = name
+
+#     def signal(self, price):
+#         return HOLD
+
+# class MovingAverageStrategy(strategy):
+#     def init(self, ma_period):
+#         self.ma_period = ma_period
+
+#     def signal(self, price):
+#         result = super().signal(price)
+#         if price > 100:
+#             return "buy"
+#         return result
+
+# strat = MovingAverageStrategy(20)
+# print(strat.name)
+
+
+#ISSUES:\
+# 1. Uncapitalized class name
+# 2. Lack of floor symbols __ next to init
+# 3. name in init has local scope instead of being self.name
+# 4. HOLD in signal in parent class will trigger a TypeError, as it's not defined in anyway, and it's not a string either
+# 5. lack of super() to get the parent class parameters in init
+# 6. with current logic in signal in both classes, we only get to have a 'buy' or 'hold' signal (from the parent class), and no sell at all
+# 7. the class is called without a name
+# 8. Lack of type hints
+
+#fixed version:
+
+# class Strategy:
+#     '''a base strategy for creating strategies'''
+#     def __init__(self, name: str):
+#         self.name = name
+
+#     def signal(self):
+#         pass
+
+# class MovingAverageStrategy(Strategy):
+#     '''a child-class of strategy class with its separate signal generating logic'''
+#     def __init__(self, name: str, ma_period: float):
+#         super().__init__(name)
+#         self.ma_period = ma_period
+
+#     '''Signal class used to generate signals for the moving average strategy (mock, as you can see :))'''
+#     def signal(self, price: float):
+#         if price > 100:
+#             return 'Buy'
+#         elif price < 100:
+#             return 'Hold'
+        
+# strat = MovingAverageStrategy('Strategy1', 20)
+# print(strat.name)
+
+#finish 12:38

@@ -36,21 +36,27 @@ This directory contains all theoretical lessons organized by week and topic.
 - Boolean indexing and iteration
 - **PCAP Traps:** Forgetting return in `__str__`, `.any()` semantics, parentheses in filters
 
+### [Pandas Essentials](pandas.md)
+- Series vs DataFrame
+- Essential DataFrame operations
+- Checking for missing values (NaN)
+- Filtering rows (Boolean indexing)
+- Advanced filtering & optimization patterns
+- **PCAP Traps:** `.any()` semantics, parentheses in multiple conditions, return types
+
 ---
 
-## Week 2: Object-Oriented Programming - Advanced (Coming Soon)
+## Week 2: Advanced OOP
 
-### OOP Fundamentals
-- What are classes and why use them
-- `__init__` and `self`
-- Instance vs class attributes
-- Methods vs functions
-
-### Inheritance & Polymorphism
-- Class inheritance
+### [Inheritance](week2_inheritance.md)
+- Basic inheritance syntax and "IS-A" relationships
+- The `super()` function for calling parent methods
 - Method overriding
-- super() usage
-- Multiple inheritance (MRO)
+- Abstract Base Classes (ABC) with `@abstractmethod`
+- `isinstance()` and `issubclass()` for type checking
+- Method Resolution Order (MRO)
+- Common inheritance patterns (extending behavior, template method)
+- **PCAP Traps:** Forgetting `super().__init__()`, abstract methods not implemented, `isinstance()` vs `type()`, overriding vs overloading
 
 ---
 

@@ -135,3 +135,37 @@ Format: Date | Topic | Score | Difficulty | Notes
 
 ---
 
+## Week 2, Day 1 - 2026-01-13
+
+**Topic:** Inheritance Fundamentals
+**Score:** 8/8 tasks completed | 94%
+**Difficulty:** Medium (5/10)
+
+**Tasks Completed:**
+1. PCAP warm-up (predict output with inheritance)
+2. SavingsAccount class (inheriting from BankAccount)
+3. Strategy pattern (parent Strategy, child LevelCrossStrategy)
+4. PCAP trap hunt (missing `super().__init__()`)
+5. isinstance/issubclass practice (8 predictions)
+6. PROJECT: BaseStrategy ABC (abstract base class for strategies)
+7. PCAP multiple choice (3 inheritance questions)
+8. Code review (identify 8 issues, fix broken strategy)
+
+**Key Learnings:** Basic inheritance syntax, `super()` function for calling parent methods, method overriding, Abstract Base Classes (ABC) with `@abstractmethod`, `isinstance()`/`issubclass()` for type checking, understanding when parent `__init__` runs and sets attributes
+
+**Student Question:**
+"Are these attributes or parameters? What is the difference?"
+- **Answer:** Parameters are variables in function definitions (`def __init__(self, owner, balance)`). Attributes are variables attached to objects (`self.owner`, `self.balance`).
+
+**Student Insights:**
+- Understood all concepts but noted they need regular practice for refinement
+- Correctly used `super()` in all inheritance tasks
+- Perfect ABC implementation with abstract methods
+
+**Project Milestones:**
+- Created `algo_backtest/strategies/` package
+- Implemented BaseStrategy ABC with abstract `generate_signal()` method
+- Foundation ready for concrete strategy classes
+
+---
+

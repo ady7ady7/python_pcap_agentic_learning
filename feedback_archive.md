@@ -510,3 +510,116 @@ Average Week 1 Score: (86.25% + 78.75% + 97.5% + 93.5% + 93.75%) / 5 = **89.95% 
 
 ---
 
+## Week 2, Day 1 - 2026-01-13
+
+**Topic:** Inheritance Fundamentals
+
+### Student Self-Assessment
+- **Tasks Completed:** 8/8
+- **Difficulty:** 5/10
+- **Time Spent:** 66 minutes
+
+### Student Reflection
+**What clicked:**
+"Generally everything I think, but it all needs refinement and regular practice"
+
+**Question asked:**
+"Are these attributes or parameters? What is the difference between attribute and parameter?"
+
+**Answer provided:** Parameters are variables in function/method definitions (e.g., `def __init__(self, owner, balance)` - `owner` and `balance` are parameters). Attributes are variables attached to an object (e.g., `self.owner`, `self.balance` are attributes).
+
+### Mentor Assessment
+
+**Score: 94% (A)**
+
+**Task Breakdown:**
+
+1. **PCAP Warm-up - Predict Output:** 100%
+   - Correctly predicted: `Buddy` and `Woof`
+   - Excellent explanation of inheritance and method overriding
+   - Minor note: Actual output doesn't have quotes, but understanding is perfect
+
+2. **SavingsAccount Class:** 85%
+   - ✅ Correct inheritance syntax
+   - ✅ Proper use of `super().__init__(owner, balance)`
+   - ✅ `add_interest()` logic correct
+   - ✅ Good docstrings
+   - ❌ Line 84: Redundant `self.balance = balance` (already set by parent)
+   - ❌ Line 87: Formatting inconsistency (extra spaces, need to multiply rate by 100 for percentage display)
+   - ❌ Line 91: Unnecessary return value in `add_interest()`
+
+3. **Strategy Pattern:** 100%
+   - Perfect implementation of parent and child classes
+   - Correct use of `super().__init__('Level Cross')`
+   - Clean method overriding with if/elif/else logic
+   - All test cases pass
+
+4. **PCAP Trap Hunt:** 100%
+   - ✅ Correctly identified AttributeError
+   - ✅ Explained missing `super().__init__(brand, year)`
+   - ✅ Provided correct fix
+
+5. **isinstance/issubclass Practice:** 87.5%
+   - 7/8 correct predictions
+   - ❌ **F: `issubclass(Dog, Animal)`** - Answered False, should be True (transitive inheritance: Dog → Mammal → Animal)
+   - ✅ Correct explanations for D (everything inherits from `object`) and G (every class is subclass of itself)
+
+6. **BaseStrategy ABC:** 100%
+   - Perfect ABC implementation
+   - Correct use of `@abstractmethod`
+   - Type hints on all methods
+   - Docstrings present
+   - Minor suggestions: module docstring placement, `__init__` docstring, clarify "inherited" wording in `get_name()` docstring
+
+7. **Multiple Choice:** 100%
+   - Q1: B ✅ (`super().__init__()` calls parent's `__init__`)
+   - Q2: A ✅ (inherits method from parent)
+   - Q3: B ✅ (child classes must implement abstract methods)
+
+8. **Code Review:** 95%
+   - Identified all 8 issues correctly:
+     1. ✅ Uncapitalized class name
+     2. ✅ Missing `__` around `init`
+     3. ✅ Local scope `name = name` instead of `self.name`
+     4. ✅ Undefined `HOLD` variable
+     5. ✅ Missing `super().__init__(name)`
+     6. ✅ Logic issues (no SELL signal)
+     7. ✅ Class instantiated without required parameter
+     8. ✅ Missing type hints and docstrings
+   - ❌ Corrected code has one issue: `signal()` method in parent missing `price` parameter
+
+**Weighted Score: 94%**
+
+**Strengths:**
+- ✅ Strong conceptual understanding of inheritance
+- ✅ Correct `super()` usage in all tasks
+- ✅ Excellent method overriding implementation
+- ✅ Perfect ABC understanding and implementation
+- ✅ All multiple choice correct
+- ✅ Identified all code review issues
+- ✅ Clean, readable code with good structure
+
+**Areas for Improvement:**
+1. **Avoid redundant assignments** after `super().__init__()` - parent already sets those attributes
+2. **String formatting precision** - match exact specifications (`.2f` for decimals, multiply rates by 100 for percentages)
+3. **Remember transitive inheritance** - Dog → Mammal → Animal means `issubclass(Dog, Animal)` is True
+4. **Method signatures** - when fixing code, preserve parameter lists
+
+**Key Learning:**
+When you call `super().__init__()`, the parent's constructor runs completely. All `self.attribute = value` statements in the parent execute. You don't need to (and shouldn't) reassign those attributes in the child class.
+
+**Project Progress:**
+- Created `BaseStrategy` ABC in `algo_backtest/strategies/`
+- Established abstract method pattern for strategy implementations
+- Foundation ready for concrete strategy classes (Week 2 Days 2-4)
+
+**Next Steps:**
+- Day 2: Polymorphism and multiple strategies
+- Day 3: Method Resolution Order (MRO) and complex inheritance
+- Day 4: Strategy pattern implementation with real backtesting
+- Day 5: Week 2 review and integration
+
+**Mentor Note:** Excellent first day of Week 2! Student demonstrated strong grasp of inheritance fundamentals with a 94% score. The few minor errors were implementation details (formatting, redundant code) rather than conceptual misunderstandings. The question about attributes vs parameters shows active learning and desire for clarity. Ready for more advanced OOP topics.
+
+---
+
