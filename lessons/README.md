@@ -48,15 +48,18 @@ This directory contains all theoretical lessons organized by week and topic.
 
 ## Week 2: Advanced OOP
 
-### [Inheritance](week2_inheritance.md)
+### [Inheritance & Polymorphism](week2_inheritance.md)
 - Basic inheritance syntax and "IS-A" relationships
 - The `super()` function for calling parent methods
 - Method overriding
 - Abstract Base Classes (ABC) with `@abstractmethod`
 - `isinstance()` and `issubclass()` for type checking
 - Method Resolution Order (MRO)
+- **Polymorphism** - using objects of different types through the same interface
+- Duck typing in Python
+- Type-specific behavior with `isinstance()`
 - Common inheritance patterns (extending behavior, template method)
-- **PCAP Traps:** Forgetting `super().__init__()`, abstract methods not implemented, `isinstance()` vs `type()`, overriding vs overloading
+- **PCAP Traps:** Forgetting `super().__init__()`, abstract methods not implemented, `isinstance()` vs `type()`, overriding vs overloading, method overloading (not supported in Python)
 
 ---
 

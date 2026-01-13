@@ -392,13 +392,290 @@ c = Child()  # TypeError: Can't instantiate abstract class Child
 
 ---
 
+## Polymorphism
+
+**Polymorphism** means "many forms" - the ability to use objects of different types through the same interface. In Python, polymorphism allows you to treat different objects uniformly if they share a common interface (methods with the same name).
+
+### What is Polymorphism?
+
+```python
+"""Polymorphism allows different objects to be used interchangeably."""
+
+class Shape:
+    def area(self):
+        return 0
+
+class Rectangle(Shape):
+    def __init__(self, width, height):
+        self.width = width
+        self.height = height
+
+    def area(self):
+        return self.width * self.height
+
+class Circle(Shape):
+    def __init__(self, radius):
+        self.radius = radius
+
+    def area(self):
+        return 3.14159 * self.radius ** 2
+
+# Polymorphism in action - same interface, different implementations
+shapes = [Rectangle(5, 3), Circle(2), Rectangle(4, 4)]
+
+# We can call .area() on ANY shape without knowing its exact type
+total_area = sum(shape.area() for shape in shapes)
+print(total_area)  # 44.56636
+```
+
+**Key concept:** The `area()` method behaves differently for Rectangle vs Circle, but we can use them interchangeably because they share the same interface.
+
+---
+
+### Duck Typing - Python's Polymorphism
+
+Python uses **duck typing**: "If it walks like a duck and quacks like a duck, it's a duck."
+
+You don't need inheritance for polymorphism in Python - objects just need to have the right methods.
+
+```python
+"""Duck typing - polymorphism without inheritance."""
+
+class Dog:
+    def speak(self):
+        return "Woof!"
+
+class Cat:
+    def speak(self):
+        return "Meow!"
+
+class Car:
+    def speak(self):
+        return "Beep beep!"
+
+# No common parent class, but all have speak() method
+def make_it_speak(thing):
+    """This function works with ANY object that has a speak() method."""
+    return thing.speak()
+
+print(make_it_speak(Dog()))  # "Woof!"
+print(make_it_speak(Cat()))  # "Meow!"
+print(make_it_speak(Car()))  # "Beep beep!"
+```
+
+**Advantage:** Flexible and Pythonic.
+**Disadvantage:** No compile-time type checking (can fail at runtime if object doesn't have the method).
+
+---
+
+### Polymorphism with Abstract Base Classes
+
+ABCs enforce a contract - all children MUST implement the interface.
+
+```python
+"""Using ABC to ensure polymorphism works correctly."""
+
+from abc import ABC, abstractmethod
+
+class Strategy(ABC):
+    """All strategies must implement generate_signal."""
+
+    @abstractmethod
+    def generate_signal(self, price: float) -> str:
+        pass
+
+class LevelCrossStrategy(Strategy):
+    def __init__(self, level: float):
+        self.level = level
+
+    def generate_signal(self, price: float) -> str:
+        if price > self.level:
+            return "BUY"
+        elif price < self.level:
+            return "SELL"
+        return "HOLD"
+
+class MovingAverageStrategy(Strategy):
+    def __init__(self, period: int):
+        self.period = period
+        self.prices = []
+
+    def generate_signal(self, price: float) -> str:
+        self.prices.append(price)
+        if len(self.prices) < self.period:
+            return "HOLD"
+        ma = sum(self.prices[-self.period:]) / self.period
+        return "BUY" if price > ma else "SELL" if price < ma else "HOLD"
+
+# Polymorphism - function works with ANY Strategy
+def test_strategy(strategy: Strategy, prices: list[float]) -> None:
+    """Test any strategy - polymorphism in action."""
+    for price in prices:
+        signal = strategy.generate_signal(price)
+        print(f"Price {price}: {signal}")
+
+# Different strategies, same interface
+strat1 = LevelCrossStrategy(100.0)
+strat2 = MovingAverageStrategy(3)
+
+test_strategy(strat1, [95, 100, 105])
+test_strategy(strat2, [95, 100, 105])
+```
+
+**Benefits:**
+- **Type safety:** ABC ensures all strategies implement `generate_signal()`
+- **Documentation:** ABC makes the interface explicit
+- **IDE support:** Better autocomplete and type hints
+
+---
+
+### Polymorphism Example: Payment Processing
+
+```python
+"""Real-world polymorphism example - payment methods."""
+
+from abc import ABC, abstractmethod
+
+class PaymentMethod(ABC):
+    @abstractmethod
+    def process_payment(self, amount: float) -> bool:
+        pass
+
+class CreditCard(PaymentMethod):
+    def __init__(self, card_number: str):
+        self.card_number = card_number
+
+    def process_payment(self, amount: float) -> bool:
+        print(f"Charging ${amount} to card {self.card_number[-4:]}")
+        return True
+
+class PayPal(PaymentMethod):
+    def __init__(self, email: str):
+        self.email = email
+
+    def process_payment(self, amount: float) -> bool:
+        print(f"Processing ${amount} via PayPal ({self.email})")
+        return True
+
+class BankTransfer(PaymentMethod):
+    def __init__(self, account: str):
+        self.account = account
+
+    def process_payment(self, amount: float) -> bool:
+        print(f"Transferring ${amount} from account {self.account}")
+        return True
+
+# Checkout function doesn't care WHICH payment method - polymorphism!
+def checkout(payment_method: PaymentMethod, total: float) -> None:
+    """Process checkout with any payment method."""
+    print(f"Total: ${total}")
+    if payment_method.process_payment(total):
+        print("Payment successful!\n")
+
+# All payment methods work the same way
+checkout(CreditCard("1234-5678-9012-3456"), 99.99)
+checkout(PayPal("user@example.com"), 49.99)
+checkout(BankTransfer("ACC-12345"), 199.99)
+```
+
+---
+
+### Type Checking with isinstance()
+
+Sometimes you need to know the exact type of an object for polymorphism to work correctly.
+
+```python
+"""Using isinstance() to handle different types."""
+
+from abc import ABC, abstractmethod
+
+class Animal(ABC):
+    @abstractmethod
+    def speak(self):
+        pass
+
+class Dog(Animal):
+    def speak(self):
+        return "Woof!"
+
+    def fetch(self):
+        return "Fetching ball..."
+
+class Cat(Animal):
+    def speak(self):
+        return "Meow!"
+
+    def scratch(self):
+        return "Scratching post..."
+
+def interact_with_animal(animal: Animal) -> None:
+    """Interact with animal - uses polymorphism + type checking."""
+    # Polymorphism - works for ALL animals
+    print(animal.speak())
+
+    # Type-specific behavior
+    if isinstance(animal, Dog):
+        print(animal.fetch())
+    elif isinstance(animal, Cat):
+        print(animal.scratch())
+
+dog = Dog()
+cat = Cat()
+
+interact_with_animal(dog)  # Woof! Fetching ball...
+interact_with_animal(cat)  # Meow! Scratching post...
+```
+
+**When to use isinstance():**
+- ✅ When different types need different additional behavior
+- ✅ When handling edge cases for specific types
+- ❌ Don't overuse - defeats the purpose of polymorphism
+
+---
+
+### PCAP Trap: Polymorphism vs Overloading
+
+**Python does NOT support method overloading** (multiple methods with same name, different parameters).
+
+```python
+class Calculator:
+    def add(self, a):
+        return a + 10
+
+    def add(self, a, b):  # This REPLACES the first add!
+        return a + b
+
+calc = Calculator()
+calc.add(5)  # TypeError! add() requires 2 arguments
+```
+
+**Python behavior:** Last method definition wins.
+
+**Solution:** Use default parameters or `*args`:
+```python
+class Calculator:
+    def add(self, a, b=0):  # Default parameter
+        return a + b
+
+    # OR
+    def add_all(self, *args):
+        return sum(args)
+
+calc = Calculator()
+calc.add(5)      # 5 (uses default b=0)
+calc.add(5, 3)   # 8
+calc.add_all(1, 2, 3, 4)  # 10
+```
+
+---
+
 ## When to Use Inheritance
 
 **✅ Good use cases:**
 - Clear "IS-A" relationship (Dog IS-A Animal)
 - Shared behavior across multiple classes
 - Template method pattern
-- Polymorphism (Week 5 topic)
+- **Polymorphism** - using different objects through same interface
 
 **❌ Bad use cases:**
 - "HAS-A" relationship (use composition instead: Car HAS-A Engine)
@@ -469,10 +746,20 @@ issubclass(Child, Parent)  # Child inherits from Parent?
 - MRO: Python searches Child → Parent → Grandparent
 - Every class inherits from `object` (implicit)
 
+**Polymorphism:**
+- Objects of different types can be used through the same interface
+- Duck typing: "If it has the method, you can call it"
+- Use ABCs to enforce polymorphic contracts
+- `isinstance()` for type-specific behavior within polymorphic functions
+- Python does NOT support method overloading (last definition wins)
+- Polymorphism enables flexible, reusable code
+
 **Common PCAP questions:**
 - "What is the output?" with inheritance hierarchies
 - "Which method is called?" (MRO questions)
 - "Can you instantiate this class?" (abstract class questions)
 - "`isinstance()` vs `type()`" traps
+- "What is polymorphism?" (definition and examples)
+- "Does this demonstrate polymorphism?" (code analysis)
 
 ---

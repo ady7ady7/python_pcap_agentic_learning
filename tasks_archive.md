@@ -169,3 +169,46 @@ Format: Date | Topic | Score | Difficulty | Notes
 
 ---
 
+## Week 2, Day 2 - 2026-01-13
+
+**Topic:** Polymorphism & Multiple Strategies
+**Score:** 8/8 tasks completed | 86.25% (bonus task 9 not completed)
+**Difficulty:** 5/10
+
+**Tasks Completed:**
+1. PCAP warm-up (polymorphism prediction with shapes)
+2. PROJECT: LevelCrossStrategy implementation
+3. PROJECT: MovingAverageStrategy implementation (self-corrected performance issues)
+4. Polymorphism testing script (test_strategies.py)
+5. isinstance() patterns (type checking)
+6. MRO prediction (incorrect - critical gap identified)
+7. PCAP multiple choice (3 polymorphism questions)
+8. Code review (fix polymorphism bugs in Vehicle classes)
+
+**Key Learnings:** Polymorphism (using objects through same interface), duck typing in Python, ABCs for polymorphic contracts, isinstance() for type-specific behavior, `__init__.py` and `__all__` for package management (industry standard), self-correction of performance issues (slicing vs `.remove()`)
+
+**Student Question:**
+"What does `__all__` mean in `__init__.py` and why do we use it?"
+- **Answer:** Controls public API, enables clean imports, standard for Mid/Senior devs, provides explicit namespace control
+
+**Student Corrections:**
+- Fixed MovingAverageStrategy to use slicing (`[-self.ma_period:]`) instead of `.remove()` for O(1) performance
+- Fixed `generate_signal()` to add price internally and handle all BUY/SELL/HOLD cases
+- Caught mentor error on non-existent `get_level()` and `get_name()` methods (used attributes directly)
+- Requested bonus tasks not count toward base 100% (correct)
+
+**Critical Gap Identified:**
+- **MRO (Method Resolution Order):** Predicted "C" but correct answer is "B" (0/10 on task)
+- **Misconception:** Thought last-written method overwrites, but Python uses C3 linearization (left-to-right)
+- **Rule:** In `class D(B, C)`, B has priority over C (leftmost parent wins)
+- **Action:** Must practice MRO with diamond inheritance patterns
+
+**Project Milestones:**
+- Implemented `LevelCrossStrategy` (price level crossing)
+- Implemented `MovingAverageStrategy` (MA-based signals with state management)
+- Both strategies inherit from `BaseStrategy` ABC
+- Configured `algo_backtest/strategies/__init__.py` with `__all__` (professional packaging)
+- Demonstrated polymorphism through common interface
+
+---
+

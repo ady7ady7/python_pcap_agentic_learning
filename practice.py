@@ -1483,3 +1483,210 @@ import numpy as np
 # print(strat.name)
 
 #finish 12:38
+
+#W2 D2 T2 - creating a mock strategy inherited from BaseStrategy (w/ abstract method for generate_signal in BaseStrategy)
+
+# from .base_strategy import BaseStrategy
+
+# class LevelCrossStrategy(BaseStrategy):
+#     '''
+#     A strategy based on crossing certain levels
+#     '''
+    
+#     def __init__(self, level: float):
+#         '''Initializing the class with defined level'''
+#         super().__init__('Level Cross Strategy')
+#         self.level = level
+        
+    
+#     def generate_signal(self, price: float) -> str:
+#         '''
+#         Method used to generate signal based on a price you pass - this is a mock method mainly used to practice.
+        
+#         It's an instance of a method that inherits abstract method from BaseStrategy (so it's mandatory).
+#         Signals for real strategies most likely will be more robust.
+#         '''
+#         if price > self.level:
+#             return 'BUY'
+#         elif price < self.level:
+#             return 'SELL'
+#         elif price == self.level:
+#             return 'HOLD'
+    
+    
+#     def get_level(self) -> float:
+#         '''Method used to return the set level'''
+#         return self.level
+
+#W2 D2 T3 - Another mock strategy built with BaseStrategy inheritance
+
+# from .base_strategy import BaseStrategy
+# from typing import List
+
+# class MovingAverageStrategy(BaseStrategy):
+    
+#     def __init__(self, ma_period: int):
+#         '''Initialization of the class, inheriting the base init from the BaseStrategy and extending it'''
+#         super().__init__(f'MovingAverage Strategy - ma {ma_period}')
+#         self.ma_period = ma_period
+#         self.price_history: List[float] = []
+    
+#     def add_price(self, price: float):
+#         '''Method used to add a price to the self.price_history list'''
+#         self.price_history.append(price)
+#         if len(self.price_history) > self.ma_period:
+#             self.price_history.remove([0])
+            
+#     def generate_signal(self, price: float) -> str:
+#         '''Method used to check whether the list has enough entries to be able to calculate the MA properly'''
+#         if len(self.price_history) < self.ma_period:
+#             print(f'Not enough data entries to properly count ma {self.ma_period}. Currently we only have {len(self.price_history)} entries.')
+#             return 'HOLD'
+        
+#         else:
+#             ma_value = sum(self.price_history) / self.ma_period
+#             if price > ma_value:
+#                 return 'BUY'
+#             else:
+#                 return 'SELL'        
+
+
+#W2 D2 T4 - testing the strategies with a function
+
+# from algo_backtest.strategies import MovingAverageStrategy, LevelCrossStrategy
+
+# '''Test script used to check if our strategies work properly'''
+
+# def test_strategy(strategy, prices: list[float]) -> None:
+#     """Test a strategy with a list of prices.
+
+#     Args:
+#         strategy: Any strategy that has generate_signal method
+#         prices: List of prices to test
+#     """
+#     print(f"\nTesting: {strategy.get_name()}")
+#     for price in prices:
+#         signal = strategy.generate_signal(price)
+#         print(f"  Price {price}: {signal}")
+
+
+# strat1 = MovingAverageStrategy(5)
+# strat2 = LevelCrossStrategy(100.5)
+
+# strat1.add_price(430)
+# strat1.add_price(230)
+# strat1.add_price(450)
+# strat1.add_price(470)
+# strat1.add_price(490)
+# strat1.add_price(530)
+# test_strategy(strat1, [430, 450, 520, 550, 570, 460, 430, 320])
+# test_strategy(strat2, [120, 105, 90, 20])
+
+
+#W2 D2 T5
+
+
+# from algo_backtest.strategies import BaseStrategy, LevelCrossStrategy, MovingAverageStrategy
+
+# def analyze_strategy(strategy: BaseStrategy) -> str:
+#     """Analyze a strategy and return description based on its type.
+
+#     Args:
+#         strategy: Any strategy instance
+
+#     Returns:
+#         Description string
+#     """
+    
+#     if isinstance(strategy, LevelCrossStrategy):
+#         return f"{strategy.name} with level={strategy.level}"
+#     elif isinstance(strategy, MovingAverageStrategy):
+#         return f"{strategy.name} with period={strategy.ma_period}"
+#     else:
+#         return strategy.name
+
+# # Test cases
+# strat1 = LevelCrossStrategy(100.0)
+# strat2 = MovingAverageStrategy(5)
+
+# print(analyze_strategy(strat1))
+# # Expected: "Level Cross Strategy with level=100.0"
+
+# print(analyze_strategy(strat2))
+
+
+#W2 D2 T8 - Bug bounty
+
+#THE BUGGY ORIGINAL:
+# class Vehicle:
+#     def __init__(self, brand):
+#         self.brand = brand
+
+#     def start(self):
+#         return "Starting vehicle"
+
+# class Car(Vehicle):
+#     def start(self):
+#         return f"Starting {self.brand} car"
+
+# class Motorcycle(Vehicle):
+#     pass
+
+# def start_all_vehicles(vehicles):
+#     for v in vehicles:
+#         print(v.start())
+
+# vehicles = [
+#     Car("Toyota"),
+#     Motorcycle("Harley"),
+#     Vehicle("Generic")
+# ]
+
+# start_all_vehicles(vehicles)
+
+
+#issues:
+#1. Lack of docstrings/typehints
+#2. Car has a missing init and it doesn't use super() - perhaps it's okay as the code still works, but it just looks weird to me
+#3. The Motorcycle class is empty, so what's the point of even having it there when it does nothing different compared to the parent class?
+#4. As a consequence of the above, the start_all_vehicles will not be able to work properly and list all the vehicles.
+
+#fix
+
+# class Vehicle:
+#     '''Parent class used to start a vehicle'''
+#     def __init__(self, brand):
+#         self.brand = brand
+
+#     def start(self):
+#         return "Starting vehicle"
+
+# class Car(Vehicle):
+#     '''A polimorphic variant of a Vehicle that is designed specifically for cars'''
+#     def __init__(self, brand: str, doors: int):
+#         super().__init__(brand)
+#         self.doors = doors
+    
+#     def start(self):
+#         return f"Starting {self.brand} car with {self.doors} doors"
+
+# class Motorcycle(Vehicle):
+#     '''A polimorphic variant of a Vehicle extended specifically for motorcycles'''
+#     def __init__(self, brand, horsepower: int):
+#         super().__init__(brand)
+#         self.horsepower = horsepower
+        
+#     def start(self):
+#         return f'Starting a {self.brand} motorcycle with {self.horsepower} horsepower'
+
+# def start_all_vehicles(vehicles):
+#     for v in vehicles:
+#         print(v.start())
+
+# vehicles = [
+#     Car("Toyota", 4),
+#     Motorcycle("Harley", 50),
+#     Vehicle("Generic")
+# ]
+
+# start_all_vehicles(vehicles)

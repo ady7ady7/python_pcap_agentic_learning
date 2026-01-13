@@ -1,6 +1,6 @@
-# Week 2, Day 1 Tasks - Inheritance Fundamentals
+# Week 2, Day 2 Tasks - Polymorphism & Multiple Strategies
 
-**Focus:** Basic inheritance, `super()`, method overriding, `isinstance()`/`issubclass()`
+**Focus:** Polymorphism, implementing multiple concrete strategies, isinstance() patterns, composition vs inheritance
 
 **Instructions:**
 - Work in `practice.py` for experimentation
@@ -9,289 +9,408 @@
 
 ---
 
-## Task 1: PCAP Warm-up - Predict the Output
+## Task 1: PCAP Warm-up - Polymorphism Prediction
 
-Predict the output of the following code WITHOUT running it first. Then explain WHY.
+Predict the output WITHOUT running the code:
 
 ```python
-class Animal:
-    def __init__(self, name):
-        self.name = name
+class Shape:
+    def area(self):
+        return 0
 
-    def speak(self):
-        return "Some sound"
+class Rectangle(Shape):
+    def __init__(self, w, h):
+        self.w = w
+        self.h = h
 
-class Dog(Animal):
-    def speak(self):
-        return "Woof"
+    def area(self):
+        return self.w * self.h
 
-d = Dog("Buddy")
-print(d.name)
-print(d.speak())
+class Circle(Shape):
+    def __init__(self, r):
+        self.r = r
+
+    def area(self):
+        return 3.14 * self.r ** 2
+
+shapes = [Rectangle(5, 3), Circle(2), Rectangle(4, 4)]
+total_area = sum(s.area() for s in shapes)
+print(total_area)
 ```
 
 **Your prediction:**
 ```
 # Output:
-'Buddy'
-'Woof'
+`43.42
 
 
-# Explanation:
-As for the name, we simply use the parent class architecture, so 'Buddy' is the name assigned to the Dog class instance, based on parent's init.
 
-As for 'woof' instead of 'Some sound' - simply the code from the child overwrites the code from the parent.
+# Explanation (what is polymorphism and how does it work here?):
+Each shape here uses the Shape class as the parent class, but their area calculations are different and yet they're calculated properly.
 
 ```
 
 ---
 
-## Task 2: Basic Inheritance - BankAccount Hierarchy
+## Task 2: PROJECT - Implement LevelCrossStrategy
 
-Create a **child class** `SavingsAccount` that inherits from the `BankAccount` class you created in Week 1.
+Create a concrete strategy that inherits from `BaseStrategy`.
 
-Requirements:
-- Inherit from `BankAccount`
-- Add a new attribute `interest_rate` (float) in `__init__`
-- Use `super().__init__()` to initialize parent attributes
-- Add a method `add_interest()` that adds interest to the balance (balance * interest_rate)
-- Add a method `__str__()` that returns: `"SavingsAccount(balance=$X, rate=Y%)"`
+**File:** `algo_backtest/strategies/level_cross_strategy.py`
 
-Test your implementation:
+**Requirements:**
+1. Import `BaseStrategy` from `.base_strategy`
+2. Create `LevelCrossStrategy` class that inherits from `BaseStrategy`
+3. `__init__(self, level: float)`:
+   - Call `super().__init__("Level Cross Strategy")`
+   - Store `self.level = level`
+4. Implement `generate_signal(self, price: float) -> str`:
+   - Return `"BUY"` if `price > self.level`
+   - Return `"SELL"` if `price < self.level`
+   - Return `"HOLD"` if `price == self.level`
+5. Add a method `get_level(self) -> float` that returns `self.level`
+6. Type hints on ALL methods
+7. Docstrings (Google style)
+
+**Update:** `algo_backtest/strategies/__init__.py`
 ```python
-savings = SavingsAccount(owner="Alice", balance=1000.0, interest_rate=0.05)
-print(savings)  # SavingsAccount(balance=$1000.00, rate=5.0%)
-savings.add_interest()
-print(savings.get_balance())  # 1050.0
+from .base_strategy import BaseStrategy
+from .level_cross_strategy import LevelCrossStrategy
+
+__all__ = ['BaseStrategy', 'LevelCrossStrategy']
 ```
 
 **Your solution:**
 ```python
-# Paste your SavingsAccount class here
+# Paste your level_cross_strategy.py content here
 
+from .base_strategy import BaseStrategy
 
+class LevelCrossStrategy(BaseStrategy):
+    '''
+    A strategy based on crossing certain levels
+    '''
     
-    
-    
-class SavingsAccount(BankAccount):
-        
-    '''A child class of BankAccount with added interest_rate
-    and add_interest method that allows for interest compounding'''
-    
-    def __init__(self, owner: str, balance: float, interest_rate: float):
-        super().__init__(owner, balance)
-        self.interest_rate = interest_rate
-        self.balance = balance
-    
-    def __str__(self):
-        return f'SavingsAccount(balance = ${super().get_balance()}, rate = {self.interest_rate}%)'
-        
-    def add_interest(self):
-        '''Compounds the interest based on set interest_rate'''
-        self.balance += self.interest_rate * self.balance
-        return self.balance
-        
-
-```
-
----
-
-## Task 3: Method Overriding - Strategy Pattern
-
-Create a simple trading strategy hierarchy:
-
-1. **Parent class `Strategy`**:
-   - `__init__(self, name: str)` - store strategy name
-   - `generate_signal(self, price: float) -> str` - returns `"HOLD"` (default implementation)
-
-2. **Child class `LevelCrossStrategy(Strategy)`**:
-   - `__init__(self, level: float)` - store level and call parent with name="Level Cross"
-   - Override `generate_signal(self, price: float)`:
-     - Returns `"BUY"` if `price > self.level`
-     - Returns `"SELL"` if `price < self.level`
-     - Returns `"HOLD"` otherwise
-
-Test:
-```python
-strategy = LevelCrossStrategy(100.0)
-print(strategy.generate_signal(105))  # "BUY"
-print(strategy.generate_signal(95))   # "SELL"
-print(strategy.generate_signal(100))  # "HOLD"
-```
-
-**Your solution:**
-```python
-# Paste your Strategy and LevelCrossStrategy classes here
-
-class Strategy:
-    '''A strategy class used to generate trades based on set signals + child classes with specific strategies'''
-    def __init__(self, name: str):
-        self.name = name
-        
-    def generate_signal(self, price: float) -> str:
-        return 'HOLD'
-    
-class LevelCrossStrategy(Strategy):
     def __init__(self, level: float):
-        super().__init__('Level Cross')
+        '''Initializing the class with defined level'''
+        super().__init__('Level Cross Strategy')
         self.level = level
         
+    
     def generate_signal(self, price: float) -> str:
+        '''
+        Method used to generate signal based on a price you pass - this is a mock method mainly used to practice.
         
+        It's an instance of a method that inherits abstract method from BaseStrategy (so it's mandatory).
+        Signals for real strategies most likely will be more robust.
+        '''
         if price > self.level:
             return 'BUY'
         elif price < self.level:
             return 'SELL'
-        else:
+        elif price == self.level:
             return 'HOLD'
+    
+    
+    def get_level(self) -> float:
+        '''Method used to return the set level'''
+        return self.level
 
+
+I also want you to explain the __init__.py file that we extended, what does it mean, why do we use it and what does this mean exactly?
+
+__all__ = ['BaseStrategy', 'LevelCrossStrategy']
+
+Is it an industry standard for Mid/Senior devs to do that? Why and what do we achieve by this?
 
 
 ```
 
 ---
 
-## Task 4: PCAP Trap Hunt - Find the Bug
+## Task 3: PROJECT - Implement MovingAverageStrategy
 
-The following code has a BUG. Identify the bug, explain why it causes an error, and provide the FIX.
+Create another concrete strategy with different logic.
 
-```python
-class Vehicle:
-    def __init__(self, brand, year):
-        self.brand = brand
-        self.year = year
+**File:** `algo_backtest/strategies/ma_strategy.py`
 
-class Car(Vehicle):
-    def __init__(self, brand, year, doors):
-        self.doors = doors
+**Requirements:**
+1. Import `BaseStrategy` and `List` type hint
+2. Create `MovingAverageStrategy` class
+3. `__init__(self, period: int)`:
+   - Call `super().__init__(f"MA({period})")`
+   - Store `self.period = period`
+   - Initialize `self.price_history: List[float] = []`
+4. Add method `add_price(self, price: float) -> None`:
+   - Append price to `price_history`
+   - Keep only last `period` prices (hint: slice or pop)
+5. Implement `generate_signal(self, price: float) -> str`:
+   - Add current price to history first
+   - If not enough data (len < period), return `"HOLD"`
+   - Calculate MA: `sum(self.price_history) / len(self.price_history)`
+   - Return `"BUY"` if `price > ma`, `"SELL"` if `price < ma`, else `"HOLD"`
+6. Type hints and docstrings
 
-car = Car("Toyota", 2023, 4)
-print(car.brand)  # What happens here?
-```
-
-**Your answer:**
-```
-Bug:
-AttributeError: 'Car' object has no attribute 'brand'
-
-Why it fails:
-Brand and year attributes in child class should be plugged from the parent class with super(). By the way, are these attributes or parameters? What is the difference between attribute and parameter?
-
-Fix:
-class Vehicle:
-    def __init__(self, brand, year):
-        self.brand = brand
-        self.year = year
-
-class Car(Vehicle):
-    def __init__(self, brand, year, doors):
-        super().__init__(brand, year)
-        self.doors = doors
-        
-
-car = Car("Toyota", 2023, 4)
-print(car.brand)
-
-```
-
----
-
-## Task 5: isinstance() and issubclass() Practice
-
-Given this class hierarchy:
-
-```python
-class Animal:
-    pass
-
-class Mammal(Animal):
-    pass
-
-class Dog(Mammal):
-    pass
-
-dog = Dog()
-```
-
-**Without running the code**, predict the output of each:
-
-```python
-print(isinstance(dog, Dog))           # A
-print(isinstance(dog, Mammal))        # B
-print(isinstance(dog, Animal))        # C
-print(isinstance(dog, object))        # D (TRICKY!)
-
-print(issubclass(Dog, Mammal))        # E
-print(issubclass(Dog, Animal))        # F
-print(issubclass(Dog, Dog))           # G (TRICKY!)
-print(issubclass(Animal, Dog))        # H
-```
-
-**Your answers:**
-```
-A: True
-B: True
-C: True
-D: True
-E: True
-F: False
-G: True
-H: False
-
-# Explanation for D and G:
-
-D -> dog is certainly an object, an instance of a class, but a separate object nevertheless
-G -> Dog is a class and I believe it's also a subclass of it's own class
-
-```
-
----
-
-## Task 6: PROJECT - Create BaseStrategy ABC
-
-Create an **Abstract Base Class** for the AlgoBacktest project.
-
-**File:** `algo_backtest/strategies/base_strategy.py` (create new file)
-
-Requirements:
-1. Import `ABC` and `abstractmethod` from `abc`
-2. Create `BaseStrategy` class that inherits from `ABC`
-3. `__init__(self, name: str)` - store strategy name
-4. Abstract method `generate_signal(self, price: float) -> str` - no implementation
-5. Concrete method `get_name(self) -> str` - returns `self.name`
-6. Add type hints to ALL methods
-7. Add docstrings (Google style)
-
-**File:** `algo_backtest/strategies/__init__.py` (create if doesn't exist)
+**Update:** `algo_backtest/strategies/__init__.py`
 ```python
 from .base_strategy import BaseStrategy
+from .level_cross_strategy import LevelCrossStrategy
+from .ma_strategy import MovingAverageStrategy
 
-__all__ = ['BaseStrategy']
+__all__ = ['BaseStrategy', 'LevelCrossStrategy', 'MovingAverageStrategy']
 ```
 
 **Your solution:**
 ```python
-# Paste your base_strategy.py content here
+# Paste your ma_strategy.py content here
 
 
 
-'''Abstract Method Class - base strategy'''
+from .base_strategy import BaseStrategy
+from typing import List
 
-from abc import ABC, abstractmethod
-
-class BaseStrategy(ABC):
-    '''A class with abstract method used to generate trading signal'''
-    def __init__(self, name: str):
-        self.name = name
-        
-    @abstractmethod
-    def generate_signal(self, price: float) -> str:
-        pass
+class MovingAverageStrategy(BaseStrategy):
     
-    def get_name(self) -> str:
-        '''inherited method to fetch a given strategy name'''
-        return self.name
+    def __init__(self, ma_period: int):
+        '''Initialization of the class, inheriting the base init from the BaseStrategy and extending it'''
+        super().__init__(f'MovingAverage Strategy - ma {ma_period}')
+        self.ma_period = ma_period
+        self.price_history: List[float] = []
+    
+    def add_price(self, price: float):
+        '''Method used to add a price to the self.price_history list'''
+        self.price_history.append(price)
+        if len(self.price_history) > self.ma_period:
+            self.price_history.remove(self.price_history[0])
+            
+    def generate_signal(self, price: float) -> str:
+        '''Method used to check whether the list has enough entries to be able to calculate the MA properly'''
+        if len(self.price_history) < self.ma_period:
+            print(f'Not enough data entries to properly count ma {self.ma_period}. Currently we only have {len(self.price_history)} entries.')
+            return 'HOLD'
+        
+        else:
+            ma_value = sum(self.price_history) / self.ma_period
+            if price > ma_value:
+                return 'BUY'
+            else:
+                return 'SELL'        
 
+
+
+```
+
+---
+
+## Task 4: Polymorphism in Action - Strategy Testing
+
+Write a script that demonstrates polymorphism by using different strategies interchangeably.
+
+**File:** Create `test_strategies.py` in the project root (not inside algo_backtest)
+
+**Requirements:**
+```python
+"""Test polymorphism with multiple strategies."""
+
+from algo_backtest.strategies import LevelCrossStrategy, MovingAverageStrategy
+
+def test_strategy(strategy, prices: list[float]) -> None:
+    """Test a strategy with a list of prices.
+
+    Args:
+        strategy: Any strategy that has generate_signal method
+        prices: List of prices to test
+    """
+    print(f"\nTesting: {strategy.get_name()}")
+    for price in prices:
+        signal = strategy.generate_signal(price)
+        print(f"  Price {price}: {signal}")
+
+# Test with different strategies
+prices = [95.0, 100.0, 105.0, 102.0, 98.0]
+
+level_strat = LevelCrossStrategy(level=100.0)
+test_strategy(level_strat, prices)
+
+ma_strat = MovingAverageStrategy(period=3)
+test_strategy(ma_strat, prices)
+```
+
+Run the script and paste the output below.
+
+**Your output:**
+```
+# Paste the actual output from running test_strategies.py here
+
+
+from algo_backtest.strategies import MovingAverageStrategy, LevelCrossStrategy
+
+'''Test script used to check if our strategies work properly'''
+
+def test_strategy(strategy, prices: list[float]) -> None:
+    """Test a strategy with a list of prices.
+
+    Args:
+        strategy: Any strategy that has generate_signal method
+        prices: List of prices to test
+    """
+    print(f"\nTesting: {strategy.get_name()}")
+    for price in prices:
+        signal = strategy.generate_signal(price)
+        print(f"  Price {price}: {signal}")
+
+
+if __name__ == '__main__':
+    strat1 = MovingAverageStrategy(5)
+    strat2 = LevelCrossStrategy(100.5)
+    
+    strat1.add_price(430)
+    strat1.add_price(230)
+    strat1.add_price(450)
+    strat1.add_price(470)
+    strat1.add_price(490)
+    strat1.add_price(530)
+    test_strategy(strat1, [430, 450, 520, 550, 570, 460, 430, 320])
+    test_strategy(strat2, [120, 105, 90, 20])
+
+
+Testing: MovingAverage Strategy - ma 5
+  Price 430: SELL
+  Price 450: BUY
+  Price 520: BUY
+  Price 550: BUY
+  Price 570: BUY
+  Price 460: BUY
+  Price 430: SELL
+  Price 320: SELL
+
+Testing: Level Cross Strategy
+  Price 120: BUY
+  Price 105: BUY
+  Price 90: SELL
+  Price 20: SELL
+
+I need to make it a bit more robust and add prices first before we could test the MA strategy.
+
+
+```
+
+---
+
+## Task 5: isinstance() Patterns - Type Checking
+
+Complete the following function that works differently based on strategy type:
+
+```python
+from typing import Union
+from algo_backtest.strategies import BaseStrategy, LevelCrossStrategy, MovingAverageStrategy
+
+def analyze_strategy(strategy: BaseStrategy) -> str:
+    """Analyze a strategy and return description based on its type.
+
+    Args:
+        strategy: Any strategy instance
+
+    Returns:
+        Description string
+    """
+    # TODO: Implement this logic:
+    # 1. All strategies should print their name
+    # 2. If it's a LevelCrossStrategy, also print the level
+    # 3. If it's a MovingAverageStrategy, also print the period
+    # 4. Use isinstance() to check types
+
+    pass  # Replace with your implementation
+
+# Test cases
+strat1 = LevelCrossStrategy(100.0)
+strat2 = MovingAverageStrategy(5)
+
+print(analyze_strategy(strat1))
+# Expected: "Level Cross Strategy with level=100.0"
+
+print(analyze_strategy(strat2))
+# Expected: "MA(5) with period=5"
+```
+
+**Your solution:**
+```python
+# Paste your complete analyze_strategy function here
+
+
+
+from algo_backtest.strategies import BaseStrategy, LevelCrossStrategy, MovingAverageStrategy
+def analyze_strategy(strategy: BaseStrategy) -> str:
+    """Analyze a strategy and return description based on its type.
+
+    Args:
+        strategy: Any strategy instance
+
+    Returns:
+        Description string
+    """
+    
+    if isinstance(strategy, LevelCrossStrategy):
+        return f"{strategy.name} with level={strategy.level}"
+    elif isinstance(strategy, MovingAverageStrategy):
+        return f"{strategy.name} with period={strategy.ma_period}"
+    else:
+        return strategy.name
+
+
+        
+# Test cases
+strat1 = LevelCrossStrategy(100.0)
+strat2 = MovingAverageStrategy(5)
+
+print(analyze_strategy(strat1))
+# Expected: "Level Cross Strategy with level=100.0"
+
+print(analyze_strategy(strat2))
+
+
+# LOG:
+
+# $ python practice.py
+# Strategy Level Cross Strategy with level = 100.0
+# Strategy MovingAverage Strategy with ma period = 5
+```
+
+---
+
+## Task 6: PCAP Trap - Method Resolution Order (MRO)
+
+Predict the output:
+
+```python
+class A:
+    def method(self):
+        return "A"
+
+class B(A):
+    def method(self):
+        return "B"
+
+class C(A):
+    def method(self):
+        return "C"
+
+class D(B, C):
+    pass
+
+obj = D()
+print(obj.method())
+print(D.__mro__)
+```
+
+**Your prediction:**
+```
+# Output:
+C
+The mro in mock is written as D -> C -> B -> A (from inner to outer)
+
+# Explanation (what is MRO and how does Python determine which method to call?):
+It's called the Method Resolution Order and Python check the methods order and it always goes to the inner one as the last one, which takes the precedence in the order. In practice, method B overwrites method A, and then method C overwrites method B. Method D should overwrite B, C, but it's empty, it only has pass so it does nothing. So if the C is the last written method, it will overwrite every previous one and we will see the output from C.
 ```
 
 ---
@@ -299,12 +418,12 @@ class BaseStrategy(ABC):
 ## Task 7: PCAP Multiple Choice
 
 ### Question 1
-What does `super().__init__()` do?
+What is polymorphism?
 
-A) Creates a new parent object
-B) Calls the parent class's `__init__` method
-C) Overrides the parent class
-D) Deletes the parent class
+A) The ability to create multiple classes
+B) The ability to use objects of different types through the same interface
+C) The ability to inherit from multiple parents
+D) The ability to override methods
 
 **Your answer:** B
 
@@ -314,116 +433,199 @@ D) Deletes the parent class
 What is the output?
 
 ```python
-class A:
-    def method(self):
-        return "A"
+class Animal:
+    def speak(self):
+        return "sound"
 
-class B(A):
-    pass
+class Dog(Animal):
+    def speak(self):
+        return "woof"
 
-b = B()
-print(b.method())
+def make_sound(animal: Animal):
+    return animal.speak()
+
+d = Dog()
+print(make_sound(d))
 ```
 
-A) `"A"`
-B) `"B"`
-C) `AttributeError`
-D) `None`
-
-**Your answer:** A
-
----
-
-### Question 3
-Which is TRUE about abstract methods?
-
-A) They must have an implementation in the parent class
-B) Child classes are required to implement them
-C) They can only be used in built-in classes
-D) They are deprecated in Python 3
+A) `"sound"`
+B) `"woof"`
+C) `TypeError`
+D) `AttributeError`
 
 **Your answer:** B
 
 ---
 
-## Task 8: Code Review - Fix the Strategy Implementation
+### Question 3
+When should you use composition over inheritance?
 
-Review this code and identify ALL issues (aim for 5-7 issues):
+A) Never, inheritance is always better
+B) When you have a "HAS-A" relationship instead of "IS-A"
+C) When you want polymorphism
+D) When you need to reuse code
+
+**Your answer:** B
+
+---
+
+## Task 8: Code Review - Fix the Polymorphism Bug
+
+This code is supposed to demonstrate polymorphism but has issues. Find ALL bugs (aim for 5+) and fix them:
 
 ```python
-class strategy:
-    def init(self, name):
-        name = name
+class Vehicle:
+    def __init__(self, brand):
+        self.brand = brand
 
-    def signal(self, price):
-        return HOLD
+    def start(self):
+        return "Starting vehicle"
 
-class MovingAverageStrategy(strategy):
-    def init(self, ma_period):
-        self.ma_period = ma_period
+class Car(Vehicle):
+    def start(self):
+        return f"Starting {self.brand} car"
 
-    def signal(self, price):
-        result = super().signal(price)
-        if price > 100:
-            return "buy"
-        return result
+class Motorcycle(Vehicle):
+    pass
 
-strat = MovingAverageStrategy(20)
-print(strat.name)
+def start_all_vehicles(vehicles):
+    for v in vehicles:
+        print(v.start())
+
+vehicles = [
+    Car("Toyota"),
+    Motorcycle("Harley"),
+    Vehicle("Generic")
+]
+
+start_all_vehicles(vehicles)
 ```
 
 **Your findings:**
 ```
 Issues found:
-# 1. Uncapitalized class name
-# 2. Lack of floor symbols __ next to init
-# 3. name in init has local scope instead of being self.name
-# 4. HOLD in signal in parent class will trigger a TypeError, as it's not defined in anyway, and it's not a string either
-# 5. lack of super() to get the parent class parameters in init
-# 6. with current logic in signal in both classes, we only get to have a 'buy' or 'hold' signal (from the parent class), and no sell at all. Also this whole logic is really weird - we're calling the signal logic from the parent class, but there's no signal logic there, this logic is incomplete etc.
-# 7. the class is called without a name
-# 8. Lack of type hints andd or docs
+#1. Lack of docstrings/typehints
+#2. Car has a missing init and it doesn't use super() - perhaps it's okay as the code still works, but it just looks weird to me
+#3. The Motorcycle class is empty, so what's the point of even having it there when it does nothing different compared to the parent class?
+#4. As a consequence of the above, the start_all_vehicles will not be able to work properly and list all the vehicles or make us see any difference between them.
+
+
+
+What would the actual output be with the bugs?
+
+$ python practice.py
+Starting Toyota car
+Starting vehicle
+Starting vehicle
+
+What SHOULD the output be?
+
+It should be specific for every type of the class and extended somehow, otherwise what's the point of having different classes and cluttering the codebase?
+
 
 Corrected code:
+
+
+class Vehicle:
+    '''Parent class used to start a vehicle'''
+    def __init__(self, brand):
+        self.brand = brand
+
+    def start(self):
+        return "Starting vehicle"
+
+class Car(Vehicle):
+    '''A polimorphic variant of a Vehicle that is designed specifically for cars'''
+    def __init__(self, brand: str, doors: int):
+        super().__init__(brand)
+        self.doors = doors
+    
+    def start(self):
+        return f"Starting {self.brand} car with {self.doors} doors"
+
+class Motorcycle(Vehicle):
+    '''A polimorphic variant of a Vehicle extended specifically for motorcycles'''
+    def __init__(self, brand, horsepower: int):
+        super().__init__(brand)
+        self.horsepower = horsepower
+        
+    def start(self):
+        return f'Starting a {self.brand} motorcycle with {self.horsepower} horsepower'
+
+def start_all_vehicles(vehicles):
+    for v in vehicles:
+        print(v.start())
+
+vehicles = [
+    Car("Toyota", 4),
+    Motorcycle("Harley", 50),
+    Vehicle("Generic")
+]
+
+start_all_vehicles(vehicles)
+
+
 ```python
 
-class Strategy:
-    '''a base strategy for creating strategies'''
-    def __init__(self, name: str):
-        self.name = name
-
-    def signal(self):
-        pass
-
-class MovingAverageStrategy(Strategy):
-    '''a child-class of strategy class with its separate signal generating logic'''
-    def __init__(self, name: str, ma_period: float):
-        super().__init__(name)
-        self.ma_period = ma_period
-
-    '''Signal class used to generate signals for the moving average strategy (mock, as you can see :))'''
-    def signal(self, price: float):
-        if price > 100:
-            return 'Buy'
-        elif price < 100:
-            return 'Hold'
-        
-strat = MovingAverageStrategy('Strategy1', 20)
-print(strat.name)
 
 ```
+```
+
+---
+
+## Task 9: Bonus Challenge - Strategy Factory Pattern
+
+Implement a factory function that creates strategies based on a string name:
+
+```python
+from typing import Union
+from algo_backtest.strategies import BaseStrategy, LevelCrossStrategy, MovingAverageStrategy
+
+def create_strategy(name: str, **kwargs) -> BaseStrategy:
+    """Factory function to create strategies by name.
+
+    Args:
+        name: Strategy type ("level_cross" or "ma")
+        **kwargs: Parameters for the strategy
+
+    Returns:
+        Strategy instance
+
+    Raises:
+        ValueError: If strategy name is unknown
+    """
+    # TODO: Implement factory logic
+    pass
+
+# Test cases
+strat1 = create_strategy("level_cross", level=100.0)
+print(strat1.generate_signal(105))  # Should print "BUY"
+
+strat2 = create_strategy("ma", period=5)
+print(strat2.get_name())  # Should print "MA(5)"
+
+try:
+    strat3 = create_strategy("unknown")
+except ValueError as e:
+    print(f"Error: {e}")  # Should print error message
+```
+
+**Your solution:**
+```python
+# Paste your create_strategy function here
+
+
 ```
 
 ---
 
 ## Feedback Section
 
-**Difficulty (1-10):** 5
+**Difficulty (1-10):** ___
 
-**Time spent:** 66 minutes
+**Time spent:** ___ minutes
 
 **What clicked:**
-Generally everything I think, but it all needs refinement and regular practice
 
 
 **What's still confusing:**

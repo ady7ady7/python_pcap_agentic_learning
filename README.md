@@ -7,7 +7,7 @@ After successfully using Claude as my programming teacher for the PCEP exam (pas
 - to pass the PCAP exam
 - to prepare a portfolio project in Python (trades backtesting engine)
 
-I'm planning to achieve both goals by July 28, 2026.
+I'm planning to achieve both goals by February 28, 2026.
 
 This repository will showcase my learning process, and you can find all the tasks, feedback, exams and separate project parts that I will be working on DAILY.
 PLEASE NOTE: WHILE I USE AGENT AS MY TUTOR, I AM NOT USING AI to complete any of the tasks, and the plan is to truly learn and understand all of the concepts on my own, and all of that requires my own work.

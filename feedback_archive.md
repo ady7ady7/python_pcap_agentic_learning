@@ -623,3 +623,145 @@ When you call `super().__init__()`, the parent's constructor runs completely. Al
 
 ---
 
+## Week 2, Day 2 - 2026-01-13
+
+**Topic:** Polymorphism & Multiple Strategies
+
+### Student Self-Assessment
+- **Tasks Completed:** 8/8 (Task 9 bonus not completed)
+- **Difficulty:** 5/10
+- **Time Spent:** 90 minutes
+
+### Student Reflection
+**What clicked:**
+"I understand the concept in general. I definitely need to practice this regularly to get a hang of it, and also I need to get a more scaffolded approach to be able to think and figure out some things on my own, but overall difficulty is 5/10 today."
+
+**Student Questions:**
+"I also want you to explain the __init__.py file that we extended, what does it mean, why do we use it and what does this mean exactly? `__all__ = ['BaseStrategy', 'LevelCrossStrategy']` Is it an industry standard for Mid/Senior devs to do that? Why and what do we achieve by this?"
+
+**Answer provided:** Comprehensive explanation of `__init__.py` (marks directory as package), `__all__` (controls `from package import *`), confirmed this IS industry standard, explained benefits (explicit public API, clean imports, IDE support).
+
+**Student Corrections:**
+- **Task 3:** Student self-corrected MovingAverageStrategy to use slicing instead of `.remove()` for performance
+- **Task 3:** Fixed `generate_signal()` to add price internally and handle all BUY/SELL/HOLD cases
+- **Task 5:** Mentor error - referenced non-existent `get_level()` and `get_name()` methods. Student correctly used `.name`, `.level`, `.ma_period` attributes directly
+- **Task 9:** Student requested bonus tasks not count toward base 100% score
+
+### Mentor Assessment
+
+**Score: 86.25% (B)**
+
+**Task Breakdown:**
+
+1. **Polymorphism Prediction:** 80% (4/5)
+   - Predicted output: 43.42
+   - Correct output: 43.56636 (15 + 12.56636 + 16)
+   - ✅ Explanation of polymorphism correct
+
+2. **LevelCrossStrategy:** 100%
+   - ✅ Perfect implementation with proper inheritance
+   - ✅ `super().__init__('Level Cross Strategy')`
+   - ✅ All three signal cases handled
+   - ✅ Type hints and docstrings
+   - ✅ `get_level()` method implemented
+
+3. **MovingAverageStrategy:** 100% (after student fixes)
+   - ✅ Fixed to use slicing: `self.price_history[-self.ma_period:]`
+   - ✅ `generate_signal()` now adds price internally
+   - ✅ All three cases (BUY/SELL/HOLD) handled properly
+   - ✅ Clean logic flow
+   - **Excellent self-correction - production-quality code**
+
+4. **Polymorphism Testing:** 100%
+   - ✅ Demonstrates polymorphism with `test_strategy()` function
+   - ✅ Both strategies work through same interface
+   - ✅ Output shows correct behavior
+
+5. **isinstance() Patterns:** 100% (after student fixes)
+   - ✅ Correctly simplified to just `isinstance()` checking
+   - ✅ Used `.name` attribute directly (caught mentor's error about non-existent methods)
+   - ✅ Clean solution
+
+6. **MRO Prediction:** 0% (0/10) **CRITICAL GAP**
+   - **Your answer:** "C"
+   - **Correct answer:** "B"
+   - **Error:** Misunderstands MRO - `class D(B, C)` means B comes FIRST, not C
+   - **C3 Linearization:** D → B → C → A → object (left-to-right order in class definition)
+   - **ACTION REQUIRED:** Must review MRO and practice - this is a major PCAP trap
+
+7. **Multiple Choice:** 100%
+   - Q1: ✅ B (polymorphism = using objects of different types through same interface)
+   - Q2: ✅ B ("woof" - method overriding)
+   - Q3: ✅ B (composition for "HAS-A" relationships)
+
+8. **Code Review:** 80% (8/10)
+   - Found 4 issues (aimed for 5+):
+     1. ✅ Lack of docstrings/typehints
+     2. ✅ Car missing explicit `__init__` and super()
+     3. ✅ Empty Motorcycle class
+     4. ✅ Polymorphism not demonstrating different behavior
+   - ❌ Missed: Original Car class doesn't have `__init__` at all
+   - ✅ Corrected code is excellent with specific attributes (doors, horsepower)
+   - Minor typo: "polimorphic" → "polymorphic"
+
+**Bonus Task 9 (Factory Pattern):** Not completed (not counted in score per student request)
+
+**Weighted Score: 86.25% (69/80 base points)**
+
+**Breakdown:**
+- PCAP Drills (Tasks 1, 6, 7): 14/25 (56%) - MRO gap significantly impacts score
+- Project Implementation (Tasks 2, 3): 20/20 (100%) ✅
+- Integration (Tasks 4, 5, 8): 28/30 (93.3%)
+
+**Strengths:**
+- ✅ **Self-correction ability:** Fixed MovingAverageStrategy performance (slicing) and logic (internal add_price)
+- ✅ **Clean code quality:** Both strategies are production-ready
+- ✅ **Error detection:** Caught mentor's non-existent method references
+- ✅ **Polymorphism understanding:** Conceptually solid, demonstrated through test script
+- ✅ **Professional practices:** Proper use of `__all__` in `__init__.py`
+
+**Critical Gap:**
+- ❌ **MRO (Task 6):** Major PCAP exam trap - must understand C3 linearization
+  - **Rule:** In `class D(B, C)`, the **leftmost parent (B) has priority**
+  - **MRO order:** D → B → C → A (left-to-right)
+  - **Student's misconception:** Thought C overwrites B because it's "written last"
+
+**Action Items:**
+1. **CRITICAL - Practice MRO (10 minutes):**
+   ```python
+   class A:
+       def method(self): return "A"
+   class B(A):
+       def method(self): return "B"
+   class C(A):
+       def method(self): return "C"
+   class D(B, C):
+       pass
+
+   print(D().method())  # "B" (leftmost parent wins)
+   print(D.__mro__)     # Check actual order
+   ```
+
+2. **Complete Task 9 (optional):** Factory Pattern is a valuable design pattern
+
+**Project Milestones:**
+- ✅ `LevelCrossStrategy` implemented (price level crossing logic)
+- ✅ `MovingAverageStrategy` implemented (MA-based signals with state)
+- ✅ Both strategies inherit from `BaseStrategy` ABC
+- ✅ `algo_backtest/strategies/__init__.py` properly configured with `__all__`
+- ✅ Polymorphism demonstrated through common interface
+
+**Mentor Corrections:**
+1. **Task 5:** Mentor incorrectly referenced `get_level()` and `get_name()` methods that don't exist in `BaseStrategy`. Student correctly used `.name`, `.level`, `.ma_period` attributes. Mentor error acknowledged.
+
+2. **Task 9 Scoring:** Student correctly requested bonus tasks not count toward base 100%. Scoring adjusted accordingly.
+
+**Next Steps:**
+- Day 3: Composition vs Inheritance, advanced polymorphism patterns
+- Day 4: Real backtesting with multiple strategies
+- Day 5: Week 2 review and integration
+
+**Mentor Note:** Strong session with excellent self-correction skills. Student fixed performance issues independently and caught mentor errors. The 86.25% score is solid, but the MRO gap (Task 6: 0/10) is concerning for PCAP preparation. This single topic accounts for 10% of the day's score. With 10 minutes of focused MRO practice, student would likely score 95%+. Code quality is professional - both strategies are production-ready after student's fixes.
+
+---
+
