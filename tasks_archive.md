@@ -212,3 +212,54 @@ Format: Date | Topic | Score | Difficulty | Notes
 
 ---
 
+## Week 2, Day 3 - 2026-01-14
+
+**Topic:** Composition vs Inheritance, Advanced Polymorphism & MRO Practice
+**Score:** 5/7 base tasks completed (Tasks 3 & 6 skipped) | 86% (B)
+**Difficulty:** 8/10 (too high - overengineered tasks)
+
+**Tasks Completed:**
+1. MRO Practice (Bat/Platypus diamond inheritance) - **10/10** ✅
+2. Composition vs Inheritance Theory (Car/Engine) - **10/10** ✅
+3. Position with Composition - SKIPPED (overengineered PositionMetadata)
+4. Mixin Pattern (LoggerMixin) - **9/10** ✅
+5. PCAP MRO Edge Cases - **10/10** ✅ (challenged mentor's wrong assessment)
+6. Strategy Factory - SKIPPED (overengineered factory pattern)
+7. Multiple Choice (3 questions) - **10/10** ✅
+8. Code Review (Database composition refactoring) - **10/10** ✅
+
+**Key Learnings:**
+- **MRO MASTERED:** 0/10 on Day 2 → 10/10 on Day 3 (leftmost-parent-wins rule)
+- Composition vs Inheritance (HAS-A vs IS-A) - when to use each
+- Mixin pattern for adding functionality via multiple inheritance
+- YAGNI principle (You Aren't Gonna Need It) - Option 1 in Task 8 showed senior-level judgment
+- **Critical thinking:** Correctly challenged overengineered tasks instead of blindly implementing
+
+**Student Corrections:**
+- **Task 5 Case C:** Challenged mentor's wrong scoring - tested code and proved `S(R, Q)` where `R(Q)` does NOT raise error
+- **Tasks 3 & 6:** Correctly identified as overengineered ("What the actual fuck is that StrategyFactory bullshit?")
+- **Score corrected:** 82.86% → 86% after proving mentor wrong on Case C
+
+**Student Feedback:**
+- "Difficulty 8/10 - some really weird tasks + unclear bonus task"
+- "Mixins, HAS-A vs IS-A - we need to practice this definitely"
+- **"Yet the main objective is PCAP, do not forget"** ← CRITICAL reminder
+
+**Mentor Errors Acknowledged:**
+1. Task 5 Case C scoring was wrong (student proved with code)
+2. Tasks 3 & 6 were overengineered for the sake of teaching patterns
+3. Task 9 had unclear requirements
+4. Difficulty too high (8/10 instead of target 5-6/10)
+
+**Project Milestones:**
+- No new code (Tasks 3 & 6 skipped)
+- MRO understanding solidified (major gap closed)
+- Professional engineering judgment demonstrated
+
+**Action Items for Day 4:**
+- Focus on **actually useful** implementations (position sizing, strategy comparison)
+- More PCAP drills, less abstract OOP patterns
+- Target difficulty 5-6/10
+
+---
+

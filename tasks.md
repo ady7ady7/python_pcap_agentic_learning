@@ -1,6 +1,6 @@
-# Week 2, Day 2 Tasks - Polymorphism & Multiple Strategies
+# Week 2, Day 3 Tasks - Composition, Advanced Polymorphism & MRO Practice
 
-**Focus:** Polymorphism, implementing multiple concrete strategies, isinstance() patterns, composition vs inheritance
+**Focus:** Composition vs Inheritance (HAS-A vs IS-A), MRO deep dive, mixins, strategy integration
 
 **Instructions:**
 - Work in `practice.py` for experimentation
@@ -9,611 +9,411 @@
 
 ---
 
-## Task 1: PCAP Warm-up - Polymorphism Prediction
+## Task 1: PCAP Warm-up - MRO Practice (CRITICAL!)
 
-Predict the output WITHOUT running the code:
+Yesterday you predicted "C" but the correct answer was "B". Let's practice MRO to solidify understanding.
 
-```python
-class Shape:
-    def area(self):
-        return 0
-
-class Rectangle(Shape):
-    def __init__(self, w, h):
-        self.w = w
-        self.h = h
-
-    def area(self):
-        return self.w * self.h
-
-class Circle(Shape):
-    def __init__(self, r):
-        self.r = r
-
-    def area(self):
-        return 3.14 * self.r ** 2
-
-shapes = [Rectangle(5, 3), Circle(2), Rectangle(4, 4)]
-total_area = sum(s.area() for s in shapes)
-print(total_area)
-```
-
-**Your prediction:**
-```
-# Output:
-`43.42
-
-
-
-# Explanation (what is polymorphism and how does it work here?):
-Each shape here uses the Shape class as the parent class, but their area calculations are different and yet they're calculated properly.
-
-```
-
----
-
-## Task 2: PROJECT - Implement LevelCrossStrategy
-
-Create a concrete strategy that inherits from `BaseStrategy`.
-
-**File:** `algo_backtest/strategies/level_cross_strategy.py`
-
-**Requirements:**
-1. Import `BaseStrategy` from `.base_strategy`
-2. Create `LevelCrossStrategy` class that inherits from `BaseStrategy`
-3. `__init__(self, level: float)`:
-   - Call `super().__init__("Level Cross Strategy")`
-   - Store `self.level = level`
-4. Implement `generate_signal(self, price: float) -> str`:
-   - Return `"BUY"` if `price > self.level`
-   - Return `"SELL"` if `price < self.level`
-   - Return `"HOLD"` if `price == self.level`
-5. Add a method `get_level(self) -> float` that returns `self.level`
-6. Type hints on ALL methods
-7. Docstrings (Google style)
-
-**Update:** `algo_backtest/strategies/__init__.py`
-```python
-from .base_strategy import BaseStrategy
-from .level_cross_strategy import LevelCrossStrategy
-
-__all__ = ['BaseStrategy', 'LevelCrossStrategy']
-```
-
-**Your solution:**
-```python
-# Paste your level_cross_strategy.py content here
-
-from .base_strategy import BaseStrategy
-
-class LevelCrossStrategy(BaseStrategy):
-    '''
-    A strategy based on crossing certain levels
-    '''
-    
-    def __init__(self, level: float):
-        '''Initializing the class with defined level'''
-        super().__init__('Level Cross Strategy')
-        self.level = level
-        
-    
-    def generate_signal(self, price: float) -> str:
-        '''
-        Method used to generate signal based on a price you pass - this is a mock method mainly used to practice.
-        
-        It's an instance of a method that inherits abstract method from BaseStrategy (so it's mandatory).
-        Signals for real strategies most likely will be more robust.
-        '''
-        if price > self.level:
-            return 'BUY'
-        elif price < self.level:
-            return 'SELL'
-        elif price == self.level:
-            return 'HOLD'
-    
-    
-    def get_level(self) -> float:
-        '''Method used to return the set level'''
-        return self.level
-
-
-I also want you to explain the __init__.py file that we extended, what does it mean, why do we use it and what does this mean exactly?
-
-__all__ = ['BaseStrategy', 'LevelCrossStrategy']
-
-Is it an industry standard for Mid/Senior devs to do that? Why and what do we achieve by this?
-
-
-```
-
----
-
-## Task 3: PROJECT - Implement MovingAverageStrategy
-
-Create another concrete strategy with different logic.
-
-**File:** `algo_backtest/strategies/ma_strategy.py`
-
-**Requirements:**
-1. Import `BaseStrategy` and `List` type hint
-2. Create `MovingAverageStrategy` class
-3. `__init__(self, period: int)`:
-   - Call `super().__init__(f"MA({period})")`
-   - Store `self.period = period`
-   - Initialize `self.price_history: List[float] = []`
-4. Add method `add_price(self, price: float) -> None`:
-   - Append price to `price_history`
-   - Keep only last `period` prices (hint: slice or pop)
-5. Implement `generate_signal(self, price: float) -> str`:
-   - Add current price to history first
-   - If not enough data (len < period), return `"HOLD"`
-   - Calculate MA: `sum(self.price_history) / len(self.price_history)`
-   - Return `"BUY"` if `price > ma`, `"SELL"` if `price < ma`, else `"HOLD"`
-6. Type hints and docstrings
-
-**Update:** `algo_backtest/strategies/__init__.py`
-```python
-from .base_strategy import BaseStrategy
-from .level_cross_strategy import LevelCrossStrategy
-from .ma_strategy import MovingAverageStrategy
-
-__all__ = ['BaseStrategy', 'LevelCrossStrategy', 'MovingAverageStrategy']
-```
-
-**Your solution:**
-```python
-# Paste your ma_strategy.py content here
-
-
-
-from .base_strategy import BaseStrategy
-from typing import List
-
-class MovingAverageStrategy(BaseStrategy):
-    
-    def __init__(self, ma_period: int):
-        '''Initialization of the class, inheriting the base init from the BaseStrategy and extending it'''
-        super().__init__(f'MovingAverage Strategy - ma {ma_period}')
-        self.ma_period = ma_period
-        self.price_history: List[float] = []
-    
-    def add_price(self, price: float):
-        '''Method used to add a price to the self.price_history list'''
-        self.price_history.append(price)
-        if len(self.price_history) > self.ma_period:
-            self.price_history.remove(self.price_history[0])
-            
-    def generate_signal(self, price: float) -> str:
-        '''Method used to check whether the list has enough entries to be able to calculate the MA properly'''
-        if len(self.price_history) < self.ma_period:
-            print(f'Not enough data entries to properly count ma {self.ma_period}. Currently we only have {len(self.price_history)} entries.')
-            return 'HOLD'
-        
-        else:
-            ma_value = sum(self.price_history) / self.ma_period
-            if price > ma_value:
-                return 'BUY'
-            else:
-                return 'SELL'        
-
-
-
-```
-
----
-
-## Task 4: Polymorphism in Action - Strategy Testing
-
-Write a script that demonstrates polymorphism by using different strategies interchangeably.
-
-**File:** Create `test_strategies.py` in the project root (not inside algo_backtest)
-
-**Requirements:**
-```python
-"""Test polymorphism with multiple strategies."""
-
-from algo_backtest.strategies import LevelCrossStrategy, MovingAverageStrategy
-
-def test_strategy(strategy, prices: list[float]) -> None:
-    """Test a strategy with a list of prices.
-
-    Args:
-        strategy: Any strategy that has generate_signal method
-        prices: List of prices to test
-    """
-    print(f"\nTesting: {strategy.get_name()}")
-    for price in prices:
-        signal = strategy.generate_signal(price)
-        print(f"  Price {price}: {signal}")
-
-# Test with different strategies
-prices = [95.0, 100.0, 105.0, 102.0, 98.0]
-
-level_strat = LevelCrossStrategy(level=100.0)
-test_strategy(level_strat, prices)
-
-ma_strat = MovingAverageStrategy(period=3)
-test_strategy(ma_strat, prices)
-```
-
-Run the script and paste the output below.
-
-**Your output:**
-```
-# Paste the actual output from running test_strategies.py here
-
-
-from algo_backtest.strategies import MovingAverageStrategy, LevelCrossStrategy
-
-'''Test script used to check if our strategies work properly'''
-
-def test_strategy(strategy, prices: list[float]) -> None:
-    """Test a strategy with a list of prices.
-
-    Args:
-        strategy: Any strategy that has generate_signal method
-        prices: List of prices to test
-    """
-    print(f"\nTesting: {strategy.get_name()}")
-    for price in prices:
-        signal = strategy.generate_signal(price)
-        print(f"  Price {price}: {signal}")
-
-
-if __name__ == '__main__':
-    strat1 = MovingAverageStrategy(5)
-    strat2 = LevelCrossStrategy(100.5)
-    
-    strat1.add_price(430)
-    strat1.add_price(230)
-    strat1.add_price(450)
-    strat1.add_price(470)
-    strat1.add_price(490)
-    strat1.add_price(530)
-    test_strategy(strat1, [430, 450, 520, 550, 570, 460, 430, 320])
-    test_strategy(strat2, [120, 105, 90, 20])
-
-
-Testing: MovingAverage Strategy - ma 5
-  Price 430: SELL
-  Price 450: BUY
-  Price 520: BUY
-  Price 550: BUY
-  Price 570: BUY
-  Price 460: BUY
-  Price 430: SELL
-  Price 320: SELL
-
-Testing: Level Cross Strategy
-  Price 120: BUY
-  Price 105: BUY
-  Price 90: SELL
-  Price 20: SELL
-
-I need to make it a bit more robust and add prices first before we could test the MA strategy.
-
-
-```
-
----
-
-## Task 5: isinstance() Patterns - Type Checking
-
-Complete the following function that works differently based on strategy type:
-
-```python
-from typing import Union
-from algo_backtest.strategies import BaseStrategy, LevelCrossStrategy, MovingAverageStrategy
-
-def analyze_strategy(strategy: BaseStrategy) -> str:
-    """Analyze a strategy and return description based on its type.
-
-    Args:
-        strategy: Any strategy instance
-
-    Returns:
-        Description string
-    """
-    # TODO: Implement this logic:
-    # 1. All strategies should print their name
-    # 2. If it's a LevelCrossStrategy, also print the level
-    # 3. If it's a MovingAverageStrategy, also print the period
-    # 4. Use isinstance() to check types
-
-    pass  # Replace with your implementation
-
-# Test cases
-strat1 = LevelCrossStrategy(100.0)
-strat2 = MovingAverageStrategy(5)
-
-print(analyze_strategy(strat1))
-# Expected: "Level Cross Strategy with level=100.0"
-
-print(analyze_strategy(strat2))
-# Expected: "MA(5) with period=5"
-```
-
-**Your solution:**
-```python
-# Paste your complete analyze_strategy function here
-
-
-
-from algo_backtest.strategies import BaseStrategy, LevelCrossStrategy, MovingAverageStrategy
-def analyze_strategy(strategy: BaseStrategy) -> str:
-    """Analyze a strategy and return description based on its type.
-
-    Args:
-        strategy: Any strategy instance
-
-    Returns:
-        Description string
-    """
-    
-    if isinstance(strategy, LevelCrossStrategy):
-        return f"{strategy.name} with level={strategy.level}"
-    elif isinstance(strategy, MovingAverageStrategy):
-        return f"{strategy.name} with period={strategy.ma_period}"
-    else:
-        return strategy.name
-
-
-        
-# Test cases
-strat1 = LevelCrossStrategy(100.0)
-strat2 = MovingAverageStrategy(5)
-
-print(analyze_strategy(strat1))
-# Expected: "Level Cross Strategy with level=100.0"
-
-print(analyze_strategy(strat2))
-
-
-# LOG:
-
-# $ python practice.py
-# Strategy Level Cross Strategy with level = 100.0
-# Strategy MovingAverage Strategy with ma period = 5
-```
-
----
-
-## Task 6: PCAP Trap - Method Resolution Order (MRO)
-
-Predict the output:
-
-```python
-class A:
-    def method(self):
-        return "A"
-
-class B(A):
-    def method(self):
-        return "B"
-
-class C(A):
-    def method(self):
-        return "C"
-
-class D(B, C):
-    pass
-
-obj = D()
-print(obj.method())
-print(D.__mro__)
-```
-
-**Your prediction:**
-```
-# Output:
-C
-The mro in mock is written as D -> C -> B -> A (from inner to outer)
-
-# Explanation (what is MRO and how does Python determine which method to call?):
-It's called the Method Resolution Order and Python check the methods order and it always goes to the inner one as the last one, which takes the precedence in the order. In practice, method B overwrites method A, and then method C overwrites method B. Method D should overwrite B, C, but it's empty, it only has pass so it does nothing. So if the C is the last written method, it will overwrite every previous one and we will see the output from C.
-```
-
----
-
-## Task 7: PCAP Multiple Choice
-
-### Question 1
-What is polymorphism?
-
-A) The ability to create multiple classes
-B) The ability to use objects of different types through the same interface
-C) The ability to inherit from multiple parents
-D) The ability to override methods
-
-**Your answer:** B
-
----
-
-### Question 2
-What is the output?
+**Predict the output WITHOUT running the code:**
 
 ```python
 class Animal:
     def speak(self):
-        return "sound"
+        return "generic sound"
 
-class Dog(Animal):
+class Mammal(Animal):
     def speak(self):
-        return "woof"
+        return "mammal sound"
 
-def make_sound(animal: Animal):
-    return animal.speak()
+class Bird(Animal):
+    def speak(self):
+        return "chirp"
 
-d = Dog()
-print(make_sound(d))
-```
-
-A) `"sound"`
-B) `"woof"`
-C) `TypeError`
-D) `AttributeError`
-
-**Your answer:** B
-
----
-
-### Question 3
-When should you use composition over inheritance?
-
-A) Never, inheritance is always better
-B) When you have a "HAS-A" relationship instead of "IS-A"
-C) When you want polymorphism
-D) When you need to reuse code
-
-**Your answer:** B
-
----
-
-## Task 8: Code Review - Fix the Polymorphism Bug
-
-This code is supposed to demonstrate polymorphism but has issues. Find ALL bugs (aim for 5+) and fix them:
-
-```python
-class Vehicle:
-    def __init__(self, brand):
-        self.brand = brand
-
-    def start(self):
-        return "Starting vehicle"
-
-class Car(Vehicle):
-    def start(self):
-        return f"Starting {self.brand} car"
-
-class Motorcycle(Vehicle):
+class Bat(Mammal, Bird):
     pass
 
-def start_all_vehicles(vehicles):
-    for v in vehicles:
-        print(v.start())
+class Platypus(Bird, Mammal):
+    pass
 
-vehicles = [
-    Car("Toyota"),
-    Motorcycle("Harley"),
-    Vehicle("Generic")
-]
+bat = Bat()
+platypus = Platypus()
 
-start_all_vehicles(vehicles)
+print(bat.speak())
+print(platypus.speak())
+print(Bat.__mro__)
 ```
 
-**Your findings:**
+**Your prediction:**
 ```
-Issues found:
-#1. Lack of docstrings/typehints
-#2. Car has a missing init and it doesn't use super() - perhaps it's okay as the code still works, but it just looks weird to me
-#3. The Motorcycle class is empty, so what's the point of even having it there when it does nothing different compared to the parent class?
-#4. As a consequence of the above, the start_all_vehicles will not be able to work properly and list all the vehicles or make us see any difference between them.
+# Output (3 lines):
+
+print(bat.speak()) # -> 'mammal sound'
+print(platypus.speak()) # -> 'chirp'
+print(Bat.__mro__) # Mammal -> Bird -> Animal
 
 
 
-What would the actual output be with the bugs?
+# Explanation (why does order in class definition matter?):
 
-$ python practice.py
-Starting Toyota car
-Starting vehicle
-Starting vehicle
+Because the order is from bottom to the top and also from left to right, so its:
+Platypus = Bird -> Mammal -> Animal
+Bat = Mammal -> Bird -> Animal
 
-What SHOULD the output be?
+```
 
-It should be specific for every type of the class and extended somehow, otherwise what's the point of having different classes and cluttering the codebase?
+---
 
+## Task 2: Composition vs Inheritance - Theory
 
-Corrected code:
+**Question:** When should you use composition (HAS-A) instead of inheritance (IS-A)?
 
+Read the following scenario and decide which approach is better:
 
-class Vehicle:
-    '''Parent class used to start a vehicle'''
-    def __init__(self, brand):
-        self.brand = brand
+**Scenario A:** You're building a `Car` class. A car needs an engine to function.
+
+**Option 1 - Inheritance:**
+```python
+class Engine:
+    def start(self):
+        return "Engine started"
+
+class Car(Engine):  # Car IS-A Engine
+    pass
+```
+
+**Option 2 - Composition:**
+```python
+class Engine:
+    def start(self):
+        return "Engine started"
+
+class Car:
+    def __init__(self):
+        self.engine = Engine()  # Car HAS-A Engine
 
     def start(self):
-        return "Starting vehicle"
+        return self.engine.start()
+```
 
-class Car(Vehicle):
-    '''A polimorphic variant of a Vehicle that is designed specifically for cars'''
-    def __init__(self, brand: str, doors: int):
-        super().__init__(brand)
-        self.doors = doors
+**Your answer:**
+```
+Which is better (Option 1 or Option 2)?
+
+
+That really depends on the context, but here we would rather use option 2. 
+
+
+Why?
+
+CAR doesn't seem like it needs to be a subclass of Engine at all, it rather needs to use the features of Engine.
+
+
+Give a real-world example where inheritance would be correct:
+
+If we had a general class - like BaseStrategy, that would settle some variables that will or should be use in every strategy, but then each strategy might be very different and it needs a very specific extension of the BaseStrategy.
+
+
+```
+
+---
+
+## Task 3: PROJECT - Position with Composition
+
+Currently our `Position` class stores `ticker`, `entry_price`, `quantity`, etc. as primitive types.
+
+**Task:** Refactor `Position` to use **composition** by creating a `PositionMetadata` class that holds non-price data.
+
+**Requirements:**
+1. Create a `PositionMetadata` class in `algo_backtest/engine/position_metadata.py`:
+   - Attributes: `ticker: str`, `side: str`, `quantity: float`
+   - Add `__str__` method: `"AAPL LONG 100 shares"`
+
+2. Modify `Position` class in `algo_backtest/engine/position.py`:
+   - Replace individual `ticker`, `side`, `quantity` attributes with `self.metadata: PositionMetadata`
+   - Update `__init__` to accept `metadata: PositionMetadata` parameter
+   - Update all methods to use `self.metadata.ticker`, `self.metadata.side`, etc.
+   - Update `__str__` to use `self.metadata`
+
+**Paste your code below:**
+```python
+# position_metadata.py
+
+
+
+# position.py (modified parts only)
+
+
+
+```
+
+---
+
+## Task 4: Mixin Pattern - LoggerMixin
+
+A **mixin** is a small class that provides specific functionality via multiple inheritance. Mixins DON'T stand alone - they're meant to be combined with other classes.
+
+**Task:** Create a `LoggerMixin` that adds logging capability to any class.
+
+**Requirements:**
+1. Create `LoggerMixin` class with a `log(message: str)` method that prints: `"[ClassName] message"`
+2. Create a `Trade` class that inherits from BOTH `LoggerMixin` AND your base class
+3. Demonstrate logging a trade execution
+
+**Paste your code below:**
+```python
+# Your mixin implementation
+
+# class LoggerMixin:
     
-    def start(self):
-        return f"Starting {self.brand} car with {self.doors} doors"
-
-class Motorcycle(Vehicle):
-    '''A polimorphic variant of a Vehicle extended specifically for motorcycles'''
-    def __init__(self, brand, horsepower: int):
-        super().__init__(brand)
-        self.horsepower = horsepower
-        
-    def start(self):
-        return f'Starting a {self.brand} motorcycle with {self.horsepower} horsepower'
-
-def start_all_vehicles(vehicles):
-    for v in vehicles:
-        print(v.start())
-
-vehicles = [
-    Car("Toyota", 4),
-    Motorcycle("Harley", 50),
-    Vehicle("Generic")
-]
-
-start_all_vehicles(vehicles)
+#     def __init__(self):
+#         self.class_name = None
+    
+#     def log(self, message: str):
+#         print(f'{self.class_name} message: {message}')
+    
 
 
-```python
+# class Trade(LoggerMixin):
+    
+#     def __init__(self):
+#         super().__init__()
+#         self.class_name = 'Trade Class'
 
+# x = Trade()
+# x.log('Test Xd')
 
-```
+# #LOG:
+# $ python practice.py
+# Trade Class message: Test Xd
+
+# I didn't follow your reqs exactly, as I didn't want to clutter the code base but I've created a reusable Mixin class with log capabilities, and it works properly
 ```
 
 ---
 
-## Task 9: Bonus Challenge - Strategy Factory Pattern
+## Task 5: PCAP Trap - MRO Edge Cases
 
-Implement a factory function that creates strategies based on a string name:
+**Predict which of these will raise an error and why:**
 
 ```python
-from typing import Union
-from algo_backtest.strategies import BaseStrategy, LevelCrossStrategy, MovingAverageStrategy
-
-def create_strategy(name: str, **kwargs) -> BaseStrategy:
-    """Factory function to create strategies by name.
-
-    Args:
-        name: Strategy type ("level_cross" or "ma")
-        **kwargs: Parameters for the strategy
-
-    Returns:
-        Strategy instance
-
-    Raises:
-        ValueError: If strategy name is unknown
-    """
-    # TODO: Implement factory logic
+# Case A
+class A:
     pass
 
-# Test cases
-strat1 = create_strategy("level_cross", level=100.0)
-print(strat1.generate_signal(105))  # Should print "BUY"
+class B(A):
+    pass
 
-strat2 = create_strategy("ma", period=5)
-print(strat2.get_name())  # Should print "MA(5)"
+class C(A, B):
+    pass
 
-try:
-    strat3 = create_strategy("unknown")
-except ValueError as e:
-    print(f"Error: {e}")  # Should print error message
+# Case B
+class X:
+    pass
+
+class Y:
+    pass
+
+class Z(X, Y):
+    pass
+
+# Case C
+class P:
+    pass
+
+class Q(P):
+    pass
+
+class R(Q):
+    pass
+
+class S(R, Q):
+    pass
 ```
 
-**Your solution:**
-```python
-# Paste your create_strategy function here
+**Your answer:**
+```
+Case A (Error? Yes/No): Yes
+Reason: B is inherited from A, and thefore A can't be inherited from B, it just doesn't make sense.
 
+
+Case B (Error? Yes/No): No.
+Reason: Everything is fine here, the classes are separate and then we create an inheritance order.
+
+
+Case C (Error? Yes/No): No
+Reason: It's a proper structure of inheritance and the final class that will take precedence is R.
+
+
+```
+
+---
+
+## Task 6: PROJECT - Strategy Factory with Polymorphism
+
+Create a `StrategyFactory` class that creates strategies based on string identifiers. This demonstrates **polymorphism** (returning different types through same interface) and **factory pattern**.
+
+**Requirements:**
+1. Create `algo_backtest/strategies/strategy_factory.py`
+2. Implement `StrategyFactory` class with static method `create(strategy_type: str, **kwargs) -> BaseStrategy`
+3. Support creating:
+   - `"level_cross"` → returns `LevelCrossStrategy(level=kwargs['level'])`
+   - `"moving_average"` → returns `MovingAverageStrategy(ma_period=kwargs['ma_period'])`
+4. Raise `ValueError` if `strategy_type` is unknown
+5. Add type hints and docstrings
+
+**Paste your code below:**
+```python
+# strategy_factory.py
+
+
+
+
+```
+
+---
+
+## Task 7: Multiple Choice - Advanced OOP
+
+**Question 1:** What is the main advantage of composition over inheritance?
+
+A) Composition is faster
+B) Composition allows runtime flexibility (you can change components)
+C) Composition uses less memory
+D) Composition is required for polymorphism
+
+**Your answer:** B
+
+---
+
+**Question 2:** In `class D(B, C)`, if both B and C define `method()`, which one does D inherit?
+
+A) C's method (rightmost parent)
+B) B's method (leftmost parent)
+C) Both (D has two methods)
+D) Neither (raises AttributeError)
+
+**Your answer:** B
+
+---
+
+**Question 3:** What is a mixin?
+
+A) A class that mixes data types
+B) A small class designed to provide specific functionality via multiple inheritance
+C) A function that modifies class behavior
+D) A decorator for methods
+
+**Your answer:** B
+
+---
+
+## Task 8: Code Review - Composition vs Inheritance Abuse
+
+The following code works but violates good OOP design. Identify issues and rewrite using composition.
+
+```python
+class Database:
+    def __init__(self, connection_string):
+        self.connection_string = connection_string
+
+    def connect(self):
+        return f"Connected to {self.connection_string}"
+
+    def query(self, sql):
+        return f"Executing: {sql}"
+
+class UserManager(Database):  # IS-A relationship
+    def __init__(self, connection_string):
+        super().__init__(connection_string)
+
+    def get_user(self, user_id):
+        return self.query(f"SELECT * FROM users WHERE id={user_id}")
+
+class ProductManager(Database):  # IS-A relationship
+    def __init__(self, connection_string):
+        super().__init__(connection_string)
+
+    def get_product(self, product_id):
+        return self.query(f"SELECT * FROM products WHERE id={product_id}")
+```
+
+**Issues identified:**
+```
+#1. UserManager shouldn't be a subclass of Database - it could use Database method's instead (connect + query), but it's not an extended Database version, but rather it uses 2 methods from the Database.
+#2. Same for ProductManager, there's no need to inherit Database class, but rather simply use the query method.
+#3. And as for both - for these two subclasses, we could simply write two extra methods to the Database method and it would be much more nice and neat, if it's only about changing the product_id or user_id. It's just weird to invent a new class for that.
+
+```
+
+**Your refactored code (using composition):**
+#Option 1 - IMHO very clear and not overengineered
+class Database:
+    def __init__(self, connection_string):
+        self.connection_string = connection_string
+
+    def connect(self):
+        return f"Connected to {self.connection_string}"
+
+    def query(self, sql):
+        return f"Executing: {sql}"
+
+    def get_user(self, user_id):
+        return (f"SELECT * FROM users WHERE id={user_id}")
+    
+    def get_product(self, product_id):
+        return (f"SELECT * FROM products WHERE id={product_id}")
+
+
+#Option 2 - A bit more tricky but with perhaps clearer structure if we're planning to extend the new classes much further
+
+class Database:
+    def __init__(self, connection_string):
+        self.connection_string = connection_string
+
+    def connect(self):
+        return f"Connected to {self.connection_string}"
+
+    def query(self, sql):
+        return f"Executing: {sql}"
+
+class UserManager():  # IS-A relationship
+    def __init__(self, connection_string):
+        self.connection = Database(connection_string)
+
+    def get_user(self, user_id):
+        return self.connection.query(f"SELECT * FROM users WHERE id={user_id}")
+
+class ProductManager():  # IS-A relationship
+    def __init__(self, connection_string):
+        self.connection = Database(connection_string)
+
+    def get_product(self, product_id):
+        return self.connection.query(f"SELECT * FROM products WHERE id={product_id}")
+
+#Evaluate both solutions and argument which one would be better here, and in general.
+
+```
+
+---
+
+## Task 9: BONUS - Advanced Strategy with Composition
+
+Create a `CompositeStrategy` that combines multiple strategies using composition (NOT inheritance).
+
+**Requirements:**
+- Inherits from `BaseStrategy`
+- Constructor accepts `List[BaseStrategy]`
+- `generate_signal()` calls all sub-strategies and returns:
+  - `"BUY"` if majority say BUY
+  - `"SELL"` if majority say SELL
+  - `"HOLD"` otherwise
+- Use `isinstance()` to validate all strategies are `BaseStrategy` instances
+
+**Paste your code below:**
+```python
+# composite_strategy.py
+
+
+What the hell, how would I be able to do that considering that each strategy has its own parameters like level, period etc? That's a really weird task and I didn't know what did you expect here.
 
 ```
 
@@ -621,19 +421,17 @@ except ValueError as e:
 
 ## Feedback Section
 
-**Difficulty (1-10):** ___
+**Time spent:** 60 minutes
 
-**Time spent:** ___ minutes
+**Difficulty (1-10):** 8 - some really weird tasks + unclear bonus task with difficult and not understandable requirements, unrealistic
 
 **What clicked:**
+-
+
+**What's confusing:**
+A lot of things - mixins, calling a list of strategies (bonus tasks), and HAS-A vs IS-A (when to use which option) - we need to practice this definitely. Yet the main objective is PCEP, do not forget
 
 
-**What's still confusing:**
+**Questions:**
 
 
-**Questions for mentor:**
-
-
----
-
-**When done, save this file and notify your mentor for assessment.**

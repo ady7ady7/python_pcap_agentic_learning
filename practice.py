@@ -1690,3 +1690,167 @@ import numpy as np
 # ]
 
 # start_all_vehicles(vehicles)
+
+
+#W2 D3 T1 -> MRO predictions
+
+# class Animal:
+#     def speak(self):
+#         return "generic sound"
+
+# class Mammal(Animal):
+#     def speak(self):
+#         return "mammal sound"
+
+# class Bird(Animal):
+#     def speak(self):
+#         return "chirp"
+
+# class Bat(Mammal, Bird):
+#     pass
+
+# class Platypus(Bird, Mammal):
+#     pass
+
+# bat = Bat()
+# platypus = Platypus()
+
+# print(bat.speak()) # -> 'mammal sound'
+# print(platypus.speak()) # -> 'chirp'
+# print(Bat.__mro__) # Mammal -> Bird -> Animal
+
+#W2 D3 T4
+
+# class LoggerMixin:
+    
+#     def __init__(self):
+#         self.class_name = None
+    
+#     def log(self, message: str):
+#         print(f'{self.class_name} message: {message}')
+    
+
+
+# class Trade(LoggerMixin):
+    
+#     def __init__(self):
+#         super().__init__()
+#         self.class_name = 'Trade Class'
+        
+
+# x = Trade()
+# x.log('Test Xd')
+
+#W2 D3 T5 - error prediction
+
+
+# Case A -> Error, B is inherited from A, and it doesn't make sense to later make A inherited from B 
+# class A:
+#     pass
+
+# class B(A):
+#     pass
+
+# class C(A, B):
+#     pass
+
+# # Case B -> No error, everything's fine here and we kind of 'appoint' the inheritance structure in Z class
+# class X:
+#     pass
+
+# class Y:
+#     pass
+
+# class Z(X, Y):
+#     pass
+
+# # Case C -> No error, It's a proper structure of inheritance -> It doesn't change much, but it works.
+# class P:
+#     pass
+
+# class Q(P):
+#     pass
+
+# class R(Q):
+#     pass
+
+# class S(R, Q):
+#     pass
+
+
+#W2 D3 T8 - # Identifying issues
+
+# class Database:
+#     def __init__(self, connection_string):
+#         self.connection_string = connection_string
+
+#     def connect(self):
+#         return f"Connected to {self.connection_string}"
+
+#     def query(self, sql):
+#         return f"Executing: {sql}"
+
+# class UserManager(Database):  # IS-A relationship
+#     def __init__(self, connection_string):
+#         super().__init__(connection_string)
+
+#     def get_user(self, user_id):
+#         return self.query(f"SELECT * FROM users WHERE id={user_id}")
+
+# class ProductManager(Database):  # IS-A relationship
+#     def __init__(self, connection_string):
+#         super().__init__(connection_string)
+
+#     def get_product(self, product_id):
+#         return self.query(f"SELECT * FROM products WHERE id={product_id}")
+#
+#Issues:
+#1. UserManager shouldn't be a subclass of Database - it could use Database method's instead (connect + query), but it's not an extended Database version, but rather it uses 2 methods from the Database.
+#2. Same for ProductManager, there's no need to inherit Database class, but rather simply use the query method.
+#3. And as for both - for these two subclasses, we could simply write two extra methods to the Database method and it would be much more nice and neat, if it's only about changing the product_id or user_id. It's just weird to invent a new class for that.
+
+
+#Option 1 - IMHO very clear and not overengineered
+# class Database:
+#     def __init__(self, connection_string):
+#         self.connection_string = connection_string
+
+#     def connect(self):
+#         return f"Connected to {self.connection_string}"
+
+#     def query(self, sql):
+#         return f"Executing: {sql}"
+
+#     def get_user(self, user_id):
+#         return (f"SELECT * FROM users WHERE id={user_id}")
+    
+#     def get_product(self, product_id):
+#         return (f"SELECT * FROM products WHERE id={product_id}")
+
+
+# #Option 2 - A bit more tricky but with perhaps clearer structure if we're planning to extend the new classes much further
+
+# class Database:
+#     def __init__(self, connection_string):
+#         self.connection_string = connection_string
+
+#     def connect(self):
+#         return f"Connected to {self.connection_string}"
+
+#     def query(self, sql):
+#         return f"Executing: {sql}"
+
+# class UserManager():  # IS-A relationship
+#     def __init__(self, connection_string):
+#         self.connection = Database(connection_string)
+
+#     def get_user(self, user_id):
+#         return self.connection.query(f"SELECT * FROM users WHERE id={user_id}")
+
+# class ProductManager():  # IS-A relationship
+#     def __init__(self, connection_string):
+#         self.connection = Database(connection_string)
+
+#     def get_product(self, product_id):
+#         return self.connection.query(f"SELECT * FROM products WHERE id={product_id}")
+

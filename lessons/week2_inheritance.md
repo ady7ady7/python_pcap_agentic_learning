@@ -242,6 +242,219 @@ print(C.__mro__)
 
 ---
 
+### Multiple Inheritance and C3 Linearization
+
+**CRITICAL PCAP TRAP:** When a class inherits from multiple parents, Python uses **C3 Linearization** to determine MRO. The order of parents in the class definition matters!
+
+#### The Diamond Problem
+
+```python
+"""Multiple inheritance - the diamond problem."""
+
+class A:
+    def method(self):
+        return "A"
+
+class B(A):
+    def method(self):
+        return "B"
+
+class C(A):
+    def method(self):
+        return "C"
+
+class D(B, C):  # D inherits from BOTH B and C
+    pass
+
+# Which method does D use?
+obj = D()
+print(obj.method())  # "B" (NOT "C"!)
+print(D.__mro__)
+# (<class 'D'>, <class 'B'>, <class 'C'>, <class 'A'>, <class 'object'>)
+```
+
+**Why "B" and not "C"?**
+
+In `class D(B, C)`, the **leftmost parent has priority**. Python's MRO follows these rules:
+
+1. **Left-to-right order:** Parents listed first come first in MRO
+2. **Depth-first, left-to-right:** Visit leftmost parent tree completely before right parents
+3. **Preserve monotonicity:** No class appears before its parent
+
+**MRO Order:** D → B → C → A → object
+
+**COMMON MISTAKE:** Thinking the "last written" class or "rightmost" parent takes precedence. **THIS IS WRONG!**
+
+---
+
+#### Visualizing the Diamond
+
+```
+        A
+       / \
+      B   C
+       \ /
+        D
+```
+
+When `D` calls `method()`, Python searches:
+1. Check `D` (not found)
+2. Check `B` (found! returns "B")
+3. (Never reaches C because B had the method)
+
+---
+
+#### Practical Example: PCAP Exam Trap
+
+```python
+"""PCAP trap - predict the output."""
+
+class Animal:
+    def speak(self):
+        return "generic sound"
+
+class Mammal(Animal):
+    def speak(self):
+        return "mammal sound"
+
+class Bird(Animal):
+    def speak(self):
+        return "chirp"
+
+class Bat(Mammal, Bird):  # Leftmost = Mammal
+    pass
+
+class Platypus(Bird, Mammal):  # Leftmost = Bird
+    pass
+
+bat = Bat()
+platypus = Platypus()
+
+print(bat.speak())       # "mammal sound" (Mammal is leftmost)
+print(platypus.speak())  # "chirp" (Bird is leftmost)
+
+# Check MRO
+print(Bat.__mro__)
+# (Bat, Mammal, Bird, Animal, object)
+
+print(Platypus.__mro__)
+# (Platypus, Bird, Mammal, Animal, object)
+```
+
+**Key Insight:** **The order you list parent classes determines priority!**
+
+---
+
+#### How to Check MRO
+
+```python
+"""Always use __mro__ or .mro() to verify."""
+
+class A:
+    pass
+
+class B(A):
+    pass
+
+class C(A):
+    pass
+
+class D(B, C):
+    pass
+
+# Method 1: __mro__ attribute (tuple)
+print(D.__mro__)
+# (<class 'D'>, <class 'B'>, <class 'C'>, <class 'A'>, <class 'object'>)
+
+# Method 2: .mro() method (list)
+print(D.mro())
+# [<class 'D'>, <class 'B'>, <class 'C'>, <class 'A'>, <class 'object'>]
+```
+
+---
+
+#### PCAP Exam Questions About MRO
+
+**Type 1: "What is the output?"**
+```python
+class A:
+    def method(self): return "A"
+
+class B(A):
+    def method(self): return "B"
+
+class C(A):
+    def method(self): return "C"
+
+class D(B, C):
+    pass
+
+print(D().method())  # What prints?
+```
+
+**Answer:** `"B"` (leftmost parent B is checked first)
+
+---
+
+**Type 2: "What is the MRO?"**
+```python
+class X: pass
+class Y(X): pass
+class Z(X): pass
+class W(Y, Z): pass
+
+print(W.__mro__)  # Predict the order
+```
+
+**Answer:** `(W, Y, Z, X, object)` (W → leftmost Y → then Z → common parent X)
+
+---
+
+**Type 3: "Will this raise an error?"**
+```python
+class A:
+    pass
+
+class B(A):
+    pass
+
+class C(A, B):  # Try to inherit from A before B (but B inherits from A!)
+    pass
+```
+
+**Answer:** `TypeError: Cannot create a consistent method resolution order (MRO)`
+
+**Why?** Python can't satisfy "A before B" (from `A, B` order) AND "B before A" (from B's inheritance). This violates monotonicity.
+
+---
+
+#### C3 Linearization Rules (Summary)
+
+1. **Children before parents:** A class always comes before its parents in MRO
+2. **Left-to-right:** Parents are visited in the order they're listed
+3. **Parents only once:** Each class appears exactly once in MRO
+4. **Preserve order from all parents:** If B comes before C in one parent's MRO, B must come before C in child's MRO
+
+**For PCAP:** Remember the simple rule: **In `class D(B, C)`, B has priority over C (leftmost wins).**
+
+---
+
+#### When to Use Multiple Inheritance
+
+**✅ Good use cases:**
+- Mixins (small classes that add specific functionality)
+- Interface implementation (like Java interfaces)
+- Combining unrelated behaviors
+
+**❌ Avoid when:**
+- Creates confusing MRO
+- Diamond inheritance with complex logic
+- Can be solved with composition instead
+
+**Python philosophy:** "Explicit is better than implicit." If MRO is confusing, use composition.
+
+---
+
 ## Common Inheritance Patterns
 
 ### 1. Extending Parent Behavior (not replacing)

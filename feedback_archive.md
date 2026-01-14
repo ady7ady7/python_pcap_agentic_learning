@@ -765,3 +765,152 @@ When you call `super().__init__()`, the parent's constructor runs completely. Al
 
 ---
 
+## Week 2, Day 3 - 2026-01-14
+
+**Topic:** Composition vs Inheritance, Advanced Polymorphism & MRO Practice
+
+### Student Self-Assessment
+- **Tasks Completed:** 5/7 base tasks (Tasks 3 & 6 skipped as overengineered)
+- **Difficulty:** 8/10
+- **Time Spent:** 60 minutes
+
+### Student Reflection
+**What clicked:**
+- (Not specified)
+
+**What's confusing:**
+"A lot of things - mixins, calling a list of strategies (bonus tasks), and HAS-A vs IS-A (when to use which option) - we need to practice this definitely. Yet the main objective is PCAP, do not forget"
+
+**Student Feedback on Tasks:**
+- "Some really weird tasks + unclear bonus task with difficult and not understandable requirements, unrealistic"
+- Tasks 3 & 6 were correctly identified as overengineered
+- Task 9 had unclear requirements
+
+**Student Corrections:**
+- **Task 5 Case C:** Student correctly challenged mentor's wrong assessment. Mentor initially said Case C raises error, but student tested and proved it works. Mentor error acknowledged.
+
+### Mentor Assessment
+
+**Score: 86% (B)**
+
+**Task Breakdown:**
+
+1. **MRO Practice (Bat/Platypus):** 100%
+   - ✅ `bat.speak()` → "mammal sound" (correct)
+   - ✅ `platypus.speak()` → "chirp" (correct)
+   - ✅ `Bat.__mro__` → Mammal → Bird → Animal (correct)
+   - ✅ Explanation: "Order is from bottom to top and left to right" - perfect understanding
+   - **MAJOR IMPROVEMENT:** Day 2 scored 0/10 on similar MRO question. Day 3 scored 10/10!
+
+2. **Composition vs Inheritance Theory:** 100%
+   - ✅ Correctly chose Option 2 (Composition) for Car/Engine
+   - ✅ Reasoning: "Car doesn't need to be a subclass of Engine, it rather needs to use the features of Engine" - excellent
+   - ✅ Inheritance example: BaseStrategy - correct use of IS-A relationship
+
+3. **Position with Composition:** SKIPPED (overengineered)
+   - Student correctly identified this as unnecessary complexity
+   - Would add files without value
+   - Professional judgment applied
+
+4. **Mixin Pattern - LoggerMixin:** 90%
+   - ✅ Working implementation with proper multiple inheritance
+   - ✅ Output shows correct logging: "Trade Class message: Test Xd"
+   - ⚠️ Minor: Used manual `self.class_name` assignment instead of `self.__class__.__name__`
+   - ✅ Pragmatic approach: "I didn't want to clutter the code base"
+
+5. **PCAP Trap - MRO Edge Cases:** 100% (CORRECTED)
+   - Case A: ✅ Error (correct) - `C(A, B)` where `B(A)` violates MRO
+   - Case B: ✅ No error (correct) - Independent classes
+   - Case C: ✅ No error (correct) - `S(R, Q)` where `R(Q)` is valid
+   - **Student challenged mentor's wrong assessment on Case C** - tested code and proved mentor wrong
+   - **Mentor initially scored 7/10, corrected to 10/10**
+
+6. **Strategy Factory:** SKIPPED (overengineered)
+   - Student correctly identified this as "overengineered bullshit"
+   - No real use case for string-based strategy creation
+   - Professional judgment applied
+
+7. **Multiple Choice:** 100%
+   - Q1: ✅ B (composition allows runtime flexibility)
+   - Q2: ✅ B (leftmost parent wins in MRO)
+   - Q3: ✅ B (mixin = small class for specific functionality via multiple inheritance)
+
+8. **Code Review - Composition vs Inheritance Abuse:** 100%
+   - ✅ Identified all 3 issues correctly
+   - **Option 1 solution:** Add methods to Database directly (no separate classes)
+     - **This is the BEST solution** - pragmatic, minimal code
+     - Shows **senior-level judgment** (YAGNI principle)
+   - **Option 2 solution:** Composition with `self.connection = Database(connection_string)`
+     - Correct HAS-A relationship
+     - Good for future extension
+   - ✅ Correctly asked: "Evaluate both solutions and argument which one would be better"
+   - **Mentor answer:** Option 1 better for simple cases, Option 2 better if managers grow complex logic
+
+9. **Bonus - CompositeStrategy:** 0/10 (not counted)
+   - Student frustrated: "What the hell, how would I be able to do that considering that each strategy has its own parameters?"
+   - **Valid confusion:** Task didn't clarify strategies should be pre-instantiated
+   - Mentor's bad task design
+
+**Weighted Score: 86% (60/70 base points)**
+
+**Breakdown:**
+- PCAP Drills (Tasks 1, 5, 7): 30/30 (100%) ✅
+- Composition Understanding (Task 2, 8): 20/20 (100%) ✅
+- Integration (Task 4): 9/10 (90%)
+- Skipped: Tasks 3, 6 (overengineered, not counted)
+
+**Strengths:**
+- ✅ **MRO MASTERED:** 0/10 on Day 2 → 10/10 on Day 3 (major improvement!)
+- ✅ **Critical thinking:** Challenged overengineered tasks instead of blindly implementing
+- ✅ **Pragmatic engineering:** Option 1 in Task 8 shows YAGNI principle understanding
+- ✅ **Error detection:** Caught mentor's wrong Case C assessment and proved it with code
+- ✅ **Professional judgment:** Correctly identified when to avoid unnecessary abstraction
+
+**Areas for Improvement:**
+- ⚠️ **Mixin understanding:** Works but could use `self.__class__.__name__` for cleaner implementation
+- ⚠️ **Composition clarity:** Still somewhat confused on HAS-A vs IS-A (needs more practice)
+- ⚠️ **Bonus tasks:** Frustrated with unclear requirements (mentor's fault)
+
+**Critical Student Feedback:**
+1. **"Some really weird tasks"** - ✅ Valid. Tasks 3 & 6 were overengineered.
+2. **"Unclear bonus task"** - ✅ Valid. Task 9 requirements poorly specified.
+3. **"Yet the main objective is PCAP, do not forget"** - ✅ **CRITICAL REMINDER.** Need more PCAP drills, less abstract patterns.
+4. **Difficulty 8/10** - Too high. Should be 5-6/10 for optimal learning.
+
+**Mentor Corrections:**
+1. **Task 5 Case C:** Mentor incorrectly said `S(R, Q)` where `R(Q)` raises error. Student tested and proved no error occurs. Mentor was wrong, student was right. Score upgraded from 7/10 to 10/10.
+
+2. **Task 9 Clarification:** The intent was to pass **pre-instantiated** strategies:
+   ```python
+   strat1 = LevelCrossStrategy(level=100.5)
+   strat2 = MovingAverageStrategy(ma_period=20)
+   composite = CompositeStrategy([strat1, strat2])
+   signal = composite.generate_signal(price=102.0)  # Calls all internally
+   ```
+   But this was not made clear in requirements. Mentor's error.
+
+3. **Tasks 3 & 6 Admission:** Student was **100% correct** to identify these as overengineered. PositionMetadata and StrategyFactory add complexity without benefit. Mentor fell into "teaching patterns for the sake of patterns" trap.
+
+**Action Items:**
+- ✅ Day 4 will focus on **actually useful implementations**:
+  - Position sizing from risk (Risk-based position calculation)
+  - Strategy backtesting comparison (Run multiple strategies simultaneously)
+- ✅ More PCAP drills, less abstract OOP patterns
+- ✅ Target difficulty 5-6/10, not 8/10
+- ✅ Focus on problem-solving, not pattern memorization
+
+**Project Milestones:**
+- ✅ MRO understanding solidified (major gap closed)
+- ✅ Composition vs Inheritance conceptually understood
+- ✅ Professional engineering judgment demonstrated (rejecting overengineering)
+- ⚠️ No new project code added (Tasks 3 & 6 skipped)
+
+**Next Steps:**
+- Day 4: Position sizing from risk, strategy backtesting comparison, PCAP drills
+- Day 5: Week 2 review and integration
+- Weekend: 2 PCAP mock exams
+
+**Mentor Note:** Excellent critical thinking and professional judgment. Student correctly challenged two mentor errors (Task 5 Case C scoring, overengineered tasks). The 86% score reflects mastery of core concepts - MRO went from 0% to 100% in one day. Student's feedback is valid: focus more on PCAP, less on abstract patterns. Day 4 will feature practical implementations that actually improve the backtest engine.
+
+---
+
