@@ -79,3 +79,5 @@ class PositionManager:
         if not self.positions:
             return "PositionManager: No open positions"
         return f"PositionManager: {len(self.positions)} open positions"
+    
+    

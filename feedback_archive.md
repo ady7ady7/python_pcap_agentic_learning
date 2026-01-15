@@ -914,3 +914,165 @@ When you call `super().__init__()`, the parent's constructor runs completely. Al
 
 ---
 
+## Week 2, Day 4 - 2026-01-15
+
+**Topic:** Position Sizing, Exception Handling & PCAP Drills
+
+### Student Self-Assessment
+- **Tasks Completed:** 6/7 base tasks (Task 4 skipped - too big a leap)
+- **Difficulty:** 5-9/10 (mixed - some tasks good, Task 4 was 9/10)
+- **Time Spent:** 60 minutes
+
+### Student Reflection
+**What clicked:**
+- (Not specified)
+
+**What's confusing:**
+"Task 4 is definitely a LEAP too big for today and it doesn't make sense."
+
+**Student Feedback on Tasks:**
+- Task 4 (Strategy Comparison) was a 9/10 difficulty brick wall
+- Task 6 (@staticmethod) was asked without being taught first
+- Student wants scaffolded approach: "I NEED TO UNDERSTAND THEM, and the road to that is through a step-by-step understanding process and building blocks"
+- "the main goal for me is to understand everything I do, I do not want to jump gaps that are too big yet"
+- Requested lesson file for @classmethod vs @staticmethod
+
+**Student Corrections:**
+- Task 4: Correctly identified as requiring prerequisite knowledge not yet taught (list imports, Dict types, backtesting engine)
+- Task 6: Correctly identified that @staticmethod was never taught
+- Task 9: Skipped because it depended on Task 4
+
+### Mentor Assessment
+
+**Score: 84% (B)**
+
+**Task Breakdown:**
+
+1. **Exception Handling Order:** 80%
+   - ✅ Correct understanding of else/finally behavior
+   - ⚠️ Output format slightly off - `finally` prints BEFORE return value is printed
+   - ✅ Explanation correct: "else block only executes if we don't get any errors, finally block always executes"
+
+2. **Position Sizing from Risk:** 90%
+   - ✅ Excellent implementation with correct formula
+   - ✅ Edge case handled (distance == 0)
+   - ✅ Good docstring and exception handling
+   - ⚠️ Minor: `@classmethod` should use `cls` not `self` as first parameter
+   - **Actually useful code for the project!**
+
+3. **List Comprehensions with Conditionals:** 100%
+   - ✅ result_a = [105, 102, 110] (correct)
+   - ✅ result_b = [100, 210, 98, 204, 220, 95] (correct)
+   - ✅ result_c = [105, 102] (correct)
+   - ✅ Excellent explanation of filter-if vs ternary-if (understood concept without knowing terminology)
+   - ✅ Noted double-if syntax was new but understood it correctly
+
+4. **Strategy Backtesting Comparison:** SKIPPED (MENTOR'S FAULT)
+   - Student correctly identified this as too big a leap
+   - Required: List[BaseStrategy] imports, Dict return types, backtesting engine
+   - None of these were taught as building blocks first
+   - **NOT COUNTED - Mentor's poor task design**
+
+5. **Mutable Default Arguments:** 100%
+   - ✅ Correct output prediction (logic correct, format minor)
+   - ✅ Perfect bug explanation: "mutable default parameter - a list, which is problematic"
+   - ✅ Perfect fix with `None` pattern
+   - **Critical PCAP trap - nailed it!**
+
+6. **@classmethod vs @staticmethod:** 60% (MENTOR'S FAULT for not teaching)
+   - Q1: ✅ "class name" (receives cls) - correct
+   - Q2: ❌ "price" - wrong. @staticmethod receives NOTHING automatically
+   - Q3: ❌ "Yes" - wrong. @classmethod cannot access self (no instance)
+   - Q4: ✅ Correct - @staticmethod has no access to class or instance
+   - Q5: ✅ Correct reasoning
+   - **Student correctly requested lesson file be created**
+
+7. **Multiple Choice:** 67%
+   - Q1: ❌ C (wrong) → Correct: B. Python does NOT auto-call parent's `__init__`
+   - Q2: ✅ B (ZeroDivisionError)
+   - Q3: ✅ B (else = no exception, finally = always)
+
+8. **Code Review - Risk Calculator:** 100%
+   - ✅ Found all bugs:
+     1. Missing `/ 100` for risk_percent
+     2. Missing `self` in get_risk_amount
+     3. Missing `abs()` for distance (identified)
+     4. Added type hints and docstrings
+   - ✅ Excellent corrected code with clear documentation
+
+9. **Bonus - Portfolio P&L Tracking:** SKIPPED (depends on Task 4)
+   - Valid reason - Task 4 was prerequisite
+   - **NOT COUNTED**
+
+**Weighted Score: 84% (49.7/59 base points)**
+
+**Adjusted Score (accounting for mentor's teaching failures):** ~87%
+
+**Breakdown:**
+- PCAP Drills (Tasks 1, 3, 5, 7): 34.7/40 (87%)
+- Project Implementation (Task 2): 9/10 (90%)
+- Code Review (Task 8): 10/10 (100%)
+- Skipped due to mentor failure: Tasks 4, 6 partial, 9
+
+**Strengths:**
+- ✅ **Position sizing implementation** - Actually useful, production-quality code
+- ✅ **List comprehension mastery** - Perfect understanding of filter vs ternary
+- ✅ **Mutable default trap** - Critical PCAP concept nailed
+- ✅ **Code review skills** - Found all bugs, excellent corrected code
+- ✅ **Self-advocacy** - Correctly identified when tasks were unfair/too difficult
+
+**Critical Gaps:**
+- ⚠️ **super().__init__() behavior** - Thought Python auto-calls parent's __init__ (it doesn't!)
+- ⚠️ **@classmethod first parameter** - Should be `cls`, not `self`
+- ⚠️ **@staticmethod** - Never taught, needs lesson file
+
+**Mentor Failures (Day 4):**
+1. **Task 4 was a 9/10 brick wall** - Required List[BaseStrategy], Dict types, and backtesting engine without teaching building blocks
+2. **Task 6 asked about @staticmethod** - Never taught this concept
+3. **Task 9 depended on Task 4** - Cascading failure
+4. **Difficulty was mixed (5-9/10)** - Should have been consistent 5-6/10
+
+**Action Items:**
+1. ✅ Create `lessons/week2_classmethod_staticmethod.md` with examples
+2. ✅ Break Task 4 into smaller building blocks for future days:
+   - Step 1: Iterating over list of objects
+   - Step 2: Calling methods on list of objects
+   - Step 3: Simple backtest loop
+   - Step 4: Comparing two strategies
+   - Step 5: Full comparison class
+3. ✅ Keep difficulty at 5-6/10 - No more brick walls
+4. ✅ PCAP remains the focus
+
+**Critical Correction for Student:**
+
+**Q7.1 - What happens without `super().__init__()`?**
+```python
+class Parent:
+    def __init__(self):
+        self.parent_attr = "I exist"
+
+class Child(Parent):
+    def __init__(self):
+        # NOT calling super().__init__()
+        self.child_attr = "I exist too"
+
+c = Child()
+print(c.child_attr)   # Works
+print(c.parent_attr)  # AttributeError! Never created
+```
+**Python does NOT automatically call parent's `__init__`.** You must do it explicitly.
+
+**Project Milestones:**
+- ✅ Position sizing from risk implemented (`calculate_position_size` classmethod)
+- ✅ Risk calculator code reviewed and corrected
+- ⚠️ Strategy comparison postponed (building blocks needed first)
+
+**Next Steps:**
+- Day 5: Week 2 review and integration
+- Create @classmethod/@staticmethod lesson file
+- Weekend: 2 PCAP mock exams
+
+**Mentor Note:** Student correctly identified Task 4 as too big a leap and Task 6 as testing untaught material. This is the third day in a row where mentor created tasks that were either overengineered (Day 3) or required untaught prerequisites (Day 4). Student's request for scaffolded, 5-6/10 difficulty learning is 100% valid. The 84% score reflects solid understanding of concepts that WERE properly taught. Must do better at building knowledge incrementally.
+
+---
+

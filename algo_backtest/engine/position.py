@@ -105,3 +105,28 @@ class Position:
 
         
         
+    @classmethod
+    def calculate_position_size(cls,
+                                account_balance: float,
+                                risk_percent: float, 
+                                entry_price: float, 
+                                stop_loss_price: float) -> float:
+        '''
+        A class method used to calculate the position size based on a set risk %,
+        entry + stop loss
+        
+        For now it uses a stop loss price - at some point I might decide to use distance instead - depends on our needs
+        '''
+        try:
+            usd_risk = account_balance * (risk_percent / 100)
+            distance = abs(entry_price - stop_loss_price)
+            
+            if distance != 0:
+                position_size = usd_risk / distance
+                return position_size
+            else:
+                print('The stop loss is set at the entry price, returning 0')
+                return 0
+            
+        except Exception as e:
+            print(f'Unexpected error: {str(e)}')

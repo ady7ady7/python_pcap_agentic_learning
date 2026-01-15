@@ -263,3 +263,52 @@ Format: Date | Topic | Score | Difficulty | Notes
 
 ---
 
+## Week 2, Day 4 - 2026-01-15
+
+**Topic:** Position Sizing, Exception Handling & PCAP Drills
+**Score:** 6/7 base tasks completed (Task 4 skipped) | 84% (B)
+**Difficulty:** 5-9/10 (mixed - Task 4 was a brick wall)
+
+**Tasks Completed:**
+1. Exception Handling Order (try/except/else/finally) - **8/10** ✅
+2. Position Sizing from Risk (@classmethod) - **9/10** ✅
+3. List Comprehensions with Conditionals - **10/10** ✅
+4. Strategy Backtesting Comparison - SKIPPED (mentor's fault - too big a leap)
+5. Mutable Default Arguments trap - **10/10** ✅
+6. @classmethod vs @staticmethod - **6/10** (mentor's fault - never taught @staticmethod)
+7. Multiple Choice (3 questions) - **6.7/10** (missed super().__init__ behavior)
+8. Code Review - Risk Calculator - **10/10** ✅
+
+**Key Learnings:**
+- Position sizing formula: `risk_dollars / distance`
+- List comprehension: filter-if (at end) vs ternary-if (at beginning)
+- Mutable default arguments trap - use `None` pattern
+- try/except/else/finally flow - finally ALWAYS runs
+
+**Student Feedback:**
+- "Task 4 is definitely a LEAP too big for today"
+- "I NEED TO UNDERSTAND THEM, and the road to that is through a step-by-step understanding process"
+- "the main goal for me is to understand everything I do"
+- Requested lesson file for @classmethod vs @staticmethod
+
+**Critical Gap Identified:**
+- **super().__init__() behavior:** Thought Python auto-calls parent's __init__ (it doesn't!)
+- Must explicitly call `super().__init__()` or parent attributes won't be initialized
+
+**Mentor Failures:**
+1. Task 4 required List[BaseStrategy], Dict types, backtesting engine - none taught
+2. Task 6 asked about @staticmethod - never taught
+3. Task 9 depended on Task 4 - cascading failure
+4. Difficulty mixed (5-9/10) instead of consistent 5-6/10
+
+**Project Milestones:**
+- ✅ Position sizing from risk implemented (`calculate_position_size` classmethod)
+- ⚠️ Strategy comparison postponed (building blocks needed first)
+
+**Action Items:**
+- Create @classmethod/@staticmethod lesson file
+- Break strategy comparison into smaller building blocks
+- Keep difficulty at 5-6/10
+
+---
+

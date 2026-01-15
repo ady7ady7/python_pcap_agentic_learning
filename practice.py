@@ -1854,3 +1854,184 @@ import numpy as np
 #     def get_product(self, product_id):
 #         return self.connection.query(f"SELECT * FROM products WHERE id={product_id}")
 
+
+#W2 D4 T1
+# def process_data(value):
+#     try:
+#         result = 10 / value
+#         data = [1, 2, 3]
+#         print(data[value])
+#     except ZeroDivisionError:
+#         return "Zero error"
+#     except IndexError:
+#         return "Index error"
+#     except Exception as e:
+#         return f"Other: {e}"
+#     else:
+#         return "Success"
+#     finally:
+#         print("Cleanup")
+
+# print(process_data(0))
+# print(process_data(5))
+# print(process_data(2))
+
+
+# Output prediction:
+#Zero error -> Cleanup
+#Index error -> Cleanup
+#Success -> Cleanup
+
+# The exception order is arranged well, from specific to general.
+# The else block only executes if we don't get any errors, and the finally block always executes.
+
+#W2 D4 T2 - classmethod in position.py for calculating position size
+
+#     @classmethod
+#     def calculate_position_size(self,
+#                                 account_balance: float,
+#                                 position_type: str,
+#                                 risk_percent: float, 
+#                                 entry_price: float, 
+#                                 stop_loss_price: float) -> float:
+#         '''
+#         A class method used to calculate the position size based on a set risk %,
+#         with given position type and entry + stop loss
+        
+#         For now it uses a stop loss price - at some point I might decide to use distance instead - depends on our needs
+#         '''
+#         try:
+#             usd_risk = account_balance * (risk_percent / 100)
+            
+#             if position_type.upper() == 'BUY':
+#                 distance = abs(entry_price - stop_loss_price)
+#             else:
+#                 distance = abs(entry_price + stop_loss_price)
+            
+#             if distance != 0:
+#                 position_size = usd_risk / distance
+#                 return position_size
+#             else:
+#                 print('The stop loss is set at the entry price, returning 0')
+#                 return 0
+            
+#         except Exception as e:
+#             print(f'Unexpected error: {str(e)}')
+
+
+# from algo_backtest.engine.position_manager import Position
+
+# size = Position.calculate_position_size(10000, 'buy', 0.5, 50.0, 48.0)
+# print(size)
+
+#W4 D4 T3 - Output prediction - list comprehensions review
+
+# prices = [100, 105, 98, 102, 110, 95]
+# # A
+# result_a = [p for p in prices if p > 100]
+# # B
+# result_b = [p * 2 if p > 100 else p for p in prices]
+# # C
+# result_c = [p for p in prices if p > 100 if p < 110]
+
+# print(result_a) #-> [105, 102, 110] 
+# print(result_b) #-> [100, 210, 98, 204, 220, 95]
+# print(result_c) #-> [105, 102]
+
+#W4 D4 T5 - bug fix
+
+# def add_trade(trade, portfolio=[]): #This is the issue - mutable default parameter
+#     portfolio.append(trade)
+#     return portfolio
+
+# result1 = add_trade("AAPL")
+# result2 = add_trade("GOOGL")
+# result3 = add_trade("MSFT", [])
+
+# print(result1) 'AAPL'
+# print(result2) 'AAPL, GOOGL'
+# print(result3) 'MSFT'
+
+#FIX:
+
+# def add_trade(trade, portfolio = None): #This is the issue - mutable default parameter
+    
+#     if portfolio is None:
+#         portfolio = []
+#     portfolio.append(trade)
+#     return portfolio
+
+# result1 = add_trade("AAPL")
+# result2 = add_trade("GOOGL")
+# result3 = add_trade("MSFT", [])
+
+# print(result1) #'AAPL'
+# print(result2) #'AAPL, GOOGL'
+# print(result3) #'MSFT'
+
+
+#W2 D4 T8 - Code Review / Code Fix
+
+# class RiskCalculator:
+#     def __init__(self, account_balance):
+#         self.account_balance = account_balance
+
+#     def calculate_position_size(self, risk_percent, entry, stop_loss):
+#         risk_dollars = self.account_balance * risk_percent  # Bug 1
+#         distance = entry - stop_loss  # Bug 2
+#         position_size = risk_dollars / distance  # Bug 3
+#         return position_size
+
+#     def get_risk_amount(risk_percent):  # Bug 4
+#         return self.account_balance * (risk_percent / 100)
+
+# # Test
+# calc = RiskCalculator(10000)
+# size = calc.calculate_position_size(1, 50, 48)  # Should be 50 shares
+# print(size)
+
+# 1. No type hints/ docstrings
+# 2. Lack of self in get_risk_amount method
+# 3. That really depends on how we ask and present our data, but risk_percent and multiplying it by our acc balance like that might be tricky.
+#If somebody gives the percent value like 5, we'd get our balance by 5 instead of 5% of our balance. But this depends, as we could also state percents as 0.05.
+# 4. I've chosen more descriptive variants for entry and stop_loss
+
+
+
+# class RiskCalculator:
+#     '''Class used to calculate risk - both position size and the risk amount'''
+    
+    
+    
+    
+#     def __init__(self, account_balance: float):
+#         self.account_balance = account_balance
+        
+#     def calculate_position_size(self, 
+#                                 risk_percent: float, 
+#                                 entry_price: float, 
+#                                 stop_loss_price: float) -> float:
+        
+#         '''Method used to calculate position size - check args, as this is IMPORTANT:
+        
+#         risk_percent - GIVE THE ACTUAL PERCENT VALUE here (e.g. 0.5 for 0.5%, 5 for 5%, 20 for 20%)
+#         entry - provide the entry price e.g. 2053.43
+#         stop_loss_price - as above,
+
+        
+#         '''
+        
+#         risk_dollars = self.account_balance * (risk_percent / 100)
+#         distance = abs(entry_price - stop_loss_price)  #More descriptive variant + abs for both BUY/SELL
+#         position_size = risk_dollars / distance  #This should be correct now if we assume that above is correct
+#         return position_size
+
+#     def get_risk_amount(self, risk_percent):
+#         '''Get the risk amount per position'''
+#         return self.account_balance * (risk_percent / 100)
+
+# # Test
+# calc = RiskCalculator(10000)
+# size = calc.calculate_position_size(1, 50, 48)  # Should be 50 shares
+# print(size)
+

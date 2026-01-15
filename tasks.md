@@ -1,145 +1,209 @@
-# Week 2, Day 3 Tasks - Composition, Advanced Polymorphism & MRO Practice
+# Week 2, Day 4 Tasks - Position Sizing & Strategy Backtesting
 
-**Focus:** Composition vs Inheritance (HAS-A vs IS-A), MRO deep dive, mixins, strategy integration
+**Focus:** Risk-based position sizing, strategy comparison, PCAP drills (more exam focus, less abstract OOP)
 
 **Instructions:**
 - Work in `practice.py` for experimentation
 - Paste your FINAL solutions/answers below each task
-- For project tasks, create/modify files in `algo_backtest/` as specified
+- For project tasks, modify files in `algo_backtest/` as specified
 
 ---
 
-## Task 1: PCAP Warm-up - MRO Practice (CRITICAL!)
+## Task 1: PCAP Warm-up - Exception Handling Order
 
-Yesterday you predicted "C" but the correct answer was "B". Let's practice MRO to solidify understanding.
-
-**Predict the output WITHOUT running the code:**
+Predict the output WITHOUT running the code:
 
 ```python
-class Animal:
-    def speak(self):
-        return "generic sound"
+def process_data(value):
+    try:
+        result = 10 / value
+        data = [1, 2, 3]
+        print(data[value])
+    except ZeroDivisionError:
+        return "Zero error"
+    except IndexError:
+        return "Index error"
+    except Exception as e:
+        return f"Other: {e}"
+    else:
+        return "Success"
+    finally:
+        print("Cleanup")
 
-class Mammal(Animal):
-    def speak(self):
-        return "mammal sound"
-
-class Bird(Animal):
-    def speak(self):
-        return "chirp"
-
-class Bat(Mammal, Bird):
-    pass
-
-class Platypus(Bird, Mammal):
-    pass
-
-bat = Bat()
-platypus = Platypus()
-
-print(bat.speak())
-print(platypus.speak())
-print(Bat.__mro__)
+print(process_data(0))
+print(process_data(5))
+print(process_data(2))
 ```
 
 **Your prediction:**
 ```
-# Output (3 lines):
-
-print(bat.speak()) # -> 'mammal sound'
-print(platypus.speak()) # -> 'chirp'
-print(Bat.__mro__) # Mammal -> Bird -> Animal
-
+# Output:
+#Zero error -> Cleanup
+#Index error -> Cleanup
+#Success -> Cleanup
 
 
-# Explanation (why does order in class definition matter?):
 
-Because the order is from bottom to the top and also from left to right, so its:
-Platypus = Bird -> Mammal -> Animal
-Bat = Mammal -> Bird -> Animal
+
+# Explanation (what is the order of exception handling?):
+It's arranged well, from specific to general and from the usual order they might occur.
+The else block only executes if we don't get any errors, and finally block always executes.
+
 
 ```
 
 ---
 
-## Task 2: Composition vs Inheritance - Theory
+## Task 2: PROJECT - Position Sizing from Risk
 
-**Question:** When should you use composition (HAS-A) instead of inheritance (IS-A)?
+**This is actually useful!** Implement risk-based position sizing for your backtest engine.
 
-Read the following scenario and decide which approach is better:
+**Concept:**
+- You have $10,000 account
+- You want to risk max 1% per trade ($100)
+- Entry at $50, Stop Loss at $48 (distance = $2)
+- **Position size = Risk $ / Distance = $100 / $2 = 50 shares**
 
-**Scenario A:** You're building a `Car` class. A car needs an engine to function.
+**Requirements:**
+1. Add `@classmethod` to `Position` class: `calculate_position_size(account_balance: float, risk_percent: float, entry_price: float, stop_loss: float) -> float`
+2. Method should:
+   - Calculate risk in dollars: `account_balance * (risk_percent / 100)`
+   - Calculate distance: `abs(entry_price - stop_loss)`
+   - Return position size: `risk_dollars / distance`
+   - Handle edge case: if distance == 0, return 0
+3. Add type hints and docstring
 
-**Option 1 - Inheritance:**
+**Example usage:**
 ```python
-class Engine:
-    def start(self):
-        return "Engine started"
-
-class Car(Engine):  # Car IS-A Engine
-    pass
+# Risk 1% of $10,000 account = $100 max loss
+# Entry $50, SL $48 (distance $2)
+size = Position.calculate_position_size(10000, 1.0, 50.0, 48.0)
+print(size)  # Should print 50.0
 ```
 
-**Option 2 - Composition:**
+**Paste your code below:**
 ```python
-class Engine:
-    def start(self):
-        return "Engine started"
+# In algo_backtest/engine/position.py
 
-class Car:
-    def __init__(self):
-        self.engine = Engine()  # Car HAS-A Engine
 
-    def start(self):
-        return self.engine.start()
+    @classmethod
+    def calculate_position_size(self,
+                                account_balance: float,
+                                risk_percent: float, 
+                                entry_price: float, 
+                                stop_loss_price: float) -> float:
+        '''
+        A class method used to calculate the position size based on a set risk %,
+        entry + stop loss
+        
+        For now it uses a stop loss price - at some point I might decide to use distance instead - depends on our needs
+        '''
+        try:
+            usd_risk = account_balance * (risk_percent / 100)
+            distance = abs(entry_price - stop_loss_price)
+            
+            if distance != 0:
+                position_size = usd_risk / distance
+                return position_size
+            else:
+                print('The stop loss is set at the entry price, returning 0')
+                return 0
+            
+        except Exception as e:
+            print(f'Unexpected error: {str(e)}')
+
+```
+
+---
+
+## Task 3: PCAP Drill - List Comprehensions with Conditionals
+
+Predict the output WITHOUT running:
+
+```python
+prices = [100, 105, 98, 102, 110, 95]
+
+# A
+result_a = [p for p in prices if p > 100]
+
+# B
+result_b = [p * 2 if p > 100 else p for p in prices]
+
+# C
+result_c = [p for p in prices if p > 100 if p < 110]
+
+print(result_a)
+print(result_b)
+print(result_c)
 ```
 
 **Your answer:**
 ```
-Which is better (Option 1 or Option 2)?
+result_a = [105, 102, 110]
 
+result_b = [100, 210, 98, 204, 220, 95]
+ 
+result_c = [105, 102]
 
-That really depends on the context, but here we would rather use option 2. 
-
-
-Why?
-
-CAR doesn't seem like it needs to be a subclass of Engine at all, it rather needs to use the features of Engine.
-
-
-Give a real-world example where inheritance would be correct:
-
-If we had a general class - like BaseStrategy, that would settle some variables that will or should be use in every strategy, but then each strategy might be very different and it needs a very specific extension of the BaseStrategy.
+# Explanation (difference between filter-if and ternary-if):
+Not sure what you mean by these name filter-if and ternary-if (you can explain), but the logic here is simple:
+In result A - if serves as a filter to only get entries above 100 (p > 100)
+In result B - there is an if-else structure - for entries above 100 (p > 100) we multiply them by 2, and others are returned normally (else p)
+In result C - there is quite weird double if structure (never seen it before, as normally we'd probably use and or something like that) but the logic is simple as well we only fetch entries above 100 (p > 100) and the second if works as the second condition for entries below 110 (p < 110)
 
 
 ```
 
 ---
 
-## Task 3: PROJECT - Position with Composition
+## Task 4: PROJECT - Strategy Backtesting Comparison
 
-Currently our `Position` class stores `ticker`, `entry_price`, `quantity`, etc. as primitive types.
-
-**Task:** Refactor `Position` to use **composition** by creating a `PositionMetadata` class that holds non-price data.
+**This is actually useful!** Run multiple strategies on the same data and compare performance.
 
 **Requirements:**
-1. Create a `PositionMetadata` class in `algo_backtest/engine/position_metadata.py`:
-   - Attributes: `ticker: str`, `side: str`, `quantity: float`
-   - Add `__str__` method: `"AAPL LONG 100 shares"`
+1. Create `algo_backtest/engine/backtest_comparison.py`
+2. Implement `StrategyComparison` class with:
+   - `__init__(self, strategies: List[BaseStrategy], prices: List[float])`
+   - `run_backtest(self) -> Dict[str, Dict[str, float]]` that returns:
+     ```python
+     {
+         "Level Cross Strategy": {
+             "signals": ["BUY", "BUY", "HOLD", ...],
+             "win_rate": 0.65,
+             "total_trades": 20
+         },
+         "MovingAverage Strategy - ma 5": {
+             "signals": ["HOLD", "BUY", "SELL", ...],
+             "win_rate": 0.58,
+             "total_trades": 18
+         }
+     }
+     ```
+   - Calculate win_rate as: (BUY signals + SELL signals) / total signals
+   - Add type hints and docstrings
 
-2. Modify `Position` class in `algo_backtest/engine/position.py`:
-   - Replace individual `ticker`, `side`, `quantity` attributes with `self.metadata: PositionMetadata`
-   - Update `__init__` to accept `metadata: PositionMetadata` parameter
-   - Update all methods to use `self.metadata.ticker`, `self.metadata.side`, etc.
-   - Update `__str__` to use `self.metadata`
+3. Create test script that compares LevelCrossStrategy and MovingAverageStrategy on sample prices
 
 **Paste your code below:**
 ```python
-# position_metadata.py
+# backtest_comparison.py
+
+This is a great idea, but a too big knowledge gap for me at this point.
+I want to actually learn to be able to do such a thing BUT I NEED TO BE UNDERSTANDING IT.
+I don't want to use any form of cheating now, but WE SHOULD aim to create a similar file/code during the next two-three weeks, but I'm not ready for that now.
+
+For that I'd like to:
+- learn how these list imports of package strategies work - as a scaffolded approach, from very simple examples
+- create a backtesting engine first - a one that will be thought over for my needs (scaffolded)
+- after the backtesting engine is in place, we can think about a similar code to this that you require now.
+
+But remember, the main goal for me is to understand everything I do, I do not want to jump gaps that are too big yet.
+
+This task is a 9/10 difficulty for now, I'm not doing it and I'D LIKE YOU TO NOW TAKE AWAY POINTS FROM ME FOR THAT!
 
 
+# Test script (practice.py or separate file)
 
-# position.py (modified parts only)
 
 
 
@@ -147,273 +211,240 @@ Currently our `Position` class stores `ticker`, `entry_price`, `quantity`, etc. 
 
 ---
 
-## Task 4: Mixin Pattern - LoggerMixin
+## Task 5: PCAP Trap - Mutable Default Arguments
 
-A **mixin** is a small class that provides specific functionality via multiple inheritance. Mixins DON'T stand alone - they're meant to be combined with other classes.
-
-**Task:** Create a `LoggerMixin` that adds logging capability to any class.
-
-**Requirements:**
-1. Create `LoggerMixin` class with a `log(message: str)` method that prints: `"[ClassName] message"`
-2. Create a `Trade` class that inherits from BOTH `LoggerMixin` AND your base class
-3. Demonstrate logging a trade execution
-
-**Paste your code below:**
-```python
-# Your mixin implementation
-
-# class LoggerMixin:
-    
-#     def __init__(self):
-#         self.class_name = None
-    
-#     def log(self, message: str):
-#         print(f'{self.class_name} message: {message}')
-    
-
-
-# class Trade(LoggerMixin):
-    
-#     def __init__(self):
-#         super().__init__()
-#         self.class_name = 'Trade Class'
-
-# x = Trade()
-# x.log('Test Xd')
-
-# #LOG:
-# $ python practice.py
-# Trade Class message: Test Xd
-
-# I didn't follow your reqs exactly, as I didn't want to clutter the code base but I've created a reusable Mixin class with log capabilities, and it works properly
-```
-
----
-
-## Task 5: PCAP Trap - MRO Edge Cases
-
-**Predict which of these will raise an error and why:**
+What's wrong with this code? Predict the output and explain the bug:
 
 ```python
-# Case A
-class A:
-    pass
+def add_trade(trade, portfolio=[]):
+    portfolio.append(trade)
+    return portfolio
 
-class B(A):
-    pass
+result1 = add_trade("AAPL")
+result2 = add_trade("GOOGL")
+result3 = add_trade("MSFT", [])
 
-class C(A, B):
-    pass
-
-# Case B
-class X:
-    pass
-
-class Y:
-    pass
-
-class Z(X, Y):
-    pass
-
-# Case C
-class P:
-    pass
-
-class Q(P):
-    pass
-
-class R(Q):
-    pass
-
-class S(R, Q):
-    pass
+print(result1)
+print(result2)
+print(result3)
 ```
 
 **Your answer:**
 ```
-Case A (Error? Yes/No): Yes
-Reason: B is inherited from A, and thefore A can't be inherited from B, it just doesn't make sense.
+Output:
 
-
-Case B (Error? Yes/No): No.
-Reason: Everything is fine here, the classes are separate and then we create an inheritance order.
-
-
-Case C (Error? Yes/No): No
-Reason: It's a proper structure of inheritance and the final class that will take precedence is R.
-
-
-```
-
----
-
-## Task 6: PROJECT - Strategy Factory with Polymorphism
-
-Create a `StrategyFactory` class that creates strategies based on string identifiers. This demonstrates **polymorphism** (returning different types through same interface) and **factory pattern**.
-
-**Requirements:**
-1. Create `algo_backtest/strategies/strategy_factory.py`
-2. Implement `StrategyFactory` class with static method `create(strategy_type: str, **kwargs) -> BaseStrategy`
-3. Support creating:
-   - `"level_cross"` → returns `LevelCrossStrategy(level=kwargs['level'])`
-   - `"moving_average"` → returns `MovingAverageStrategy(ma_period=kwargs['ma_period'])`
-4. Raise `ValueError` if `strategy_type` is unknown
-5. Add type hints and docstrings
-
-**Paste your code below:**
-```python
-# strategy_factory.py
+print(result1) 'AAPL'
+print(result2) 'AAPL, GOOGL'
+print(result3) 'MSFT'
 
 
 
 
-```
+Bug explanation:
+There is a mutable default parameter - a list, which is problematic.
+It works as if it was saved for every other object we create, unless we provide our own version of a default parameter, as in result 3.
 
----
 
-## Task 7: Multiple Choice - Advanced OOP
+How to fix it:
 
-**Question 1:** What is the main advantage of composition over inheritance?
+We shouldn't use an empty list as our parameter - there are solutions to that as using None as default parameter:
 
-A) Composition is faster
-B) Composition allows runtime flexibility (you can change components)
-C) Composition uses less memory
-D) Composition is required for polymorphism
-
-**Your answer:** B
-
----
-
-**Question 2:** In `class D(B, C)`, if both B and C define `method()`, which one does D inherit?
-
-A) C's method (rightmost parent)
-B) B's method (leftmost parent)
-C) Both (D has two methods)
-D) Neither (raises AttributeError)
-
-**Your answer:** B
-
----
-
-**Question 3:** What is a mixin?
-
-A) A class that mixes data types
-B) A small class designed to provide specific functionality via multiple inheritance
-C) A function that modifies class behavior
-D) A decorator for methods
-
-**Your answer:** B
-
----
-
-## Task 8: Code Review - Composition vs Inheritance Abuse
-
-The following code works but violates good OOP design. Identify issues and rewrite using composition.
-
-```python
-class Database:
-    def __init__(self, connection_string):
-        self.connection_string = connection_string
-
-    def connect(self):
-        return f"Connected to {self.connection_string}"
-
-    def query(self, sql):
-        return f"Executing: {sql}"
-
-class UserManager(Database):  # IS-A relationship
-    def __init__(self, connection_string):
-        super().__init__(connection_string)
-
-    def get_user(self, user_id):
-        return self.query(f"SELECT * FROM users WHERE id={user_id}")
-
-class ProductManager(Database):  # IS-A relationship
-    def __init__(self, connection_string):
-        super().__init__(connection_string)
-
-    def get_product(self, product_id):
-        return self.query(f"SELECT * FROM products WHERE id={product_id}")
-```
-
-**Issues identified:**
-```
-#1. UserManager shouldn't be a subclass of Database - it could use Database method's instead (connect + query), but it's not an extended Database version, but rather it uses 2 methods from the Database.
-#2. Same for ProductManager, there's no need to inherit Database class, but rather simply use the query method.
-#3. And as for both - for these two subclasses, we could simply write two extra methods to the Database method and it would be much more nice and neat, if it's only about changing the product_id or user_id. It's just weird to invent a new class for that.
-
-```
-
-**Your refactored code (using composition):**
-#Option 1 - IMHO very clear and not overengineered
-class Database:
-    def __init__(self, connection_string):
-        self.connection_string = connection_string
-
-    def connect(self):
-        return f"Connected to {self.connection_string}"
-
-    def query(self, sql):
-        return f"Executing: {sql}"
-
-    def get_user(self, user_id):
-        return (f"SELECT * FROM users WHERE id={user_id}")
+def add_trade(trade, portfolio = None): #This was the issue - mutable default parameter
     
-    def get_product(self, product_id):
-        return (f"SELECT * FROM products WHERE id={product_id}")
+    if portfolio is None:
+        portfolio = []
+    portfolio.append(trade)
+    return portfolio
 
-
-#Option 2 - A bit more tricky but with perhaps clearer structure if we're planning to extend the new classes much further
-
-class Database:
-    def __init__(self, connection_string):
-        self.connection_string = connection_string
-
-    def connect(self):
-        return f"Connected to {self.connection_string}"
-
-    def query(self, sql):
-        return f"Executing: {sql}"
-
-class UserManager():  # IS-A relationship
-    def __init__(self, connection_string):
-        self.connection = Database(connection_string)
-
-    def get_user(self, user_id):
-        return self.connection.query(f"SELECT * FROM users WHERE id={user_id}")
-
-class ProductManager():  # IS-A relationship
-    def __init__(self, connection_string):
-        self.connection = Database(connection_string)
-
-    def get_product(self, product_id):
-        return self.connection.query(f"SELECT * FROM products WHERE id={product_id}")
-
-#Evaluate both solutions and argument which one would be better here, and in general.
 
 ```
 
 ---
 
-## Task 9: BONUS - Advanced Strategy with Composition
+## Task 6: PCAP Drill - Class Methods vs Static Methods
 
-Create a `CompositeStrategy` that combines multiple strategies using composition (NOT inheritance).
+What's the difference? When would you use each?
+
+```python
+class Strategy:
+    default_risk = 0.01
+
+    @classmethod
+    def from_risk(cls, account_balance):
+        return cls(account_balance * cls.default_risk)
+
+    @staticmethod
+    def validate_price(price):
+        return price > 0
+
+    def __init__(self, risk_amount):
+        self.risk_amount = risk_amount
+```
+
+**Questions:**
+
+1. What does `@classmethod` receive as first parameter?
+2. What does `@staticmethod` receive as first parameter?
+3. Can a `@classmethod` access `self.risk_amount`?
+4. Can a `@staticmethod` access `cls.default_risk`?
+5. When should you use `@classmethod` instead of `@staticmethod`?
+
+**Your answers:**
+
+Listen, again this is a knowledge gap - we didn't have staticmethod...
+We also should have some notes on both classmethod and staticmethod in week2_classmethod_staticmethod with examples. I'll try to solve the questions anyway, as we've already had classmethod, and I'll use the web to find info on staticmethod, BUT WE NEED THE NOTES as I told you above.
+
+
+```
+1. It receives the class name
+
+2. It receives price
+
+3. Yes.
+
+4. From what i've read, no - it doesn't have access to the class or instance.
+
+5. When you want to have a separate class function used outside and for specific occasions, but you also need some of the class parameters or defined logic or whatever.
+
+```
+
+---
+
+## Task 7: Multiple Choice - PCAP Focus
+
+**Question 1:** What happens when you inherit from a class but don't call `super().__init__()`?
+
+A) Syntax error
+B) Parent's `__init__` doesn't run, parent attributes not initialized
+C) Automatically calls parent's `__init__` anyway
+D) TypeError at runtime
+
+**Your answer:** 
+C
+
+---
+
+**Question 2:** Which exception is raised when you divide by zero?
+
+A) ValueError
+B) ZeroDivisionError
+C) ArithmeticError
+D) DivisionError
+
+**Your answer:** B
+
+---
+
+**Question 3:** What does `try/except/else/finally` do?
+
+A) `else` runs if exception occurs, `finally` runs always
+B) `else` runs if no exception, `finally` runs always
+C) `else` runs always, `finally` runs if exception
+D) `else` runs if no exception, `finally` runs only on success
+
+**Your answer:** B
+
+---
+
+## Task 8: Code Review - Fix the Risk Calculator
+
+This code has bugs. Find them and fix it:
+
+```python
+class RiskCalculator:
+    def __init__(self, account_balance):
+        self.account_balance = account_balance
+
+    def calculate_position_size(self, risk_percent, entry, stop_loss):
+        risk_dollars = self.account_balance * risk_percent  # Bug 1
+        distance = entry - stop_loss  # Bug 2
+        position_size = risk_dollars / distance  # Bug 3
+        return position_size
+
+    def get_risk_amount(risk_percent):  # Bug 4
+        return self.account_balance * (risk_percent / 100)
+
+# Test
+calc = RiskCalculator(10000)
+size = calc.calculate_position_size(1, 50, 48)  # Should be 50 shares
+print(size)
+```
+
+**Bugs found:**
+```
+# 1. No type hints/ docstrings
+# 2. Lack of self in get_risk_amount method
+# 3. That really depends on how we ask and present our data, but risk_percent and multiplying it by our acc balance like that might be tricky.
+#If somebody gives the percent value like 5, we'd get our balance by 5 instead of 5% of our balance. But this depends, as we could also state percents as 0.05.
+# 4. I've chosen more descriptive variants for entry and stop_loss
+
+```
+
+**Corrected code:**
+```python
+
+class RiskCalculator:
+    '''Class used to calculate risk - both position size and the risk amount'''
+    
+    
+    
+    
+    def __init__(self, account_balance: float):
+        self.account_balance = account_balance
+        
+    def calculate_position_size(self, 
+                                risk_percent: float, 
+                                entry_price: float, 
+                                stop_loss_price: float) -> float:
+        
+        '''Method used to calculate position size - check args, as this is IMPORTANT:
+        
+        risk_percent - GIVE THE ACTUAL PERCENT VALUE here (e.g. 0.5 for 0.5%, 5 for 5%, 20 for 20%)
+        entry - provide the entry price e.g. 2053.43
+        stop_loss_price - as above,
+
+        
+        '''
+        
+        risk_dollars = self.account_balance * (risk_percent / 100)
+        distance = abs(entry_price - stop_loss_price)  #More descriptive variant + abs for both BUY/SELL
+        position_size = risk_dollars / distance  #This should be correct now if we assume that above is correct
+        return position_size
+
+    def get_risk_amount(self, risk_percent):
+        '''Get the risk amount per position'''
+        return self.account_balance * (risk_percent / 100)
+
+# Test
+calc = RiskCalculator(10000)
+size = calc.calculate_position_size(1, 50, 48)  # Should be 50 shares
+print(size)
+
+
+```
+
+---
+
+## Task 9: BONUS - Portfolio P&L Tracking
+
+Extend Task 4 to track actual P&L if strategies were traded.
 
 **Requirements:**
-- Inherits from `BaseStrategy`
-- Constructor accepts `List[BaseStrategy]`
-- `generate_signal()` calls all sub-strategies and returns:
-  - `"BUY"` if majority say BUY
-  - `"SELL"` if majority say SELL
-  - `"HOLD"` otherwise
-- Use `isinstance()` to validate all strategies are `BaseStrategy` instances
+- For each strategy, calculate hypothetical P&L assuming:
+  - BUY at current price → profit if next price is higher
+  - SELL at current price → profit if next price is lower
+  - HOLD → no trade
+- Return total P&L for each strategy
+- Compare which strategy performed best
 
 **Paste your code below:**
 ```python
-# composite_strategy.py
+# Extended backtest_comparison.py
+
+SKIPPED FOR THE REASONS STATED IN TASK4 - I want to be able to get to the stage where I can comfortably create similar things, but I NEED TO UNDERSTAND THEM, and the road to that is through a step-by-step understanding process and building blocks, not jumping suhc a huge bricks. It's not a gap created in this task though, it's the gap in task 4, as this task seems rather simple if we had task 4 completed. I still expect YOU WILL NOT TAKE AWAY MY points for this.
 
 
-What the hell, how would I be able to do that considering that each strategy has its own parameters like level, period etc? That's a really weird task and I didn't know what did you expect here.
+
 
 ```
 
@@ -423,14 +454,14 @@ What the hell, how would I be able to do that considering that each strategy has
 
 **Time spent:** 60 minutes
 
-**Difficulty (1-10):** 8 - some really weird tasks + unclear bonus task with difficult and not understandable requirements, unrealistic
+**Difficulty (1-10):**
+5-9
 
 **What clicked:**
--
+
 
 **What's confusing:**
-A lot of things - mixins, calling a list of strategies (bonus tasks), and HAS-A vs IS-A (when to use which option) - we need to practice this definitely. Yet the main objective is PCEP, do not forget
-
+Task 4 is definitely a LEAP too big for today and it doesn't make sense.
 
 **Questions:**
 

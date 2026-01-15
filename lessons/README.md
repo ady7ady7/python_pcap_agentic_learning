@@ -61,6 +61,15 @@ This directory contains all theoretical lessons organized by week and topic.
 - Common inheritance patterns (extending behavior, template method)
 - **PCAP Traps:** Forgetting `super().__init__()`, abstract methods not implemented, `isinstance()` vs `type()`, overriding vs overloading, method overloading (not supported in Python)
 
+### [@classmethod and @staticmethod](week2_classmethod_staticmethod.md)
+- Regular methods (review) - receive `self`
+- `@classmethod` - receives `cls` (the class itself)
+- `@staticmethod` - receives nothing automatically
+- When to use which (comparison table)
+- Alternative constructors with `@classmethod`
+- Utility functions with `@staticmethod`
+- **PCAP Traps:** Confusing `cls` and `self`, @staticmethod trying to use `cls`, first parameter naming
+
 ---
 
 ## Week 3-8: Advanced Topics (Planned)
