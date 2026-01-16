@@ -1,449 +1,394 @@
-# Week 2, Day 4 Tasks - Position Sizing & Strategy Backtesting
+# Week 2, Day 5 Tasks - Week Review & Integration (Friday)
 
-**Focus:** Risk-based position sizing, strategy comparison, PCAP drills (more exam focus, less abstract OOP)
+**Focus:** Week 2 review, PCAP drills, consolidation of OOP concepts
+
+**Target Difficulty:** 5-6/10 (no brick walls!)
 
 **Instructions:**
 - Work in `practice.py` for experimentation
 - Paste your FINAL solutions/answers below each task
-- For project tasks, modify files in `algo_backtest/` as specified
 
 ---
 
-## Task 1: PCAP Warm-up - Exception Handling Order
+## Task 1: Quick Fire Review (Week 2 Concepts)
+
+Answer these questions without looking at notes:
+
+**Q1:** In `class D(B, C)`, which parent's method is used if both B and C have `method()`?
+
+**Q2:** What's the difference between `@classmethod` and `@staticmethod` first parameter?
+
+**Q3:** What pattern should you use instead of `def func(items=[])` to avoid the mutable default trap?
+
+**Q4:** When should you use composition (HAS-A) instead of inheritance (IS-A)?
+
+**Q5:** What does `super().__init__()` do? Does Python call it automatically?
+
+**Q6:** What does `__all__` in `__init__.py` control?
+
+**Your answers:**
+```
+Q1: B
+
+Q2: For @class method it's cls, for staticmethod the first parameter will depend on a given method (not determined).
+
+Q3: items = None, and then we can set items = 0 if items == None.
+
+Q4: When a subclass is stricly an extension of the base class - e.g. it's a specific trading strategy and the parent class is a general strategy.
+
+Q5: It imports/fetches the init parameters from the parent class.
+
+Q6: It controls all of the classes that can be interacted with/imported from a given package/module (folder). It lists all available classes that we can later import and use in other folders/files.
+
+```
+
+---
+
+## Task 2: PCAP Drill - Inheritance Output Prediction
 
 Predict the output WITHOUT running the code:
 
 ```python
-def process_data(value):
-    try:
-        result = 10 / value
-        data = [1, 2, 3]
-        print(data[value])
-    except ZeroDivisionError:
-        return "Zero error"
-    except IndexError:
-        return "Index error"
-    except Exception as e:
-        return f"Other: {e}"
-    else:
-        return "Success"
-    finally:
-        print("Cleanup")
+class Vehicle:
+    wheels = 4
 
-print(process_data(0))
-print(process_data(5))
-print(process_data(2))
+    def __init__(self, brand):
+        self.brand = brand
+
+    def describe(self):
+        return f"{self.brand} with {self.wheels} wheels"
+
+class Motorcycle(Vehicle):
+    wheels = 2
+
+class Car(Vehicle):
+    def __init__(self, brand, doors):
+        super().__init__(brand)
+        self.doors = doors
+
+    def describe(self):
+        return f"{super().describe()}, {self.doors} doors"
+
+# What prints?
+m = Motorcycle("Honda")
+c = Car("Toyota", 4)
+
+print(m.describe())
+print(c.describe())
+print(m.wheels, c.wheels)
+```
+
+**Your prediction:**
+```
+# Output (3 lines):
+
+Honda with 2 wheels
+Toyota with 4 wheels, 4 doors
+2 4
+
+# Explanation:
+What's there to explain - it's all very simple - we pass relevant parameters and shared class attribute takes precedence, unless it's modified on purpose (as in motorcycle).
+
+
+```
+
+---
+
+## Task 3: PCAP Drill - Exception Handling
+
+Predict the output WITHOUT running:
+
+```python
+def risky_operation(x):
+    try:
+        if x == 0:
+            raise ValueError("Zero not allowed")
+        result = 10 / x
+    except ValueError as e:
+        print(f"Caught: {e}")
+        return -1
+    except ZeroDivisionError:
+        print("Division by zero!")
+        return -2
+    else:
+        print(f"Success: {result}")
+        return result
+    finally:
+        print("Cleanup done")
+
+print(risky_operation(0))
+print("---")
+print(risky_operation(2))
 ```
 
 **Your prediction:**
 ```
 # Output:
-#Zero error -> Cleanup
-#Index error -> Cleanup
-#Success -> Cleanup
+#1 - Caught: Zero not allowed. Cleanup done. -1
+#2 - Success: 5.0 Cleanup done. 5.0
 
 
 
 
-# Explanation (what is the order of exception handling?):
-It's arranged well, from specific to general and from the usual order they might occur.
-The else block only executes if we don't get any errors, and finally block always executes.
+# Explanation (order of execution):
+I was uncertain whether we will see the raise ValueError's message or excepts' ValueError's message - I definitely need to practice nad remember this.
 
-
-```
-
----
-
-## Task 2: PROJECT - Position Sizing from Risk
-
-**This is actually useful!** Implement risk-based position sizing for your backtest engine.
-
-**Concept:**
-- You have $10,000 account
-- You want to risk max 1% per trade ($100)
-- Entry at $50, Stop Loss at $48 (distance = $2)
-- **Position size = Risk $ / Distance = $100 / $2 = 50 shares**
-
-**Requirements:**
-1. Add `@classmethod` to `Position` class: `calculate_position_size(account_balance: float, risk_percent: float, entry_price: float, stop_loss: float) -> float`
-2. Method should:
-   - Calculate risk in dollars: `account_balance * (risk_percent / 100)`
-   - Calculate distance: `abs(entry_price - stop_loss)`
-   - Return position size: `risk_dollars / distance`
-   - Handle edge case: if distance == 0, return 0
-3. Add type hints and docstring
-
-**Example usage:**
-```python
-# Risk 1% of $10,000 account = $100 max loss
-# Entry $50, SL $48 (distance $2)
-size = Position.calculate_position_size(10000, 1.0, 50.0, 48.0)
-print(size)  # Should print 50.0
-```
-
-**Paste your code below:**
-```python
-# In algo_backtest/engine/position.py
-
-
-    @classmethod
-    def calculate_position_size(self,
-                                account_balance: float,
-                                risk_percent: float, 
-                                entry_price: float, 
-                                stop_loss_price: float) -> float:
-        '''
-        A class method used to calculate the position size based on a set risk %,
-        entry + stop loss
-        
-        For now it uses a stop loss price - at some point I might decide to use distance instead - depends on our needs
-        '''
-        try:
-            usd_risk = account_balance * (risk_percent / 100)
-            distance = abs(entry_price - stop_loss_price)
-            
-            if distance != 0:
-                position_size = usd_risk / distance
-                return position_size
-            else:
-                print('The stop loss is set at the entry price, returning 0')
-                return 0
-            
-        except Exception as e:
-            print(f'Unexpected error: {str(e)}')
+As for the general rule -> try -> (OPTIONALLY) else (if we don't encounter an error) -> finally (always)
 
 ```
 
 ---
 
-## Task 3: PCAP Drill - List Comprehensions with Conditionals
+## Task 4: PCAP Drill - @classmethod and @staticmethod
 
 Predict the output WITHOUT running:
 
 ```python
-prices = [100, 105, 98, 102, 110, 95]
+class Counter:
+    count = 0
 
-# A
-result_a = [p for p in prices if p > 100]
+    def __init__(self):
+        Counter.count += 1
 
-# B
-result_b = [p * 2 if p > 100 else p for p in prices]
+    @classmethod
+    def get_count(cls):
+        return cls.count
 
-# C
-result_c = [p for p in prices if p > 100 if p < 110]
+    @staticmethod
+    def validate(value):
+        return value > 0
 
-print(result_a)
-print(result_b)
-print(result_c)
+# What happens?
+print(Counter.get_count())
+c1 = Counter()
+c2 = Counter()
+print(Counter.get_count())
+print(c1.get_count())
+print(Counter.validate(-5))
+print(c2.validate(10))
 ```
 
-**Your answer:**
+**Your prediction:**
 ```
-result_a = [105, 102, 110]
+# Output (5 lines):
 
-result_b = [100, 210, 98, 204, 220, 95]
- 
-result_c = [105, 102]
 
-# Explanation (difference between filter-if and ternary-if):
-Not sure what you mean by these name filter-if and ternary-if (you can explain), but the logic here is simple:
-In result A - if serves as a filter to only get entries above 100 (p > 100)
-In result B - there is an if-else structure - for entries above 100 (p > 100) we multiply them by 2, and others are returned normally (else p)
-In result C - there is quite weird double if structure (never seen it before, as normally we'd probably use and or something like that) but the logic is simple as well we only fetch entries above 100 (p > 100) and the second if works as the second condition for entries below 110 (p < 110)
+# What happens?
+print(Counter.get_count()) #0
+c1 = Counter() #2
+c2 = Counter() #2
+print(Counter.get_count()) #2
+print(c1.get_count()) #5
+print(Counter.validate(-5))#False
+print(c2.validate(10)) #True
 
+
+# Explanation:
+
+When we create actual class objects, the count value is increased with init.
+As classmethod doesn't include actually creating any object, it doesn't use the init - it doesn't increase the count value, but it's obviously able to fetch it, and since it's a shared class attribute, we get the last value.
+
+When creating a new class object (as c1, c2), we increase that count value by 1, as it's a shared class attribute.
 
 ```
 
 ---
 
-## Task 4: PROJECT - Strategy Backtesting Comparison
+## Task 5: Code Integration - Position with Risk Sizing
 
-**This is actually useful!** Run multiple strategies on the same data and compare performance.
+Yesterday you implemented `calculate_position_size`. Now let's use it in practice.
 
-**Requirements:**
-1. Create `algo_backtest/engine/backtest_comparison.py`
-2. Implement `StrategyComparison` class with:
-   - `__init__(self, strategies: List[BaseStrategy], prices: List[float])`
-   - `run_backtest(self) -> Dict[str, Dict[str, float]]` that returns:
-     ```python
-     {
-         "Level Cross Strategy": {
-             "signals": ["BUY", "BUY", "HOLD", ...],
-             "win_rate": 0.65,
-             "total_trades": 20
-         },
-         "MovingAverage Strategy - ma 5": {
-             "signals": ["HOLD", "BUY", "SELL", ...],
-             "win_rate": 0.58,
-             "total_trades": 18
-         }
-     }
-     ```
-   - Calculate win_rate as: (BUY signals + SELL signals) / total signals
-   - Add type hints and docstrings
-
-3. Create test script that compares LevelCrossStrategy and MovingAverageStrategy on sample prices
+**Task:** Write a simple script that:
+1. Creates a Position using the position sizing calculation
+2. Uses account balance = $10,000, risk = 2%, entry = $100, stop_loss = $95
+3. Prints the calculated position size
+4. Creates a Position object with that size
+5. Prints the Position using `__str__`
 
 **Paste your code below:**
 ```python
-# backtest_comparison.py
-
-This is a great idea, but a too big knowledge gap for me at this point.
-I want to actually learn to be able to do such a thing BUT I NEED TO BE UNDERSTANDING IT.
-I don't want to use any form of cheating now, but WE SHOULD aim to create a similar file/code during the next two-three weeks, but I'm not ready for that now.
-
-For that I'd like to:
-- learn how these list imports of package strategies work - as a scaffolded approach, from very simple examples
-- create a backtesting engine first - a one that will be thought over for my needs (scaffolded)
-- after the backtesting engine is in place, we can think about a similar code to this that you require now.
-
-But remember, the main goal for me is to understand everything I do, I do not want to jump gaps that are too big yet.
-
-This task is a 9/10 difficulty for now, I'm not doing it and I'D LIKE YOU TO NOW TAKE AWAY POINTS FROM ME FOR THAT!
-
-
-# Test script (practice.py or separate file)
+# Your integration script
 
 
 
+from algo_backtest.engine.position import Position
+
+position_size = Position.calculate_position_size(10000, 2, 100, 95)
+print(position_size)
+position = Position('DAX', 'Buy', 25100, position_size, 24900, 25300)
+print(str(position))
+
+#LOG:
+
+# $ python practice.py
+# 40.0
+# BUY 40.0 @ 25100 [SL = 24900, TP = 25300]
+# (.venv) 
 
 ```
 
 ---
 
-## Task 5: PCAP Trap - Mutable Default Arguments
+## Task 6: PCAP Multiple Choice - Week 2 Review
 
-What's wrong with this code? Predict the output and explain the bug:
+**Question 1:** What is Method Resolution Order (MRO)?
 
-```python
-def add_trade(trade, portfolio=[]):
-    portfolio.append(trade)
-    return portfolio
-
-result1 = add_trade("AAPL")
-result2 = add_trade("GOOGL")
-result3 = add_trade("MSFT", [])
-
-print(result1)
-print(result2)
-print(result3)
-```
+A) The order methods are defined in a class
+B) The order Python searches for methods in inheritance hierarchy
+C) The order constructors are called
+D) The order attributes are initialized
 
 **Your answer:**
-```
-Output:
-
-print(result1) 'AAPL'
-print(result2) 'AAPL, GOOGL'
-print(result3) 'MSFT'
-
-
-
-
-Bug explanation:
-There is a mutable default parameter - a list, which is problematic.
-It works as if it was saved for every other object we create, unless we provide our own version of a default parameter, as in result 3.
-
-
-How to fix it:
-
-We shouldn't use an empty list as our parameter - there are solutions to that as using None as default parameter:
-
-def add_trade(trade, portfolio = None): #This was the issue - mutable default parameter
-    
-    if portfolio is None:
-        portfolio = []
-    portfolio.append(trade)
-    return portfolio
-
-
-```
+B
 
 ---
 
-## Task 6: PCAP Drill - Class Methods vs Static Methods
+**Question 2:** Which decorator creates a method that can access class attributes but not instance attributes?
 
-What's the difference? When would you use each?
+A) @property
+B) @staticmethod
+C) @classmethod
+D) @abstractmethod
 
-```python
-class Strategy:
-    default_risk = 0.01
+**Your answer:**
+C
 
-    @classmethod
-    def from_risk(cls, account_balance):
-        return cls(account_balance * cls.default_risk)
-
-    @staticmethod
-    def validate_price(price):
-        return price > 0
-
-    def __init__(self, risk_amount):
-        self.risk_amount = risk_amount
-```
-
-**Questions:**
-
-1. What does `@classmethod` receive as first parameter?
-2. What does `@staticmethod` receive as first parameter?
-3. Can a `@classmethod` access `self.risk_amount`?
-4. Can a `@staticmethod` access `cls.default_risk`?
-5. When should you use `@classmethod` instead of `@staticmethod`?
-
-**Your answers:**
-
-Listen, again this is a knowledge gap - we didn't have staticmethod...
-We also should have some notes on both classmethod and staticmethod in week2_classmethod_staticmethod with examples. I'll try to solve the questions anyway, as we've already had classmethod, and I'll use the web to find info on staticmethod, BUT WE NEED THE NOTES as I told you above.
-
-
-```
-1. It receives the class name
-
-2. It receives price
-
-3. Yes.
-
-4. From what i've read, no - it doesn't have access to the class or instance.
-
-5. When you want to have a separate class function used outside and for specific occasions, but you also need some of the class parameters or defined logic or whatever.
-
-```
 
 ---
 
-## Task 7: Multiple Choice - PCAP Focus
+**Question 3:** What happens if a child class doesn't call `super().__init__()`?
 
-**Question 1:** What happens when you inherit from a class but don't call `super().__init__()`?
+A) Python raises TypeError
+B) Parent's `__init__` runs automatically
+C) Parent's attributes are not initialized
+D) The child class cannot be instantiated
 
-A) Syntax error
-B) Parent's `__init__` doesn't run, parent attributes not initialized
-C) Automatically calls parent's `__init__` anyway
-D) TypeError at runtime
-
-**Your answer:** 
+**Your answer:**
 C
 
 ---
 
-**Question 2:** Which exception is raised when you divide by zero?
+**Question 4:** What is the output of `[x*2 if x > 5 else x for x in [3, 6, 9]]`?
 
-A) ValueError
-B) ZeroDivisionError
-C) ArithmeticError
-D) DivisionError
+A) [3, 12, 18]
+B) [6, 12, 18]
+C) [3, 6, 9]
+D) [6, 6, 9]
 
-**Your answer:** B
-
----
-
-**Question 3:** What does `try/except/else/finally` do?
-
-A) `else` runs if exception occurs, `finally` runs always
-B) `else` runs if no exception, `finally` runs always
-C) `else` runs always, `finally` runs if exception
-D) `else` runs if no exception, `finally` runs only on success
-
-**Your answer:** B
+**Your answer:**
+A
 
 ---
 
-## Task 8: Code Review - Fix the Risk Calculator
+**Question 5:** In `class C(A, B)`, what is the MRO?
 
-This code has bugs. Find them and fix it:
+A) C → B → A → object
+B) C → A → B → object
+C) A → B → C → object
+D) B → A → C → object
+
+**Your answer:**
+
+D
+In other words, as this can is a bit ambiguous and can be interpreted in different ways:
+The C is dominant and final, but it inherits everything from A, which inherits from B.
+But in the final execution we will overwrite everything from B with A, and we will overwrite everything from A with C - that's what I mean in my answer.
+
+---
+
+## Task 7: Code Review - Find the Bugs
+
+This code has 4 bugs. Find and fix them:
 
 ```python
-class RiskCalculator:
-    def __init__(self, account_balance):
-        self.account_balance = account_balance
+class Strategy:
+    active_count = 0
 
-    def calculate_position_size(self, risk_percent, entry, stop_loss):
-        risk_dollars = self.account_balance * risk_percent  # Bug 1
-        distance = entry - stop_loss  # Bug 2
-        position_size = risk_dollars / distance  # Bug 3
-        return position_size
+    def __init__(self, name):
+        self.name = name
+        active_count += 1  # Bug 1
 
-    def get_risk_amount(risk_percent):  # Bug 4
-        return self.account_balance * (risk_percent / 100)
+    @classmethod
+    def get_active(self):  # Bug 2
+        return cls.active_count
 
-# Test
-calc = RiskCalculator(10000)
-size = calc.calculate_position_size(1, 50, 48)  # Should be 50 shares
-print(size)
+    @staticmethod
+    def validate_name(name):
+        return len(name) > 0 and self.name.isalpha()  # Bug 3
+
+    def describe():  # Bug 4
+        return f"Strategy: {self.name}"
 ```
 
 **Bugs found:**
 ```
-# 1. No type hints/ docstrings
-# 2. Lack of self in get_risk_amount method
-# 3. That really depends on how we ask and present our data, but risk_percent and multiplying it by our acc balance like that might be tricky.
-#If somebody gives the percent value like 5, we'd get our balance by 5 instead of 5% of our balance. But this depends, as we could also state percents as 0.05.
-# 4. I've chosen more descriptive variants for entry and stop_loss
+#1. We will not increase active_count as it's in local scope
+#2 Class method CANNOT use self, it uses cls instead
+#3 static_method DOES NOT have access to class attributes, it's a self standing function only with its own attributes
+#4 Lack of self in describe method
 
 ```
 
 **Corrected code:**
 ```python
 
-class RiskCalculator:
-    '''Class used to calculate risk - both position size and the risk amount'''
-    
-    
-    
-    
-    def __init__(self, account_balance: float):
-        self.account_balance = account_balance
-        
-    def calculate_position_size(self, 
-                                risk_percent: float, 
-                                entry_price: float, 
-                                stop_loss_price: float) -> float:
-        
-        '''Method used to calculate position size - check args, as this is IMPORTANT:
-        
-        risk_percent - GIVE THE ACTUAL PERCENT VALUE here (e.g. 0.5 for 0.5%, 5 for 5%, 20 for 20%)
-        entry - provide the entry price e.g. 2053.43
-        stop_loss_price - as above,
+class Strategy:
+    '''Mock docstring'''
+    active_count = 0
 
-        
-        '''
-        
-        risk_dollars = self.account_balance * (risk_percent / 100)
-        distance = abs(entry_price - stop_loss_price)  #More descriptive variant + abs for both BUY/SELL
-        position_size = risk_dollars / distance  #This should be correct now if we assume that above is correct
-        return position_size
+    def __init__(self, name: str):
+        self.name = name
+        Strategy.active_count += 1
 
-    def get_risk_amount(self, risk_percent):
-        '''Get the risk amount per position'''
-        return self.account_balance * (risk_percent / 100)
+    @classmethod
+    def get_active(cls) -> int:  
+        '''Returns count of active strategies'''
+        return cls.active_count
 
-# Test
-calc = RiskCalculator(10000)
-size = calc.calculate_position_size(1, 50, 48)  # Should be 50 shares
-print(size)
+    @staticmethod
+    def validate_name(name) -> bool:
+        '''A standalone method/function that allows to validate any name'''
+        return len(name) > 0 and name.isalpha()
+
+    def describe(self) -> str:  
+        '''Returns the name of a given strategy'''
+        return f"Strategy: {self.name}"
+
+
 
 
 ```
 
 ---
 
-## Task 9: BONUS - Portfolio P&L Tracking
+## Task 8: Week 2 Self-Assessment
 
-Extend Task 4 to track actual P&L if strategies were traded.
+Rate your understanding of each topic (1-5, where 5 = fully confident):
 
-**Requirements:**
-- For each strategy, calculate hypothetical P&L assuming:
-  - BUY at current price → profit if next price is higher
-  - SELL at current price → profit if next price is lower
-  - HOLD → no trade
-- Return total P&L for each strategy
-- Compare which strategy performed best
+```
+Inheritance basics (class Child(Parent)):        5/5
+super().__init__() usage:                        5/5
+Method overriding:                               5/5
+MRO (Method Resolution Order):                   5/5
+@classmethod:                                    4/5
+@staticmethod:                                   4/5
+Composition vs Inheritance (HAS-A vs IS-A):      4/5
+Mutable default arguments trap:                  5/5
+List comprehensions (filter-if vs ternary-if):   5/5
+try/except/else/finally flow:                    5/5
 
-**Paste your code below:**
-```python
-# Extended backtest_comparison.py
+Topics I need more practice on:
 
-SKIPPED FOR THE REASONS STATED IN TASK4 - I want to be able to get to the stage where I can comfortably create similar things, but I NEED TO UNDERSTAND THEM, and the road to that is through a step-by-step understanding process and building blocks, not jumping suhc a huge bricks. It's not a gap created in this task though, it's the gap in task 4, as this task seems rather simple if we had task 4 completed. I still expect YOU WILL NOT TAKE AWAY MY points for this.
+classmethod/staticmethod + potential other types of special methods if there are any (and if they're relevant now/relevant to PCAP requirements, as PCAP is the MOST IMPORTANT GOAL)
+importing and calling them with different types of arguments/parameters (also including lists, Pandas Dataframes etc.), 
+creating them as well,
+packaging and using _all_ with init.py,
+
+- I also definitely need to practice / come back to basic data manipulations, defaultdict etc. as we study the current topics, so that I will be able to reinforce the past topics as well.
 
 
+Topics I feel confident about:
+I listed them, feeling confident with most of these topics.
 
 
 ```
@@ -455,13 +400,13 @@ SKIPPED FOR THE REASONS STATED IN TASK4 - I want to be able to get to the stage 
 **Time spent:** 60 minutes
 
 **Difficulty (1-10):**
-5-9
-
+4
 **What clicked:**
-
+Almost everything
 
 **What's confusing:**
-Task 4 is definitely a LEAP too big for today and it doesn't make sense.
+
+Class method vs staticmethod perhaps needs a bit more practice
 
 **Questions:**
 

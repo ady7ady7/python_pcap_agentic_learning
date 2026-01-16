@@ -1076,3 +1076,157 @@ print(c.parent_attr)  # AttributeError! Never created
 
 ---
 
+## Week 2, Day 5 - 2026-01-16
+
+**Topic:** Week 2 Review & Integration (Friday Wrap-up)
+
+### Student Self-Assessment
+- **Tasks Completed:** 8/8
+- **Difficulty:** 4/10
+- **Time Spent:** 60 minutes
+
+### Student Reflection
+**What clicked:**
+"Almost everything"
+
+**What's confusing:**
+"Class method vs staticmethod perhaps needs a bit more practice"
+
+**Self-Ratings:**
+- Inheritance basics: 5/5
+- super().__init__() usage: 5/5
+- Method overriding: 5/5
+- MRO: 5/5
+- @classmethod: 4/5
+- @staticmethod: 4/5
+- Composition vs Inheritance: 4/5
+- Mutable default arguments trap: 5/5
+- List comprehensions: 5/5
+- try/except/else/finally flow: 5/5
+
+**Topics needing more practice:**
+- @classmethod/@staticmethod with different argument types
+- Packaging with `__all__` and `__init__.py`
+- Basic data manipulations (defaultdict, etc.)
+
+### Mentor Assessment
+
+**Score: 92% (A-)**
+
+**Task Breakdown:**
+
+1. **Quick Fire Review (6 Questions):** 90%
+   - Q1: ✅ B (leftmost parent in MRO) - CORRECT
+   - Q2: ✅ cls for @classmethod, "depends on method" for @staticmethod - CORRECT (student clarified)
+   - Q3: ✅ `items = None` pattern - CORRECT
+   - Q4: ⚠️ Answered about inheritance instead of composition - Student clarified understanding
+   - Q5: ⚠️ "imports/fetches" instead of "calls" - Student clarified understanding
+   - Q6: ✅ `__all__` controls imports - CORRECT
+
+2. **Inheritance Output Prediction:** 100%
+   - ✅ `Honda with 2 wheels` - CORRECT
+   - ✅ `Toyota with 4 wheels, 4 doors` - CORRECT
+   - ✅ `2 4` - CORRECT
+   - Explanation solid: "shared class attribute takes precedence, unless modified"
+
+3. **Exception Handling Output:** 95%
+   - ✅ Correct logic: try → except → finally → return value
+   - ⚠️ Minor output format issue (separator display)
+   - ✅ Correct understanding: "else only if no error, finally always"
+
+4. **@classmethod/@staticmethod Output:** 90%
+   - ✅ All 5 outputs correct (0, 2, 2, False, True)
+   - ⚠️ Minor typo in comments (#5 instead of #2 for c1.get_count())
+   - ✅ Excellent explanation of class attributes and classmethod behavior
+
+5. **Position Integration Script:** 100%
+   - ✅ Perfect implementation
+   - ✅ Correct position sizing: 40.0
+   - ✅ Correct output: `BUY 40.0 @ 25100 [SL = 24900, TP = 25300]`
+   - **Shows solid understanding of project components working together**
+
+6. **Multiple Choice (5 Questions):** 90%
+   - Q1: ✅ B (MRO definition) - CORRECT
+   - Q2: ✅ C (@classmethod access) - CORRECT
+   - Q3: ✅ C (super().__init__ not auto-called) - CORRECT - **FIXED FROM DAY 4!**
+   - Q4: ✅ A ([3, 12, 18]) - CORRECT
+   - Q5: ⚠️ D - Student correctly argued answer options were ambiguous (arrow direction unclear)
+
+7. **Code Review (Find 4 Bugs):** 100%
+   - ✅ Bug 1: `active_count` local scope → `Strategy.active_count`
+   - ✅ Bug 2: `@classmethod` with `self` → `cls`
+   - ✅ Bug 3: `@staticmethod` trying to use `self` → removed
+   - ✅ Bug 4: `describe()` missing `self` → added
+   - ✅ Corrected code is production-quality with docstrings and type hints
+
+8. **Week 2 Self-Assessment:** Complete
+   - Thoughtful reflection on strengths and areas for improvement
+   - Correctly identified @classmethod/@staticmethod as needing more practice
+   - Shows self-awareness and learning maturity
+
+**Weighted Score: 92% (A-)**
+
+**Breakdown:**
+- PCAP Drills (Tasks 1-4, 6): 93%
+- Project Integration (Task 5): 100%
+- Code Review (Task 7): 100%
+- Self-Assessment (Task 8): Complete
+
+**Key Improvements from Day 4:**
+- ✅ **super().__init__() behavior** - Now correctly understands Python does NOT auto-call parent's __init__
+- ✅ **Difficulty appropriate** - 4/10 (in target 5-6/10 range)
+- ✅ **All tasks completable** - No brick walls
+
+**Student Clarifications Accepted:**
+1. **Task 6 Q5 MRO:** Arrow direction in answers was genuinely ambiguous. Student demonstrated correct understanding.
+2. **Task 1 Q2:** "depends on method" correctly describes @staticmethod behavior.
+3. **Task 1 Q4:** Student understands both composition and inheritance, just read question differently.
+4. **Task 1 Q5:** "imports/fetches" vs "calls" is terminology, not conceptual error.
+
+**Project Milestones:**
+- ✅ Position sizing integration working
+- ✅ Week 2 OOP concepts solidified
+- ✅ Ready for Week 3: Advanced OOP patterns
+
+---
+
+## Week 2 Summary
+
+| Day | Topic | Score | Difficulty |
+|-----|-------|-------|------------|
+| 1 | Inheritance Fundamentals | 94% | 5/10 |
+| 2 | Polymorphism & Multiple Strategies | 86.25% | 5/10 |
+| 3 | Composition vs Inheritance & MRO | 86% | 8/10 |
+| 4 | Position Sizing & PCAP Drills | 84% | 5-9/10 |
+| 5 | Week Review & Integration | 92% | 4/10 |
+
+**Week 2 Average: 88.5% (B+)**
+
+**Week 2 Strengths:**
+- ✅ MRO understanding: 0% (Day 2) → 100% (Day 3 onwards) - Major improvement
+- ✅ Inheritance and method overriding - Solid
+- ✅ @classmethod factory patterns - Good
+- ✅ Exception handling flow - Solid
+- ✅ List comprehensions (filter vs ternary) - Mastered
+- ✅ Mutable default trap - Mastered
+- ✅ Code review skills - Excellent
+- ✅ Professional judgment - Correctly rejected overengineered tasks
+
+**Week 2 Areas for Week 3:**
+- ⚠️ @classmethod vs @staticmethod - Needs continued practice
+- ⚠️ Composition patterns in real code
+- ⚠️ More PCAP-style drills
+
+**Mentor Lessons Learned:**
+1. Difficulty must stay at 5-6/10 - No brick walls
+2. Teach concepts BEFORE testing them
+3. Scaffolded approach works best
+4. Student correctly pushes back on unfair tasks - Trust that judgment
+
+**Weekend Tasks:**
+- Complete Exam A (30 questions)
+- Complete Exam B (30 questions)
+- Target: 70%+ (21/30) on each
+
+---
+

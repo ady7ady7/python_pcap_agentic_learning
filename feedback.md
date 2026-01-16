@@ -1,7 +1,7 @@
 # Daily Feedback Template
 
-**Date:** 2026-01-10
-**Week:** 2 | **Day:** 1 (Monday)
+**Date:** [To be filled]
+**Week:** 3 | **Day:** 1 (Monday)
 **Topic:** [To be filled]
 
 ---
@@ -15,7 +15,7 @@
 [ ] Just Right
 [ ] Too Hard
 
-**Time Spent:** ___ hours
+**Time Spent:** ___ minutes
 
 ---
 

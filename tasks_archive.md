@@ -312,3 +312,52 @@ Format: Date | Topic | Score | Difficulty | Notes
 
 ---
 
+## Week 2, Day 5 - 2026-01-16
+
+**Topic:** Week 2 Review & Integration (Friday Wrap-up)
+**Score:** 8/8 tasks completed | 92% (A-)
+**Difficulty:** 4/10
+
+**Tasks Completed:**
+1. Quick Fire Review (6 Questions) - **90%** ✅
+2. Inheritance Output Prediction - **100%** ✅
+3. Exception Handling Output - **95%** ✅
+4. @classmethod/@staticmethod Output - **90%** ✅
+5. Position Integration Script - **100%** ✅
+6. Multiple Choice (5 Questions) - **90%** ✅
+7. Code Review (Find 4 Bugs) - **100%** ✅
+8. Week 2 Self-Assessment - Complete ✅
+
+**Key Achievements:**
+- Fixed super().__init__() misconception from Day 4
+- All 3 inheritance output predictions correct
+- Perfect Position integration with calculate_position_size
+- Found all 4 bugs in Strategy class code review
+- Difficulty was appropriate (4/10 vs previous 8-9/10)
+
+**Student Self-Ratings (5-point scale):**
+- Inheritance basics: 5/5
+- super().__init__(): 5/5
+- MRO: 5/5
+- @classmethod: 4/5
+- @staticmethod: 4/5
+- Composition vs Inheritance: 4/5
+
+**Week 2 Summary:**
+| Day | Score | Topic |
+|-----|-------|-------|
+| 1 | 94% | Inheritance Fundamentals |
+| 2 | 86.25% | Polymorphism & Strategies |
+| 3 | 86% | Composition & MRO |
+| 4 | 84% | Position Sizing |
+| 5 | 92% | Week Review |
+
+**Week 2 Average: 88.5% (B+)**
+
+**Weekend Tasks:**
+- PCAP Mock Exam A (30 questions)
+- PCAP Mock Exam B (30 questions)
+- Target: 70%+ (21/30) on each
+
+---
+
