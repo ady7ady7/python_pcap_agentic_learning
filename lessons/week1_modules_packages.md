@@ -187,6 +187,126 @@ print(random.randint(1, 10))  # AttributeError: module has no attribute 'randint
 
 ---
 
+### Namespace Coexistence (Important Concept!)
+
+While Trap 3 shows what happens when you **shadow** a module name, here's the key insight: **your namespace and a module's namespace can coexist perfectly** when you use `import module` (not `from module import *`).
+
+**Example 1: Your functions vs module functions**
+```python
+"""Your namespace and math's namespace coexist without conflict."""
+
+import math
+
+
+def sin(x):
+    """Your custom sin function - lives in YOUR namespace."""
+    if 2 * x == pi:
+        return 0.99999999
+    else:
+        return None
+
+
+pi = 3.14  # Your pi - lives in YOUR namespace
+
+print(sin(pi / 2))           # 0.99999999 - calls YOUR sin with YOUR pi
+print(math.sin(math.pi / 2)) # 1.0 - calls math's sin with math's pi
+```
+
+**Why this works:**
+- `sin` and `pi` exist in **your module's namespace**
+- `math.sin` and `math.pi` exist in **math's namespace** (accessed via `math.`)
+- No collision because they're in separate namespaces!
+
+**Example 2: Same name, different namespaces**
+```python
+"""Demonstrating how import keeps namespaces separate."""
+
+import random
+
+random_number = 42  # Your variable named 'random_number'
+random_list = [1, 2, 3]  # Your variable named 'random_list'
+
+# No conflict! 'random' is the module, your variables are separate
+print(random.choice(random_list))  # Uses module's choice() on your list
+print(random_number)               # Your variable, untouched
+```
+
+**Key Takeaway:**
+- `import math` → Access via `math.sin`, `math.pi` (namespaced)
+- `from math import sin, pi` → Brings `sin`, `pi` directly into YOUR namespace (can cause collisions!)
+- `from math import *` → **DANGEROUS** - imports everything, high collision risk
+
+**PCAP Exam Tip:** When you see `import module`, the module's contents are accessed via `module.name`. When you see `from module import name`, `name` is now directly in your namespace and can shadow your own definitions.
+
+**Example 3: Order matters with selective imports (PCAP TRAP!)**
+```python
+"""Selective import gets overwritten by later definitions."""
+
+from math import sin, pi
+
+print(sin(pi / 2))  # 1.0 - uses math.sin and math.pi
+
+pi = 3.14  # Overwrites imported pi
+
+
+def sin(x):  # Overwrites imported sin
+    if 2 * x == pi:
+        return 0.99999999
+    else:
+        return None
+
+
+print(sin(pi / 2))  # 0.99999999 - uses YOUR sin and YOUR pi
+
+# Output:
+# 1.0
+# 0.99999999
+```
+
+**Why this happens:**
+1. `from math import sin, pi` → Brings `sin` and `pi` into YOUR namespace
+2. First `print(sin(pi / 2))` → Uses imported `sin` and `pi` (math's versions)
+3. `pi = 3.14` → **Overwrites** the imported `pi` with your value
+4. `def sin(x):` → **Overwrites** the imported `sin` with your function
+5. Second `print(sin(pi / 2))` → Uses YOUR `sin` and YOUR `pi`
+
+**Critical insight:** With `from module import name`, the imported names live in YOUR namespace. Any later assignment to those names **replaces** them - Python doesn't know or care that they came from an import.
+
+**Contrast with `import module`:** If you used `import math`, then `math.sin` and `math.pi` would remain untouched regardless of what you define, because they're in a separate namespace.
+
+**Example 4: Aliased imports (PCAP Exam Favorite!)**
+```python
+"""Aliased imports - original names become inaccessible."""
+
+from math import pi as PI, sin as sine
+
+print(sine(PI / 2))  # 1.0 - works with aliases
+print(sin(PI / 2))   # NameError! 'sin' doesn't exist
+print(pi)            # NameError! 'pi' doesn't exist
+```
+
+**Two key rules:**
+1. **Original names become inaccessible:** After `from math import pi as PI`, only `PI` exists in your namespace - `pi` is NOT defined. Using the original name raises `NameError`.
+2. **Multiple aliases in one import:** You can alias multiple items in a single import statement using commas: `from math import pi as PI, sin as sine, cos as cosine`
+
+**General syntax:**
+```python
+from module import name as alias
+from module import name1 as alias1, name2 as alias2, name3 as alias3
+```
+
+**Same rule applies to module aliases:**
+```python
+import math as m
+
+print(m.pi)     # 3.14159... - works
+print(math.pi)  # NameError! 'math' doesn't exist after aliasing
+```
+
+**PCAP Trap:** The exam loves to test whether you know that the original name is gone after aliasing. If you see `import X as Y` followed by code using `X`, it's a `NameError`.
+
+---
+
 **Trap 4: `__init__.py` Execution Behavior**
 ```python
 # __init__.py

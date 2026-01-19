@@ -641,3 +641,512 @@ You demonstrated excellent learning ability by fixing the major gaps from Exam A
 **Recommendation:** Spend 15 minutes reviewing the 3 minor gaps above, then move confidently into Week 2.
 
 **Excellent work on Week 1! You've shown strong learning ability and adaptability.**
+
+---
+
+## Week 2 Exam A - 2026-01-18
+
+**Time Taken:** 10 minutes (Start: 18:48, Finish: 18:58)
+**Score:** 24/30 (80%)
+**Result:** ✅ PASS (70% required)
+**Grade:** B
+
+---
+
+### Section-by-Section Breakdown
+
+| Section | Score | Percentage |
+|---------|-------|------------|
+| Inheritance & OOP (1-10) | 9/10 | 90% |
+| Class & Static Methods (11-15) | 3/5 | 60% |
+| Exception Handling (16-20) | 5/5 | 100% |
+| List Comprehensions (21-25) | 5/5 | 100% |
+| Mixed Topics (26-30) | 2/5 | 40% |
+
+---
+
+### Detailed Question Analysis
+
+#### ✅ Correct Answers (24/30)
+
+**Section 1: Inheritance & OOP**
+- Q1: ✅ B - Correct (polymorphism - `Dog.speak()` overrides `Animal.speak()`)
+- Q2: ✅ B - Correct (`super()` returns proxy to access parent methods)
+- Q3: ✅ B - Correct (`c.value = 20` - Child's `__init__` doesn't call parent's)
+- Q4: ✅ B - Correct (abstract methods MUST be implemented by child classes)
+- Q5: ✅ B - Correct (MRO: D → B → C → A, so `x = 2` from C)
+- Q6: ✅ A - Correct (MRO: D → B → C → A → object)
+- Q8: ✅ B - Correct (class attribute shared: `c1.count = c2.count = 2`)
+- Q9: ✅ B - Correct (`isinstance()` checks object type, `issubclass()` checks hierarchy)
+- Q10: ✅ C - Correct (`"Base Child"` via `super().method() + " Child"`)
+
+**Section 2: Class & Static Methods**
+- Q11: ✅ B - Correct (`cls` is first parameter of `@classmethod`)
+- Q12: ✅ C - Correct (no automatic parameter for `@staticmethod`)
+- Q13: ✅ A - Correct (`5, 6` - both work called on class or instance)
+
+**Section 3: Exception Handling**
+- Q16: ✅ B - Correct (`A C` - ZeroDivisionError caught, finally runs)
+- Q17: ✅ C - Correct (`else` runs when NO exception occurs)
+- Q18: ✅ B - Correct (`finally` always wins - returns `2`)
+- Q19: ✅ B - Accepted (you demonstrated understanding of specific→generic order)
+- Q20: ✅ A - Correct (`ValueError` - `type(e).__name__` returns class name)
+
+**Section 4: List Comprehensions**
+- Q21: ✅ B - Correct (`[0, 4, 8]` - only even numbers doubled)
+- Q22: ✅ B - Correct (`[0, 0, 0, 4, 5]` - ternary if replaces values)
+- Q23: ✅ B - Correct (mutable default argument bug)
+- Q24: ✅ B - Correct (`[2]` - two `if` conditions act as AND)
+- Q25: ✅ B - Correct (`[[1, 1], [2, 4], [3, 9]]` - nested list comprehension)
+
+**Section 5: Mixed Topics**
+- Q27: ✅ C - Correct (`__all__` controls `from package import *`)
+- Q28: ✅ B - Correct (`20` - `@property` makes method callable as attribute) - *Fair point about not covering this yet!*
+
+---
+
+#### ❌ Incorrect Answers (6/30)
+
+**Q7: What happens if you don't call `super().__init__()`?**
+- **Your answer:** B (Parent's `__init__` is called automatically)
+- **Correct answer:** C (Parent's instance attributes are not initialized)
+- **Explanation:** **THIS WAS THE TRAP FROM DAY 4!** Python does NOT automatically call the parent's `__init__`. You must explicitly call `super().__init__()` if you want parent initialization. You corrected this on Day 5 but reverted under exam pressure.
+- **Critical:** This is a PCAP favorite - you KNOW this, just need to internalize it
+- **Review:** Week 2 Day 4 & Day 5 feedback
+
+**Q14: Can a `@staticmethod` access class attributes?**
+- **Your answer:** D (No, never)
+- **Correct answer:** C (No, unless you hardcode the class name)
+- **Explanation:** A `@staticmethod` CAN access class attributes if you hardcode the class name:
+  ```python
+  class Math:
+      PI = 3.14159
+
+      @staticmethod
+      def get_pi():
+          return Math.PI  # Works! Hardcoded class name
+  ```
+  It just can't use `cls` or `self` - but hardcoding works.
+- **Subtle distinction:** "Never" is too absolute
+
+**Q15: When should you use `@classmethod`?**
+- **Your answer:** C (When the method is completely independent)
+- **Correct answer:** B (When you need to create alternative constructors)
+- **Explanation:** C describes `@staticmethod`! `@classmethod` is specifically for:
+  - Alternative constructors (e.g., `Person.from_json()`, `Position.from_dict()`)
+  - Factory methods that need to know the class
+  - Accessing/modifying class-level state
+- **Mix-up:** You confused the use cases of `@classmethod` and `@staticmethod`
+
+**Q26: Diamond inheritance with `super()` output**
+- **Your answer:** C (D B A C A)
+- **Correct answer:** B (D B C A)
+- **Explanation:** With `super()` and diamond inheritance, each class's `__init__` is called **ONCE**. The MRO is `D → B → C → A → object`. `super()` follows MRO, not direct parent:
+  - D prints "D", calls super() → goes to B (next in MRO)
+  - B prints "B", calls super() → goes to C (NOT A! C is next in MRO)
+  - C prints "C", calls super() → goes to A (next in MRO)
+  - A prints "A"
+  - Result: `D B C A` - each class printed exactly once
+- **Key insight:** `super()` doesn't mean "parent", it means "next in MRO"
+
+**Q29: Composition definition**
+- **Your answer:** A (Composition means one class inherits from another)
+- **Correct answer:** B (Composition means one class contains an instance of another)
+- **Explanation:** You got this RIGHT on Day 3 and Day 5!
+  - **Inheritance = IS-A:** Dog IS-A Animal (`class Dog(Animal)`)
+  - **Composition = HAS-A:** Car HAS-A Engine (`self.engine = Engine()`)
+- **Regression:** This is Day 3 material - you know this!
+
+**Q30: Class vs Instance attribute assignment**
+- **Your answer:** B (child child)
+- **Correct answer:** A (parent child)
+- **Explanation:**
+  ```python
+  c.value = "child"  # Creates INSTANCE attribute on c
+  Child.value        # Still "parent" (class attribute unchanged)
+  c.value            # "child" (instance attribute shadows class)
+  ```
+  `c.value = "child"` creates a new **instance attribute** that shadows the class attribute. It does NOT modify `Child.value`.
+- **Review:** Week 1 Exam A Q19 - same concept!
+
+---
+
+### Patterns in Your Mistakes
+
+1. **Reverted knowledge under pressure:**
+   - Q7: You knew super() isn't auto-called (Day 5) but forgot under exam pressure
+   - Q29: You knew composition vs inheritance (Day 3) but confused them
+
+2. **@classmethod vs @staticmethod confusion:**
+   - Q14: Didn't know staticmethod can hardcode class access
+   - Q15: Mixed up the use cases completely
+
+3. **MRO with super() nuance:**
+   - Q26: Didn't realize super() follows MRO, ensuring each class called once
+
+4. **Instance vs class attribute (persistent):**
+   - Q30: Same mistake as Week 1 Exam A Q19
+
+---
+
+### Comparison with Week 1 Exams
+
+| Section | Week 1 Exam A | Week 1 Exam B | Week 2 Exam A |
+|---------|---------------|---------------|---------------|
+| **Score** | 83.3% | 86.7% | 80% |
+| **Exceptions** | 100% | 100% | 100% |
+| **OOP** | 83.3% | 100% | 90% |
+| **List Comp** | N/A | N/A | 100% |
+
+**Exception handling remains perfect across all 3 exams!**
+
+---
+
+### Strengths Observed
+
+1. **Exception Handling: 100%** - THIRD consecutive perfect score. This is locked in.
+
+2. **List Comprehensions: 100%** - Perfect! You understand:
+   - Filter-if at end (`if x > 1`)
+   - Ternary-if at start (`x if x > 3 else 0`)
+   - Multiple conditions (`if x > 1 if x < 3`)
+   - Nested structures
+
+3. **Basic Inheritance: 90%** - Strong grasp of:
+   - Method overriding
+   - `super()` for parent method access
+   - MRO lookup order
+   - `isinstance()` vs `issubclass()`
+
+4. **Speed:** 10 minutes is excellent, but may be causing recall issues
+
+---
+
+### Critical Gaps to Address
+
+#### 🔴 HIGH PRIORITY (Address before Exam B)
+
+**1. super().__init__() is NOT automatic (Q7)**
+```python
+class Parent:
+    def __init__(self):
+        self.parent_attr = "I exist"
+
+class Child(Parent):
+    def __init__(self):
+        # If you don't call super().__init__(), parent_attr WON'T EXIST
+        self.child_attr = "I exist"
+
+c = Child()
+print(c.child_attr)   # "I exist"
+print(c.parent_attr)  # AttributeError! Parent.__init__ never ran
+```
+
+**2. @classmethod vs @staticmethod use cases (Q14, Q15)**
+| Feature | @classmethod | @staticmethod |
+|---------|--------------|---------------|
+| First param | `cls` (automatic) | None (nothing automatic) |
+| Access class attrs | Via `cls.attr` | Via `ClassName.attr` (hardcoded) |
+| Main use case | Alternative constructors | Utility functions |
+| Example | `Person.from_json(data)` | `Math.add(a, b)` |
+
+**3. super() follows MRO, not parent (Q26)**
+```python
+class A:
+    def __init__(self): print("A", end=" ")
+class B(A):
+    def __init__(self): print("B", end=" "); super().__init__()
+class C(A):
+    def __init__(self): print("C", end=" "); super().__init__()
+class D(B, C):
+    def __init__(self): print("D", end=" "); super().__init__()
+
+# MRO: D → B → C → A → object
+d = D()  # Output: D B C A (NOT D B A C A!)
+```
+
+**4. Composition = HAS-A (Q29)**
+```python
+# INHERITANCE (IS-A): Dog IS-A Animal
+class Dog(Animal): pass
+
+# COMPOSITION (HAS-A): Car HAS-A Engine
+class Car:
+    def __init__(self):
+        self.engine = Engine()  # Contains an instance
+```
+
+**5. Instance attribute shadows class attribute (Q30)**
+```python
+class Parent:
+    value = "parent"  # Class attribute
+
+class Child(Parent):
+    pass
+
+c = Child()
+c.value = "child"     # Creates INSTANCE attribute
+print(Child.value)    # "parent" (class attr unchanged)
+print(c.value)        # "child" (instance shadows class)
+```
+
+---
+
+### Regarding @property
+
+You're right - I included it as a preview. Quick explanation:
+
+`@property` turns a method into a read-only attribute:
+```python
+class Circle:
+    def __init__(self, radius):
+        self._radius = radius
+
+    @property
+    def diameter(self):
+        return self._radius * 2
+
+c = Circle(5)
+print(c.diameter)  # 10 - called like attribute, not diameter()
+```
+
+**Use cases:**
+- Computed attributes
+- Encapsulation (hiding internal representation)
+- Validation on attribute access
+
+We'll cover this properly in Week 5 (Encapsulation). Consider Q28 a freebie.
+
+---
+
+### Study Plan for Exam B
+
+**Before taking Exam B (15-20 minutes):**
+
+1. **Write out from memory:**
+   - super().__init__() is NOT called automatically
+   - @classmethod: alternative constructors, receives `cls`
+   - @staticmethod: utility functions, no automatic params
+   - Composition = HAS-A, Inheritance = IS-A
+
+2. **Run this code in REPL:**
+   ```python
+   # MRO with super()
+   class A:
+       def __init__(self): print("A", end=" ")
+   class B(A):
+       def __init__(self): print("B", end=" "); super().__init__()
+   class C(A):
+       def __init__(self): print("C", end=" "); super().__init__()
+   class D(B, C):
+       def __init__(self): print("D", end=" "); super().__init__()
+
+   d = D()  # What prints?
+   print()
+   print(D.__mro__)
+   ```
+
+3. **Instance vs class attribute:**
+   ```python
+   class Test:
+       x = "class"
+
+   t = Test()
+   t.x = "instance"
+   print(Test.x)  # ?
+   print(t.x)     # ?
+   ```
+
+---
+
+### Final Verdict
+
+**Result:** ✅ **PASS** (80%)
+
+**Analysis:**
+- You passed with a comfortable margin (10% above threshold)
+- Exception handling and list comprehensions are rock solid
+- The 6 incorrect answers cluster around:
+  1. @classmethod/@staticmethod confusion (2 questions)
+  2. MRO with super() nuance (1 question)
+  3. Reverted knowledge under pressure (3 questions)
+
+**Key Insight:** 4 of your 6 mistakes were on concepts you've demonstrated understanding of before. This suggests exam pressure is causing recall issues, not fundamental gaps.
+
+**Recommendation:** Before Exam B, take 15 minutes to write out the 5 key concepts from memory. This will prime your recall under exam conditions.
+
+**Prediction for Exam B:** With focused review, 26-28/30 (87-93%)
+
+---
+
+## Week 2 Exam B - 2026-01-19
+
+**Time Taken:** 22 minutes (Start: 11:36, Finish: 11:58)
+**Score:** 29/30 (96.7%)
+**Result:** ✅ PASS (70% required)
+**Grade:** A+
+
+---
+
+### Section-by-Section Breakdown
+
+| Section | Score | Percentage |
+|---------|-------|------------|
+| Inheritance & OOP (1-10) | 10/10 | 100% |
+| Class & Static Methods (11-15) | 5/5 | 100% |
+| Exception Handling (16-20) | 4/5 | 80% |
+| List Comprehensions (21-25) | 5/5 | 100% |
+| Mixed Topics (26-30) | 5/5 | 100% |
+
+---
+
+### Detailed Question Analysis
+
+#### ✅ Correct Answers (29/30)
+
+**Section 1: Inheritance & OOP - PERFECT**
+- Q1: ✅ A - Correct (`2 4` - Bike overrides wheels, Vehicle unchanged)
+- Q2: ✅ B - Correct (`"Hi"` - C inherits B's override)
+- Q3: ✅ A - Correct (method overriding = same name in child)
+- Q4: ✅ B - Correct (`1 2` - super().__init__() properly called)
+- Q5: ✅ A - Correct (every class is subclass of itself)
+- Q6: ✅ B - Correct (`"Y"` - MRO: Z → Y → X)
+- Q7: ✅ B - Correct (Z → Y → X → object)
+- Q8: ✅ A - Correct (`100 2` - instance shadows class attr)
+- Q9: ✅ A - Correct (`True True` - b is instance of A and object)
+- Q10: ✅ B - Correct (TypeError - can't instantiate ABC)
+
+**Section 2: Class & Static Methods - PERFECT**
+- Q11: ✅ A - Correct (`20, 7` - classmethod and staticmethod both work)
+- Q12: ✅ B - Correct (classmethod on instance still receives cls)
+- Q13: ✅ B - Correct (`10 10` - classmethod modified class attr)
+- Q14: ✅ A - Correct (only regular methods access self.attribute)
+- Q15: ✅ B - Correct (factory methods create instances alternatively)
+
+**Section 3: Exception Handling**
+- Q16: ✅ A - Correct (`A B D` - ValueError caught, else skipped, finally runs)
+- Q17: ✅ B - **ACCEPTED** (student correctly identified output as `finally` then `try`)
+- Q19: ✅ A - Correct (`A` - ValueError caught by first except)
+- Q20: ✅ C - Correct (finally always runs)
+
+**Section 4: List Comprehensions - PERFECT**
+- Q21: ✅ B - Correct (`[0, 1, 4, 9]` - squares of 0-3)
+- Q22: ✅ A - **ACCEPTED** (student demonstrated: `a=[3,4]` filters, `b=[0,0,0,3,4]` transforms)
+- Q23: ✅ B - Correct (`[1] [2]` - None pattern prevents mutable default bug)
+- Q24: ✅ B - Correct (`[1,2,3,4,5,6]` - nested comprehension flattens)
+- Q25: ✅ B - Correct (`{1:1, 2:4, 3:9}` - dict comprehension)
+
+**Section 5: Mixed Topics - PERFECT**
+- Q26: ✅ B - Correct (composition = class contains instances of other classes)
+- Q27: ✅ B - Correct (`42` - nested class attribute access)
+- Q28: ✅ B - Correct (`"__main__"` when run directly)
+- Q29: ✅ A - Correct (`True True` - both x and y exist after super().__init__())
+- Q30: ✅ B - Correct (Manager HAS-A Database, not IS-A Database)
+
+---
+
+#### ❌ Incorrect Answers (1/30)
+
+**Q18: Exception hierarchy (most specific to most general)**
+- **Your answer:** D (`ValueError → ArithmeticError → Exception`)
+- **Correct answer:** B (`ValueError → Exception → BaseException`)
+- **Explanation:** `ValueError` and `ArithmeticError` are **siblings** (both inherit from `Exception`), not in a parent-child relationship. The correct chain is:
+  ```
+  BaseException (root)
+  └── Exception
+      ├── ValueError      (sibling)
+      └── ArithmeticError (sibling)
+  ```
+- **Key insight:** "Most specific to most general" means following the actual inheritance chain upward, not listing unrelated exceptions.
+
+---
+
+### Disputed Questions - Resolution
+
+**Q17: try/finally/return order**
+- **Student's argument:** The question answer format is ambiguous. The actual execution is:
+  1. Function executes, `finally` prints "finally"
+  2. Function returns "try"
+  3. `print(result)` prints "try"
+
+  So output is "finally" on one line, then "try" on next line.
+- **Verdict:** ✅ **ACCEPTED** - Student demonstrated perfect understanding of try/finally/return semantics. The answer format was indeed confusing.
+
+**Q22: filter vs transform terminology**
+- **Student's argument:** Demonstrated concrete understanding with:
+  - `a = [3, 4]` (keeps only elements > 2)
+  - `b = [0, 0, 0, 3, 4]` (replaces elements ≤ 2 with 0)
+- **Verdict:** ✅ **ACCEPTED** - Perfect output prediction shows complete mastery. The answer A is correct.
+
+**Note for future exams:** Q17 and Q22 need clearer wording.
+
+---
+
+### Massive Improvement from Exam A
+
+| Concept | Exam A | Exam B | Fixed? |
+|---------|--------|--------|--------|
+| super().__init__() automatic? | ❌ (Q7) | ✅ (Q4) | YES |
+| @classmethod use case | ❌ (Q15) | ✅ (Q15) | YES |
+| @staticmethod access | ❌ (Q14) | ✅ (Q14) | YES |
+| Composition definition | ❌ (Q29) | ✅ (Q26) | YES |
+| Instance vs class attrs | ❌ (Q30) | ✅ (Q8) | YES |
+| MRO understanding | ❌ (Q26) | ✅ (Q6, Q7) | YES |
+
+**All 6 major gaps from Exam A were corrected!**
+
+---
+
+### Week 2 Exam Comparison
+
+| Metric | Exam A | Exam B | Change |
+|--------|--------|--------|--------|
+| **Score** | 24/30 (80%) | 29/30 (96.7%) | **+16.7%** 🔥 |
+| **Grade** | B | A+ | **+2 grades** |
+| **Time** | 10 min | 22 min | +12 min (more careful) |
+| **Inheritance & OOP** | 9/10 | 10/10 | +10% |
+| **Class/Static Methods** | 3/5 | 5/5 | **+40%** |
+| **Exception Handling** | 5/5 | 4/5 | -20% |
+| **List Comprehensions** | 5/5 | 5/5 | Maintained |
+| **Mixed Topics** | 2/5 | 5/5 | **+60%** |
+
+---
+
+### Strengths Demonstrated
+
+1. **OOP Mastery: 100%** - Perfect score on all 10 inheritance questions
+2. **@classmethod/@staticmethod: 100%** - Completely fixed from Exam A
+3. **Composition vs Inheritance:** Now solid
+4. **Instance vs Class attributes:** Now solid
+5. **MRO understanding:** Now solid
+6. **List Comprehensions: 100%** - Maintained from Exam A
+7. **Critical thinking:** Correctly identified ambiguous questions
+
+---
+
+### Single Remaining Gap
+
+**Exception hierarchy structure:**
+- You know the behavior (100% on try/except/finally questions)
+- Minor gap: sibling vs parent-child relationships in exception tree
+- `ValueError` and `ArithmeticError` are both children of `Exception`, not related to each other
+
+---
+
+### Final Verdict
+
+**Result:** ✅ **EXCEPTIONAL PASS** (96.7%)
+
+This is the best exam performance of the program so far. You:
+1. Fixed ALL 6 gaps from Exam A
+2. Achieved 100% on 4 of 5 sections
+3. Demonstrated critical thinking on ambiguous questions
+4. Took appropriate time (22 min vs rushed 10 min)
+
+**Week 2 Weekend Summary:**
+- Exam A: 80% (B)
+- Exam B: 96.7% (A+)
+- Average: 88.35%
+- Improvement: +16.7%
+
+**Ready for Week 3:** Absolutely. The foundations are rock solid.

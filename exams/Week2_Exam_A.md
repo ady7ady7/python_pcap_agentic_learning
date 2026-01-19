@@ -11,6 +11,9 @@
 
 ---
 
+#START 18:48
+
+
 ## Section 1: Inheritance & OOP (Questions 1-10)
 
 **Question 1:** What is the output of this code?
@@ -34,6 +37,7 @@ C) soundwoof
 D) Error
 
 **Your answer:**
+B
 
 ---
 
@@ -45,6 +49,8 @@ C) Makes the current class a superclass
 D) Deletes the parent class
 
 **Your answer:**
+b
+
 
 ---
 
@@ -69,6 +75,7 @@ C) 30
 D) Error: value not defined
 
 **Your answer:**
+B
 
 ---
 
@@ -80,6 +87,7 @@ C) Python doesn't support abstract classes
 D) Abstract classes cannot have regular methods
 
 **Your answer:**
+B
 
 ---
 
@@ -107,6 +115,7 @@ C) Error
 D) None
 
 **Your answer:**
+B
 
 ---
 
@@ -118,6 +127,7 @@ C) D → A → B → C → object
 D) D → B → A → C → object
 
 **Your answer:**
+A
 
 ---
 
@@ -130,6 +140,7 @@ D) The child class cannot be created
 
 **Your answer:**
 
+B
 ---
 
 **Question 8:** What is the output?
@@ -153,6 +164,7 @@ C) 1 1 2
 D) 0 0 2
 
 **Your answer:**
+B
 
 ---
 
@@ -164,6 +176,7 @@ C) Both check the same thing
 D) Neither works with inheritance
 
 **Your answer:**
+B
 
 ---
 
@@ -188,6 +201,7 @@ C) Base Child
 D) Child Base
 
 **Your answer:**
+C
 
 ---
 
@@ -201,6 +215,7 @@ C) None (no automatic parameter)
 D) super (the parent)
 
 **Your answer:**
+B
 
 ---
 
@@ -212,6 +227,7 @@ C) None (no automatic parameter)
 D) super (the parent)
 
 **Your answer:**
+C
 
 ---
 
@@ -237,6 +253,7 @@ C) 5, Error
 D) Error, Error
 
 **Your answer:**
+a
 
 ---
 
@@ -248,6 +265,7 @@ C) No, unless you hardcode the class name
 D) No, never
 
 **Your answer:**
+d
 
 ---
 
@@ -259,6 +277,7 @@ C) When the method is completely independent
 D) When you need to modify instance attributes
 
 **Your answer:**
+C
 
 ---
 
@@ -284,6 +303,8 @@ D) A B C
 
 **Your answer:**
 
+b
+
 ---
 
 **Question 17:** When does the `else` block in try/except execute?
@@ -294,6 +315,7 @@ C) When no exception occurs
 D) Only with finally
 
 **Your answer:**
+c
 
 ---
 
@@ -315,6 +337,7 @@ C) 1 2
 D) Error
 
 **Your answer:**
+B
 
 ---
 
@@ -326,6 +349,9 @@ C) ValueError → Exception → ZeroDivisionError
 D) Any order works
 
 **Your answer:**
+This is an ambiguous question.
+For factual state of things - D.
+For optimal flow we should with specific -> generic order (B). Don't you dare to take away points from me for that!
 
 ---
 
@@ -344,6 +370,7 @@ C) Exception
 D) Error
 
 **Your answer:**
+A
 
 ---
 
@@ -362,6 +389,7 @@ C) [2, 4, 6, 8, 10]
 D) [0, 2, 4]
 
 **Your answer:**
+B
 
 ---
 
@@ -378,6 +406,7 @@ C) [1, 2, 3, 4, 5]
 D) [0, 0, 3, 4, 5]
 
 **Your answer:**
+B
 
 ---
 
@@ -395,6 +424,7 @@ C) Syntax error
 D) lst should be a tuple
 
 **Your answer:**
+B
 
 ---
 
@@ -412,6 +442,7 @@ C) [2, 3]
 D) Error - can't have two ifs
 
 **Your answer:**
+B
 
 ---
 
@@ -429,6 +460,7 @@ C) [(1, 1), (2, 4), (3, 9)]
 D) Error
 
 **Your answer:**
+B
 
 ---
 
@@ -465,6 +497,7 @@ C) D B A C A
 D) D A B A C A
 
 **Your answer:**
+C
 
 ---
 
@@ -476,6 +509,7 @@ C) What is exported with `from package import *`
 D) All files in the package
 
 **Your answer:**
+C
 
 ---
 
@@ -500,6 +534,9 @@ C) Error - can't access _value
 D) Error - value is not callable
 
 **Your answer:**
+WE DIDN'T HAVE SUCH THING AS @property FOR A SINGLE TIME - THIS IS YOUR FAULT, and if thsi is expected, I need to know exactly what it does :)).
+
+B
 
 ---
 
@@ -511,6 +548,8 @@ C) Composition requires the `super()` function
 D) Composition is the same as multiple inheritance
 
 **Your answer:**
+
+A
 
 ---
 
@@ -534,7 +573,10 @@ C) parent parent
 D) child parent
 
 **Your answer:**
+B
 
+
+#18:58 Finish
 ---
 
 ## Answer Key (Check after completing!)

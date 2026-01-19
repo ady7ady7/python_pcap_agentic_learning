@@ -11,6 +11,9 @@
 
 ---
 
+
+#Start 11:36
+
 ## Section 1: Inheritance & OOP (Questions 1-10)
 
 **Question 1:** What is the output?
@@ -32,6 +35,7 @@ C) 2 2
 D) 4 2
 
 **Your answer:**
+A
 
 ---
 
@@ -59,6 +63,7 @@ C) HelloHi
 D) Error
 
 **Your answer:**
+B
 
 ---
 
@@ -70,6 +75,7 @@ C) Creating multiple methods with same name but different parameters
 D) Deleting a parent method
 
 **Your answer:**
+A
 
 ---
 
@@ -95,6 +101,7 @@ C) None 2
 D) 2 1
 
 **Your answer:**
+B
 
 ---
 
@@ -106,6 +113,7 @@ C) `issubclass()` only works with direct parents
 D) `issubclass()` checks instance type
 
 **Your answer:**
+A
 
 ---
 
@@ -131,6 +139,7 @@ C) XY
 D) Error
 
 **Your answer:**
+B
 
 ---
 
@@ -142,7 +151,7 @@ C) Z → X → object → Y
 D) Y → X → Z → object
 
 **Your answer:**
-
+b
 ---
 
 **Question 8:** What is the output?
@@ -166,6 +175,8 @@ C) 100 100
 D) 2 100
 
 **Your answer:**
+a
+
 
 ---
 
@@ -188,6 +199,7 @@ C) False True
 D) False False
 
 **Your answer:**
+A
 
 ---
 
@@ -210,6 +222,7 @@ C) Returns None
 D) Creates Shape with area = 0
 
 **Your answer:**
+B
 
 ---
 
@@ -239,6 +252,7 @@ C) 20, Error
 D) Error, Error
 
 **Your answer:**
+A
 
 ---
 
@@ -250,6 +264,7 @@ C) Yes, but it receives the instance as first argument
 D) It raises an error
 
 **Your answer:**
+B
 
 ---
 
@@ -274,6 +289,8 @@ C) 5 5
 D) 10 5
 
 **Your answer:**
+B
+
 
 ---
 
@@ -285,6 +302,7 @@ C) @staticmethod only
 D) Both @classmethod and @staticmethod
 
 **Your answer:**
+A
 
 ---
 
@@ -296,6 +314,7 @@ C) To make methods faster
 D) To hide class attributes
 
 **Your answer:**
+B
 
 ---
 
@@ -321,6 +340,7 @@ C) A C D
 D) B D
 
 **Your answer:**
+A
 
 ---
 
@@ -345,7 +365,12 @@ C) finally
 D) try finally
 
 **Your answer:**
+This is ambiguous!
+We'd get 'finally' as a result of calling the resut = test()
+Then we'd get 'try' as the print out of print(result).
+This answer is fucked up.
 
+Give me a point for that!
 ---
 
 **Question 18:** Which is the correct exception hierarchy (most specific to most general)?
@@ -356,6 +381,7 @@ C) BaseException → Exception → ValueError
 D) ValueError → ArithmeticError → Exception
 
 **Your answer:**
+D
 
 ---
 
@@ -378,6 +404,7 @@ C) A B
 D) C
 
 **Your answer:**
+A
 
 ---
 
@@ -389,6 +416,7 @@ C) The code always runs, even with return/exception
 D) The code runs only after else
 
 **Your answer:**
+C
 
 ---
 
@@ -407,6 +435,7 @@ C) [0, 1, 2, 3]
 D) [1, 2, 3, 4]
 
 **Your answer:**
+B
 
 ---
 
@@ -423,6 +452,15 @@ C) Both filter
 D) Both transform
 
 **Your answer:**
+Weird question, dependso n what you mean by filter/transform, but this is a retarded fucking question, and in a sense 'a' list filters only, as it only leaves entries that are compliant to the if condition without mdoifying them, but in a sense it 'transforms' the list, as there weill be fewer entries.
+
+The 'b' list transforms some entries, by turning them into 0.
+I know exactly what the result would be:
+
+a = [3, 4]
+b = [0, 0, 0, 3, 4]
+
+Now give me my fucking point - the answer following the logic would be A!
 
 ---
 
@@ -445,6 +483,8 @@ C) [1, 2] [1, 2]
 D) Error
 
 **Your answer:**
+B
+
 
 ---
 
@@ -462,6 +502,7 @@ C) [[1, 3, 5], [2, 4, 6]]
 D) Error
 
 **Your answer:**
+B
 
 ---
 
@@ -478,6 +519,7 @@ C) [(1, 1), (2, 4), (3, 9)]
 D) Error
 
 **Your answer:**
+B
 
 ---
 
@@ -491,6 +533,7 @@ C) A class that cannot be instantiated
 D) A class with only static methods
 
 **Your answer:**
+B
 
 ---
 
@@ -510,6 +553,7 @@ C) None
 D) Outer.Inner.value
 
 **Your answer:**
+B
 
 ---
 
@@ -521,6 +565,7 @@ C) `"script"`
 D) Empty string
 
 **Your answer:**
+B
 
 ---
 
@@ -547,6 +592,7 @@ C) True False
 D) False False
 
 **Your answer:**
+A
 
 ---
 
@@ -564,6 +610,9 @@ C) Missing super().__init__()
 D) query() should be a static method
 
 **Your answer:**
+B
+
+#Koniec 11:58
 
 ---
 
