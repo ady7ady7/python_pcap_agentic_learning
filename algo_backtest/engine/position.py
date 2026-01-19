@@ -1,6 +1,6 @@
 '''Position management for trading strategies.'''
 
-from typing import Optional
+from typing import Optional, Tuple
 
 class Position:
     '''
@@ -70,7 +70,7 @@ class Position:
             return pnl
         
     
-    def should_close(self, current_price: float) -> bool:
+    def should_close(self, current_price: float) -> Tuple[bool, str]:
         
         '''
         Method used to check if position should close (if it hit SL or TP).
@@ -82,26 +82,23 @@ class Position:
         
         if current_price < 0:
             print('Incorrect current price, it should be above 0!')
-            return False
+            return (False, 'Still open')
         if self.side != 'BUY' and self.side != 'SELL':
             print('Incorrect side, it should be either BUY or SELL (case insensitive)')
-            return False
+            return (False, 'Still open')
         
         
-        if self.side == 'BUY' and current_price < self.stop_loss: #Simple if-checks, starting from SL check
+        if self.side == 'BUY' and current_price <= self.stop_loss: #Simple if-checks, starting from SL check
             print('Buy SL hit')
-            return True
-        elif self.side == 'BUY' and current_price > self.take_profit:
-            print('Buy TP hit')
-            return True
+            return (True, 'Buy SL hit')
+        elif self.side == 'BUY' and current_price >= self.take_profit:
+            return (True, 'Buy TP hit')
 
         
-        elif self.side == 'SELL' and current_price > self.stop_loss:
-            print('Sell SL hit')
-            return True
-        elif self.side == 'SELL' and current_price < self.take_profit:
-            print('Sell TP hit')
-            return True
+        elif self.side == 'SELL' and current_price >= self.stop_loss:
+            return (True, 'Sell SL hit')
+        elif self.side == 'SELL' and current_price <= self.take_profit:
+            return (True, 'Sell TP hit')
 
         
         

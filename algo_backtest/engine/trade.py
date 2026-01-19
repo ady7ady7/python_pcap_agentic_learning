@@ -1,4 +1,5 @@
 """Trade management for completed positions."""
+from typing import Optional
 
 class Trade:
     '''
@@ -22,23 +23,29 @@ class Trade:
                  entry_price: float,
                  exit_price: float,
                  quantity: float,
-                 entry_time: str,
-                 exit_time: str,
-                 exit_reason: str) -> None:
+                 entry_time: Optional[str] = None,
+                 exit_time: Optional[str] = None,
+                 exit_reason: Optional[str] = None
+                 ):
         
         """Initialize a completed trade and calculate P&L."""
         
-        self.ticker = ticker
-        self.side = side.upper()
-        self.entry_price = entry_price
-        self.exit_price = exit_price
-        self.quantity = quantity
-        self.entry_time = entry_time
-        self.exit_time = exit_time
-        self.exit_reason = exit_reason.upper()
+        self._ticker = ticker
+        self._side = side.upper()
+        self._entry_price = entry_price
+        self._exit_price = exit_price
+        self._quantity = quantity
+        self._entry_time = entry_time
+        self._exit_time = exit_time
+        
+        if exit_reason is not None:
+            self._exit_reason = exit_reason.upper()
+        else:
+            self._exit_reason = ''
 
-        # Calculate P&L automatically
-        self.pnl = self._calculate_pnl()
+        #Properties - is_winner + pnl
+        self.__pnl: Optional[float] = None
+        self.__is_winner: Optional[bool] = None
         
     def __str__(self):
         """
@@ -48,52 +55,55 @@ class Trade:
         Example: [WIN] BUY 10000 EURUSD: 1.0800 -> 1.0850 (TP) | P&L: $500.00
         """
         
-        if self.is_winner() == True:
+        if self.is_winner == True:
             result = '[WIN]'
         else:
             result = '[LOSS]'
-            
-        return (f'''{result} {self.side} {self.quantity} {self.ticker}: 
-                {self.entry_price} -> {self.exit_price} ({self.exit_reason}) 
+        
+        return (f'''{result} {self._side} {self._quantity} {self._ticker}: 
+                {self._entry_price} -> {self._exit_price} {self._exit_reason}
                 | P&L: ${self.pnl:.2f}''')
     
     def __repr__(self):
         
         
-        return (f'Trade(ticker = {self.ticker!r}, side = {self.side!r},'
-                f'entry_price = {self.entry_price}, exit_price = {self.exit_price}'
-                f'quantity = {self.quantity}, pnl = {self.pnl:.2f}, exit_reason = {self.exit_reason!r}'
+        return (f'Trade(ticker = {self._ticker!r}, side = {self._side!r},'
+                f'entry_price = {self._entry_price}, exit_price = {self._exit_price}'
+                f'quantity = {self._quantity}, pnl = {self.pnl:.2f}, exit_reason = {self._exit_reason!r}'
         )
     
-    def _calculate_pnl(self) -> float:
-        """
+    
+    @property
+    def pnl(self) -> float:
+        '''
         Calculate profit/loss based on side.
 
         Returns:
             P&L in currency units.
-        """
-
-        if self.side != 'BUY' and self.side != 'SELL':
+        '''
+        if self._side != 'BUY' and self._side != 'SELL':
             print('Incorrect side, it should be either BUY or SELL (case insensitive)')
             return None
-        elif self.exit_price < 0 or self.entry_price < 0:
+        elif self._exit_price < 0 or self._entry_price < 0:
             print('Incorrect exit price or entry price, it should be above 0!')
             return None
         
-        if self.side == 'BUY':
-            pnl = (self.exit_price - self.entry_price) * self.quantity
-            return pnl
-        elif self.side == 'SELL':
-            pnl = (self.entry_price - self.exit_price) * self.quantity
-            return pnl
+        if self._side == 'BUY':
+            self.__pnl = (self._exit_price - self._entry_price) * self._quantity
+            return self.__pnl
+        elif self._side == 'SELL':
+            self.__pnl = (self._entry_price - self._exit_price) * self._quantity
+            return self.__pnl
         
-        
+    @property 
     def is_winner(self) -> bool:
-        """Check if trade was profitable."""
+        """A property created to check if trade was profitable."""
         if self.pnl > 0:
-            return True
+            self.__is_winner = True
         else:
-            return False
+            self.__is_winner = False
+            
+        return self.__is_winner
         
     
     @classmethod
@@ -110,7 +120,7 @@ class Trade:
         """
 
         if trades is not None:
-            trades_profits = [trade._calculate_pnl() for trade in trades]
+            trades_profits = [trade.pnl() for trade in trades]
             winners = [profit for profit in trades_profits if profit > 0]
             print(trades_profits)
             return (len(winners) / len(trades_profits)) * 100

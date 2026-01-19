@@ -1230,3 +1230,134 @@ print(c.parent_attr)  # AttributeError! Never created
 
 ---
 
+## Week 3, Day 1 - 2026-01-19
+
+**Topic:** Encapsulation & Properties
+
+### Student Self-Assessment
+- **Tasks Completed:** 8/8
+- **Difficulty:** Not specified
+- **Time Spent:** 120 minutes
+
+### Student Reflection
+**What clicked:**
+- (Not specified - feedback section incomplete)
+
+**What's confusing:**
+- (Not specified)
+
+### Mentor Assessment
+
+**Score: 92% (A-)**
+
+**Task Breakdown:**
+
+1. **PCAP Warm-up - Access Control Conventions:** 100%
+   - Q1: ✅ Correct - name mangling prevents direct access
+   - Q2: ✅ Correct - `_MyClass__name` is the mangled form
+   - Q3: ✅ Correct - single underscore is convention only
+   - Q4: ✅ Correct - B is protected by convention, good note about C being quasi-private
+
+2. **Predict the Output (Name Mangling):** 100%
+   - ✅ `visible` - correct
+   - ✅ `hidden` - correct
+   - ✅ `False` - correct
+   - ✅ `True` - correct
+   - Excellent explanation of name mangling mechanics
+
+3. **@property Basics:** 90%
+   - ✅ Output predictions correct (25, 77.0)
+   - ⚠️ Explanation slightly imprecise: Said "no such attribute as 'celsius'" but actual error is `AttributeError: can't set attribute`
+   - The property DOES exist - it just has no setter defined
+   - Correct conceptual understanding, minor terminology issue
+
+4. **Price Class Implementation:** 100%
+   - ✅ Proper `@property` getter
+   - ✅ Proper `@value.setter` with validation
+   - ✅ Correct `ValueError` raise
+   - Minor: Error message has exclamation ("!") but spec didn't - trivial
+
+5. **Trade Class Foundation:** 90%
+   - ✅ All required attributes stored as protected
+   - ✅ Side converted to uppercase
+   - ✅ `pnl` property calculates correctly for BUY/SELL
+   - ✅ `is_winner` property works
+   - ✅ Added entry_time, exit_time, exit_reason - nice extension
+   - ❌ Bug in `calculate_win_rate`:
+     ```python
+     trades_profits = [trade.pnl() for trade in trades]  # BUG!
+     ```
+     Should be:
+     ```python
+     trades_profits = [trade.pnl for trade in trades]  # pnl is a property
+     ```
+   - Properties don't use parentheses - that's the core concept being taught!
+
+6. **Property Edge Cases:** 100%
+   - ✅ Correct predictions (1, 2, 3)
+   - ✅ Good understanding of properties recalculating on each access
+   - Understood side-effect trap
+
+7. **Multiple Choice:** 75%
+   - Q1: ❌ Answered B, correct is **C** (prevent name collisions in subclasses)
+   - Q2: ✅ B (AttributeError)
+   - Q3: ✅ C (read-only attributes)
+   - Q4: ✅ B (private attribute name-mangled form)
+
+   **Critical Correction for Q1:**
+   Name mangling does NOT encrypt values. Its purpose is to **prevent accidental name collisions in subclasses**:
+   ```python
+   class Parent:
+       def __init__(self):
+           self.__value = 10  # Becomes _Parent__value
+
+   class Child(Parent):
+       def __init__(self):
+           super().__init__()
+           self.__value = 20  # Becomes _Child__value (different!)
+   ```
+   Without mangling, `Child.__value` would overwrite `Parent.__value`.
+
+8. **Integration - Position and Trade Together:** 100%
+   - ✅ Excellent `PositionTrade` class integrating both components
+   - ✅ Uses `calculate_position_size` correctly
+   - ✅ Handles position-to-trade workflow
+   - ✅ Modified `should_close()` to return `Tuple[bool, str]` for exit reason
+   - ✅ Output shows working integration
+   - **Exceeded expectations** - class design shows good engineering judgment
+
+**Weighted Score: 92%**
+
+**Breakdown:**
+- PCAP Drills (Tasks 1, 2, 3, 6, 7): 93%
+- Implementation (Tasks 4, 5): 95%
+- Integration (Task 8): 100%
+
+**Strengths:**
+- ✅ Solid grasp of `@property` mechanics
+- ✅ Good understanding of name mangling syntax
+- ✅ Excellent Trade class implementation
+- ✅ Strong integration thinking (Task 8)
+- ✅ Professional code with docstrings and type hints
+
+**Areas for Improvement:**
+1. **Name mangling purpose** - It's about preventing subclass collisions, not encryption/security
+2. **Property error messages** - `AttributeError: can't set attribute` (no setter), not "attribute doesn't exist"
+3. **Properties vs methods** - Properties never use `()` - bug in `calculate_win_rate`
+
+**Project Milestones:**
+- ✅ Trade class created with encapsulated PnL
+- ✅ Protected/private attributes implemented correctly
+- ✅ Position-to-Trade workflow demonstrated
+- ✅ Position class extended with Tuple return type
+
+**Next Steps:**
+- Day 2: More property patterns, data validation
+- Day 3: Advanced encapsulation patterns
+- Day 4: Unit testing for Trade class
+- Day 5: Week 3 review and integration
+
+**Mentor Note:** Strong start to Week 3. Student demonstrated solid understanding of encapsulation concepts with 92% score. The Task 8 integration class (`PositionTrade`) shows excellent engineering thinking - going beyond requirements to create a reusable workflow. The Q1 multiple choice error about name mangling purpose is a common misconception worth clarifying. The property-as-method bug in Task 5 (`trade.pnl()`) is ironic given Task 3's lesson about properties not using parentheses - good learning moment.
+
+---
+

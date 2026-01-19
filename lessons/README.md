@@ -72,7 +72,20 @@ This directory contains all theoretical lessons organized by week and topic.
 
 ---
 
-## Week 3-8: Advanced Topics (Planned)
+## Week 3: Encapsulation & Core Domain Models
+
+### [Encapsulation & Properties](week3_oop_encapsulation.md)
+- What is encapsulation and why it matters
+- Access control conventions (`public`, `_protected`, `__private`)
+- Name mangling explained
+- `@property` decorator (getters, setters, deleters)
+- Computed/derived properties
+- Building the `Trade` class with proper encapsulation
+- **PCAP Traps:** Name mangling confusion, property vs method syntax, read-only properties
+
+---
+
+## Week 4-8: Advanced Topics (Planned)
 
 *Topics will be added as we progress through the course*
 

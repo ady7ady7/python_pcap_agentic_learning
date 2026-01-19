@@ -8,22 +8,25 @@
 
 ## Phase 1: Foundations & Data (Weeks 1-3)
 
-### Week 1: Project Setup ✓
-- [ ] Create package structure (`algo_backtest/`, `data/`, `engine/`, `strategies/`)
-- [ ] Setup `requirements.txt` (Pandas, NumPy)
-- [ ] Create `main.py` entry point
-- [ ] Version tracking in `__init__.py`
+### Week 1: Project Setup ✅ COMPLETE
+- [x] Create package structure (`algo_backtest/`, `data/`, `engine/`, `strategies/`)
+- [x] Setup `requirements.txt` (Pandas, NumPy)
+- [x] Create `main.py` entry point
+- [x] Version tracking in `__init__.py`
 
-### Week 2: Data Infrastructure
-- [ ] Build `DataLoader` class (loads CSV using Pandas)
-- [ ] Handle missing data / dirty CSVs
-- [ ] Implement `get_price_at_time(timestamp)` method
-- [ ] Create `data/mock_trades.csv` with sample OHLC data
+### Week 2: OOP Foundations ✅ COMPLETE
+- [x] Inheritance & Polymorphism (BaseStrategy ABC)
+- [x] LevelCrossStrategy & MovingAverageStrategy
+- [x] @classmethod for position sizing
+- [x] `Position` class with SL/TP, PnL calculation, `should_close()`
+- [x] `calculate_position_size` classmethod
 
-### Week 3: Core Domain Models
-- [ ] `Position` class (attributes: entry_price, sl, tp, size)
-- [ ] `Trade` class (attributes: open_time, close_time, pnl)
-- [ ] Unit tests for SL/TP calculation logic
+### Week 3: Encapsulation & Trade Class (CURRENT)
+- [ ] `Trade` class with encapsulated PnL (using @property)
+- [ ] Protected/private attributes (`_protected`, `__private`)
+- [ ] Property decorators for controlled access
+- [ ] Position-to-Trade conversion workflow
+- [ ] Unit tests for Trade class
 
 ---
 
@@ -70,5 +73,5 @@
 
 ---
 
-**Current Status:** Week 1, Day 1 - Initialization Phase
-**Last Updated:** 2026-01-05
+**Current Status:** Week 3, Day 1 - Encapsulation & Trade Class
+**Last Updated:** 2026-01-19
