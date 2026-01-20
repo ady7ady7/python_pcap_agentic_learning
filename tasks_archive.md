@@ -361,3 +361,39 @@ Format: Date | Topic | Score | Difficulty | Notes
 
 ---
 
+## Week 3, Day 1 - 2026-01-19
+
+**Topic:** Encapsulation & Properties
+**Score:** 8/8 tasks completed | 92% (A-)
+**Difficulty:** Medium
+**Time Spent:** 120 minutes
+
+**Tasks Completed:**
+1. PCAP warm-up (access control conventions - 4 questions)
+2. Name mangling output prediction
+3. @property basics (Temperature class)
+4. Price class implementation with validation
+5. PROJECT: Trade class with encapsulated PnL
+6. Property edge cases (side effects trap)
+7. PCAP multiple choice (4 questions - 3/4 correct)
+8. Integration: Position and Trade together (PositionTrade class)
+
+**Key Learnings:**
+- Access control conventions (`public`, `_protected`, `__private`)
+- Name mangling transforms `__attr` to `_ClassName__attr`
+- `@property` creates getters, `@name.setter` creates setters
+- Properties are accessed without parentheses (not methods!)
+- Name mangling purpose: prevent subclass collisions (NOT encryption)
+
+**Critical Corrections:**
+- Q7.1: Name mangling prevents accidental name collisions in subclasses, not "encrypting" values
+- Task 5 bug: `trade.pnl()` should be `trade.pnl` (property, not method)
+- Task 3: `AttributeError: can't set attribute` (no setter), not "no such attribute"
+
+**Project Milestones:**
+- Created Trade class with encapsulated PnL using @property
+- Extended Position.should_close() to return Tuple[bool, str] for exit reason
+- Built PositionTrade integration class (exceeded requirements)
+
+---
+

@@ -25,6 +25,8 @@ class Trade:
                  quantity: float,
                  entry_time: Optional[str] = None,
                  exit_time: Optional[str] = None,
+                 stop_loss: Optional[float] = None,
+                 take_profit: Optional[float] = None,
                  exit_reason: Optional[str] = None
                  ):
         
@@ -37,15 +39,19 @@ class Trade:
         self._quantity = quantity
         self._entry_time = entry_time
         self._exit_time = exit_time
+        self._stop_loss = stop_loss
+        self._take_profit = take_profit
         
         if exit_reason is not None:
             self._exit_reason = exit_reason.upper()
         else:
             self._exit_reason = ''
 
-        #Properties - is_winner + pnl
+        #Properties - is_winner + pnl + return_percent
         self.__pnl: Optional[float] = None
         self.__is_winner: Optional[bool] = None
+        self.__return_percent: Optional[float] = None
+        self.__risk_reward_ratio: Optional[float] = None
         
     def __str__(self):
         """
@@ -97,14 +103,32 @@ class Trade:
         
     @property 
     def is_winner(self) -> bool:
-        """A property created to check if trade was profitable."""
+        '''A property created to check if trade was profitable.'''
         if self.pnl > 0:
             self.__is_winner = True
         else:
             self.__is_winner = False
             
         return self.__is_winner
-        
+    
+    @property
+    def return_percent(self) -> float:
+        '''A property used to calculate the %P/L'''
+        if self._side == 'BUY':
+            self.__return_percent = ((self._exit_price - self._entry_price) / self._entry_price) * 100
+        else:
+            self.__return_percent = ((self._entry_price - self._exit_price) / self._entry_price) * 100
+            
+        return self.__return_percent
+    
+    @property
+    def risk_reward_ratio(self) -> float:
+        '''A property used to calc R:R ratio'''
+        if self._stop_loss == self._entry_price:
+            return 0
+        else:
+            self.__risk_reward_ratio = abs(self._take_profit - self._entry_price) / abs(self._entry_price - self._stop_loss)
+        return self.__risk_reward_ratio
     
     @classmethod
     def calculate_win_rate(cls, trades: list['Trade']) -> float:
@@ -120,7 +144,7 @@ class Trade:
         """
 
         if trades is not None:
-            trades_profits = [trade.pnl() for trade in trades]
+            trades_profits = [trade.pnl for trade in trades]
             winners = [profit for profit in trades_profits if profit > 0]
             print(trades_profits)
             return (len(winners) / len(trades_profits)) * 100

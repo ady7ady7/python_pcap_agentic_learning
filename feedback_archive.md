@@ -1361,3 +1361,110 @@ print(c.parent_attr)  # AttributeError! Never created
 
 ---
 
+## Week 3, Day 2 - 2026-01-20
+
+**Topic:** Advanced Properties, Validation & `random` Module
+
+### Student Self-Assessment
+- **Tasks Completed:** 8/8 + Bonus
+- **Difficulty:** 5/10
+- **Time Spent:** 120 minutes
+
+### Student Reflection
+**What clicked:**
+- Class creation comprehension growing
+- Session was productive and fruitful
+
+**Student Feedback:**
+- Wants more coding tasks, fewer output prediction tasks
+- `random` module is low priority - notes for reference, not focus
+- Main priority: passing PCAP exam
+- Requested scaffolded explanation for property recursion trap
+
+### Mentor Assessment
+
+**Score: 91% (A-)**
+
+**Task Breakdown:**
+
+1. **PCAP Warm-up - random Module Basics:** 75%
+   - Q1: ❌ Answered B, correct is **C** - `random.random()` returns [0.0, 1.0) - excludes 1, not 0
+   - Q2: ❌ Both `randint` and `randrange` return **integers**. Difference is endpoint inclusion
+   - Q3: ✅ Correct understanding (sample > list length causes error)
+   - Q4: ✅ True - choice can return same element repeatedly
+
+2. **Predict Output - seed():** 100%
+   - ✅ `True, False` - correct
+   - Good explanation: same seed = same sequence
+
+3. **Percentage Class:** 100%
+   - ✅ Protected `_value` attribute
+   - ✅ Property getter
+   - ✅ Setter with validation (0-100)
+   - ✅ `as_decimal` read-only property
+   - Minor: `range(0, 101)` works but `0 <= setter <= 100` cleaner for floats
+
+4. **Property Infinite Recursion Trap:** 100%
+   - ✅ Correct answer (B - RecursionError)
+   - ✅ Correct fix (use `self._value`)
+   - Requested detailed scaffolded explanation for Day 3
+
+5. **Trade Class Enhancement:** 100%
+   - ✅ `return_percent` property (BUY/SELL logic correct)
+   - ✅ `risk_reward_ratio` property (division by zero protection)
+   - ✅ Added `stop_loss` and `take_profit` parameters
+   - Output correct: P&L $50, Return 0.45%, R:R 2.00
+
+6. **choice() vs sample() Practice:** 100%
+   - Q1: ✅ Deterministic with seed
+   - Q2: ✅ Excellent explanation (choice can repeat, sample cannot)
+   - Q3: ✅ Clean code using sample() for unique selection
+
+7. **Multiple Choice:** 100%
+   - Q1: ✅ B (property runs code on access)
+   - Q2: ✅ B (4 - mutable list reference trap)
+   - Q3: ✅ D (sample returns random order, no duplicates)
+   - Q4: ✅ B (seed makes results reproducible)
+
+8. **RiskValidator Class:** 100%
+   - ✅ Private attributes with `__`
+   - ✅ Property getters with validation
+   - ✅ `validate_position` method works correctly
+
+**Bonus Task 9 - Random Trade Generator:** 100%
+   - ✅ Clean implementation using choice, uniform, randint
+   - ✅ Good docstring
+   - ✅ Working output with realistic trades
+
+**Weighted Score: 91%**
+
+**Corrections Applied:**
+1. `random.random()` returns [0.0, 1.0) - includes 0, excludes 1
+2. `randint(1, 10)` vs `randrange(1, 10)`: Both return integers, difference is endpoint inclusion
+
+**Strengths:**
+- ✅ Class creation skills improving noticeably
+- ✅ Validation patterns solid
+- ✅ Property mechanics well understood
+- ✅ Integration tasks completed excellently
+- ✅ Bonus completed with clean, documented code
+
+**Areas for Improvement:**
+- `random` module specifics (low priority per student request)
+- Verify `calculate_win_rate` bug fix applied to actual Trade class
+
+**Action Items for Day 3:**
+1. More coding tasks, fewer predictions (per student request)
+2. De-prioritize `random` module (PCAP core topics priority)
+3. Include scaffolded property recursion explanation
+4. Focus on PCAP exam preparation
+
+**Project Milestones:**
+- ✅ Trade class enhanced with `return_percent` and `risk_reward_ratio`
+- ✅ RiskValidator class created
+- ✅ Random trade generator function working
+
+**Mentor Note:** Excellent Day 2 session. Student's self-awareness about learning preferences (more coding, less prediction) is valuable feedback. The 91% score reflects strong understanding of property patterns and validation. The `random` module errors are minor and acknowledged as low priority. Class-building skills are clearly developing - the student recognizes this growth themselves. Day 3 will shift toward more hands-on coding with PCAP focus.
+
+---
+

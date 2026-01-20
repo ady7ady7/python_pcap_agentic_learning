@@ -83,6 +83,12 @@ This directory contains all theoretical lessons organized by week and topic.
 - Building the `Trade` class with proper encapsulation
 - **PCAP Traps:** Name mangling confusion, property vs method syntax, read-only properties
 
+### [The random Module](week3_random_module.md)
+- `random()`, `seed()`, `randint()`, `randrange()` basics
+- `choice()` - picking a single element from a sequence
+- `sample()` - picking multiple unique elements
+- **PCAP Traps:** `randint` inclusive vs `randrange` exclusive, `sample()` requires k <= len(seq)
+
 ---
 
 ## Week 4-8: Advanced Topics (Planned)

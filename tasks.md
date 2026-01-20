@@ -1,228 +1,207 @@
-# Week 3, Day 1 Tasks - Encapsulation & Properties (Monday)
+# Week 3, Day 2 - Advanced Properties, Validation & `random` Module
 
-**Focus:** Access control conventions, `@property` decorator, building the Trade class
+**Date:** 2026-01-20
+**Focus:** Property patterns, data validation, `random` module basics, PCAP drills
 
-**Lesson:** [Encapsulation & Properties](lessons/week3_oop_encapsulation.md)
+**Lessons:**
+- [Encapsulation & Properties](lessons/week3_oop_encapsulation.md)
+- [The random Module](lessons/week3_random_module.md)
 
 **Target Difficulty:** 5-6/10
 
-**Instructions:**
-- Work in `practice.py` for experimentation
-- Paste your FINAL solutions/answers below each task
+**Remember:** Work in `practice.py`, paste FINAL answers here for review.
 
 ---
 
-## Task 1: PCAP Warm-up - Access Control Conventions
+## Task 1: PCAP Warm-up - `random` Module Basics (Pure Python)
 
-Answer these questions about Python's naming conventions:
+Answer these questions about the `random` module:
 
-**Q1:** What happens when you try to access `obj.__secret` from outside the class?
+**Q1:** What is the output range of `random.random()`?
+- A) 0 to 1 (inclusive on both ends)
+- B) 0 to 1 (excludes 0)
+- C) 0 to 1 (excludes 1)
+- D) 1 to 100
 
-**Q2:** What does Python transform `__name` to inside a class called `MyClass`?
+**Q2:** What is the difference between `random.randint(1, 10)` and `random.randrange(1, 10)`?
 
-**Q3:** True or False: A single underscore `_name` prevents access to an attribute.
+**Q3:** What error occurs with `random.sample([1, 2, 3], 5)`?
 
-**Q4:** Which is the correct way to make an attribute "protected" by convention?
-- A) `self.protected_name`
-- B) `self._protected_name`
-- C) `self.__protected_name`
-- D) `self.protected_name_`
+**Q4:** True or False: `random.choice([1, 2, 3])` can return the same element multiple times if called repeatedly.
 
 **Your answers:**
 ```
-Q1: You will not be able to do so, as the name is mangled.
+Q1: B
 
-Q2: _MyClass__name
+Q2: Randint returns int values, randrange returns floats.
 
-Q3: False - it's just a convention that it shouldn't be accessed
+Q3: The sample cannot be longer than the length of the source it uses (here the list has 3 elements, and we're asking for a sample of 5 - it's literally impossible)
 
-Q4: B -> only protected by convention, C -> actual name mangling (quasi-private, still accessible if you know the mangling rule)
+Q4: True
 
 ```
 
 ---
 
-## Task 2: PCAP Drill - Predict the Output (Name Mangling)
-
-Predict the output WITHOUT running the code:
+## Task 2: Predict the Output - `random` with `seed()`
 
 ```python
-class Secret:
-    def __init__(self):
-        self._protected = "visible"
-        self.__private = "hidden"
+import random
 
-    def reveal(self):
-        return self.__private
+random.seed(100)
+a = random.randint(1, 10)
 
-s = Secret()
-print(s._protected)
-print(s.reveal())
-print(hasattr(s, '__private'))
-print(hasattr(s, '_Secret__private'))
+random.seed(100)
+b = random.randint(1, 10)
+
+random.seed(200)
+c = random.randint(1, 10)
+
+print(a == b)
+print(a == c)
 ```
+
+**Predict the output and explain WHY.**
 
 **Your prediction:**
 ```
-# Output (4 lines):
-print(s._protected) #visible
-print(s.reveal()) #hidden
-print(hasattr(s, '__private')) #False
-print(hasattr(s, '_Secret__private')) #True
-
-
+# Output (2 lines):
+print(a == b) #True
+print(a == c) #False
 
 # Explanation:
-_name is only a convention.
-__name does the quasi-protection, which the name mangling to _Class__name, so it's not accessible under __name, but accessible if you know the mangling rules.
+Seed is a guarantee of returning the same results if we use the same seed setting.
 
 ```
 
 ---
 
-## Task 3: PCAP Drill - @property Basics
+## Task 3: Property with Validation - `Percentage` Class
 
-Predict the output WITHOUT running:
-
-```python
-class Temperature:
-    def __init__(self, celsius):
-        self._celsius = celsius
-
-    @property
-    def celsius(self):
-        return self._celsius
-
-    @property
-    def fahrenheit(self):
-        return self._celsius * 9/5 + 32
-
-t = Temperature(25)
-print(t.celsius)
-print(t.fahrenheit)
-t.celsius = 30  # What happens here?
-```
-
-**Your prediction:**
-```
-# Output:
-print(t.celsius) #25
-print(t.fahrenheit) # 77
-t.celsius = 30  # What happens here? Error - there's no such attribute as 'celsius' in the Temperature class.
-
-
-# What happens on the last line?
-We're trying to access the celsius class attribute, but it isn't there.
-There's only _celsius, so we'd have to do t._celsius (but it's NOT RECOMMENDED, as it's obviously 'protected' by the convention)
-
-As an alternative, we could establish a setter there and it WOULD work.
-```
-
----
-
-## Task 4: Code Implementation - Property with Setter
-
-Create a `Price` class that:
-1. Has a protected `_value` attribute
+Create a `Percentage` class that:
+1. Stores a value as a protected attribute `_value`
 2. Has a `value` property (getter)
-3. Has a `value` setter that validates: value must be >= 0
-4. Raises `ValueError` with message "Price cannot be negative" if validation fails
+3. Has a `value` setter that:
+   - Accepts values 0-100 (inclusive)
+   - Raises `ValueError` with message "Percentage must be between 0 and 100" if out of range
+4. Has a `as_decimal` property (read-only) that returns value / 100
+
+**Test code:**
+```python
+p = Percentage(50)
+print(p.value)      # 50
+print(p.as_decimal) # 0.5
+p.value = 75
+print(p.value)      # 75
+p.value = 150       # ValueError: Percentage must be between 0 and 100
+```
 
 **Your code:**
 ```python
-class Price:
-    # Your implementation here
-    pass
 
-
-# Test it:
-p = Price(100)
-print(p.value)      # Should print: 100
-p.value = 150       # Should work
-print(p.value)      # Should print: 150
-p.value = -10       # Should raise ValueError
-```
-
-class Price:
-    '''A mock docstring of a mock class used for practice'''
-    
-    def __init__(self, value: float):
+class Percentage:
+    def __init__(self, value):
         self._value = value
     
     @property
-    def value(self) -> float:
+    def value(self):
         return self._value
     
     @value.setter
-    def value(self, value: float) -> None:
-        if value >= 0:
-            self._value = value
+    def value(self, setter):
+        if setter in range(0, 101):
+            self._value = setter
         else:
-            raise ValueError('Price cannot be negative!')
+            raise ValueError('Percentage must be between 0 and 100!')
+    
+    @property
+    def as_decimal(self):
+        return self._value / 100
 
 
+
+```
 
 ---
 
-## Task 5: PROJECT - Trade Class Foundation
+## Task 4: Property Trap - Infinite Recursion
 
-Create a basic `Trade` class in `algo_backtest/engine/trade.py`:
+**What happens when you run this code?**
 
-**Requirements:**
-1. Constructor parameters: `ticker`, `side`, `entry_price`, `exit_price`, `quantity`
-2. Store all as protected attributes (`_ticker`, etc.)
-3. `side` should be stored as uppercase
-4. Add a `pnl` property that calculates profit/loss:
-   - BUY: `(exit_price - entry_price) * quantity`
-   - SELL: `(entry_price - exit_price) * quantity`
-5. Add an `is_winner` property that returns `True` if `pnl > 0`
-6. Add `__str__` method: `"BUY AAPL: +150.00 (WIN)"` or `"SELL AAPL: -50.00 (LOSS)"`
-
-**Paste your code below:**
 ```python
-# algo_backtest/engine/trade.py
+class BadExample:
+    def __init__(self, value):
+        self.value = value
+
+    @property
+    def value(self):
+        return self.value
+
+    @value.setter
+    def value(self, new_value):
+        self.value = new_value
+
+obj = BadExample(10)
+```
+
+**A)** Prints 10
+**B)** RecursionError (infinite loop)
+**C)** AttributeError
+**D)** Works fine, obj.value is 10
+
+**Your answer and explanation:**
+```
+Answer:
+B
 
 
+Explanation:
+The value attribute is left unprotected, but honestly I DON'T UNDERSTAND THIS MYSELF, and I'd like you to explain this further and focus on that tomorrow with a scaffolding approach.
+
+
+How to fix it:
+If we protect the attribute by turning self.value into self._value, the issue disappears.
 
 ```
 
-**Test your Trade class:**
+---
+
+## Task 5: PROJECT - Trade Class Enhancement
+
+Enhance your `Trade` class from Day 1 with:
+
+1. Add a `@property` called `return_percent` that calculates:
+   - For BUY: `((exit_price - entry_price) / entry_price) * 100`
+   - For SELL: `((entry_price - exit_price) / entry_price) * 100`
+
+2. Add a `@property` called `risk_reward_ratio` that:
+   - Requires the Trade to have `stop_loss` and `take_profit` attributes (add if needed)
+   - Calculates: `abs(take_profit - entry_price) / abs(entry_price - stop_loss)`
+   - Returns `None` if stop_loss equals entry_price (division by zero protection)
+
+3. **Fix the `calculate_win_rate` classmethod bug from Day 1:**
+   - Change `trade.pnl()` to `trade.pnl` (property, not method!)
+
+**Test with:**
 ```python
-# In practice.py - paste your test code and output
-from algo_backtest.engine.trade import Trade
-
-# Create a winning BUY trade
-t1 = Trade("AAPL", "buy", 100.0, 110.0, 10)
-print(t1)           # Should show: BUY AAPL: +100.00 (WIN)
-print(t1.pnl)       # Should show: 100.0
-print(t1.is_winner) # Should show: True
-
-# Create a losing SELL trade
-t2 = Trade("TSLA", "sell", 200.0, 220.0, 5)
-print(t2)           # Should show: SELL TSLA: -100.00 (LOSS)
+trade = Trade(
+    ticker="EURUSD",
+    side="BUY",
+    entry_price=1.1000,
+    exit_price=1.1050,
+    quantity=10000,
+    stop_loss=1.0950,
+    take_profit=1.1100
+)
+print(f"P&L: ${trade.pnl:.2f}")
+print(f"Return: {trade.return_percent:.2f}%")
+print(f"R:R Ratio: {trade.risk_reward_ratio:.2f}")
 ```
 
+**Your updated code (paste the new/changed parts):**
+```python
+#Changed parts below:
 
-
-"""Trade management for completed positions."""
-from typing import Optional
-
-class Trade:
-    '''
-    Represents a completed trade
-    
-    Attributes:
-        ticker: Trading symbol.
-        side: 'BUY' or 'SELL'.
-        entry_price: Entry price.
-        exit_price: Exit price.
-        quantity: Number of units.
-        entry_time: Entry timestamp (string or datetime).
-        exit_time: Exit timestamp (string or datetime).
-        pnl: Profit/Loss (calculated automatically).
-        exit_reason: 'SL', 'TP', or 'MANUAL'.
-    '''
-    
     def __init__(self,
                  ticker: str,
                  side: str,
@@ -231,6 +210,8 @@ class Trade:
                  quantity: float,
                  entry_time: Optional[str] = None,
                  exit_time: Optional[str] = None,
+                 stop_loss: Optional[float] = None,
+                 take_profit: Optional[float] = None,
                  exit_reason: Optional[str] = None
                  ):
         
@@ -243,158 +224,129 @@ class Trade:
         self._quantity = quantity
         self._entry_time = entry_time
         self._exit_time = exit_time
+        self._stop_loss = stop_loss
+        self._take_profit = take_profit
         
         if exit_reason is not None:
             self._exit_reason = exit_reason.upper()
         else:
             self._exit_reason = ''
 
-        #Properties - is_winner + pnl
+        #Properties - is_winner + pnl + return_percent
         self.__pnl: Optional[float] = None
         self.__is_winner: Optional[bool] = None
-        
-    def __str__(self):
-        """
-        User-friendly representation.
+        self.__return_percent: Optional[float] = None
+        self.__risk_reward_ratio: Optional[float] = None
 
-        Format: [WIN/LOSS] SIDE QUANTITY TICKER: ENTRY -> EXIT (REASON) | P&L: $X.XX
-        Example: [WIN] BUY 10000 EURUSD: 1.0800 -> 1.0850 (TP) | P&L: $500.00
-        """
-        
-        if self.is_winner == True:
-            result = '[WIN]'
-        else:
-            result = '[LOSS]'
-        
-        return (f'''{result} {self._side} {self._quantity} {self._ticker}: 
-                {self._entry_price} -> {self._exit_price} {self._exit_reason}
-                | P&L: ${self.pnl:.2f}''')
-    
-    def __repr__(self):
-        
-        
-        return (f'Trade(ticker = {self._ticker!r}, side = {self._side!r},'
-                f'entry_price = {self._entry_price}, exit_price = {self._exit_price}'
-                f'quantity = {self._quantity}, pnl = {self.pnl:.2f}, exit_reason = {self._exit_reason!r}'
-        )
-    
-    
+
     @property
-    def pnl(self) -> float:
-        '''
-        Calculate profit/loss based on side.
-
-        Returns:
-            P&L in currency units.
-        '''
-        if self._side != 'BUY' and self._side != 'SELL':
-            print('Incorrect side, it should be either BUY or SELL (case insensitive)')
-            return None
-        elif self._exit_price < 0 or self._entry_price < 0:
-            print('Incorrect exit price or entry price, it should be above 0!')
-            return None
-        
+    def return_percent(self) -> float:
+        '''A property used to calculate the %P/L'''
         if self._side == 'BUY':
-            self.__pnl = (self._exit_price - self._entry_price) * self._quantity
-            return self.__pnl
-        elif self._side == 'SELL':
-            self.__pnl = (self._entry_price - self._exit_price) * self._quantity
-            return self.__pnl
-        
-    @property 
-    def is_winner(self) -> bool:
-        """A property created to check if trade was profitable."""
-        if self.pnl > 0:
-            self.__is_winner = True
+            self.__return_percent = ((self._exit_price - self._entry_price) / self._entry_price) * 100
         else:
-            self.__is_winner = False
+            self.__return_percent = ((self._entry_price - self._exit_price) / self._entry_price) * 100
             
-        return self.__is_winner
-        
+        return self.__return_percent
     
-    @classmethod
-    def calculate_win_rate(cls, trades: list['Trade']) -> float:
-        """
-        Calculate win rate from list of trades.
-
-        Args:
-            trades: List of Trade objects.
-
-        Returns:
-            Win rate as percentage (0-100).
-            Returns 0 if no trades.
-        """
-
-        if trades is not None:
-            trades_profits = [trade.pnl() for trade in trades]
-            winners = [profit for profit in trades_profits if profit > 0]
-            print(trades_profits)
-            return (len(winners) / len(trades_profits)) * 100
-            
-        else:
+    @property
+    def risk_reward_ratio(self) -> float:
+        '''A property used to calc R:R ratio'''
+        if self._stop_loss == self._entry_price:
             return 0
+        else:
+            self.__risk_reward_ratio = abs(self._take_profit - self._entry_price) / abs(self._entry_price - self._stop_loss)
+        return self.__risk_reward_ratio
 
 
-#test_log:
+```
+
+**Test output:**
+```
 $ python practice.py
-[WIN] BUY 10 AAPL: 
-                100.0 -> 110.0
-                | P&L: $100.00
-100.0
-True
-[LOSS] SELL 5 TSLA:
-                200.0 -> 220.0
-                | P&L: $-100.00
+P&L: $50.00
+Return: 0.45%
+R:R Ratio: 2.00
 (.venv) 
+```
+
+---
+
+## Task 6: `random.choice()` vs `random.sample()` Practice
+
+**Q1:** Predict ALL possible outputs of this code:
+```python
+import random
+random.seed(42)
+result = random.choice(['A', 'B', 'C'])
+print(result)
+```
+(Hint: With a seed, the output is deterministic)
+
+
+**Q2:** What's the difference between these two approaches?
+```python
+# Approach A
+picks = [random.choice(items) for _ in range(3)]
+
+# Approach B
+picks = random.sample(items, 3)
+```
+
+**Q3:** Write code that randomly selects 3 unique prices from a list of 10 prices (no duplicates).
+
+**Your answers:**
+```
+Q1: We will always get the same result, as seed gives deterministic output (replicable).
+
+Q2: A - we'd get a random item from the range each time - in a sense we'd get 3 random items, as we're using a list comprehension here - there could've been repetitions.
+B - We'd get a sample of items of length 3 - random and no repetitions.
+
+Q3 (code):
+
+import random
+prices = [random.randrange(0, 400) for i in range(10)]
+print(prices)
+sample = random.sample(prices, 3)
+print(sample)
+
+```
+
+---
+
+## Task 7: PCAP Multiple Choice - Properties & Encapsulation
+
+**Question 1:** What does `@property` allow you to do?
+- A) Make an attribute immutable
+- B) Run code when an attribute is accessed
+- C) Prevent a class from being inherited
+- D) Create class-level constants
+
+**Your answer:**
+B
 
 
 ---
 
-## Task 6: PCAP Drill - Property Edge Cases
-
-What is the output of this code?
-
+**Question 2:** Given this code:
 ```python
-class Counter:
+class Example:
     def __init__(self):
-        self._count = 0
+        self.__data = [1, 2, 3]
 
     @property
-    def count(self):
-        self._count += 1
-        return self._count
+    def data(self):
+        return self.__data
 
-c = Counter()
-print(c.count)
-print(c.count)
-print(c.count)
+e = Example()
+e.data.append(4)
+print(len(e.data))
 ```
-
-**Your prediction:**
-```
-# Output (3 lines):
-
-print(c.count) #1
-print(c.count) #2
-print(c.count) #3
-
-# Why does this happen?
-
-#Each time we call the property it is recalculated and we're given the latest value, simple as that.
-
-
-```
-
----
-
-## Task 7: PCAP Multiple Choice
-
-**Question 1:** What is the purpose of name mangling (`__name`)?
-
-A) To make attributes completely inaccessible
-B) To encrypt attribute values
-C) To prevent accidental name collisions in subclasses
-D) To improve performance
+What is the output?
+- A) 3
+- B) 4
+- C) AttributeError
+- D) TypeError
 
 **Your answer:**
 B
@@ -402,12 +354,22 @@ B
 
 ---
 
-**Question 2:** What error is raised when you try to set a property that has no setter?
+**Question 3:** Which statement about `random.sample()` is TRUE?
+- A) It can return duplicate elements
+- B) It modifies the original list
+- C) The k parameter can exceed the sequence length
+- D) It returns elements in random order without duplicates
 
-A) `TypeError`
-B) `AttributeError`
-C) `ValueError`
-D) `NameError`
+**Your answer:**
+D
+
+---
+
+**Question 4:** What is the purpose of `random.seed()`?
+- A) Generate truly random numbers
+- B) Make random results reproducible
+- C) Reset the random number generator to zero
+- D) Increase randomness quality
 
 **Your answer:**
 B
@@ -415,138 +377,205 @@ B
 
 ---
 
-**Question 3:** Which statement is TRUE about `@property`?
+## Task 8: Integration - Position Risk Validator
 
-A) Properties must always have a setter
-B) Properties are accessed with parentheses like methods
-C) Properties can be used to create read-only attributes
-D) Properties cannot access other instance attributes
+Create a `RiskValidator` class that validates trading positions using properties:
 
-**Your answer:**
-C
+**Requirements:**
+1. Constructor takes: `max_risk_percent` (float), `max_position_size` (float)
+2. Both should be stored as protected attributes with validation:
+   - `max_risk_percent` must be between 0.1 and 10.0
+   - `max_position_size` must be positive
+3. Add `@property` getters for both
+4. Add a method `validate_position(position: Position) -> Tuple[bool, str]` that:
+   - Checks if position quantity exceeds `max_position_size`
+   - Returns `(False, "Position size exceeds maximum")` if invalid
+   - Returns `(True, "Position valid")` if valid
 
+**Test with:**
+```python
+validator = RiskValidator(max_risk_percent=2.0, max_position_size=100.0)
+print(validator.max_risk_percent)  # 2.0
 
----
+# Create a position with 150 units (exceeds max)
+large_position = Position(
+    ticker="AAPL",
+    side="BUY",
+    quantity=150.0,
+    entry_price=150.0
+)
 
-**Question 4:** What does `hasattr(obj, '_Class__attr')` check?
-
-A) If the class has a protected attribute
-B) If the class has a private attribute (name-mangled form)
-C) If the object has a static attribute
-D) If the attribute is callable
-
-**Your answer:**
-B
-
-
----
-
-## Task 8: Integration - Position and Trade Together
-
-Write a short script that:
-1. Creates a Position using `calculate_position_size` (from Week 2)
-2. Simulates that the trade hit take profit
-3. Creates a Trade object from the Position data
-4. Prints both the Position and the Trade
-
-**Scenario:**
-- Account: $10,000, Risk: 2%
-- Entry: $50, Stop Loss: $48, Take Profit: $55
-- Result: Price hit TP at $55
+valid, message = validator.validate_position(large_position)
+print(f"Valid: {valid}, Message: {message}")
+# Valid: False, Message: Position size exceeds maximum
+```
 
 **Your code:**
 ```python
-# Your integration script
-
-from typing import Optional
-from algo_backtest.engine.position import Position
-from algo_backtest.engine.trade import Trade
 
 
-class PositionTrade:
-    '''My practice class which integrates both Position and Trade classes
+from typing import Tuple
+
+class RiskValidator:
     
-       Mainly done for practice purposes for now, but we will see.
-    '''
-    
-    def __init__(self,
-    acc_size: float,
-    risk_percent: float,
-    entry_price: float,
-    asset_name: str,
-    position_side: str,
-    sl: Optional[float] = None,
-    tp: Optional[float] = None,
-    ):
-        self.acc_size = acc_size
-        self.risk_percent = risk_percent
-        self.entry_price = entry_price
-        self.asset_name = asset_name
-        self.position_side = position_side
+    def __init__(self, max_risk_percent: float, max_position_size: float):
         
-        self.sl = sl
-        self.tp = tp
+        self.__max_risk_percent = max_risk_percent
+        self.__max_position_size = max_position_size
         
-        self.position = None
-        self.trade = None
-        
-
-    def create_trade(self):
-        
-        '''A method used to integrate the Position class and create an instance of an active position'''
-
-        try:
-            self.position_size = Position.calculate_position_size(self.acc_size, self.risk_percent, self.entry_price, self.sl)
-            self.position = Position(self.asset_name, self.position_side, self.entry_price, self.position_size, self.sl, self.tp)
-            
-        except Exception as e:
-            print(f'Unexpected error: {str(e)}')
-            
-    def check_trade(self, price):
-        
-        '''A method used to check if the position should close and IF IT SHOULD, we integrate the Trade class'''
-        
-        if self.position is not None and price > 0:
-            check, reason = self.position.should_close(price)
-            if check is True:
-                print('Time to close the position!')
-                self.trade = Trade(self.asset_name, self.position_side, self.entry_price, price, self.position_size, None, None, reason)
-                
-                print(self.trade)
-                print(self.position)
-            else:
-                print('Position still open')
+    @property
+    def max_risk_percent(self) -> float:
+        '''Property max_risk_percent with validation'''
+        if self.__max_risk_percent < 0.1 or self.__max_risk_percent > 10:
+            raise ValueError('Max risk percent should be between 0.1 and 10.0!')
         else:
-            print('There is no position or the given price is below 0')
-            
-            
+            return self.__max_risk_percent
 
-x = PositionTrade(10000, 2, 50, 'DAX', 'Buy', 48, 55)
-x.create_trade()
-x.check_trade(55)
+    @property
+    def max_position_size(self) -> float:
+        '''Property max_position_size with validation'''
+        if self.__max_position_size < 0:
+            raise ValueError('Max position size should be above 0!')
+        else:
+            return self.__max_position_size
+        
+    def validate_position(self, position) -> Tuple[bool, str]:
+        if position.quantity > self.__max_position_size:
+            return (False, 'Position size exceeds maximum')
+        else:
+            return (True, 'Position valid!')
+        
+
+validator = RiskValidator(max_risk_percent=2.0, max_position_size=100.0)
+print(validator.max_risk_percent)  # 2.0
 
 
+from algo_backtest.engine.position import Position
 
-That was a lengthy one and while I started with a simple function, at some point I thought I'd need a class for hte most optimal flow here. Sure, I could hardcode some things or simply do things manually, but this flow allows us to simply enter parameters once and call them with create_trade and check_trade. Anyway, I'm looking forward to your feedback
+large_position = Position(
+    ticker="AAPL",
+    side="BUY",
+    quantity=150.0,
+    entry_price=150.0
+)
 
-Log:
+
+valid, message = validator.validate_position(large_position)
+print(f"Valid: {valid}, Message: {message}")
+
+```
+
+**Test output:**
+```
 
 $ python practice.py
-Time to close the position!
-[WIN] BUY 100.0 DAX: 
-                50 -> 55 BUY TP HIT
-                | P&L: $500.00
-BUY 100.0 @ 50 [SL = 48, TP = 55]
+2.0
+Valid: False, Message: Position size exceeds maximum
+(.venv) 
+
+```
+
+---
+
+## Bonus Task 9: Random Trade Generator (Optional)
+
+Create a function `generate_random_trades(n: int, tickers: List[str]) -> List[Trade]` that:
+
+1. Uses `random.choice()` to pick a random ticker for each trade
+2. Uses `random.choice(['BUY', 'SELL'])` for side
+3. Uses `random.uniform(10.0, 200.0)` for entry_price (look this up!)
+4. Calculates exit_price as entry_price ± random 1-5%
+5. Uses `random.randint(1, 100)` for quantity
+
+**Example:**
+```python
+tickers = ['AAPL', 'GOOGL', 'MSFT', 'AMZN']
+trades = generate_random_trades(5, tickers)
+for trade in trades:
+    print(trade)
+```
+
+**Your code:**
+```python
+
+import random
+from typing import List
+from algo_backtest.engine.trade import Trade
+
+def generate_random_trades(n: int, tickers: List[str]) -> List[Trade]:
+    '''A function used to generate a number of random trades
+    
+    Args: 
+    n - the number of trades you want to generate
+    tickers - the list of tickers you want to use in the generator
+    
+    Returns:
+    - a list of generated trades
+    '''
+    
+    trades = []
+    
+    for i in range(n):
+        ticker = random.choice(tickers)
+        side = random.choice(['BUY', 'SELL'])
+        entry_price = random.uniform(120.0, 200.0)
+        exit_price = entry_price * random.uniform(0.95, 1.05)
+        quantity = random.randint(1, 100)
+        
+        trade = Trade(ticker, side, entry_price, exit_price, quantity)
+        trades.append(trade)
+        
+    return trades
+
+
+tickers = ['AAPL', 'GOOGL', 'MSFT', 'AMZN']
+trades = generate_random_trades(5, tickers)
+for trade in trades:
+    print(trade)
+
+
+log:
+$ python practice.py
+[LOSS] SELL 34 AAPL: 
+                185.98111874245407 -> 186.7779514338092
+                | P&L: $-27.09
+[WIN] SELL 36 AMZN:
+                194.20487593635704 -> 187.88404543653377
+                | P&L: $227.55
+[LOSS] BUY 7 GOOGL:
+                120.58725843989532 -> 118.93887978985677
+                | P&L: $-11.54
+[WIN] BUY 5 AAPL:
+                126.71241306407863 -> 131.95414869532704
+                | P&L: $26.21
+[WIN] SELL 10 AMZN:
+                184.4049033108104 -> 181.14097146272442
+                | P&L: $32.64
+
 
 
 
 ```
+
+---
+
+## Checklist
+
+- [ ] Task 1: random module basics (4 questions)
+- [ ] Task 2: seed() output prediction
+- [ ] Task 3: Percentage class with validation
+- [ ] Task 4: Property infinite recursion trap
+- [ ] Task 5: Trade class enhancements
+- [ ] Task 6: choice vs sample practice
+- [ ] Task 7: Multiple choice (4 questions)
+- [ ] Task 8: RiskValidator class
+- [ ] Bonus Task 9: Random trade generator (optional)
 
 ---
 
 ## Feedback Section
 
-**Time spent:** 120 minutes
+**Time spent:** ___ minutes
 
 **Difficulty (1-10):**
 
@@ -556,5 +585,9 @@ BUY 100.0 @ 50 [SL = 48, TP = 55]
 **What's confusing:**
 
 
-**Questions:**
+**Questions for mentor:**
 
+
+---
+
+**When complete:** Fill out feedback section above and notify mentor for assessment.
