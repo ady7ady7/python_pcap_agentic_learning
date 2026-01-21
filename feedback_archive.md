@@ -1468,3 +1468,110 @@ print(c.parent_attr)  # AttributeError! Never created
 
 ---
 
+## Week 3, Day 3 - 2026-01-21
+
+**Topic:** Decorators, Special Methods & PCAP Drills
+
+### Student Self-Assessment
+- **Tasks Completed:** 8/8
+- **Difficulty:** 5-6/10
+- **Time Spent:** 70 minutes
+
+### Student Reflection
+**What clicked:**
+- Everything was doable today
+
+**What's confusing:**
+- New dunder methods need reference notes (created `week3_dunder_methods.md`)
+- Encapsulation and inheriting values via classes still tricky
+- Confusion about whether `__init__` values are inherited with/without `super()`
+
+**Student Feedback:**
+- Dunder methods (`__eq__`, `__len__`, `__iter__`, `__hash__`) weren't taught before being tested
+- Requested dunder methods lesson file (created)
+- Needs more scaffolded examples showing inheritance with/without `super()`
+
+### Mentor Assessment
+
+**Score: 89% (B+)**
+
+**Task Breakdown:**
+
+1. **Exception Hierarchy (4 questions):** 75%
+   - Q1: ✅ B (BaseException) - correct
+   - Q2: ✅ ValueError - correct
+   - Q3: ✅ Correct - KeyboardInterrupt is BaseException, not Exception
+   - Q4: ⚠️ Incomplete - bare `except:` catches EVERYTHING (including SystemExit, KeyboardInterrupt), not just "does nothing"
+
+2. **BankAccount Class:** 90%
+   - ✅ Private attributes (`__owner`, `__balance`)
+   - ✅ Read-only properties (no setters)
+   - ✅ `deposit()` and `withdraw()` methods work
+   - ✅ `__str__` implemented
+   - ⚠️ Validation for negative balance in wrong place (getter vs `__init__`)
+
+3. **`__str__` vs `__repr__`:** 80%
+   - ✅ Q2 predictions all correct
+   - ⚠️ Q1 `__repr__`: Used `!r` on class name adding unwanted quotes
+
+4. **TradeManager Class:** 100%
+   - ✅ All methods implemented correctly
+   - ✅ `__len__` and `__iter__` work
+   - ✅ Properties for total_pnl, win_rate, trade_count
+   - ✅ Output matches expected
+   - Smart incremental calculation approach
+
+5. **Multiple Choice (4 questions):** 100%
+   - Q1: ✅ B (False True) - missing `super().__init__()`
+   - Q2: ✅ B (property without setter)
+   - Q3: ✅ B (AttributeError - `_value` never defined)
+   - Q4: ✅ B (1 2 3) - class attribute counter
+
+6. **Debug Product Class (4 bugs):** 100%
+   - ✅ Bug 1: `self.price` → `self._price` (recursion)
+   - ✅ Bug 2: Added ValueError for negative values
+   - ✅ Bug 3: `(1 - percent)` → `(1 - percent / 100)`
+   - ✅ Bug 4: Missing `:` after `def __str__(self)`
+
+7. **Position `__eq__` and `__hash__`:** 90%
+   - ✅ Both methods implemented correctly
+   - ✅ Output correct (True, False, 2)
+   - ✅ Set deduplication works
+   - ⚠️ Code truncated in submission (docstring not closed)
+
+8. **Mutable Default Arguments:** 100%
+   - ✅ Correct output prediction
+   - ✅ Perfect fix using `None` default pattern
+
+**Weighted Score: 89%**
+
+**Strengths:**
+- ✅ TradeManager implementation excellent (all 9 requirements met)
+- ✅ Debugging skills strong (all 4 bugs found)
+- ✅ Multiple choice 100%
+- ✅ Good understanding of mutable default trap
+- ✅ Quick completion (70 minutes)
+
+**Areas for Improvement:**
+- Bare `except:` issues (catches more than expected)
+- Validation placement (`__init__` vs getter)
+- `__repr__` formatting (avoid `!r` on class name)
+
+**Critical Feedback Addressed:**
+1. ✅ Created `week3_dunder_methods.md` with table of contents
+2. ⚠️ Need scaffolded inheritance/super() examples for Day 4
+
+**Project Milestones:**
+- ✅ TradeManager class created with full functionality
+- ✅ Position enhanced with `__eq__` and `__hash__`
+- ✅ Dunder methods lesson file created
+
+**Action Items for Day 4:**
+1. Add scaffolded inheritance/super() examples in tasks
+2. More practice with `__init__` inheritance patterns
+3. Continue PCAP focus
+
+**Mentor Note:** Good Day 3 session with 89% score. Student completed 8 tasks in 70 minutes - very efficient. The request for dunder methods documentation was valid and has been addressed. The confusion about inheritance and `super()` is a common sticking point - will add scaffolded examples showing exactly when parent `__init__` runs. The TradeManager implementation shows strong class-building skills with all 9 requirements met perfectly.
+
+---
+

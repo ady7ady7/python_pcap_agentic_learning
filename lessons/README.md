@@ -83,11 +83,19 @@ This directory contains all theoretical lessons organized by week and topic.
 - Building the `Trade` class with proper encapsulation
 - **PCAP Traps:** Name mangling confusion, property vs method syntax, read-only properties
 
-### [The random Module](week3_random_module.md)
-- `random()`, `seed()`, `randint()`, `randrange()` basics
-- `choice()` - picking a single element from a sequence
-- `sample()` - picking multiple unique elements
+### [Useful Standard Library Modules](week3_useful_modules.md)
+- **random** - pseudo-random number generation, `choice()`, `sample()`
+- **platform** - system/hardware information, execution layers
 - **PCAP Traps:** `randint` inclusive vs `randrange` exclusive, `sample()` requires k <= len(seq)
+
+### [Dunder (Magic) Methods](week3_dunder_methods.md)
+- `__str__` vs `__repr__` - string representations
+- `__len__`, `__iter__` - making objects work with len() and for loops
+- `__eq__`, `__hash__` - equality and hashing for sets/dicts
+- Comparison methods (`__lt__`, `__gt__`, etc.)
+- Arithmetic methods (`__add__`, `__sub__`, etc.)
+- `__getitem__`, `__contains__` - indexing and membership
+- **PCAP Traps:** `__eq__` without `__hash__`, default identity comparison
 
 ---
 

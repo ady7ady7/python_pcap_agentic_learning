@@ -397,3 +397,43 @@ Format: Date | Topic | Score | Difficulty | Notes
 
 ---
 
+## Week 3, Day 2 - 2026-01-20
+
+**Topic:** Advanced Properties, Validation & `random` Module
+**Score:** 8/8 + Bonus | 91% (A-)
+**Difficulty:** 5/10
+**Time Spent:** 120 minutes
+
+**Tasks Completed:**
+1. PCAP warm-up - random module basics (4 questions - 2/4)
+2. Predict output - seed() behavior
+3. Percentage class with validation
+4. Property infinite recursion trap (PCAP trap)
+5. PROJECT: Trade class enhancements (return_percent, risk_reward_ratio)
+6. choice() vs sample() practice
+7. PCAP multiple choice (4 questions - 4/4)
+8. RiskValidator class with property validation
+9. BONUS: Random trade generator function
+
+**Key Learnings:**
+- Property validation patterns (setter with constraints)
+- Property recursion trap (use `self._value` not `self.value`)
+- `random.seed()` makes results reproducible
+- `choice()` can repeat, `sample()` returns unique elements
+
+**Critical Corrections:**
+- `random.random()` returns [0.0, 1.0) - excludes 1, not 0
+- `randint` and `randrange` both return integers (difference is endpoint inclusion)
+
+**Student Feedback:**
+- Wants more coding, fewer prediction tasks
+- `random` module is low priority - PCAP exam is the focus
+- Requested scaffolded explanation for property recursion
+
+**Project Milestones:**
+- Trade class enhanced with `return_percent` and `risk_reward_ratio` properties
+- RiskValidator class created with property-based validation
+- Random trade generator function working
+
+---
+

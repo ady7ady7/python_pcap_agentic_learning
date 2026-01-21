@@ -44,6 +44,16 @@ class Position:
     def __repr__(self) -> str:
         '''A Python magic method used to provide devs with useful information to recreate the object '''
         return f'Position(ticker = {self.ticker}, side = {self.side}, entry_price = {self.entry_price}, quantity = {self.quantity}, stop_loss = {self.stop_loss}, take_profit = {self.take_profit})'
+    
+    def __hash__(self):
+        '''A dunder method that allows us to hash a given position to later be used in a dictionary'''
+        return hash((self.ticker, self.side, self.entry_price, self.quantity))
+    
+    def __eq__(self, other) -> bool:
+        '''Checks whether two positions are equal to each other
+        
+        '''
+        return self.ticker == other.ticker and self.side == other.side and self.entry_price == other.entry_price and self.quantity == other.quantity
         
     def calculate_pnl(self, current_price: float) -> float:
         
