@@ -2035,3 +2035,1118 @@ import numpy as np
 # size = calc.calculate_position_size(1, 50, 48)  # Should be 50 shares
 # print(size)
 
+#W2 D5 T2 - Output prediction
+
+# class Vehicle:
+#     wheels = 4
+
+#     def __init__(self, brand):
+#         self.brand = brand
+
+#     def describe(self):
+#         return f"{self.brand} with {self.wheels} wheels"
+
+# class Motorcycle(Vehicle):
+#     wheels = 2
+
+# class Car(Vehicle):
+#     def __init__(self, brand, doors):
+#         super().__init__(brand)
+#         self.doors = doors
+
+#     def describe(self):
+#         return f"{super().describe()}, {self.doors} doors"
+
+# # What prints?
+# m = Motorcycle("Honda")
+# c = Car("Toyota", 4)
+
+# print(m.describe()) #-> Honda with 2 wheels
+# print(c.describe()) #-> Toyota with 4 wheels, 4 doors
+# print(m.wheels, c.wheels) #-> 2 4
+
+
+#W2 D5 T3 - Predict the output
+# def risky_operation(x):
+#     try:
+#         if x == 0:
+#             raise ValueError("Zero not allowed")
+#         result = 10 / x
+#     except ValueError as e:
+#         print(f"Caught: {e}")
+#         return -1
+#     except ZeroDivisionError:
+#         print("Division by zero!")
+#         return -2
+#     else:
+#         print(f"Success: {result}")
+#         return result
+#     finally:
+#         print("Cleanup done")
+
+# print(risky_operation(0))
+# print("---")
+# print(risky_operation(2))
+
+# #1 - Caught: Zero not allowed. Cleanup done. -1
+# #2 - Success: 5.0 Cleanup done. 5.0
+
+
+#W2 D5 T4 - Output prediction
+
+# class Counter:
+#     count = 0
+
+#     def __init__(self):
+#         Counter.count += 1
+
+#     @classmethod
+#     def get_count(cls):
+#         return cls.count
+
+#     @staticmethod
+#     def validate(value):
+#         return value > 0
+
+# print(Counter.get_count()) #0
+# c1 = Counter() #2
+# c2 = Counter() #2
+# print(Counter.get_count()) #2
+# print(c1.get_count()) #5
+# print(Counter.validate(-5))#False
+# print(c2.validate(10)) #True
+
+'''
+
+When we create actual class objects, the count value is increased with init.
+As classmethod doesn't include actually creating any object, it doesn't use the init - it doesn't increase the count value, but it's obviously able to fetch it, and since it's a shared class attribute, we get the last value.
+
+When creating a new class object (as c1, c2), we increase that count value by 1, as it's a shared class attribute.
+
+'''
+
+#W2 D5 T5
+
+# from algo_backtest.engine.position import Position
+
+# position_size = Position.calculate_position_size(10000, 2, 100, 95)
+# print(position_size)
+# position = Position('DAX', 'Buy', 25100, position_size, 24900, 25300)
+# print(str(position))
+
+
+#W2 D5 T7 - Bug fix
+
+# class Strategy:
+#     active_count = 0
+
+#     def __init__(self, name):
+#         self.name = name
+#         active_count += 1  # Bug 1
+
+#     @classmethod
+#     def get_active(self):  # Bug 2
+#         return cls.active_count
+
+#     @staticmethod
+#     def validate_name(name):
+#         return len(name) > 0 and self.name.isalpha()  # Bug 3
+
+#     def describe():  # Bug 4
+#         return f"Strategy: {self.name}"
+    
+# #1. We will not increase active_count as it's in local scope
+# #2 Class method CANNOT use self, it uses cls instead
+# #3 static_method DOES NOT have access to class attributes, it's a self standing function only with its own attributes
+# #4 Lack of self in describe method
+# #5 - lack of docs/typehints - not a bug, but a bad practice
+
+#FIXED VERSION BELOW:
+
+# class Strategy:
+#     '''Mock docstring'''
+#     active_count = 0
+
+#     def __init__(self, name: str):
+#         self.name = name
+#         Strategy.active_count += 1
+
+#     @classmethod
+#     def get_active(cls) -> int:  
+#         '''Returns count of active strategies'''
+#         return cls.active_count
+
+#     @staticmethod
+#     def validate_name(name) -> bool:
+#         '''A standalone method/function that allows to validate any name'''
+#         return len(name) > 0 and name.isalpha()
+
+#     def describe(self) -> str:  
+#         '''Returns the name of a given strategy'''
+#         return f"Strategy: {self.name}"
+
+
+
+#W3 D1 T2 - Output prediction
+
+# class Secret:
+#     def __init__(self):
+#         self._protected = "visible"
+#         self.__private = "hidden"
+
+#     def reveal(self):
+#         return self.__private
+
+# s = Secret()
+# print(s._protected) #visible
+# print(s.reveal()) #hidden
+# print(hasattr(s, '__private')) #False
+# print(hasattr(s, '_Secret__private')) #True
+
+#W3 D1 T3 - Output prediction
+
+# class Temperature:
+#     def __init__(self, celsius):
+#         self._celsius = celsius
+
+#     @property
+#     def celsius(self):
+#         return self._celsius
+
+#     @property
+#     def fahrenheit(self):
+#         return self._celsius * 9/5 + 32
+
+# t = Temperature(25) 
+# print(t.celsius) #25
+# print(t.fahrenheit) # 77
+# t.celsius = 30  # What happens here? Error - there's no such attribute as 'celsius' in the Temperature class.
+
+#W3 D1 T4 - Code impl
+
+# Create a `Price` class that:
+# 1. Has a protected `_value` attribute
+# 2. Has a `value` property (getter)
+# 3. Has a `value` setter that validates: value must be >= 0
+# 4. Raises `ValueError` with message "Price cannot be negative" if validation fails
+
+# class Price:
+#     '''A mock docstring of a mock class used for practice'''
+    
+#     def __init__(self, value: float):
+#         self._value = value
+    
+#     @property
+#     def value(self) -> float:
+#         return self._value
+    
+#     @value.setter
+#     def value(self, value: float) -> None:
+#         if value >= 0:
+#             self._value = value
+#         else:
+#             raise ValueError('Price cannot be negative!')
+
+
+# # Test it:
+# p = Price(100)
+# print(p.value)      # Should print: 100
+# p.value = 150       # Should work
+# print(p.value)      # Should print: 150
+# p.value = -10       # Should raise ValueError
+#works.
+
+
+
+#W3 D1 T5 -  modifying Trade class in algo_backtest/engine/trade.py - protected attributes, pnl as a property, is_winner property
+
+# In practice.py - paste your test code and output
+# from algo_backtest.engine.trade import Trade
+
+# # Create a winning BUY trade
+# t1 = Trade("AAPL", "buy", 100.0, 110.0, 10)
+# print(t1)           # Should show: BUY AAPL: +100.00 (WIN)
+# print(t1.pnl)       # Should show: 100.0
+# print(t1.is_winner) # Should show: True
+
+# # Create a losing SELL trade
+# t2 = Trade("TSLA", "sell", 200.0, 220.0, 5)
+# print(t2)           # Should show: SELL TSLA: -100.00 (LOSS)
+
+
+#Updated Trade class pasted here as well:
+
+# """Trade management for completed positions."""
+# from typing import Optional
+
+# class Trade:
+#     '''
+#     Represents a completed trade
+    
+#     Attributes:
+#         ticker: Trading symbol.
+#         side: 'BUY' or 'SELL'.
+#         entry_price: Entry price.
+#         exit_price: Exit price.
+#         quantity: Number of units.
+#         entry_time: Entry timestamp (string or datetime).
+#         exit_time: Exit timestamp (string or datetime).
+#         pnl: Profit/Loss (calculated automatically).
+#         exit_reason: 'SL', 'TP', or 'MANUAL'.
+#     '''
+    
+#     def __init__(self,
+#                  ticker: str,
+#                  side: str,
+#                  entry_price: float,
+#                  exit_price: float,
+#                  quantity: float,
+#                  entry_time: Optional[str] = None,
+#                  exit_time: Optional[str] = None,
+#                  exit_reason: Optional[str] = None
+#                  ):
+        
+#         """Initialize a completed trade and calculate P&L."""
+        
+#         self._ticker = ticker
+#         self._side = side.upper()
+#         self._entry_price = entry_price
+#         self._exit_price = exit_price
+#         self._quantity = quantity
+#         self._entry_time = entry_time
+#         self._exit_time = exit_time
+        
+#         if exit_reason is not None:
+#             self._exit_reason = exit_reason.upper()
+#         else:
+#             self._exit_reason = ''
+
+#         #Properties - is_winner + pnl
+#         self.__pnl: Optional[float] = None
+#         self.__is_winner: Optional[bool] = None
+        
+#     def __str__(self):
+#         """
+#         User-friendly representation.
+
+#         Format: [WIN/LOSS] SIDE QUANTITY TICKER: ENTRY -> EXIT (REASON) | P&L: $X.XX
+#         Example: [WIN] BUY 10000 EURUSD: 1.0800 -> 1.0850 (TP) | P&L: $500.00
+#         """
+        
+#         if self.is_winner == True:
+#             result = '[WIN]'
+#         else:
+#             result = '[LOSS]'
+        
+#         return (f'''{result} {self._side} {self._quantity} {self._ticker}: 
+#                 {self._entry_price} -> {self._exit_price} {self._exit_reason}
+#                 | P&L: ${self.pnl:.2f}''')
+    
+#     def __repr__(self):
+        
+        
+#         return (f'Trade(ticker = {self._ticker!r}, side = {self._side!r},'
+#                 f'entry_price = {self._entry_price}, exit_price = {self._exit_price}'
+#                 f'quantity = {self._quantity}, pnl = {self.pnl:.2f}, exit_reason = {self._exit_reason!r}'
+#         )
+    
+    
+#     @property
+#     def pnl(self) -> float:
+#         '''
+#         Calculate profit/loss based on side.
+
+#         Returns:
+#             P&L in currency units.
+#         '''
+#         if self._side != 'BUY' and self._side != 'SELL':
+#             print('Incorrect side, it should be either BUY or SELL (case insensitive)')
+#             return None
+#         elif self._exit_price < 0 or self._entry_price < 0:
+#             print('Incorrect exit price or entry price, it should be above 0!')
+#             return None
+        
+#         if self._side == 'BUY':
+#             self.__pnl = (self._exit_price - self._entry_price) * self._quantity
+#             return self.__pnl
+#         elif self._side == 'SELL':
+#             self.__pnl = (self._entry_price - self._exit_price) * self._quantity
+#             return self.__pnl
+        
+#     @property 
+#     def is_winner(self) -> bool:
+#         """A property created to check if trade was profitable."""
+#         if self.pnl > 0:
+#             self.__is_winner = True
+#         else:
+#             self.__is_winner = False
+            
+#         return self.__is_winner
+        
+    
+#     @classmethod
+#     def calculate_win_rate(cls, trades: list['Trade']) -> float:
+#         """
+#         Calculate win rate from list of trades.
+
+#         Args:
+#             trades: List of Trade objects.
+
+#         Returns:
+#             Win rate as percentage (0-100).
+#             Returns 0 if no trades.
+#         """
+
+#         if trades is not None:
+#             trades_profits = [trade.pnl() for trade in trades]
+#             winners = [profit for profit in trades_profits if profit > 0]
+#             print(trades_profits)
+#             return (len(winners) / len(trades_profits)) * 100
+            
+#         else:
+#             return 0
+
+
+#W3 D1 T6 - Property output prediction
+
+# class Counter:
+#     def __init__(self):
+#         self._count = 0
+
+#     @property
+#     def count(self):
+#         self._count += 1
+#         return self._count
+
+# c = Counter()
+# print(c.count) #1
+# print(c.count) #2
+# print(c.count) #3
+
+
+#W3 D1 T8 - it was supposed to be just a script to integrate Position with Trade,
+#As a result of a natural flow I quickly moved to an idea of creating another class
+
+# from typing import Optional
+# from algo_backtest.engine.position import Position
+# from algo_backtest.engine.trade import Trade
+
+
+# class PositionTrade:
+#     '''My practice class which integrates both Position and Trade classes
+    
+#        Mainly done for practice purposes for now, but we will see.
+#     '''
+    
+#     def __init__(self,
+#     acc_size: float,
+#     risk_percent: float,
+#     entry_price: float,
+#     asset_name: str,
+#     position_side: str,
+#     sl: Optional[float] = None,
+#     tp: Optional[float] = None,
+#     ):
+#         self.acc_size = acc_size
+#         self.risk_percent = risk_percent
+#         self.entry_price = entry_price
+#         self.asset_name = asset_name
+#         self.position_side = position_side
+        
+#         self.sl = sl
+#         self.tp = tp
+        
+#         self.position = None
+#         self.trade = None
+        
+
+#     def create_trade(self):
+        
+#         '''A method used to integrate the Position class and create an instance of an active position'''
+
+#         try:
+#             self.position_size = Position.calculate_position_size(self.acc_size, self.risk_percent, self.entry_price, self.sl)
+#             self.position = Position(self.asset_name, self.position_side, self.entry_price, self.position_size, self.sl, self.tp)
+            
+#         except Exception as e:
+#             print(f'Unexpected error: {str(e)}')
+            
+#     def check_trade(self, price):
+        
+#         '''A method used to check if the position should close and IF IT SHOULD, we integrate the Trade class'''
+        
+#         if self.position is not None and price > 0:
+#             check, reason = self.position.should_close(price)
+#             if check is True:
+#                 print('Time to close the position!')
+#                 self.trade = Trade(self.asset_name, self.position_side, self.entry_price, price, self.position_size, None, None, reason)
+                
+#                 print(self.trade)
+#                 print(self.position)
+#             else:
+#                 print('Position still open')
+#         else:
+#             print('There is no position or the given price is below 0')
+            
+            
+
+# x = PositionTrade(10000, 2, 50, 'DAX', 'Buy', 48, 55)
+# x.create_trade()
+# x.check_trade(55)
+
+
+#W3 D2 T2 - random testing
+
+# import random
+
+# random.seed(100)
+# a = random.randint(1, 10)
+
+# random.seed(100)
+# b = random.randint(1, 10)
+
+# random.seed(200)
+# c = random.randint(1, 10)
+
+# print(a == b) #True
+# print(a == c) #False
+
+
+#W3 D2 T3
+
+# class Percentage:
+#     def __init__(self, value):
+#         self._value = value
+    
+#     @property
+#     def value(self):
+#         return self._value
+    
+#     @value.setter
+#     def value(self, setter):
+#         if setter in range(0, 101):
+#             self._value = setter
+#         else:
+#             raise ValueError('Percentage must be between 0 and 100!')
+    
+#     @property
+#     def as_decimal(self):
+#         return self._value / 100
+    
+# p = Percentage(50)
+# print(p.value)      # 50
+# print(p.as_decimal) # 0.5
+# p.value = 75
+# print(p.value)      # 75
+# p.value = 150  
+
+#W3 D2 T4 - before the attribute was unprotected and caused RecursionError
+
+# class BadExample:
+#     def __init__(self, value):
+#         self._value = value
+
+#     @property
+#     def value(self):
+#         return self._value
+
+#     @value.setter
+#     def value(self, new_value):
+#         self._value = new_value
+
+# obj = BadExample(10)
+
+
+#W3 D2 T5 - updating the Trade class - added tp/sl as optional init values + risk_reward_ratio and return_percent as properties
+# from algo_backtest.engine.trade import Trade
+
+# trade = Trade(
+#     ticker="EURUSD",
+#     side="BUY",
+#     entry_price=1.1000,
+#     exit_price=1.1050,
+#     quantity=10000,
+#     stop_loss=1.0950,
+#     take_profit=1.1100
+# )
+# print(f"P&L: ${trade.pnl:.2f}")
+# print(f"Return: {trade.return_percent:.2f}%")
+# print(f"R:R Ratio: {trade.risk_reward_ratio:.2f}")
+
+
+
+#W3 D2 T6
+
+# import random
+# random.seed(42)
+# result = random.choice(['A', 'B', 'C'])
+# print(result)
+
+# picks = [random.choice(items) for _ in range(3)]
+
+# picks = random.sample(items, 3)
+
+# import random
+# prices = [random.randrange(0, 400) for i in range(10)]
+# print(prices)
+# sample = random.sample(prices, 3)
+# print(sample)
+
+
+# class Example:
+#     def __init__(self):
+#         self.__data = [1, 2, 3]
+
+#     @property
+#     def data(self):
+#         return self.__data
+
+# e = Example()
+# e.data.append(4)
+# print(len(e.data))
+
+#W3 D2 T8 - Risk Validator class
+
+# from typing import Tuple
+
+# class RiskValidator:
+    
+#     def __init__(self, max_risk_percent: float, max_position_size: float):
+        
+#         self.__max_risk_percent = max_risk_percent
+#         self.__max_position_size = max_position_size
+        
+#     @property
+#     def max_risk_percent(self) -> float:
+#         '''Property max_risk_percent with validation'''
+#         if self.__max_risk_percent < 0.1 or self.__max_risk_percent > 10:
+#             raise ValueError('Max risk percent should be between 0.1 and 10.0!')
+#         else:
+#             return self.__max_risk_percent
+
+#     @property
+#     def max_position_size(self) -> float:
+#         '''Property max_position_size with validation'''
+#         if self.__max_position_size < 0:
+#             raise ValueError('Max position size should be above 0!')
+#         else:
+#             return self.__max_position_size
+        
+#     def validate_position(self, position) -> Tuple[bool, str]:
+#         if position.quantity > self.__max_position_size:
+#             return (False, 'Position size exceeds maximum')
+#         else:
+#             return (True, 'Position valid!')
+        
+
+# validator = RiskValidator(max_risk_percent=2.0, max_position_size=100.0)
+# print(validator.max_risk_percent)  # 2.0
+
+
+# from algo_backtest.engine.position import Position
+
+# large_position = Position(
+#     ticker="AAPL",
+#     side="BUY",
+#     quantity=150.0,
+#     entry_price=150.0
+# )
+
+
+# valid, message = validator.validate_position(large_position)
+# print(f"Valid: {valid}, Message: {message}")
+
+
+#W3 D2 T9 - Random trade generator
+
+# import random
+# from typing import List
+# from algo_backtest.engine.trade import Trade
+
+# def generate_random_trades(n: int, tickers: List[str]) -> List[Trade]:
+#     '''A function used to generate a number of random trades
+    
+#     Args: 
+#     n - the number of trades you want to generate
+#     tickers - the list of tickers you want to use in the generator
+    
+#     Returns:
+#     - a list of generated trades
+#     '''
+    
+#     trades = []
+    
+#     for i in range(n):
+#         ticker = random.choice(tickers)
+#         side = random.choice(['BUY', 'SELL'])
+#         entry_price = random.uniform(120.0, 200.0)
+#         exit_price = entry_price * random.uniform(0.95, 1.05)
+#         quantity = random.randint(1, 100)
+        
+#         trade = Trade(ticker, side, entry_price, exit_price, quantity)
+#         trades.append(trade)
+        
+#     return trades
+
+
+# tickers = ['AAPL', 'GOOGL', 'MSFT', 'AMZN']
+# trades = generate_random_trades(5, tickers)
+# for trade in trades:
+#     print(trade)
+
+#W3 D3 T1
+
+# try:
+#     x = int("abc")
+# except Exception as e:
+#     print(type(e).__name__)
+    
+#W3 D3 T2
+
+# class BankAccount:
+#     def __init__(self, owner: str, initial_balance: float = 0.0):
+#         self.__owner = owner
+#         self.initial_balance = initial_balance
+#         self.__balance = self.initial_balance
+        
+#     def __str__(self):
+#         return f'{__class__.__name__}(owner = {self.__owner}, balance = {self.__balance})'
+        
+#     @property
+#     def owner(self) -> str:
+#         return self.__owner
+    
+#     @property
+#     def balance(self) -> float:
+#         if self.initial_balance < 0:
+#             raise ValueError('Initial balance cannot be below 0!')
+#         else:
+#             return self.__balance
+        
+#     def deposit(self, amount: float):
+#         self.__balance += amount
+    
+#     def withdraw(self, amount: float):
+#         if amount > self.__balance:
+#             print(f'The current balance is lower than the amount you want to withdraw!')
+#             return False
+#         else:
+#             self.__balance -= amount
+#             print(f'Successfully withdrawn ${amount:.2f} from the account.')
+#             return True
+    
+    
+    
+# acc = BankAccount("Alice", 100.0)
+# print(acc.owner)          # Alice
+# print(acc.balance)        # 100.0
+# acc.deposit(50.0)
+# print(acc.balance)        # 150.0
+# success = acc.withdraw(200.0)
+# print(success)            # False (insufficient funds)
+# print(acc.balance)        # 150.0 (unchanged)
+# acc.owner = "Bob"         # AttributeError (read-only)
+# print(acc)
+
+
+#W3 D3 T3
+
+# class Point:
+#     def __init__(self, x: int, y: int):
+#         self.x = x
+#         self.y = y
+
+#     def __str__(self) -> str:
+#         '''Simplified string representation if anybody wants to print a class instance'''
+#         return f'{__class__.__name__} at ({self.x}, {self.y})'
+    
+#     def __repr__(self) -> str:
+#         '''Unambigous representation for devs'''
+#         return f'{__class__.__name__!r}(x = {self.x}, y = {self.y})'
+    
+    
+
+# p = Point(3, 5)
+# print(p)           # Which method? str
+# print([p])         # Which method?
+# print(f"{p}")      # Which method?
+# print(f"{p!r}")    # Which method? -> repr
+
+#W3 D3 T4
+
+# from typing import List
+# from algo_backtest.engine.trade import Trade
+
+# class TradeManager:
+#     '''Mock class used to manage trades with the Trade class, we can calculate the win rate, total pnl etc.
+#        Requires Trade class import from algo_backtest/engine/trade.py'''
+    
+#     def __init__(self):
+#         self._trades = []
+#         self.__total_pnl: float = 0.0
+#         self.__win_rate: float = 0.0
+#         self.__trade_count: int = 0
+        
+#         self.winning_trades = 0
+        
+#     def __len__(self):
+#         '''Length dunder method'''
+#         return len(self._trades)
+
+#     def __iter__(self):
+#         '''Iter dunder method, making the objects in the TradeManager iterable'''
+#         return iter(self._trades)
+    
+#     @property 
+#     def trade_count(self):
+#         return self.__trade_count
+    
+#     @property
+#     def total_pnl(self):
+#         return self.__total_pnl
+    
+#     @property
+#     def win_rate(self):
+#         self.__win_rate = (self.winning_trades / self.__trade_count * 100)
+#         return self.__win_rate
+        
+    
+#     def add_trade(self, trade: Trade) -> None:
+#         '''A method used to add trades created with a Trade class'''
+#         self._trades.append(trade)
+#         self.__trade_count += 1
+#         self.__total_pnl += trade.pnl
+#         if trade.pnl > 0:
+#             self.winning_trades += 1
+        
+#     def remove_trade(self, ticker: str) -> bool:
+#         '''A method used to remove trades and return a T/F'''
+#         for trade in self._trades:
+#             if trade.ticker == ticker:
+#                 self._trades.remove(trade)
+#                 return True
+#         print('Did not find a trade with requested ticker')
+#         return False
+
+#     def get_trades_by_side(self, side: str) -> List[Trade]:
+#         '''Gets all of the trades that are either 'BUY' or 'SELL' '''
+#         filtered_trades = []
+        
+#         for trade in self._trades:
+#             if trade.side == side:
+#                 filtered_trades.append(trade)
+        
+#         return filtered_trades
+
+
+
+# manager = TradeManager()
+# manager.add_trade(Trade("AAPL", "BUY", 100, 110, 10))   # +100 PnL
+# manager.add_trade(Trade("GOOGL", "SELL", 200, 190, 5))  # +50 PnL
+# manager.add_trade(Trade("MSFT", "BUY", 50, 45, 20))     # -100 PnL
+
+# print(f"Total P&L: ${manager.total_pnl:.2f}")  # $50.00
+# print(f"Win Rate: {manager.win_rate:.1f}%")    # 66.7%
+# print(f"Trade Count: {manager.trade_count}")   # 3
+# print(f"Length: {len(manager)}")               # 3
+
+# for trade in manager:
+#     print(trade)
+
+#W3 D3 T5
+# class A:
+#     def __init__(self):
+#         self.x = 1
+
+# class B(A):
+#     def __init__(self):
+#         self.y = 2
+
+# b = B()
+# print(hasattr(b, 'x'), hasattr(b, 'y'))
+
+
+# class MyClass:
+#     @property
+#     def value(self):
+#         return self._value
+
+# obj = MyClass()
+# print(obj.value) #Attribute Error - object has no attribute '_value'
+
+# class Counter:
+#     count = 0
+
+#     def __init__(self):
+#         Counter.count += 1
+#         self.id = Counter.count
+
+# c1 = Counter()
+# c2 = Counter()
+# c3 = Counter()
+# print(c1.id, c2.id, c3.id)
+
+#W3 D3 T6 - Debugging
+
+#Original:
+# class Product:
+#     def __init__(self, name, price):
+#         self.name = name
+#         self._price = price
+
+#     @property
+#     def price(self):
+#         return self.price  # Bug 1
+
+#     @price.setter
+#     def price(self, value):
+#         if value > 0:
+#             self._price = value
+#         # Bug 2: What if value <= 0?
+
+#     def apply_discount(self, percent):
+#         self._price = self._price * (1 - percent)  # Bug 3
+
+#     def __str__(self)
+#         return f"Product: {self.name}, ${self._price}"  # Bug 4
+    
+    
+    # 1. Wrong property name
+    # 2. We aren't properly handling negative values here, which should be the msot logical step
+    # 3. Whatever number we put as percent here (if it's an integer), we'd end up with a negative number most likely
+    # 4. Lack of :
+    
+    #Fixed version:
+    
+    
+# class Product:
+#     '''Mock class for exercise purpose'''
+#     def __init__(self, name: str, price: float):
+#         self.name = name
+#         self._price = price
+    
+#     def __str__(self):
+#         return f'Product: {self.name}, ${self._price}'    
+    
+#     @property
+#     def price(self):
+#         if self._price < 0:
+#             raise ValueError('Price cannot be negative!')
+#         else:
+#             return self._price
+
+#     @price.setter
+#     def price(self, value):
+#         if value < 0:
+#             raise ValueError('Price cannot be negative!')
+#         else:
+#             self._price = value
+            
+#     def apply_discount(self, percent):
+#         self._price = self._price * (1 - percent / 100)
+
+
+#W3 D3 T7 - dunder methods hash + eq added to  algo_backtest/engine/position.py
+
+# from algo_backtest.engine.position import Position
+
+# p1 = Position("AAPL", "BUY", 100.0, 10)
+# p2 = Position("AAPL", "BUY", 100.0, 10)
+# p3 = Position("AAPL", "SELL", 100.0, 10)
+
+# print(p1 == p2)  # True
+# print(p1 == p3)  # False
+
+# # Can use in set
+# positions = {p1, p2, p3}
+# print(len(positions))  # 2 (p1 and p2 are duplicates)
+# print(positions)
+
+#W3 D3 T8 - Mutable def argument trap
+
+# def add_item(item, items=[]):
+#     items.append(item)
+#     return items
+
+# print(add_item("a"))
+# print(add_item("b"))
+# print(add_item("c"))
+
+#Q1 Base Output:
+#[a], [a, b], [a, b, c]
+
+#Fixed version:
+# from typing import List
+
+# def add_item(item: str, items: List = None) -> List:
+    
+#     if items is None:
+#         items = []
+#     items.append(item)
+#     return items
+
+# print(add_item("a"))
+# print(add_item("b"))
+# print(add_item("c"))
+
+# from platform import python_implementation, python_version_tuple
+
+# print(python_implementation())
+
+# for atr in python_version_tuple():
+#     print(atr)
+
+#W3 D4 T1
+
+
+# class Parent:
+#     def __init__(self):
+#         self.x = 1
+#         print("Parent __init__ ran")
+
+# class Child(Parent):
+#     def __init__(self):
+#         super().__init__() #WITHOUT THIS LINE WE'D GET AN ATTRIBUTE ERROR - parent's init doesn't RUN AUTOMATICALLY
+#         self.y = 2
+#         print("Child __init__ ran")
+        
+
+# c = Child()
+# # Output: "Child __init__ ran"  (Parent never ran!)
+
+# print(c.y)  # 2 - works
+# print(c.x)  # AttributeError: 'Child' has no attribute 'x'
+
+
+
+### Example 3: NO `__init__` in Child -> The INIT inheritance is automatic!
+
+# class Parent:
+#     def __init__(self):
+#         self.x = 1
+#         print("Parent __init__ ran")
+
+# class Child(Parent):
+#     pass  # No __init__ defined
+
+# c = Child()
+# # Output: "Parent __init__ ran"  (Automatically uses Parent's!)
+
+# print(c.x)  # 1 - works!
+
+
+#W4 D4 T2 - creating child class for the Base class Account:
+
+
+# class Account:
+#     def __init__(self, owner: str, balance: float = 0.0):
+#         self._owner = owner
+#         self._balance = balance
+
+#     @property
+#     def balance(self) -> float:
+#         return self._balance
+
+#     def deposit(self, amount: float) -> None:
+#         if amount > 0:
+#             self._balance += amount
+
+
+
+# class MarginAccount(Account):
+#     '''A child class with margin and buying power added'''
+
+#     def __init__(self, owner: str, balance: float, leverage: float):
+#         super().__init__(owner, balance)
+#         self._leverage = leverage
+#         self._buying_power = 0.0
+        
+#     def __str__(self):
+#         return f'{__class__.__name__}(owner = {self._owner}, balance = {self._balance}, leverage = {self._leverage})'
+    
+#     @property
+#     def buying_power(self) -> float:
+#         '''A property that calculates the current buying power'''
+#         self._buying_power = self._leverage * self._balance
+#         return self._buying_power
+    
+#     @property
+#     def leverage(self) -> float:
+#         '''A property that describes leverage (read-only)'''
+#         return self._leverage
+
+
+# acc = MarginAccount("Alice", 1000.0, leverage=2.0)
+# print(acc.balance)       # 1000.0
+# print(acc.leverage)      # 2.0
+# print(acc.buying_power)  # 2000.0
+# acc.deposit(500)
+# print(acc.buying_power)  # 3000.0
+# print(acc)               # MarginAccount(owner='Alice', balance=1500.00, leverage=2.0)
+
+
+#W4 D4 T4 - price generator function
+
+# import random
+
+# def price_generator(start_price: float, num_ticks: int, volatility: int = 5):
+#     """
+#     Generate simulated price ticks.
+
+#     Args:
+#         start_price: Starting price
+#         num_ticks: Number of price updates to generate
+#         volatility: Max percentage change per tick (1 = 1%)
+
+#     Yields:
+#         float: Next price value
+#     """
+
+#     prices = []
+#     for i in range(num_ticks):
+#         price = start_price * (1 - (random.uniform(-volatility, volatility) / 100))
+#         prices.append(price)
+    
+#     return prices
+
+
+# prices = price_generator(100, 10, 5)
+# print(prices)
+
+# class Parent:
+#     class_var = "parent"
+
+# class Child(Parent):
+#     pass
+
+# Child.class_var = "child"
+# print(Parent.class_var, Child.class_var)
+
+
+#W3 D4 T6  - DEBUGGING
+
+# class Vehicle:
+#     def __init__(self, brand: str, year: int):
+#         self.brand = brand
+#         self.year = year
+
+#     def info(self) -> str:
+#         return f"{self.year} {self.brand}"
+
+# class Car(Vehicle):
+#     def __init__(self, brand: str, year: int, doors: int):
+#         super().__init__(brand, year)
+#         self.doors = doors
+
+#     def info(self) -> str:
+#         return f"{super().info()} with {self.doors} doors"
+
+# car = Car("Toyota", 2020, 4)
+# print(car.info())  # Expected: "2020 Toyota with 4 doors"
+
+# #The child class has init, so it won't automatically inherit the attributes from the parent class,
+# #yet it doesn't use the super().__init__() so it won't actually be able to ge the brand, and year attributes.
+
+
+#W3 D4 T7
+

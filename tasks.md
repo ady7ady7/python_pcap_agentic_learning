@@ -1,9 +1,11 @@
-# Week 3, Day 3 - Decorators, Special Methods & PCAP Drills
+# Week 3, Day 4 - Inheritance Patterns, Generators & PCAP Drills
 
-**Date:** 2026-01-21
-**Focus:** More coding, PCAP core topics, scaffolded property explanation
+**Date:** 2026-01-22
+**Focus:** Scaffolded inheritance examples, generators intro, PCAP core topics
 
-**Lesson:** [Encapsulation & Properties](lessons/week3_oop_encapsulation.md)
+**Lessons:**
+- [Inheritance & Polymorphism](lessons/week2_inheritance.md)
+- [Dunder Methods](lessons/week3_dunder_methods.md)
 
 **Target Difficulty:** 5-6/10
 
@@ -11,451 +13,405 @@
 
 ---
 
-## Scaffolded Explanation: Property Recursion Trap
+## Scaffolded Explanation: Inheritance & `super().__init__()`
 
-You asked for this yesterday. Here's the step-by-step breakdown:
+You asked for this yesterday. Here's the definitive guide:
 
-### The Problem Code
+### The Golden Rule
+
+**If a child class defines `__init__`, the parent's `__init__` does NOT run automatically.**
+
+You MUST call `super().__init__()` explicitly if you want parent initialization.
+
+### Example 1: WITHOUT `super().__init__()`
+
 ```python
-class BadExample:
-    def __init__(self, value):
-        self.value = value  # Line A
+class Parent:
+    def __init__(self):
+        self.x = 1
+        print("Parent __init__ ran")
 
-    @property
-    def value(self):
-        return self.value   # Line B
+class Child(Parent):
+    def __init__(self):
+        self.y = 2
+        print("Child __init__ ran")
 
-    @value.setter
-    def value(self, new_value):
-        self.value = new_value  # Line C
+c = Child()
+# Output: "Child __init__ ran"  (Parent never ran!)
+
+print(c.y)  # 2 - works
+print(c.x)  # AttributeError: 'Child' has no attribute 'x'
 ```
 
-### What Happens Step-by-Step
+**What happened:** Child's `__init__` completely **replaced** Parent's. The line `self.x = 1` never executed.
 
-**Step 1:** You call `BadExample(10)`
-**Step 2:** Python runs `__init__(self, 10)`
-**Step 3:** Line A executes: `self.value = value` (which is `self.value = 10`)
-**Step 4:** Python sees `self.value = ...` and thinks: "Is there a setter for `value`?"
-**Step 5:** YES! The `@value.setter` exists. Python calls it.
-**Step 6:** The setter runs Line C: `self.value = new_value`
-**Step 7:** Python sees `self.value = ...` again → calls the setter again
-**Step 8:** Infinite loop → RecursionError
+### Example 2: WITH `super().__init__()`
 
-### The Key Insight
-
-The **property name** (`value`) and the **storage attribute** must be DIFFERENT:
-- Property name: `value` (what users access)
-- Storage attribute: `_value` (where data actually lives)
-
-### The Fix
 ```python
-class GoodExample:
-    def __init__(self, value):
-        self._value = value  # Store in _value (different name!)
+class Parent:
+    def __init__(self):
+        self.x = 1
+        print("Parent __init__ ran")
 
-    @property
-    def value(self):
-        return self._value   # Return from _value
+class Child(Parent):
+    def __init__(self):
+        super().__init__()  # Call Parent's __init__ FIRST
+        self.y = 2
+        print("Child __init__ ran")
 
-    @value.setter
-    def value(self, new_value):
-        self._value = new_value  # Store in _value
+c = Child()
+# Output:
+# "Parent __init__ ran"
+# "Child __init__ ran"
+
+print(c.x)  # 1 - works! Parent set it up
+print(c.y)  # 2 - works! Child set it up
 ```
 
-Now `self.value = 10` calls the setter, which stores in `self._value` (no recursion).
+### Example 3: NO `__init__` in Child (Automatic Inheritance)
+
+```python
+class Parent:
+    def __init__(self):
+        self.x = 1
+        print("Parent __init__ ran")
+
+class Child(Parent):
+    pass  # No __init__ defined
+
+c = Child()
+# Output: "Parent __init__ ran"  (Automatically uses Parent's!)
+
+print(c.x)  # 1 - works!
+```
+
+**Rule:** If Child doesn't define `__init__` at all, Python automatically uses Parent's.
+
+### Quick Reference Table
+
+| Child has `__init__`? | Calls `super().__init__()`? | Parent's `__init__` runs? |
+|----------------------|----------------------------|---------------------------|
+| No | N/A | ✅ YES (automatic) |
+| Yes | No | ❌ NO |
+| Yes | Yes | ✅ YES |
 
 ---
 
-## Task 1: PCAP Warm-up - Exception Hierarchy (Pure Python)
+## Task 1: PCAP Warm-up - Inheritance Output Prediction
 
-Answer these questions:
+Predict the output for each snippet:
 
-**Q1:** Which exception is the parent of ALL built-in exceptions?
-- A) `Exception`
-- B) `BaseException`
-- C) `Error`
-- D) `object`
-
-**Q2:** What is the output?
+**Snippet A:**
 ```python
-try:
-    x = int("abc")
-except Exception as e:
-    print(type(e).__name__)
+class A:
+    def __init__(self):
+        self.value = 10
+
+class B(A):
+    def __init__(self):
+        self.value = 20
+
+b = B()
+print(b.value)
 ```
 
-**Q3:** Can you catch `KeyboardInterrupt` with `except Exception`? Why or why not?
-
-**Q4:** What's wrong with this code?
+**Snippet B:**
 ```python
-try:
-    risky_operation()
-except:
+class A:
+    def __init__(self):
+        self.value = 10
+
+class B(A):
+    def __init__(self):
+        super().__init__()
+        self.value = 20
+
+b = B()
+print(b.value)
+```
+
+**Snippet C:**
+```python
+class A:
+    def __init__(self):
+        self.value = 10
+
+class B(A):
     pass
+
+b = B()
+print(b.value)
 ```
 
-**Your answers:**
+**Your predictions:**
 ```
-Q1: B
+Snippet A: 20
 
-Q2: ValueError
+Snippet B: 20
 
-Q3: No, it's not an Exception, but a different type of a BaseException
-
-Q4: Except does not handle any errors, there's just the pass, which literally does nothing
+Snippet C: 10
 
 ```
 
 ---
 
-## Task 2: Build a `BankAccount` Class with Full Encapsulation
+## Task 2: Build a `TradingAccount` Class Hierarchy
 
-Create a `BankAccount` class with:
+Create a class hierarchy for trading accounts:
 
-1. **Constructor:** `__init__(self, owner: str, initial_balance: float = 0.0)`
-   - Store `_owner` (protected, immutable after creation)
-   - Store `_balance` (protected)
-   - Validate: initial_balance cannot be negative (raise `ValueError`)
-
-2. **Properties:**
-   - `owner` - read-only property (no setter)
-   - `balance` - read-only property (no setter - use methods to modify)
-
-3. **Methods:**
-   - `deposit(amount: float) -> None` - add to balance (amount must be > 0)
-   - `withdraw(amount: float) -> bool` - subtract from balance if sufficient funds, return True/False
-   - `__str__` - return `"BankAccount(owner='John', balance=100.00)"`
-
-**Test code:**
+**Base class `Account`:**
 ```python
-acc = BankAccount("Alice", 100.0)
-print(acc.owner)          # Alice
-print(acc.balance)        # 100.0
-acc.deposit(50.0)
-print(acc.balance)        # 150.0
-success = acc.withdraw(200.0)
-print(success)            # False (insufficient funds)
-print(acc.balance)        # 150.0 (unchanged)
-acc.owner = "Bob"         # AttributeError (read-only)
-```
+class Account:
+    def __init__(self, owner: str, balance: float = 0.0):
+        self._owner = owner
+        self._balance = balance
 
-**Your code:**
-```python
-
-class BankAccount:
-    def __init__(self, owner: str, initial_balance: float = 0.0):
-        self.__owner = owner
-        self.initial_balance = initial_balance
-        self.__balance = self.initial_balance
-        
-    def __str__(self):
-        return f'{__class__.__name__}(owner = {self.__owner}, balance = {self.__balance})'
-        
-    @property
-    def owner(self) -> str:
-        return self.__owner
-    
     @property
     def balance(self) -> float:
-        if self.initial_balance < 0:
-            raise ValueError('Initial balance cannot be below 0!')
-        else:
-            return self.__balance
-        
-    def deposit(self, amount: float):
-        self.__balance += amount
-    
-    def withdraw(self, amount: float):
-        if amount > self.__balance:
-            print(f'The current balance is lower than the amount you want to withdraw!')
-            return False
-        else:
-            self.__balance -= amount
-            print(f'Successfully withdrawn ${amount:.2f} from the account.')
-            return True
+        return self._balance
 
-
+    def deposit(self, amount: float) -> None:
+        if amount > 0:
+            self._balance += amount
 ```
 
-**Test output:**
-```
-
-$ python practice.py
-Alice
-100.0
-150.0
-The current balance is lower than the amount you want to withdraw!
-False
-150.0
-Traceback (most recent call last):
-  File "C:\Users\HARDPC\Desktop\AL\projekty\python_pcap_agentic_learning\practice.py", line 2748, in <module>
-    acc.owner = "Bob"         # AttributeError (read-only)
-    ^^^^^^^^^
-AttributeError: property 'owner' of 'BankAccount' object has no setter
-
-```
-
----
-
-## Task 3: PCAP Drill - `__str__` vs `__repr__` Review
-
-**Q1:** Implement both `__str__` and `__repr__` for this class:
-
-```python
-class Point:
-    def __init__(self, x: int, y: int):
-        self.x = x
-        self.y = y
-
-    # Add __str__ and __repr__
-```
-
-Requirements:
-- `__str__` should return: `"Point at (3, 5)"`
-- `__repr__` should return: `"Point(x=3, y=5)"`
-
-**Q2:** What prints when you do this?
-```python
-p = Point(3, 5)
-print(p)           # Which method? str
-print([p])         # Which method? repr
-print(f"{p}")      # Which method? str
-print(f"{p!r}")    # Which method? -> repr
-```
-
-**Your code and answers:**
-```python
-# Q1: Your Point class
-
-
-class Point:
-    def __init__(self, x: int, y: int):
-        self.x = x
-        self.y = y
-
-    def __str__(self) -> str:
-        '''Simplified string representation if anybody wants to print a class instance'''
-        return f'{__class__.__name__} at ({self.x}, {self.y})'
-    
-    def __repr__(self) -> str:
-        '''Unambigous representation for devs'''
-        return f'{__class__.__name__!r}(x = {self.x}, y = {self.y})'
-
-
-# Q2: Your predictions
-print(p)      # str
-print([p])    # repr
-print(f"{p}") # str
-print(f"{p!r}") # repr
-
-```
-
----
-
-## Task 4: PROJECT - TradeManager Class
-
-Create a `TradeManager` class to manage multiple trades:
-
-**Requirements:**
-1. **Constructor:** Initialize with empty list `_trades`
-2. **Method:** `add_trade(trade: Trade) -> None` - adds trade to list
-3. **Method:** `remove_trade(ticker: str) -> bool` - removes first trade matching ticker, returns True/False
-4. **Property:** `total_pnl` - returns sum of all trade PnLs
-5. **Property:** `win_rate` - returns percentage of winning trades (0-100)
-6. **Property:** `trade_count` - returns number of trades
-7. **Method:** `get_trades_by_side(side: str) -> List[Trade]` - filter by BUY/SELL
-8. **`__len__`** - return number of trades (so `len(manager)` works)
-9. **`__iter__`** - make it iterable (so `for trade in manager` works)
+**Your task:** Create `MarginAccount(Account)` that:
+1. Calls `super().__init__(owner, balance)`
+2. Adds a new attribute `_leverage` (float, default 1.0)
+3. Adds a `leverage` property (read-only)
+4. Adds a `buying_power` property that returns `balance * leverage`
+5. Overrides `__str__` to show: `"MarginAccount(owner='Alice', balance=1000.00, leverage=2.0)"`
 
 **Test code:**
 ```python
-from algo_backtest.engine.trade import Trade
-
-manager = TradeManager()
-manager.add_trade(Trade("AAPL", "BUY", 100, 110, 10))   # +100 PnL
-manager.add_trade(Trade("GOOGL", "SELL", 200, 190, 5))  # +50 PnL
-manager.add_trade(Trade("MSFT", "BUY", 50, 45, 20))     # -100 PnL
-
-print(f"Total P&L: ${manager.total_pnl:.2f}")  # $50.00
-print(f"Win Rate: {manager.win_rate:.1f}%")    # 66.7%
-print(f"Trade Count: {manager.trade_count}")   # 3
-print(f"Length: {len(manager)}")               # 3
-
-for trade in manager:
-    print(trade)
+acc = MarginAccount("Alice", 1000.0, leverage=2.0)
+print(acc.balance)       # 1000.0
+print(acc.leverage)      # 2.0
+print(acc.buying_power)  # 2000.0
+acc.deposit(500)
+print(acc.buying_power)  # 3000.0
+print(acc)               # MarginAccount(owner='Alice', balance=1500.00, leverage=2.0)
 ```
 
 **Your code:**
 ```python
 
-from typing import List
-from algo_backtest.engine.trade import Trade
 
-class TradeManager:
-    '''Mock class used to manage trades with the Trade class, we can calculate the win rate, total pnl etc.
-       Requires Trade class import from algo_backtest/engine/trade.py'''
-    
-    def __init__(self):
-        self._trades = []
-        self.__total_pnl: float = 0.0
-        self.__win_rate: float = 0.0
-        self.__trade_count: int = 0
-        
-        self.winning_trades = 0
-        
-    def __len__(self):
-        '''Length dunder method'''
-        return len(self._trades)
+class MarginAccount(Account):
+    '''A child class with margin and buying power added'''
 
-    def __iter__(self):
-        '''Iter dunder method, making the objects in the TradeManager iterable'''
-        return iter(self._trades)
-    
-    @property 
-    def trade_count(self):
-        return self.__trade_count
+    def __init__(self, owner: str, balance: float, leverage: float):
+        super().__init__(owner, balance)
+        self._leverage = leverage
+        self._buying_power = 0.0
+        
+    def __str__(self):
+        return f'{__class__.__name__}(owner = {self._owner}, balance = {self._balance}, leverage = {self._leverage})'
     
     @property
-    def total_pnl(self):
-        return self.__total_pnl
+    def buying_power(self) -> float:
+        '''A property that calculates the current buying power'''
+        self._buying_power = self._leverage * self._balance
+        return self._buying_power
     
     @property
-    def win_rate(self):
-        self.__win_rate = (self.winning_trades / self.__trade_count * 100)
-        return self.__win_rate
-        
-    
-    def add_trade(self, trade: Trade) -> None:
-        '''A method used to add trades created with a Trade class'''
-        self._trades.append(trade)
-        self.__trade_count += 1
-        self.__total_pnl += trade.pnl
-        if trade.pnl > 0:
-            self.winning_trades += 1
-        
-    def remove_trade(self, ticker: str) -> bool:
-        '''A method used to remove trades and return a T/F'''
-        for trade in self._trades:
-            if trade.ticker == ticker:
-                self._trades.remove(trade)
-                return True
-        print('Did not find a trade with requested ticker')
-        return False
-
-    def get_trades_by_side(self, side: str) -> List[Trade]:
-        '''Gets all of the trades that are either 'BUY' or 'SELL' '''
-        filtered_trades = []
-        
-        for trade in self._trades:
-            if trade.side == side:
-                filtered_trades.append(trade)
-        
-        return filtered_trades
-
-
-
-
+    def leverage(self) -> float:
+        '''A property that describes leverage (read-only)'''
+        return self._leverage
 ```
 
 **Test output:**
 ```
 
 $ python practice.py
-Total P&L: $50.00
-Win Rate: 66.7%
-Trade Count: 3
-Length: 3
-[WIN] BUY 10 AAPL:
-                100 -> 110
-                | P&L: $100.00
-[WIN] SELL 5 GOOGL:
-                200 -> 190
-                | P&L: $50.00
-[LOSS] BUY 20 MSFT:
-                50 -> 45
-                | P&L: $-100.00
+1000.0
+2.0
+2000.0
+3000.0
+MarginAccount(owner = Alice, balance = 1500.0, leverage = 2.0)
 (.venv) 
 
 ```
 
 ---
 
-## Task 5: PCAP Drill - Multiple Choice (PCAP Core Topics)
+## Task 3: Generator Basics (PCAP Topic)
 
-**Question 1:** What is the output?
+Generators are functions that use `yield` instead of `return`. They produce values one at a time, saving memory.
+
+**Q1:** What's the output?
 ```python
-class A:
-    def __init__(self):
-        self.x = 1
+def count_up(n):
+    for i in range(1, n + 1):
+        yield i
 
-class B(A):
-    def __init__(self):
-        self.y = 2
+gen = count_up(3)
+print(type(gen))
+print(next(gen))
+print(next(gen))
+print(next(gen))
+print(next(gen))  # What happens here?
 
-b = B()
-print(hasattr(b, 'x'), hasattr(b, 'y'))
+WE DID NOT USE YIELD FOR ONCE - IT'S MY FIRST ENCOUNTER WITH THIS, SO I SIMPLY RAN THE CODE:
+
+1
+2
+3
+Traceback (most recent call last):
+  File "C:\Users\HARDPC\Desktop\AL\projekty\python_pcap_agentic_learning\practice.py", line 3099, in <module>
+    print(next(gen))  # What happens here?
+          ~~~~^^^^^
+StopIteration
+
+
+
 ```
-- A) `True True`
-- B) `False True`
-- C) `True False`
-- D) `False False`
 
-**Your answer:**
-B
-
-
----
-
-**Question 2:** Which correctly makes a read-only property?
-- A) `@property` with `@name.setter` that raises an error
-- B) `@property` without defining a setter
-- C) Using `__name` (name mangling)
-- D) Using `_name` (protected convention)
-
-**Your answer:**
-B
-
----
-
-**Question 3:** What exception is raised?
+**Q2:** Convert this list comprehension to a generator expression:
 ```python
-class MyClass:
-    @property
-    def value(self):
-        return self._value
-
-obj = MyClass()
-print(obj.value)
+squares = [x**2 for x in range(10)]  # List comprehension
 ```
-- A) `ValueError`
-- B) `AttributeError`
-- C) `TypeError`
-- D) `NameError`
 
-**Your answer:**
-B
+**Q3:** What's the key difference between a list and a generator in terms of memory?
 
+**Your answers:**
 
----
+SAME NIGGA, WHY DO YOU ASK ME TO DO A THING WE DIDN'T EVEN COVER...
+I DON'T KNOW, HOW WOULD I AND WHY?
 
-**Question 4:** What is the output?
-```python
-class Counter:
-    count = 0
+IS IT EVEN PCAP-RELEVANT? IF IT IS, MAYBE INTRODUCE IT FIRST? 
+IF IT ISN'T MAYBE FORGET IT? AND DON'T YOU DARE TO TAKE AWAYP OINTS FROM ME FOR THAT!
 
-    def __init__(self):
-        Counter.count += 1
-        self.id = Counter.count
-
-c1 = Counter()
-c2 = Counter()
-c3 = Counter()
-print(c1.id, c2.id, c3.id)
 ```
-- A) `1 1 1`
-- B) `1 2 3`
-- C) `3 3 3`
-- D) `0 1 2`
+Q1 Output:
+
+
+Q1 Last line:
+
+
+Q2 Generator expression:
+
+
+Q3 Memory difference:
+
+
+```
+
+---
+
+## Task 4: PROJECT - Create a `PriceGenerator`
+
+Create a generator function that simulates price movements:
+
+```python
+def price_generator(start_price: float, num_ticks: int, volatility: float = 0.01):
+    """
+    Generate simulated price ticks.
+
+    Args:
+        start_price: Starting price
+        num_ticks: Number of price updates to generate
+        volatility: Max percentage change per tick (0.01 = 1%)
+
+    Yields:
+        float: Next price value
+    """
+    # Your implementation here
+    pass
+```
+
+**Requirements:**
+1. Start with `start_price`
+2. For each tick, change price by random amount within ±volatility
+3. Use `random.uniform(-volatility, volatility)` for the change
+4. Yield each new price
+5. Price should never go below 0.01
+
+**Test code:**
+```python
+import random
+random.seed(42)  # For reproducible results
+
+gen = price_generator(100.0, 5, volatility=0.02)
+for price in gen:
+    print(f"${price:.2f}")
+```
+
+**Your code:**
+```python
+
+
+import random
+
+def price_generator(start_price: float, num_ticks: int, volatility: int = 5):
+    """
+    Generate simulated price ticks.
+
+    Args:
+        start_price: Starting price
+        num_ticks: Number of price updates to generate
+        volatility: Max percentage change per tick (1 = 1%)
+
+    Yields:
+        float: Next price value
+    """
+
+    prices = []
+    for i in range(num_ticks):
+        price = start_price * (1 - (random.uniform(-volatility, volatility) / 100))
+        prices.append(price)
+    
+    return prices
+
+
+prices = price_generator(100, 10, 5)
+print(prices)
+
+
+```
+
+**Test output:**
+```
+
+I decided to use int percents, so 1 = 1% - clearly described it in my docstring, so it wouldn't cause any confusion.
+
+[97.8427343661148, 99.30686543975983, 95.00972445447661, 104.76655606092213, 103.19090647636817, 101.00014832311996, 98.17085104805695, 102.63371778154186, 102.21331515408372, 99.93737557966736]
+
+Eveyrthing works.
+
+```
+
+---
+
+## Task 5: PCAP Multiple Choice - Core Topics
+
+**Question 1:** What does `yield` do in a function?
+- A) Immediately returns a value and terminates the function
+- B) Pauses the function and returns a value, resuming on next call
+- C) Creates a list of all values
+- D) Raises a StopIteration exception
+
+**Your answer:**
+I DON'T KNOW, WE DIDN'T HAVE THAT, AGAIN - DON'T YOU DARE to take away points from me. If it's PCAP -revelant, add relevant notes about it, as it's my first encounter today with yield.
+
+
+---
+
+**Question 2:** What is the output?
+```python
+class Parent:
+    class_var = "parent"
+
+class Child(Parent):
+    pass
+
+Child.class_var = "child"
+print(Parent.class_var, Child.class_var)
+```
+- A) `parent parent`
+- B) `child child`
+- C) `parent child`
+- D) `child parent`
 
 **Your answer:**
 B
@@ -463,164 +419,179 @@ B
 
 ---
 
-## Task 6: Debugging Exercise - Fix the Broken Class
+**Question 3:** What exception is raised when calling `next()` on an exhausted generator?
+- A) `GeneratorExit`
+- B) `StopIteration`
+- C) `IndexError`
+- D) `ValueError`
 
-This class has **4 bugs**. Find and fix them all:
+**Your answer:**
+B (again, asking about generator and yield...)
+
+
+---
+
+**Question 4:** Given this code, what is `result`?
+```python
+def gen():
+    yield 1
+    yield 2
+    yield 3
+
+result = list(gen())
+```
+- A) `<generator object>`
+- B) `[1, 2, 3]`
+- C) `(1, 2, 3)`
+- D) `6`
+
+**Your answer:**
+Dude....
+STOP ASKING ME ABOUT A TOPIC I NEVER ENCOUNTERED!!!!!!!!!!!!!!
+
+
+---
+
+## Task 6: Debugging - Fix the Inheritance Bug
+
+This code has a bug. Find and fix it:
 
 ```python
-class Product:
-    def __init__(self, name, price):
-        self.name = name
-        self._price = price
+class Vehicle:
+    def __init__(self, brand: str, year: int):
+        self.brand = brand
+        self.year = year
 
-    @property
-    def price(self):
-        return self.price  # Bug 1
+    def info(self) -> str:
+        return f"{self.year} {self.brand}"
 
-    @price.setter
-    def price(self, value):
-        if value > 0:
-            self._price = value
-        # Bug 2: What if value <= 0?
+class Car(Vehicle):
+    def __init__(self, brand: str, year: int, doors: int):
+        self.doors = doors
 
-    def apply_discount(self, percent):
-        self._price = self._price * (1 - percent)  # Bug 3
+    def info(self) -> str:
+        return f"{super().info()} with {self.doors} doors"
 
-    def __str__(self)
-        return f"Product: {self.name}, ${self._price}"  # Bug 4
+car = Car("Toyota", 2020, 4)
+print(car.info())  # Expected: "2020 Toyota with 4 doors"
+```
+
+**What's the bug?**
+```
+#The child class has init, so it won't automatically inherit the attributes from the parent class,
+#yet it doesn't use the super().__init__() so it won't actually be able to ge the brand, and year attributes.
 ```
 
 **Your fixed code:**
 ```python
+class Vehicle:
+    def __init__(self, brand: str, year: int):
+        self.brand = brand
+        self.year = year
 
-class Product:
-    '''Mock class for exercise purpose'''
-    def __init__(self, name: str, price: float):
-        self.name = name
-        self._price = price
-    
-    def __str__(self):
-        return f'Product: {self.name}, ${self._price}'    
-    
-    @property
-    def price(self):
-        if self._price < 0:
-            raise ValueError('Price cannot be negative!')
-        else:
-            return self._price
+    def info(self) -> str:
+        return f"{self.year} {self.brand}"
 
-    @price.setter
-    def price(self, value):
-        if value < 0:
-            raise ValueError('Price cannot be negative!')
-        else:
-            self._price = value
-            
-    def apply_discount(self, percent):
-        self._price = self._price * (1 - percent / 100)
+class Car(Vehicle):
+    def __init__(self, brand: str, year: int, doors: int):
+        super().__init__(brand, year)
+        self.doors = doors
 
+    def info(self) -> str:
+        return f"{super().info()} with {self.doors} doors"
 
-
-```
-
-**Explanation of each bug:**
-```
-    # 1. Wrong property name
-    # 2. We aren't properly handling negative values here, which should be the msot logical step
-    # 3. Whatever number we put as percent here (if it's an integer), we'd end up with a negative number most likely
-    # 4. Lack of :
-
-```
-
----
-
-## Task 7: PROJECT - Enhance Position with `__eq__` and `__hash__`
-
-Add to your `Position` class:
-
-1. **`__eq__(self, other)`** - Two positions are equal if they have:
-   - Same ticker
-   - Same side
-   - Same entry_price
-   - Same quantity
-
-2. **`__hash__(self)`** - Make Position hashable (so it can be used in sets/dicts)
-   - Return `hash((self._ticker, self._side, self._entry_price, self._quantity))`
-
-**Test code:**
-```python
-p1 = Position("AAPL", "BUY", 100.0, 10)
-p2 = Position("AAPL", "BUY", 100.0, 10)
-p3 = Position("AAPL", "SELL", 100.0, 10)
-
-print(p1 == p2)  # True
-print(p1 == p3)  # False
-
-# Can use in set
-positions = {p1, p2, p3}
-print(len(positions))  # 2 (p1 and p2 are duplicates)
-```
-
-**Your code (just the new methods):**
-```python
-
-    
-    def __hash__(self):
-        '''A dunder method that allows us to hash a given position to later be used in a dictionary'''
-        return hash((self.ticker, self.side, self.entry_price, self.quantity))
-    
-    def __eq__(self, other) -> bool:
-        '''Checks whether two positions are equal to each other
+car = Car("Toyota", 2020, 4)
 
 ```
 
 **Test output:**
 ```
-True
-False
-2
-
-also a result of print(positions):
-
-{Position(ticker = AAPL, side = SELL, entry_price = 100.0, quantity = 10, stop_loss = None, take_profit = None), Position(ticker = AAPL, side = BUY, entry_price = 100.0, quantity = 10, stop_loss = None, take_profit = None)}
+$ python practice.py
+2020 Toyota with 4 doors
 (.venv) 
 ```
 
-However, I would like to point out here that WE DIDN'T HAVE eq, len, iter, or hash dunder methods at all and they're not present in my learning materials... They all shoudl be included in a special file week3_dunder_methods, or something similar, where we begin with a table of contents (just showing the names of agiven dunder method), and a short description, information with a simple example of each method. I will then ask you to sometimes update it, or whatever. The task WASN'T difficult and required me to check the web and literally I could just copy the answer from the question. I've maybe learned something, but then I'm not sure at all I will be able toa ctually implement hash method in the acutal code.
+---
+
+## Task 7: PROJECT - Enhance TradeManager with Generator
+
+Add a generator method to your `TradeManager` class:
+
+```python
+def iter_profitable(self) -> Generator[Trade, None, None]:
+    """
+    Generator that yields only profitable trades.
+
+    Yields:
+        Trade: Each trade where pnl > 0
+    """
+    pass
+```
+
+Also add:
+```python
+def iter_by_ticker(self, ticker: str) -> Generator[Trade, None, None]:
+    """
+    Generator that yields trades matching the given ticker.
+    """
+    pass
+```
+
+**Test code:**
+```python
+manager = TradeManager()
+manager.add_trade(Trade("AAPL", "BUY", 100, 110, 10))   # +100
+manager.add_trade(Trade("GOOGL", "SELL", 200, 190, 5))  # +50
+manager.add_trade(Trade("AAPL", "BUY", 50, 45, 20))     # -100
+manager.add_trade(Trade("MSFT", "BUY", 100, 120, 10))   # +200
+
+print("Profitable trades:")
+for trade in manager.iter_profitable():
+    print(f"  {trade.ticker}: ${trade.pnl:.2f}")
+
+print("\nAAPL trades:")
+for trade in manager.iter_by_ticker("AAPL"):
+    print(f"  {trade}")
+```
+
+**Your code:**
+```python
+
+SAME ISSUE AS ABOVE - YOU DIDN'T EVEN INTRODUCE THE TOPIC OF 'YIELD' AND YOU DEMAND ME TO CREATE AN ADVANCED FUNCTION WITH THAT. HWO AM I SUPPOSED TO DO THAT?
+This is really bad...
+```
+
+**Test output:**
+```
+
+```
 
 ---
 
-## Task 8: PCAP Trap - Mutable Default Arguments (Review)
+## Task 8: PCAP Trap - Generator vs List Memory
 
-**Q1:** What's the output?
+**Q1:** What's wrong with this approach for large files?
 ```python
-def add_item(item, items=[]):
-    items.append(item)
-    return items
+def read_all_lines(filename):
+    with open(filename) as f:
+        return f.readlines()  # Returns list of ALL lines
 
-print(add_item("a"))
-print(add_item("b"))
-print(add_item("c"))
+lines = read_all_lines("huge_file.txt")  # 10GB file
+for line in lines:
+    process(line)
 ```
 
-**Q2:** Fix the function to work correctly.
+**Q2:** Rewrite it using a generator to be memory-efficient:
 
 **Your answers:**
 ```
-Q1 Output:
-[a], [a, b], [a, b, c]
+Q1 Problem:
+I don't know, we get all l lines though.
 
 
-Q2 Fixed code:
-
-from typing import List
-
-def add_item(item: str, items: List = None) -> List:
-    
-    if items is None:
-        items = []
-    items.append(item)
-    return items
+Q2 Generator version:
+Again, I DID NOT HAVE generators or YIELD!!!
+It's okay for me to learn that, but for fucks sake, I need proper guidance, materials, examples, and a scaffolded approach, please...
 
 ```
 
@@ -628,30 +599,28 @@ def add_item(item: str, items: List = None) -> List:
 
 ## Checklist
 
-- [ ] Task 1: Exception hierarchy (4 questions)
-- [ ] Task 2: BankAccount class with encapsulation
-- [ ] Task 3: `__str__` vs `__repr__` review
-- [ ] Task 4: TradeManager class (PROJECT)
+- [ ] Task 1: Inheritance output prediction (3 snippets)
+- [ ] Task 2: MarginAccount class (inheritance)
+- [ ] Task 3: Generator basics (3 questions)
+- [ ] Task 4: PriceGenerator function (PROJECT)
 - [ ] Task 5: Multiple choice (4 questions)
-- [ ] Task 6: Debug broken Product class (4 bugs)
-- [ ] Task 7: Position `__eq__` and `__hash__` (PROJECT)
-- [ ] Task 8: Mutable default argument trap
+- [ ] Task 6: Fix inheritance bug
+- [ ] Task 7: TradeManager generator methods (PROJECT)
+- [ ] Task 8: Generator vs list memory
 
 ---
 
 ## Feedback Section
 
-**Time spent:** 70 minutes
+**Time spent:** ___ minutes
 
-**Difficulty (1-10): 5-6**
+**Difficulty (1-10):**
 
 **What clicked:**
-I'd say everything was doable today.
+
 
 **What's confusing:**
-The new dunder methods are definitely now that difficult, but I definitely want notes about them for future reference as well.
 
-Encapsulation and inheriting values via different classes still seems tricky to me - I need more DOABLE examples to work on it, and I need some examples that will clearly show the difference and kind of ground that in my brain, becuase I sometimes still confuse whether the init values will be inherited, or not, if there's super() or not etc..
 
 **Questions for mentor:**
 

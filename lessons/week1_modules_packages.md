@@ -229,6 +229,8 @@ random_list = [1, 2, 3]  # Your variable named 'random_list'
 # No conflict! 'random' is the module, your variables are separate
 print(random.choice(random_list))  # Uses module's choice() on your list
 print(random_number)               # Your variable, untouched
+
+
 ```
 
 **Key Takeaway:**
@@ -391,6 +393,14 @@ def process_users(users: List[User]) -> Dict[str, int]:
    ```python
    import math
    print(dir(math))  # Shows all available functions/constants
+
+    for name in dir(math):
+        print(name, end="\t")
+
+    #OUTPUT:
+    __doc__	__loader__	__name__	__package__	__spec__	acos	acosh	asin	asinh	atan	atan2	atanh	ceil	copysign	cos	cosh	degrees	e	erf	erfc	exp	expm1	fabs	factorial	floor	fmod	frexp	fsum	gamma	hypot	isfinite	isinf	isnan	ldexp	lgamma	log	log10	log1p	log2	modf	pi	pow	radians	sin	sinh	sqrt	tan	tanh	trunc	
+
+
    ```
 
 4. **Dotted imports**: `from a.b.c import d` - Know the lookup order!

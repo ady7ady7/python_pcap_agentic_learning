@@ -1,8 +1,8 @@
 # Daily Feedback Template
 
-**Date:** [To be filled]
-**Week:** 3 | **Day:** 1 (Monday)
-**Topic:** [To be filled]
+**Date:** 2026-01-23
+**Week:** 3 | **Day:** 5 (Friday)
+**Topic:** Week Review, Generators Practice & Weekend Exam Prep
 
 ---
 
@@ -44,3 +44,4 @@
 ---
 
 **Instructions:** Fill this out after completing the day's tasks. I'll archive it and provide assessment tomorrow.
+

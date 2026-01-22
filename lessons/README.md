@@ -97,6 +97,15 @@ This directory contains all theoretical lessons organized by week and topic.
 - `__getitem__`, `__contains__` - indexing and membership
 - **PCAP Traps:** `__eq__` without `__hash__`, default identity comparison
 
+### [Generators & Iterators](week3_generators.md)
+- What is a generator and why use them
+- `yield` vs `return` - the key difference
+- Creating generator functions step-by-step
+- Generator expressions `(x for x in items)`
+- Memory efficiency (generators vs lists)
+- Common patterns (filtering, transforming, infinite)
+- **PCAP Traps:** Exhausted generators, `StopIteration`, generator vs list
+
 ---
 
 ## Week 4-8: Advanced Topics (Planned)

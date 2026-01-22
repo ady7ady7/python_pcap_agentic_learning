@@ -437,3 +437,92 @@ Format: Date | Topic | Score | Difficulty | Notes
 
 ---
 
+## Week 3, Day 3 - 2026-01-21
+
+**Topic:** Decorators, Special Methods & PCAP Drills
+**Score:** 8/8 | 89% (B+)
+**Difficulty:** 5-6/10
+**Time Spent:** 70 minutes
+
+**Tasks Completed:**
+1. Exception hierarchy (4 questions - 3.5/4)
+2. BankAccount class with full encapsulation
+3. `__str__` vs `__repr__` implementation
+4. PROJECT: TradeManager class (`__len__`, `__iter__`, properties)
+5. PCAP multiple choice (4 questions - 4/4)
+6. Debug broken Product class (4 bugs found)
+7. PROJECT: Position `__eq__` and `__hash__`
+8. Mutable default arguments trap (review)
+
+**Key Learnings:**
+- `__len__` and `__iter__` make objects work with `len()` and `for` loops
+- `__eq__` and `__hash__` enable set/dict usage
+- Bare `except:` catches EVERYTHING (including SystemExit, KeyboardInterrupt)
+- Validation should be in `__init__`, not in getter
+
+**Critical Corrections:**
+- Bare `except:` issues - catches more than expected
+- `__repr__` formatting - don't use `!r` on class name
+- Validation placement - validate in `__init__`, not getter
+
+**Student Feedback:**
+- Dunder methods weren't taught before being tested
+- Requested dunder methods lesson file (created)
+- Needs scaffolded inheritance/super() examples
+
+**Project Milestones:**
+- TradeManager class created with full functionality
+- Position enhanced with `__eq__` and `__hash__`
+- week3_dunder_methods.md lesson file created
+
+---
+
+## Week 3, Day 4 - 2026-01-22
+
+**Topic:** Inheritance Patterns, Generators & PCAP Drills
+**Score:** 91% (A-) - **Fair tasks only**
+**Difficulty:** N/A (mentor error invalidated most tasks)
+**Time Spent:** N/A
+
+**MENTOR ERROR:** Majority of tasks tested generators/yield WITHOUT providing lesson material first.
+
+**Fair Tasks Completed:**
+1. Inheritance output prediction (3 snippets - 3/3 correct)
+2. MarginAccount class with inheritance (excellent implementation)
+3. Q1 only: Generator type/StopIteration (ran code to learn)
+5. Q2: Class variable inheritance (0/1 - answered B, correct is C)
+5. Q3: StopIteration exception (1/1 correct)
+6. Debug inheritance bug - missing super().__init__() (perfect)
+
+**Unfair Tasks (NOT SCORED):**
+- Task 3 Q2, Q3: Generator expressions, memory differences
+- Task 4: PriceGenerator with yield
+- Task 5 Q1, Q4: yield questions
+- Task 7: TradeManager generator methods
+- Task 8: Generator vs list memory
+
+**Key Learnings:**
+- Inheritance patterns with/without super() solidified
+- Class variable assignment creates new attribute on subclass (doesn't modify parent)
+- StopIteration raised when generator exhausted
+
+**Critical Correction:**
+- Task 5 Q2: `Child.class_var = "child"` creates NEW attribute on Child, doesn't modify Parent's
+- Output is `parent child`, not `child child`
+
+**Student Feedback (Valid):**
+- "MAJORITY of tasks revolved around generators and yield, WHERE WE DIDN'T HAVE THEM"
+- "What kind of teaching approach is that?"
+- Requested: 1. knowledge with examples, 2. scaffolded approach
+
+**Corrective Action:**
+- Created `lessons/week3_generators.md` with full scaffolded teaching
+- Day 5 will properly introduce generator practice WITH lesson material
+
+**Project Milestones:**
+- MarginAccount class implemented correctly
+- week3_generators.md lesson file created
+- week3_useful_modules.md expanded with sys, os modules
+
+---
+

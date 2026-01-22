@@ -10,6 +10,8 @@ This lesson covers several useful modules from Python's standard library. These 
 |--------|-------------|------|
 | [`random`](#the-random-module) | Pseudo-random number generation | ~20 |
 | [`platform`](#the-platform-module) | System and hardware information | ~160 |
+| [`sys`](#the-sys-module) | Python interpreter interaction | ~280 |
+| [`os`](#the-os-module) | Operating system interaction | ~380 |
 
 ---
 
@@ -270,3 +272,386 @@ print(f"Python version: {platform.python_version()}")
 | `python_implementation()` | Interpreter type | 'CPython' |
 
 ---
+
+## The `sys` Module
+
+The `sys` module provides access to variables and functions that interact with the **Python interpreter** itself. It's essential for understanding how Python runs your code.
+
+```python
+import sys
+```
+
+### Key Use Cases
+
+1. **Command-line arguments** - Access arguments passed to your script
+2. **Module search path** - Control where Python looks for imports
+3. **Standard streams** - Access stdin, stdout, stderr
+4. **Interpreter information** - Version, platform, recursion limits
+5. **Script termination** - Exit the program with a status code
+
+---
+
+### `sys.argv` - Command Line Arguments
+
+A list containing the script name and any arguments passed to it.
+
+```python
+# script.py
+import sys
+
+print(f"Script name: {sys.argv[0]}")
+print(f"Arguments: {sys.argv[1:]}")
+print(f"Total args: {len(sys.argv)}")
+
+# Run: python script.py hello world 123
+# Output:
+# Script name: script.py
+# Arguments: ['hello', 'world', '123']
+# Total args: 4
+```
+
+**PCAP Trap:** `sys.argv[0]` is always the script name, actual arguments start at index 1.
+
+---
+
+### `sys.path` - Module Search Path
+
+A list of directories where Python looks for modules when you use `import`.
+
+```python
+import sys
+
+# See where Python looks for modules
+for path in sys.path:
+    print(path)
+
+# Add a custom directory (temporarily)
+sys.path.append('/my/custom/modules')
+
+# Now Python will also search there for imports
+```
+
+**Windows Paths - Backslash Escaping:**
+
+On Windows, paths use backslashes (`\`). Since `\` is normally used to escape characters in strings (e.g., `\n` = newline, `\t` = tab), you must **escape the backslash** with another backslash:
+
+```python
+# WRONG - \U and \p are interpreted as escape sequences
+sys.path.append('C:\Users\user\py\modules')  # SyntaxError or wrong path!
+
+# CORRECT - Double backslash escapes properly
+sys.path.append('C:\\Users\\user\\py\\modules')
+
+# ALTERNATIVE - Raw string (prefix with r)
+sys.path.append(r'C:\Users\user\py\modules')
+```
+
+**How Python resolves imports:**
+1. Current directory (usually first)
+2. PYTHONPATH environment variable directories
+3. Standard library directories
+4. Site-packages (third-party packages)
+
+---
+
+### `sys.exit()` - Exit the Program
+
+Terminates the script with an optional exit code.
+
+```python
+import sys
+
+def main():
+    if some_error:
+        print("Error occurred!", file=sys.stderr)
+        sys.exit(1)  # Non-zero = error
+
+    print("Success!")
+    sys.exit(0)  # Zero = success (optional, default)
+```
+
+**Exit codes:**
+- `0` = Success (default)
+- `1-255` = Error (convention: different codes for different errors)
+
+---
+
+### `sys.stdin`, `sys.stdout`, `sys.stderr` - Standard Streams
+
+The three standard I/O streams:
+
+```python
+import sys
+
+# Normal output (what print() uses)
+sys.stdout.write("Hello\n")
+
+# Error output (separate stream)
+sys.stderr.write("Error message\n")
+
+# Read input (what input() uses)
+data = sys.stdin.readline()
+```
+
+**Why separate stderr?** Allows redirecting normal output while keeping errors visible:
+```bash
+python script.py > output.txt  # stdout to file, stderr still on screen
+```
+
+---
+
+### `sys.version` and `sys.version_info` - Python Version
+
+```python
+import sys
+
+print(sys.version)
+# '3.10.4 (main, Mar 31 2022, 08:41:55) [GCC 7.5.0]'
+
+print(sys.version_info)
+# sys.version_info(major=3, minor=10, micro=4, releaselevel='final', serial=0)
+
+# Check minimum version
+if sys.version_info < (3, 8):
+    sys.exit("Python 3.8+ required")
+```
+
+---
+
+### `sys.getrecursionlimit()` / `sys.setrecursionlimit()` - Recursion Control
+
+```python
+import sys
+
+print(sys.getrecursionlimit())  # Default: usually 1000
+
+# Increase if needed (be careful!)
+sys.setrecursionlimit(2000)
+```
+
+**Warning:** Setting too high can crash Python with a stack overflow.
+
+---
+
+### `sys` Quick Reference
+
+| Function/Variable | Description | Example |
+|-------------------|-------------|---------|
+| `sys.argv` | Command-line arguments | `['script.py', 'arg1']` |
+| `sys.path` | Module search paths | `['/home/user', ...]` |
+| `sys.exit(code)` | Exit program | `sys.exit(1)` |
+| `sys.version` | Python version string | `'3.10.4 ...'` |
+| `sys.version_info` | Version as named tuple | `(3, 10, 4, ...)` |
+| `sys.stdin/stdout/stderr` | Standard I/O streams | File-like objects |
+| `sys.getrecursionlimit()` | Max recursion depth | `1000` |
+
+---
+
+## The `os` Module
+
+The `os` module provides functions for interacting with the **operating system**. It's essential for file/directory operations and environment variables.
+
+```python
+import os
+```
+
+### Key Use Cases
+
+1. **File/directory operations** - Create, delete, rename, list
+2. **Path manipulation** - Join paths, get file info
+3. **Environment variables** - Access system configuration
+4. **Process management** - Run commands, get current directory
+
+---
+
+### `os.getcwd()` and `os.chdir()` - Working Directory
+
+```python
+import os
+
+# Get current working directory
+print(os.getcwd())  # '/home/user/project'
+
+# Change directory
+os.chdir('/home/user/other_folder')
+print(os.getcwd())  # '/home/user/other_folder'
+```
+
+---
+
+### `os.listdir()` - List Directory Contents
+
+```python
+import os
+
+# List files and folders in current directory
+files = os.listdir('.')
+print(files)  # ['file1.py', 'folder1', 'data.csv']
+
+# List specific directory
+files = os.listdir('/home/user/documents')
+```
+
+---
+
+### `os.mkdir()` and `os.makedirs()` - Create Directories
+
+```python
+import os
+
+# Create single directory
+os.mkdir('new_folder')
+
+# Create nested directories (like mkdir -p)
+os.makedirs('parent/child/grandchild', exist_ok=True)
+# exist_ok=True prevents error if already exists
+```
+
+---
+
+### `os.remove()` and `os.rmdir()` - Delete Files/Directories
+
+```python
+import os
+
+# Delete a file
+os.remove('unwanted_file.txt')
+
+# Delete an EMPTY directory
+os.rmdir('empty_folder')
+
+# For non-empty directories, use shutil.rmtree()
+import shutil
+shutil.rmtree('folder_with_contents')
+```
+
+---
+
+### `os.path` - Path Manipulation (Submodule)
+
+The `os.path` submodule is crucial for cross-platform path handling:
+
+```python
+import os
+
+# Join paths (handles OS-specific separators)
+path = os.path.join('folder', 'subfolder', 'file.txt')
+# Windows: 'folder\\subfolder\\file.txt'
+# Linux:   'folder/subfolder/file.txt'
+
+# Check if path exists
+os.path.exists('some_file.txt')  # True/False
+
+# Check if it's a file or directory
+os.path.isfile('data.csv')      # True if it's a file
+os.path.isdir('my_folder')      # True if it's a directory
+
+# Get file name from path
+os.path.basename('/home/user/file.txt')  # 'file.txt'
+
+# Get directory from path
+os.path.dirname('/home/user/file.txt')   # '/home/user'
+
+# Split into directory and filename
+os.path.split('/home/user/file.txt')  # ('/home/user', 'file.txt')
+
+# Get file extension
+os.path.splitext('data.csv')  # ('data', '.csv')
+
+# Get absolute path
+os.path.abspath('relative/path')  # '/full/absolute/path'
+```
+
+---
+
+### `os.environ` - Environment Variables
+
+```python
+import os
+
+# Get an environment variable
+home = os.environ.get('HOME')  # '/home/user' (Linux/Mac)
+path = os.environ.get('PATH')  # System PATH variable
+
+# Get with default if not set
+debug = os.environ.get('DEBUG', 'False')
+
+# Set an environment variable (for this process only)
+os.environ['MY_VAR'] = 'some_value'
+```
+
+**Common environment variables:**
+- `HOME` / `USERPROFILE` - User's home directory
+- `PATH` - Executable search paths
+- `PYTHONPATH` - Additional Python module paths
+
+---
+
+### `os.name` - Operating System Name
+
+```python
+import os
+
+print(os.name)
+# 'nt'     - Windows
+# 'posix'  - Linux, macOS, Unix
+```
+
+---
+
+### Practical Example: Cross-Platform Script
+
+```python
+import os
+import sys
+
+def setup_project():
+    # Get project directory (where script is located)
+    script_dir = os.path.dirname(os.path.abspath(__file__))
+
+    # Create data directory if it doesn't exist
+    data_dir = os.path.join(script_dir, 'data')
+    os.makedirs(data_dir, exist_ok=True)
+
+    # Check if config file exists
+    config_path = os.path.join(script_dir, 'config.ini')
+    if not os.path.exists(config_path):
+        print(f"Warning: {config_path} not found", file=sys.stderr)
+        sys.exit(1)
+
+    print(f"Project setup complete in {script_dir}")
+
+if __name__ == '__main__':
+    setup_project()
+```
+
+---
+
+### `os` Quick Reference
+
+| Function | Description | Example |
+|----------|-------------|---------|
+| `os.getcwd()` | Get current directory | `'/home/user'` |
+| `os.chdir(path)` | Change directory | `os.chdir('/tmp')` |
+| `os.listdir(path)` | List directory contents | `['file1', 'file2']` |
+| `os.mkdir(path)` | Create directory | `os.mkdir('new')` |
+| `os.makedirs(path)` | Create nested directories | `os.makedirs('a/b/c')` |
+| `os.remove(path)` | Delete file | `os.remove('file.txt')` |
+| `os.rmdir(path)` | Delete empty directory | `os.rmdir('empty')` |
+| `os.path.join()` | Join path components | `'a/b/c'` or `'a\\b\\c'` |
+| `os.path.exists()` | Check if path exists | `True/False` |
+| `os.path.isfile()` | Check if it's a file | `True/False` |
+| `os.path.isdir()` | Check if it's a directory | `True/False` |
+| `os.environ` | Environment variables dict | `os.environ['HOME']` |
+| `os.name` | OS type | `'nt'` or `'posix'` |
+
+---
+
+## PCAP Traps - All Modules
+
+1. **`sys.argv[0]`** is the script name, not the first argument
+2. **`sys.exit()`** without argument exits with code 0 (success)
+3. **`os.path.join()`** is preferred over string concatenation for paths
+4. **`os.makedirs()`** creates all intermediate directories, `os.mkdir()` doesn't
+5. **`os.rmdir()`** only works on EMPTY directories
+6. **`os.environ.get()`** is safer than `os.environ[]` (returns None vs raises KeyError)

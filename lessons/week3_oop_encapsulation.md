@@ -352,6 +352,57 @@ class Circle:
         return 3.14 * self.radius ** 2
 ```
 
+### Trap 5: Property Recursion Trap
+
+### The Problem Code
+```python
+class BadExample:
+    def __init__(self, value):
+        self.value = value  # Line A
+
+    @property
+    def value(self):
+        return self.value   # Line B
+
+    @value.setter
+    def value(self, new_value):
+        self.value = new_value  # Line C
+```
+
+### What Happens Step-by-Step
+
+**Step 1:** You call `BadExample(10)`
+**Step 2:** Python runs `__init__(self, 10)`
+**Step 3:** Line A executes: `self.value = value` (which is `self.value = 10`)
+**Step 4:** Python sees `self.value = ...` and thinks: "Is there a setter for `value`?"
+**Step 5:** YES! The `@value.setter` exists. Python calls it.
+**Step 6:** The setter runs Line C: `self.value = new_value`
+**Step 7:** Python sees `self.value = ...` again → calls the setter again
+**Step 8:** Infinite loop → RecursionError
+
+### The Key Insight
+
+The **property name** (`value`) and the **storage attribute** must be DIFFERENT:
+- Property name: `value` (what users access)
+- Storage attribute: `_value` (where data actually lives)
+
+### The Fix
+```python
+class GoodExample:
+    def __init__(self, value):
+        self._value = value  # Store in _value (different name!)
+
+    @property
+    def value(self):
+        return self._value   # Return from _value
+
+    @value.setter
+    def value(self, new_value):
+        self._value = new_value  # Store in _value
+```
+
+Now `self.value = 10` calls the setter, which stores in `self._value` (no recursion).
+
 ---
 
 ## Exam Tips
