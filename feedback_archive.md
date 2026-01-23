@@ -1701,3 +1701,91 @@ When you do `Child.class_var = "child"`, Python creates a **new** class attribut
 
 ---
 
+## Week 3, Day 5 - 2026-01-23 (Friday)
+
+**Topic:** Generators Practice, Week Review & Exam Prep
+
+### Mentor Assessment
+
+**Task 1: Generator Basics - 87.5%**
+- Q1: ✅ Correct (1, 2)
+- Q2: ⚠️ Partial - said "StopIteration error", but `list()` handles it gracefully → returns `[]`
+- Q3: ✅ Correct (list vs generator)
+- Q4: ✅ Correct (StopIteration)
+
+**Task 2: countdown Generator - 100%**
+- ✅ Perfect implementation using `range(n, 0, -1)` with yield
+- Clean, correct code
+
+**Task 3: Generator Expressions - 100%**
+- A) ✅ `(x ** 2 for x in range(10))`
+- B) ✅ `(x for x in range(20) if x % 2 == 0)`
+- C) ✅ Output: 2, 4, [6] - all correct
+
+**Task 4: price_ticks Generator - 80%**
+- ✅ Uses `yield` correctly
+- ⚠️ Bug: Each tick uses `start_price`, not tracking accumulated price
+- Should be: `price = price * (1 + change)` where price updates each iteration
+
+**Task 5: Portfolio Class - 90%**
+- ✅ All dunder methods correct (`__init__`, `__str__`, `__len__`, `__iter__`)
+- ✅ Read-only `cash` property
+- ✅ deposit/withdraw with validation
+- ⚠️ Minor: `__str__` has comma before parenthesis
+- ⚠️ Minor: withdraw stores positive amount but spec said negative
+
+**Task 6: Multiple Choice - 75%**
+- Q1: ✅ B (value = 2)
+- Q2: ❌ Said D, correct is **A only**
+  - Option B: `self.x = 10` causes recursion (no setter, calls property getter)
+  - Option C: Just a method, not a property (missing `@property`)
+- Q3: ✅ B (prints nothing)
+- Q4: ✅ B (StopIteration after return)
+
+**Task 7: Debug Generator - 100%**
+- ✅ Correctly identified `return` stops the loop
+- ✅ Fixed to `yield`
+- Perfect explanation
+
+**Task 8: profitable_trades - 100%**
+- ✅ Used generator expression approach (valid alternative to yield loop)
+- ✅ Bonus answer correct (memory efficiency)
+
+### Final Score: 91% (A-)
+
+### Strengths
+- ✅ Quick learner - generators understood in one session with proper materials
+- ✅ Excellent Portfolio class implementation
+- ✅ Strong debugging skills
+- ✅ Generator expressions mastered
+
+### Corrections Provided
+1. **Q2 exhausted generator:** `list(exhausted_gen)` returns `[]`, doesn't raise StopIteration
+2. **Task 4 price tracking:** Each tick should update from previous price, not always start_price
+3. **Q6 Q2 properties:** Only Option A is valid - B causes recursion, C is a method not property
+
+### Week 3 Final Summary
+
+| Day | Score | Topic |
+|-----|-------|-------|
+| 1 | 92% | Encapsulation & Properties |
+| 2 | 91% | Advanced Properties & Validation |
+| 3 | 89% | Dunder Methods & TradeManager |
+| 4 | 91% | Inheritance Patterns |
+| 5 | 91% | Generators & Week Review |
+
+**Week 3 Average: 90.8% (A-)**
+
+**Key Accomplishments:**
+- Trade class with encapsulated PnL
+- TradeManager class with dunder methods
+- Portfolio class combining all concepts
+- MarginAccount with inheritance
+- Generator functions and expressions
+
+**Ready for Week 4:** Yes - strong foundation in OOP, properties, dunder methods, and generators.
+
+**Weekend Exams:** Week3_Exam_A.md and Week3_Exam_B.md generated (30 questions each).
+
+---
+

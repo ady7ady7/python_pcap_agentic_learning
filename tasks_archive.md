@@ -526,3 +526,72 @@ Format: Date | Topic | Score | Difficulty | Notes
 
 ---
 
+## Week 3, Day 5 - 2026-01-23 (Friday)
+
+**Topic:** Generators Practice, Week Review & Exam Prep
+**Score:** 91% (A-)
+**Difficulty:** 5/10 (appropriate)
+**Time Spent:** Not reported
+
+**Tasks Completed:**
+1. Generator basics (4 questions - 3.5/4)
+2. countdown generator (perfect)
+3. Generator expressions (3/3 correct)
+4. price_ticks generator (minor bug - didn't track price between ticks)
+5. Portfolio class - Week 3 review (excellent)
+6. PCAP multiple choice (3/4 - missed Q2 on read-only properties)
+7. Debug generator bug (perfect - return → yield)
+8. profitable_trades generator method (perfect)
+
+**Key Learnings:**
+- Generator syntax with `yield`
+- Generator expressions `(x for x in items)`
+- Exhausted generators return empty (not StopIteration in for loop)
+- `return` in generator causes StopIteration
+
+**Corrections:**
+- Task 1 Q2: `list(exhausted_gen)` returns `[]`, not StopIteration
+- Task 4: Price should accumulate changes, not always use start_price
+- Task 6 Q2: Only Option A is a valid read-only property (B causes recursion, C is a method)
+
+**Student Feedback:**
+- "I still kind of don't understand the concept of using these generators. Lists seem to make more sense to me."
+- Asked if generators are PCAP relevant (YES)
+
+**Project Milestones:**
+- PriceTickGenerator created
+- Portfolio class with properties + dunder methods
+- SimpleTradeManager with generator method
+
+---
+
+## Week 3 Summary
+
+| Day | Score | Topic |
+|-----|-------|-------|
+| 1 | 92% | Encapsulation & Properties |
+| 2 | 91% | Advanced Properties & Validation |
+| 3 | 89% | Dunder Methods & TradeManager |
+| 4 | 91% | Inheritance (fair tasks only) |
+| 5 | 91% | Generators & Week Review |
+
+**Week 3 Average: 90.8% (A-)**
+
+**Strengths:**
+- Excellent class-building skills (Portfolio, TradeManager, MarginAccount)
+- Strong debugging abilities
+- Good understanding of inheritance/super()
+- Quick learner on new concepts (generators picked up in one session)
+
+**Areas for Continued Practice:**
+- Read-only property patterns (Option A vs B vs C)
+- Generator use cases (when to use vs lists)
+- Class variable inheritance behavior
+
+**Weekend Tasks:**
+- PCAP Mock Exam A (30 questions)
+- PCAP Mock Exam B (30 questions)
+- Target: 70%+ (21/30) on each
+
+---
+

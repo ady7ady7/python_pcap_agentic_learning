@@ -1,47 +1,53 @@
-# Daily Feedback Template
+# Weekend Exam Feedback
 
-**Date:** 2026-01-23
-**Week:** 3 | **Day:** 5 (Friday)
-**Topic:** Week Review, Generators Practice & Weekend Exam Prep
+**Date:** 2026-01-24 / 2026-01-25
+**Week:** 3 | **Weekend Exams**
 
 ---
 
-## Self-Assessment
+## Exam A Feedback
 
-**Tasks Completed:** ___/8
-
-**Difficulty Rating:**
-[ ] Too Easy
-[ ] Just Right
-[ ] Too Hard
+**Score:** ___/30
 
 **Time Spent:** ___ minutes
 
----
+**Difficulty (1-10):**
 
-## Reflection Questions
-
-**1. What concept clicked for you today?**
+**Questions I guessed on:**
 
 
-**2. What's still confusing?**
-
-
-**3. Which task was most challenging and why?**
-
-
-**4. Did you encounter any bugs/errors that taught you something?**
-
-
-**5. How confident do you feel about today's topic?**
+**Topics I need to review:**
 
 
 ---
 
-## Questions for Mentor
+## Exam B Feedback
+
+**Score:** ___/30
+
+**Time Spent:** ___ minutes
+
+**Difficulty (1-10):**
+
+**Questions I guessed on:**
+
+
+**Topics I need to review:**
 
 
 ---
 
-**Instructions:** Fill this out after completing the day's tasks. I'll archive it and provide assessment tomorrow.
+## Weekend Reflection
 
+**What concepts feel solid now?**
+
+
+**What still needs work before Week 4?**
+
+
+**Any questions for mentor?**
+
+
+---
+
+**Instructions:** Complete both exams (no IDE!), then fill this out. Submit your answer sheets and I'll provide detailed feedback with explanations.

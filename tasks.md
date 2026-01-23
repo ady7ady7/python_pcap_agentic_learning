@@ -1,612 +1,588 @@
-# Week 3, Day 4 - Inheritance Patterns, Generators & PCAP Drills
+# Week 3, Day 5 - Friday
+## Topic: Generators Practice, Week Review & Exam Prep
 
-**Date:** 2026-01-22
-**Focus:** Scaffolded inheritance examples, generators intro, PCAP core topics
+**Date:** 2026-01-23
 
-**Lessons:**
-- [Inheritance & Polymorphism](lessons/week2_inheritance.md)
-- [Dunder Methods](lessons/week3_dunder_methods.md)
+**IMPORTANT:** READ `lessons/week3_generators.md` FIRST before starting tasks!
 
-**Target Difficulty:** 5-6/10
+The lesson is now available with full scaffolded examples. Study it before attempting these tasks.
+
+**Target Difficulty:** 5/10
 
 **Remember:** Work in `practice.py`, paste FINAL answers here for review.
 
 ---
 
-## Scaffolded Explanation: Inheritance & `super().__init__()`
+## Task 1: Generator Basics (After Reading Lesson)
 
-You asked for this yesterday. Here's the definitive guide:
+**Instructions:** Answer these questions AFTER reading the generators lesson.
 
-### The Golden Rule
-
-**If a child class defines `__init__`, the parent's `__init__` does NOT run automatically.**
-
-You MUST call `super().__init__()` explicitly if you want parent initialization.
-
-### Example 1: WITHOUT `super().__init__()`
-
-```python
-class Parent:
-    def __init__(self):
-        self.x = 1
-        print("Parent __init__ ran")
-
-class Child(Parent):
-    def __init__(self):
-        self.y = 2
-        print("Child __init__ ran")
-
-c = Child()
-# Output: "Child __init__ ran"  (Parent never ran!)
-
-print(c.y)  # 2 - works
-print(c.x)  # AttributeError: 'Child' has no attribute 'x'
-```
-
-**What happened:** Child's `__init__` completely **replaced** Parent's. The line `self.x = 1` never executed.
-
-### Example 2: WITH `super().__init__()`
-
-```python
-class Parent:
-    def __init__(self):
-        self.x = 1
-        print("Parent __init__ ran")
-
-class Child(Parent):
-    def __init__(self):
-        super().__init__()  # Call Parent's __init__ FIRST
-        self.y = 2
-        print("Child __init__ ran")
-
-c = Child()
-# Output:
-# "Parent __init__ ran"
-# "Child __init__ ran"
-
-print(c.x)  # 1 - works! Parent set it up
-print(c.y)  # 2 - works! Child set it up
-```
-
-### Example 3: NO `__init__` in Child (Automatic Inheritance)
-
-```python
-class Parent:
-    def __init__(self):
-        self.x = 1
-        print("Parent __init__ ran")
-
-class Child(Parent):
-    pass  # No __init__ defined
-
-c = Child()
-# Output: "Parent __init__ ran"  (Automatically uses Parent's!)
-
-print(c.x)  # 1 - works!
-```
-
-**Rule:** If Child doesn't define `__init__` at all, Python automatically uses Parent's.
-
-### Quick Reference Table
-
-| Child has `__init__`? | Calls `super().__init__()`? | Parent's `__init__` runs? |
-|----------------------|----------------------------|---------------------------|
-| No | N/A | ✅ YES (automatic) |
-| Yes | No | ❌ NO |
-| Yes | Yes | ✅ YES |
-
----
-
-## Task 1: PCAP Warm-up - Inheritance Output Prediction
-
-Predict the output for each snippet:
-
-**Snippet A:**
-```python
-class A:
-    def __init__(self):
-        self.value = 10
-
-class B(A):
-    def __init__(self):
-        self.value = 20
-
-b = B()
-print(b.value)
-```
-
-**Snippet B:**
-```python
-class A:
-    def __init__(self):
-        self.value = 10
-
-class B(A):
-    def __init__(self):
-        super().__init__()
-        self.value = 20
-
-b = B()
-print(b.value)
-```
-
-**Snippet C:**
-```python
-class A:
-    def __init__(self):
-        self.value = 10
-
-class B(A):
-    pass
-
-b = B()
-print(b.value)
-```
-
-**Your predictions:**
-```
-Snippet A: 20
-
-Snippet B: 20
-
-Snippet C: 10
-
-```
-
----
-
-## Task 2: Build a `TradingAccount` Class Hierarchy
-
-Create a class hierarchy for trading accounts:
-
-**Base class `Account`:**
-```python
-class Account:
-    def __init__(self, owner: str, balance: float = 0.0):
-        self._owner = owner
-        self._balance = balance
-
-    @property
-    def balance(self) -> float:
-        return self._balance
-
-    def deposit(self, amount: float) -> None:
-        if amount > 0:
-            self._balance += amount
-```
-
-**Your task:** Create `MarginAccount(Account)` that:
-1. Calls `super().__init__(owner, balance)`
-2. Adds a new attribute `_leverage` (float, default 1.0)
-3. Adds a `leverage` property (read-only)
-4. Adds a `buying_power` property that returns `balance * leverage`
-5. Overrides `__str__` to show: `"MarginAccount(owner='Alice', balance=1000.00, leverage=2.0)"`
-
-**Test code:**
-```python
-acc = MarginAccount("Alice", 1000.0, leverage=2.0)
-print(acc.balance)       # 1000.0
-print(acc.leverage)      # 2.0
-print(acc.buying_power)  # 2000.0
-acc.deposit(500)
-print(acc.buying_power)  # 3000.0
-print(acc)               # MarginAccount(owner='Alice', balance=1500.00, leverage=2.0)
-```
-
-**Your code:**
-```python
-
-
-class MarginAccount(Account):
-    '''A child class with margin and buying power added'''
-
-    def __init__(self, owner: str, balance: float, leverage: float):
-        super().__init__(owner, balance)
-        self._leverage = leverage
-        self._buying_power = 0.0
-        
-    def __str__(self):
-        return f'{__class__.__name__}(owner = {self._owner}, balance = {self._balance}, leverage = {self._leverage})'
-    
-    @property
-    def buying_power(self) -> float:
-        '''A property that calculates the current buying power'''
-        self._buying_power = self._leverage * self._balance
-        return self._buying_power
-    
-    @property
-    def leverage(self) -> float:
-        '''A property that describes leverage (read-only)'''
-        return self._leverage
-```
-
-**Test output:**
-```
-
-$ python practice.py
-1000.0
-2.0
-2000.0
-3000.0
-MarginAccount(owner = Alice, balance = 1500.0, leverage = 2.0)
-(.venv) 
-
-```
-
----
-
-## Task 3: Generator Basics (PCAP Topic)
-
-Generators are functions that use `yield` instead of `return`. They produce values one at a time, saving memory.
-
-**Q1:** What's the output?
-```python
-def count_up(n):
-    for i in range(1, n + 1):
-        yield i
-
-gen = count_up(3)
-print(type(gen))
-print(next(gen))
-print(next(gen))
-print(next(gen))
-print(next(gen))  # What happens here?
-
-WE DID NOT USE YIELD FOR ONCE - IT'S MY FIRST ENCOUNTER WITH THIS, SO I SIMPLY RAN THE CODE:
-
-1
-2
-3
-Traceback (most recent call last):
-  File "C:\Users\HARDPC\Desktop\AL\projekty\python_pcap_agentic_learning\practice.py", line 3099, in <module>
-    print(next(gen))  # What happens here?
-          ~~~~^^^^^
-StopIteration
-
-
-
-```
-
-**Q2:** Convert this list comprehension to a generator expression:
-```python
-squares = [x**2 for x in range(10)]  # List comprehension
-```
-
-**Q3:** What's the key difference between a list and a generator in terms of memory?
-
-**Your answers:**
-
-SAME NIGGA, WHY DO YOU ASK ME TO DO A THING WE DIDN'T EVEN COVER...
-I DON'T KNOW, HOW WOULD I AND WHY?
-
-IS IT EVEN PCAP-RELEVANT? IF IT IS, MAYBE INTRODUCE IT FIRST? 
-IF IT ISN'T MAYBE FORGET IT? AND DON'T YOU DARE TO TAKE AWAYP OINTS FROM ME FOR THAT!
-
-```
-Q1 Output:
-
-
-Q1 Last line:
-
-
-Q2 Generator expression:
-
-
-Q3 Memory difference:
-
-
-```
-
----
-
-## Task 4: PROJECT - Create a `PriceGenerator`
-
-Create a generator function that simulates price movements:
-
-```python
-def price_generator(start_price: float, num_ticks: int, volatility: float = 0.01):
-    """
-    Generate simulated price ticks.
-
-    Args:
-        start_price: Starting price
-        num_ticks: Number of price updates to generate
-        volatility: Max percentage change per tick (0.01 = 1%)
-
-    Yields:
-        float: Next price value
-    """
-    # Your implementation here
-    pass
-```
-
-**Requirements:**
-1. Start with `start_price`
-2. For each tick, change price by random amount within ±volatility
-3. Use `random.uniform(-volatility, volatility)` for the change
-4. Yield each new price
-5. Price should never go below 0.01
-
-**Test code:**
-```python
-import random
-random.seed(42)  # For reproducible results
-
-gen = price_generator(100.0, 5, volatility=0.02)
-for price in gen:
-    print(f"${price:.2f}")
-```
-
-**Your code:**
-```python
-
-
-import random
-
-def price_generator(start_price: float, num_ticks: int, volatility: int = 5):
-    """
-    Generate simulated price ticks.
-
-    Args:
-        start_price: Starting price
-        num_ticks: Number of price updates to generate
-        volatility: Max percentage change per tick (1 = 1%)
-
-    Yields:
-        float: Next price value
-    """
-
-    prices = []
-    for i in range(num_ticks):
-        price = start_price * (1 - (random.uniform(-volatility, volatility) / 100))
-        prices.append(price)
-    
-    return prices
-
-
-prices = price_generator(100, 10, 5)
-print(prices)
-
-
-```
-
-**Test output:**
-```
-
-I decided to use int percents, so 1 = 1% - clearly described it in my docstring, so it wouldn't cause any confusion.
-
-[97.8427343661148, 99.30686543975983, 95.00972445447661, 104.76655606092213, 103.19090647636817, 101.00014832311996, 98.17085104805695, 102.63371778154186, 102.21331515408372, 99.93737557966736]
-
-Eveyrthing works.
-
-```
-
----
-
-## Task 5: PCAP Multiple Choice - Core Topics
-
-**Question 1:** What does `yield` do in a function?
-- A) Immediately returns a value and terminates the function
-- B) Pauses the function and returns a value, resuming on next call
-- C) Creates a list of all values
-- D) Raises a StopIteration exception
-
-**Your answer:**
-I DON'T KNOW, WE DIDN'T HAVE THAT, AGAIN - DON'T YOU DARE to take away points from me. If it's PCAP -revelant, add relevant notes about it, as it's my first encounter today with yield.
-
-
----
-
-**Question 2:** What is the output?
-```python
-class Parent:
-    class_var = "parent"
-
-class Child(Parent):
-    pass
-
-Child.class_var = "child"
-print(Parent.class_var, Child.class_var)
-```
-- A) `parent parent`
-- B) `child child`
-- C) `parent child`
-- D) `child parent`
-
-**Your answer:**
-B
-
-
----
-
-**Question 3:** What exception is raised when calling `next()` on an exhausted generator?
-- A) `GeneratorExit`
-- B) `StopIteration`
-- C) `IndexError`
-- D) `ValueError`
-
-**Your answer:**
-B (again, asking about generator and yield...)
-
-
----
-
-**Question 4:** Given this code, what is `result`?
+**Q1:** What is the output?
 ```python
 def gen():
     yield 1
     yield 2
     yield 3
 
-result = list(gen())
+g = gen()
+print(next(g))
+print(next(g))
+
 ```
-- A) `<generator object>`
-- B) `[1, 2, 3]`
-- C) `(1, 2, 3)`
-- D) `6`
 
-**Your answer:**
-Dude....
-STOP ASKING ME ABOUT A TOPIC I NEVER ENCOUNTERED!!!!!!!!!!!!!!
+**Q2:** What is the output?
+```python
+def gen():
+    yield "a"
+    yield "b"
 
+g = gen()
+result = list(g)
+print(result)
+print(list(g))  # Called again on same generator
+```
+
+**Q3:** What's the difference between these two?
+```python
+a = [x**2 for x in range(5)]
+b = (x**2 for x in range(5))
+print(type(a))
+print(type(b))
+```
+
+**Q4:** What exception is raised?
+```python
+def simple():
+    yield 1
+
+g = simple()
+next(g)
+next(g)  # What happens here?
+```
+
+**Your answers:**
+```
+Q1: 1 2 (below)
+
+Q2: [a, b], StopIteration error
+
+Q3: First is a list, the second one is a generator.
+
+Q4: StopIteration exception
+```
 
 ---
 
-## Task 6: Debugging - Fix the Inheritance Bug
+## Task 2: Write Your First Generator
 
-This code has a bug. Find and fix it:
+**Instructions:** Write a generator function called `countdown` that yields numbers from `n` down to 1.
 
 ```python
-class Vehicle:
-    def __init__(self, brand: str, year: int):
-        self.brand = brand
-        self.year = year
+def countdown(n):
+    # Your code here - use yield!
+    pass
 
-    def info(self) -> str:
-        return f"{self.year} {self.brand}"
+# Test it:
+for num in countdown(5):
+    print(num)
 
-class Car(Vehicle):
-    def __init__(self, brand: str, year: int, doors: int):
-        self.doors = doors
-
-    def info(self) -> str:
-        return f"{super().info()} with {self.doors} doors"
-
-car = Car("Toyota", 2020, 4)
-print(car.info())  # Expected: "2020 Toyota with 4 doors"
+# Expected output:
+# 5
+# 4
+# 3
+# 2
+# 1
 ```
 
-**What's the bug?**
-```
-#The child class has init, so it won't automatically inherit the attributes from the parent class,
-#yet it doesn't use the super().__init__() so it won't actually be able to ge the brand, and year attributes.
-```
-
-**Your fixed code:**
+**Your code:**
 ```python
-class Vehicle:
-    def __init__(self, brand: str, year: int):
-        self.brand = brand
-        self.year = year
 
-    def info(self) -> str:
-        return f"{self.year} {self.brand}"
 
-class Car(Vehicle):
-    def __init__(self, brand: str, year: int, doors: int):
-        super().__init__(brand, year)
-        self.doors = doors
+def countdown(n):
+    for num in range(n, 0, -1): #I assume we want to include 1
+        yield num
 
-    def info(self) -> str:
-        return f"{super().info()} with {self.doors} doors"
+```
 
-car = Car("Toyota", 2020, 4)
+**Test output:**
+```
+
+$ python practice.py
+5
+4
+3
+2
+1
+
+```
+
+---
+
+## Task 3: Generator Expression Practice
+
+**Instructions:** Convert these list comprehensions to generator expressions.
+
+```python
+# A) Convert this list comprehension to a generator expression
+squares_list = [x**2 for x in range(10)]
+
+# Your generator expression (hint: change [ ] to ( ))
+squares_gen = ???
+
+# B) Convert this filtered list comprehension to a generator expression
+evens_list = [x for x in range(20) if x % 2 == 0]
+
+# Your generator expression:
+evens_gen = ???
+
+# C) Predict the output:
+gen = (x * 2 for x in [1, 2, 3])
+print(next(gen))
+print(next(gen))
+print(list(gen))  # What remains?
+```
+
+**Your answers:**
+```
+# A) Convert this list comprehension to a generator expression
+squares_list = [x**2 for x in range(10)]
+
+# Your generator expression (hint: change [ ] to ( ))
+squares_gen = (x ** 2 for x in range (10))
+
+# B) Convert this filtered list comprehension to a generator expression
+evens_list = [x for x in range(20) if x % 2 == 0]
+
+# Your generator expression:
+evens_gen = (x for x in range (20) if x % 2 == 0)
+
+# C) Predict the output:
+gen = (x * 2 for x in [1, 2, 3])
+print(next(gen)) # 2
+print(next(gen)) # 4
+print(list(gen))  # What remains? [6]
+
+```
+
+---
+
+## Task 4: PROJECT - PriceTickGenerator (Proper Version)
+
+**Instructions:** Create a generator that simulates price movements. Use `yield` this time!
+
+```python
+import random
+
+def price_ticks(start_price: float, num_ticks: int):
+    """
+    Generate simulated price movements.
+
+    Each tick moves the price by -1% to +1% randomly.
+
+    Args:
+        start_price: Starting price
+        num_ticks: Number of prices to generate
+
+    Yields:
+        float: Each new price (rounded to 2 decimals)
+    """
+    # Your code here - use yield!
+    pass
+
+# Test:
+random.seed(42)  # For reproducible results
+for price in price_ticks(100.0, 5):
+    print(f"${price:.2f}")
+```
+
+**Requirements:**
+1. Use `yield` (NOT return a list)
+2. Each tick: `price = price * (1 + random.uniform(-0.01, 0.01))`
+3. Round each price to 2 decimal places: `round(price, 2)`
+4. Never let price go below 0.01
+
+**Your code:**
+```python
+
+
+import random
+
+def price_ticks(start_price: float, num_ticks: int):
+    """
+    Generate simulated price movements.
+
+    Each tick moves the price by -1% to +1% randomly.
+
+    Args:
+        start_price: Starting price
+        num_ticks: Number of prices to generate
+
+    Yields:
+        float: Each new price (rounded to 2 decimals)
+    """
+
+    for num in range(num_ticks):
+        exit_price = round(random.uniform(start_price * 0.99, start_price * 1.01), 2)
+        yield exit_price
+```
+
+**Test output:**
+```
+$ python practice.py
+$100.28
+$99.05
+$99.55
+$99.45
+$100.47
+```
+
+---
+
+## Task 5: Week 3 Review - Portfolio Class
+
+**Instructions:** Create a `Portfolio` class that combines Properties + Dunder Methods from Week 3.
+
+```python
+class Portfolio:
+    """
+    A portfolio that holds cash and tracks transactions.
+
+    Requirements:
+    1. __init__(self, initial_cash: float) - store as _cash (protected)
+    2. cash property (read-only) - returns current cash
+    3. _transactions list (protected) - stores all deposit/withdrawal amounts
+    4. deposit(amount) - adds to cash, appends amount to transactions
+    5. withdraw(amount) - subtracts from cash (raise ValueError if insufficient), appends negative amount
+    6. __len__ - returns number of transactions
+    7. __iter__ - iterates over transactions
+    8. __str__ - returns "Portfolio: $X.XX (N transactions)"
+    """
+    pass
+
+# Test:
+p = Portfolio(1000.0)
+p.deposit(500.0)
+p.withdraw(200.0)
+print(p)              # Portfolio: $1300.00 (2 transactions)
+print(len(p))         # 2
+for t in p:
+    print(t)          # Should print: 500.0, then -200.0
+```
+
+**Your code:**
+```python
+
+
+class Portfolio:
+    """
+    A portfolio that holds cash and tracks transactions.
+
+    Requirements:
+    1. __init__(self, initial_cash: float) - store as _cash (protected)
+    2. cash property (read-only) - returns current cash
+    3. _transactions list (protected) - stores all deposit/withdrawal amounts
+    4. deposit(amount) - adds to cash, appends amount to transactions
+    5. withdraw(amount) - subtracts from cash (raise ValueError if insufficient), appends negative amount
+    6. __len__ - returns number of transactions
+    7. __iter__ - iterates over transactions
+    8. __str__ - returns "Portfolio: $X.XX (N transactions)"
+    """
+
+    def __init__(self, initial_cash: float):
+        self._cash = initial_cash
+        self._transactions_list = []
+        
+    def __str__(self) -> str:
+        return f'{__class__.__name__}: ${self._cash:.2f}, ({len(self._transactions_list)} transactions)'
+        
+    def __len__(self) -> int:
+        '''Dunder method that allows to check the current length of the transactions list'''
+        return len(self._transactions_list)
+    
+    def __iter__(self) -> iter:
+        '''Dunder method that allows us to iterate over transactions'''
+        return iter(self._transactions_list)
+        
+    @property
+    def cash(self) -> float:
+        '''A read-only property which returns the current amount of cash'''
+        return self._cash
+    
+    
+    def deposit(self, amount):
+        '''A method used to deposit any positive amount into our account'''
+        if amount < 0:
+            raise ValueError('The deposited amount has to be above 0!')
+        else:
+            self._cash += amount
+            self._transactions_list.append(('deposit', amount))
+    
+    def withdraw(self, amount):
+        '''A method used to withdraw funds if there is a sufficient amount available'''
+        if amount > self._cash:
+            raise ValueError('Deposit impossible, not enough funds')
+        else:
+            self._cash -= amount
+            self._transactions_list.append(('withdraw', amount))
+    
+
+    #Please note that I've decided to use tuples in transactions list - as they're clearer
 
 ```
 
 **Test output:**
 ```
 $ python practice.py
-2020 Toyota with 4 doors
+Portfolio: $1300.00, (2 transactions)
+2
+('deposit', 500.0)
+('withdraw', -200.0)
 (.venv) 
+
 ```
 
 ---
 
-## Task 7: PROJECT - Enhance TradeManager with Generator
+## Task 6: PCAP Multiple Choice
 
-Add a generator method to your `TradeManager` class:
+**Q1:** What is the output?
+```python
+class A:
+    def __init__(self):
+        self.value = 1
+
+class B(A):
+    def __init__(self):
+        super().__init__()
+        self.value = self.value + 1
+
+b = B()
+print(b.value)
+```
+- A) 1
+- B) 2
+- C) AttributeError
+- D) None
+
+Answer: B
+
+**Q2:** Which correctly creates a read-only property?
+```python
+# Option A
+class A:
+    def __init__(self):
+        self._x = 10
+    @property
+    def x(self):
+        return self._x
+
+# Option B
+class B:
+    def __init__(self):
+        self.x = 10
+    @property
+    def x(self):
+        return self.x
+
+# Option C
+class C:
+    def __init__(self):
+        self.__x = 10
+    def x(self):
+        return self.__x
+```
+- A) Option A only
+- B) Option B only
+- C) Option C only
+- D) Options A and C
+
+Answer: D 
+
+**Q3:** What happens when you iterate over an exhausted generator?
+```python
+gen = (x for x in [1, 2, 3])
+list(gen)  # Consumes it
+for item in gen:
+    print(item)
+```
+- A) Prints 1, 2, 3
+- B) Prints nothing (empty loop)
+- C) Raises StopIteration
+- D) Raises TypeError
+
+Answer: B
+
+**Q4:** What is the output?
+```python
+def gen():
+    yield 1
+    return "done"
+    yield 2
+
+g = gen()
+print(next(g))
+print(next(g))
+```
+- A) 1, 2
+- B) 1, then StopIteration
+- C) 1, "done"
+- D) SyntaxError
+
+Answer: B
+
+**Your answers:**
+```
+They're above as it was more convenient for me
+
+---
+
+## Task 7: Debug This Generator
+
+**Instructions:** This generator has a bug. Find and fix it.
 
 ```python
-def iter_profitable(self) -> Generator[Trade, None, None]:
-    """
-    Generator that yields only profitable trades.
+def even_numbers(limit):
+    """Generate even numbers from 0 up to (not including) limit."""
+    n = 0
+    while n < limit:
+        if n % 2 == 0:
+            return n  # BUG: What's wrong here?
+        n += 1
 
-    Yields:
-        Trade: Each trade where pnl > 0
-    """
-    pass
+# Expected behavior:
+for num in even_numbers(10):
+    print(num)
+# Should print: 0, 2, 4, 6, 8
 ```
 
-Also add:
-```python
-def iter_by_ticker(self, ticker: str) -> Generator[Trade, None, None]:
-    """
-    Generator that yields trades matching the given ticker.
-    """
-    pass
+**Questions:**
+1. What's the bug?
+2. What does the current code actually do?
+3. Write the corrected version.
+
+**Your answers:**
+```
+1. Bug:
+
+The return statement will STOP the loop.
+
+2. Current behavior:
+It stops the toop after the first iteration.
+
+3. Fixed code:
+
+def even_numbers(limit):
+    """Generate even numbers from 0 up to (not including) limit."""
+    n = 0
+    while n < limit:
+        if n % 2 == 0:
+            yield n  # BUG - IT WILL STOP THE LOOP
+        n += 1
+        
+
 ```
 
-**Test code:**
+---
+
+## Task 8: Integration - Generator Method in Class
+
+**Instructions:** Add a generator method to your TradeManager class (or create a simplified version here).
+
 ```python
-manager = TradeManager()
-manager.add_trade(Trade("AAPL", "BUY", 100, 110, 10))   # +100
-manager.add_trade(Trade("GOOGL", "SELL", 200, 190, 5))  # +50
-manager.add_trade(Trade("AAPL", "BUY", 50, 45, 20))     # -100
-manager.add_trade(Trade("MSFT", "BUY", 100, 120, 10))   # +200
+class SimpleTradeManager:
+    """Simplified version for this exercise."""
+
+    def __init__(self):
+        self._trades = []  # List of (ticker, pnl) tuples
+
+    def add_trade(self, ticker: str, pnl: float):
+        self._trades.append((ticker, pnl))
+
+    def profitable_trades(self):
+        """
+        Generator that yields only profitable trades.
+
+        Yields:
+            tuple: (ticker, pnl) where pnl > 0
+        """
+        # Your code here - use yield!
+        pass
+
+# Test:
+tm = SimpleTradeManager()
+tm.add_trade("AAPL", 100.0)
+tm.add_trade("GOOGL", -50.0)
+tm.add_trade("MSFT", 200.0)
+tm.add_trade("TSLA", -75.0)
 
 print("Profitable trades:")
-for trade in manager.iter_profitable():
-    print(f"  {trade.ticker}: ${trade.pnl:.2f}")
+for ticker, pnl in tm.profitable_trades():
+    print(f"  {ticker}: ${pnl:.2f}")
 
-print("\nAAPL trades:")
-for trade in manager.iter_by_ticker("AAPL"):
-    print(f"  {trade}")
+# Expected:
+# Profitable trades:
+#   AAPL: $100.00
+#   MSFT: $200.00
 ```
 
 **Your code:**
 ```python
 
-SAME ISSUE AS ABOVE - YOU DIDN'T EVEN INTRODUCE THE TOPIC OF 'YIELD' AND YOU DEMAND ME TO CREATE AN ADVANCED FUNCTION WITH THAT. HWO AM I SUPPOSED TO DO THAT?
-This is really bad...
+import random
+
+class SimpleTradeManager:
+    """Simplified version for this exercise."""
+
+    def __init__(self):
+        self._trades = []  # List of (ticker, pnl) tuples
+
+    def add_trade(self, ticker: str, pnl: float):
+        self._trades.append((ticker, pnl))
+
+    def profitable_trades(self):
+        """
+        Generator that yields only profitable trades.
+
+        Yields:
+            tuple: (ticker, pnl) where pnl > 0
+        """
+        
+        profitable_trades = ((trade[0], trade[1]) for trade in self._trades if trade[1] > 0)
+        return profitable_trades
+
 ```
 
 **Test output:**
 ```
+$ python practice.py
+Profitable trades:
+  AAPL: $100.0
+  MSFT: $200.0
+(.venv) 
+
+
+```
+
+**Bonus question:** Why use a generator here instead of returning a list? (1-2 sentences)
+```
+
+If we had lots of trades and a huge file, that could save some memory, as generators are way more memory-efficient.
+
 
 ```
 
 ---
 
-## Task 8: PCAP Trap - Generator vs List Memory
+## Solutions Checklist
 
-**Q1:** What's wrong with this approach for large files?
-```python
-def read_all_lines(filename):
-    with open(filename) as f:
-        return f.readlines()  # Returns list of ALL lines
-
-lines = read_all_lines("huge_file.txt")  # 10GB file
-for line in lines:
-    process(line)
-```
-
-**Q2:** Rewrite it using a generator to be memory-efficient:
-
-**Your answers:**
-```
-Q1 Problem:
-I don't know, we get all l lines though.
-
-
-Q2 Generator version:
-Again, I DID NOT HAVE generators or YIELD!!!
-It's okay for me to learn that, but for fucks sake, I need proper guidance, materials, examples, and a scaffolded approach, please...
-
-```
-
----
-
-## Checklist
-
-- [ ] Task 1: Inheritance output prediction (3 snippets)
-- [ ] Task 2: MarginAccount class (inheritance)
-- [ ] Task 3: Generator basics (3 questions)
-- [ ] Task 4: PriceGenerator function (PROJECT)
-- [ ] Task 5: Multiple choice (4 questions)
-- [ ] Task 6: Fix inheritance bug
-- [ ] Task 7: TradeManager generator methods (PROJECT)
-- [ ] Task 8: Generator vs list memory
+- [ ] Task 1: Generator basics (4 questions)
+- [ ] Task 2: countdown generator
+- [ ] Task 3: Generator expressions (A, B, C)
+- [ ] Task 4: price_ticks generator (PROJECT)
+- [ ] Task 5: Portfolio class (Week 3 review)
+- [ ] Task 6: Multiple choice (4 questions)
+- [ ] Task 7: Debug generator bug
+- [ ] Task 8: profitable_trades generator method
 
 ---
 
@@ -627,4 +603,6 @@ It's okay for me to learn that, but for fucks sake, I need proper guidance, mate
 
 ---
 
-**When complete:** Fill out feedback section above and notify mentor for assessment.
+**When complete:** Fill out feedback section and notify me for assessment.
+
+**Weekend:** After assessment, you'll receive Week 3 Exam A and Exam B (30 questions each).

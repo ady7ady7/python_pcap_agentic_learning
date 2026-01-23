@@ -3147,6 +3147,226 @@ When creating a new class object (as c1, c2), we increase that count value by 1,
 # #The child class has init, so it won't automatically inherit the attributes from the parent class,
 # #yet it doesn't use the super().__init__() so it won't actually be able to ge the brand, and year attributes.
 
+#W3 D5 T1
 
-#W3 D4 T7
+# def gen():
+#     yield 1
+#     yield 2
+#     yield 3
 
+# g = gen()
+# print(next(g))
+# print(next(g))
+
+# def simple():
+#     yield 1
+
+# g = simple()
+# next(g)
+# next(g)  # What happens here?
+
+
+
+#W3 D5 T2
+
+# def countdown(n):
+#     for num in range(n, 0, -1): #I assume we want to include 1
+#         yield num
+
+# # Test it:
+# for num in countdown(5):
+#     print(num)
+
+
+#W3 D5 T3
+# A) Convert this list comprehension to a generator expression
+# squares_list = [x**2 for x in range(10)]
+
+# # Your generator expression (hint: change [ ] to ( ))
+# squares_gen = (x ** 2 for x in range (10))
+
+# # B) Convert this filtered list comprehension to a generator expression
+# evens_list = [x for x in range(20) if x % 2 == 0]
+
+# # Your generator expression:
+# evens_gen = (x for x in range (20) if x % 2 == 0)
+
+# # C) Predict the output:
+# gen = (x * 2 for x in [1, 2, 3])
+# print(next(gen)) # 2
+# print(next(gen)) # 4
+# print(list(gen))  # What remains? [6]
+
+
+#W3 D5 T4
+
+# import random
+
+# def price_ticks(start_price: float, num_ticks: int):
+#     """
+#     Generate simulated price movements.
+
+#     Each tick moves the price by -1% to +1% randomly.
+
+#     Args:
+#         start_price: Starting price
+#         num_ticks: Number of prices to generate
+
+#     Yields:
+#         float: Each new price (rounded to 2 decimals)
+#     """
+
+#     for num in range(num_ticks):
+#         exit_price = round(random.uniform(start_price * 0.99, start_price * 1.01), 2)
+#         yield exit_price
+
+# # Test:
+# random.seed(42)  # For reproducible results
+# for price in price_ticks(100.0, 5):
+#     print(f"${price:.2f}")
+
+#W3 D5 T5
+
+
+# class Portfolio:
+#     """
+#     A portfolio that holds cash and tracks transactions.
+
+#     Requirements:
+#     1. __init__(self, initial_cash: float) - store as _cash (protected)
+#     2. cash property (read-only) - returns current cash
+#     3. _transactions list (protected) - stores all deposit/withdrawal amounts
+#     4. deposit(amount) - adds to cash, appends amount to transactions
+#     5. withdraw(amount) - subtracts from cash (raise ValueError if insufficient), appends negative amount
+#     6. __len__ - returns number of transactions
+#     7. __iter__ - iterates over transactions
+#     8. __str__ - returns "Portfolio: $X.XX (N transactions)"
+#     """
+
+#     def __init__(self, initial_cash: float):
+#         self._cash = initial_cash
+#         self._transactions_list = []
+        
+#     def __str__(self) -> str:
+#         return f'{__class__.__name__}: ${self._cash:.2f}, ({len(self._transactions_list)} transactions)'
+        
+#     def __len__(self) -> int:
+#         '''Dunder method that allows to check the current length of the transactions list'''
+#         return len(self._transactions_list)
+    
+#     def __iter__(self) -> iter:
+#         '''Dunder method that allows us to iterate over transactions'''
+#         return iter(self._transactions_list)
+        
+#     @property
+#     def cash(self) -> float:
+#         '''A read-only property which returns the current amount of cash'''
+#         return self._cash
+    
+    
+#     def deposit(self, amount):
+#         '''A method used to deposit any positive amount into our account'''
+#         if amount < 0:
+#             raise ValueError('The deposited amount has to be above 0!')
+#         else:
+#             self._cash += amount
+#             self._transactions_list.append(('deposit', amount))
+    
+#     def withdraw(self, amount):
+#         '''A method used to withdraw funds if there is a sufficient amount available'''
+#         if amount > self._cash:
+#             raise ValueError('Deposit impossible, not enough funds')
+#         else:
+#             self._cash -= amount
+#             self._transactions_list.append(('withdraw', -amount))
+    
+    
+
+# # Test:
+# p = Portfolio(1000.0)
+# p.deposit(500.0)
+# p.withdraw(200.0)
+# print(p)              # Portfolio: $1300.00 (2 transactions)
+# print(len(p))         # 2
+# for t in p:
+#     print(t)          # Should print: 500.0, then -200.0
+
+
+#W3 D5 T6
+
+# gen = (x for x in [1, 2, 3])
+# list(gen)  # Consumes it
+# for item in gen:
+#     print(item) #Prints nothing, empty loop
+
+# def gen():
+#     yield 1
+#     return "done"
+#     yield 2
+
+# g = gen()
+# print(next(g))
+# print(next(g)) -> Stop iteration error
+
+
+#W3 D5 T7 - error fix
+
+# def even_numbers(limit):
+#     """Generate even numbers from 0 up to (not including) limit."""
+#     n = 0
+#     while n < limit:
+#         if n % 2 == 0:
+#             return n  # BUG - IT WILL STOP THE LOOP
+#         n += 1
+        
+        
+
+# def even_numbers(limit):
+#     """Generate even numbers from 0 up to (not including) limit."""
+#     n = 0
+#     while n < limit:
+#         if n % 2 == 0:
+#             yield n  # BUG - IT WILL STOP THE LOOP
+#         n += 1
+        
+# for num in even_numbers(10):
+#     print(num)
+# # Should print: 0, 2, 4, 6, 8
+
+
+
+#W3 D5 T8
+
+# import random
+
+# class SimpleTradeManager:
+#     """Simplified version for this exercise."""
+
+#     def __init__(self):
+#         self._trades = []  # List of (ticker, pnl) tuples
+
+#     def add_trade(self, ticker: str, pnl: float):
+#         self._trades.append((ticker, pnl))
+
+#     def profitable_trades(self):
+#         """
+#         Generator that yields only profitable trades.
+
+#         Yields:
+#             tuple: (ticker, pnl) where pnl > 0
+#         """
+        
+#         profitable_trades = ((trade[0], trade[1]) for trade in self._trades if trade[1] > 0)
+#         return profitable_trades
+        
+
+# # Test:
+# tm = SimpleTradeManager()
+# tm.add_trade("AAPL", 100.0)
+# tm.add_trade("GOOGL", -50.0)
+# tm.add_trade("MSFT", 200.0)
+# tm.add_trade("TSLA", -75.0)
+
+# print("Profitable trades:")
+# for ticker, pnl in tm.profitable_trades():
+#     print(f"  {ticker}: ${pnl}")
