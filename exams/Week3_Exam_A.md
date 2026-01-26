@@ -13,6 +13,7 @@
 - No IDE/interpreter - this simulates exam conditions
 - After completing, check answers in `exam_feedback.md`
 
+#Start 9:51
 ---
 
 ## Questions
@@ -34,6 +35,7 @@ print(A.x, B.x)
 - C) `1 2`
 - D) `2 1`
 
+A
 ---
 
 ### Q2
@@ -52,6 +54,8 @@ print(next(g) + next(g))
 - C) `6`
 - D) `StopIteration`
 
+B
+
 ---
 
 ### Q3
@@ -60,6 +64,9 @@ Which statement about `__init__` is TRUE?
 - B) It is automatically called when creating an object
 - C) It can only have `self` as a parameter
 - D) It is inherited and cannot be overridden
+
+
+B
 
 ---
 
@@ -74,6 +81,8 @@ print(text[1:4:2])
 - C) `yt`
 - D) `IndexError`
 
+A
+
 ---
 
 ### Q5
@@ -82,6 +91,8 @@ What happens when you call `next()` on an exhausted generator?
 - B) Returns an empty list
 - C) Raises `StopIteration`
 - D) Raises `GeneratorExit`
+
+C
 
 ---
 
@@ -104,6 +115,8 @@ print(a.count, Counter.count)
 - C) `1 1`
 - D) `3 1`
 
+B
+
 ---
 
 ### Q7
@@ -112,6 +125,9 @@ Which creates a generator expression?
 - B) `(x**2 for x in range(5))`
 - C) `{x**2 for x in range(5)}`
 - D) `list(x**2 for x in range(5))`
+
+
+B
 
 ---
 
@@ -134,6 +150,8 @@ print(c.value)
 - C) `30`
 - D) `AttributeError`
 
+B
+
 ---
 
 ### Q9
@@ -142,6 +160,8 @@ What does `sys.path` contain?
 - B) A list of directories Python searches for modules
 - C) The path to the Python executable
 - D) Environment variables
+
+B
 
 ---
 
@@ -161,6 +181,8 @@ finally:
 - B) `Z F`
 - C) `A Z F`
 - D) `F`
+
+B
 
 ---
 
@@ -183,6 +205,8 @@ print(obj.value)
 - C) `25`
 - D) `AttributeError`
 
+B
+
 ---
 
 ### Q12
@@ -191,6 +215,9 @@ What is the correct way to import only the `sqrt` function from the `math` modul
 - B) `from math import sqrt`
 - C) `import math.sqrt`
 - D) `from math import * sqrt`
+
+
+B
 
 ---
 
@@ -209,6 +236,9 @@ print(list(g))
 - B) `[]`
 - C) `[0, 1, 2, 0, 1, 2]`
 - D) `StopIteration`
+
+
+B
 
 ---
 
@@ -230,6 +260,8 @@ print(a)
 - C) `<__main__.A object>`
 - D) `A repr_A`
 
+A
+
 ---
 
 ### Q15
@@ -238,6 +270,9 @@ What does name mangling do to `self.__value`?
 - B) Encrypts the value
 - C) Renames it to `_ClassName__value`
 - D) Raises an error
+
+
+C
 
 ---
 
@@ -251,6 +286,9 @@ print(s.find("z"), s.index("l"))
 - B) `None 2`
 - C) `-1 3`
 - D) `ValueError`
+
+
+A
 
 ---
 
@@ -269,6 +307,8 @@ print(len(a))
 - C) `TypeError`
 - D) `None`
 
+B
+
 ---
 
 ### Q18
@@ -277,6 +317,8 @@ Which exception is the parent of `ValueError` and `TypeError`?
 - B) `Exception`
 - C) `StandardError`
 - D) `RuntimeError`
+
+B (but Base Exceptioni s the father of all Exceptions here, so that could be a bit ambigous)
 
 ---
 
@@ -290,6 +332,8 @@ print(type(gen).__name__)
 - B) `tuple`
 - C) `generator`
 - D) `genexpr`
+
+C
 
 ---
 
@@ -313,6 +357,8 @@ print(c.brand)
 - C) `AttributeError`
 - D) `TypeError`
 
+A
+
 ---
 
 ### Q21
@@ -321,6 +367,8 @@ What does `__all__` do in a module?
 - B) Controls what is exported with `from module import *`
 - C) Makes all names public
 - D) Prevents any imports
+
+B
 
 ---
 
@@ -334,6 +382,9 @@ print(len(text.strip()))
 - B) `7`
 - C) `9`
 - D) `8`
+
+A
+
 
 ---
 
@@ -356,6 +407,8 @@ print(list(a))
 - C) `TypeError`
 - D) `<__main__.A object>`
 
+B
+
 ---
 
 ### Q24
@@ -373,6 +426,8 @@ print(list(func()))
 - C) `[1, None]`
 - D) `StopIteration`
 
+B
+
 ---
 
 ### Q25
@@ -381,6 +436,9 @@ Which is TRUE about `@property`?
 - B) It replaces the need for getter methods
 - C) It must be followed by `@setter`
 - D) It makes attributes truly private
+
+
+B
 
 ---
 
@@ -400,6 +458,8 @@ print(issubclass(B, A), isinstance(B(), A))
 - C) `False True`
 - D) `False False`
 
+B
+
 ---
 
 ### Q27
@@ -413,6 +473,8 @@ print(s[-2::-2])
 - C) `ohn`
 - D) `ot`
 
+A
+
 ---
 
 ### Q28
@@ -421,6 +483,9 @@ What happens when a class defines `__eq__` but not `__hash__`?
 - B) Objects become unhashable
 - C) Python auto-generates `__hash__`
 - D) A `SyntaxError` is raised
+
+
+B
 
 ---
 
@@ -436,6 +501,9 @@ except Exception as e:
 - B) `ValueError`
 - C) `error`
 - D) `BaseException`
+
+C
+
 
 ---
 
@@ -459,6 +527,10 @@ print(c.x)
 - C) `8`
 - D) `TypeError`
 
+C
+
+
+#Koniec 10:03
 ---
 
 ## Answer Sheet

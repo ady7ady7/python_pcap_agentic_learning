@@ -15,6 +15,9 @@
 
 ---
 
+
+#Początek 10:03
+
 ## Questions
 
 ### Q1
@@ -37,6 +40,8 @@ print(b.x)
 - C) `AttributeError`
 - D) `None`
 
+B
+
 ---
 
 ### Q2
@@ -49,6 +54,9 @@ print(text[::2] + text[1::2])
 - B) `PTOYHN`
 - C) `PYTONHTN`
 - D) `PTOYHNYTO`
+
+
+B
 
 ---
 
@@ -69,6 +77,8 @@ print(next(c), next(c), next(c))
 - C) `1 2 3`
 - D) `StopIteration`
 
+B
+
 ---
 
 ### Q4
@@ -77,6 +87,9 @@ Which is TRUE about abstract methods?
 - B) They must be overridden in concrete subclasses
 - C) They are automatically inherited without overriding
 - D) They can only exist in regular classes
+
+B
+
 
 ---
 
@@ -94,6 +107,8 @@ print(a._A__x)
 - B) `AttributeError`
 - C) `None`
 - D) `NameError`
+
+A
 
 ---
 
@@ -116,6 +131,8 @@ finally:
 - C) `V E F`
 - D) `E F`
 
+A
+
 ---
 
 ### Q7
@@ -128,6 +145,8 @@ print(s.split()[1].upper())
 - B) `WORLD`
 - C) `['hello', 'world']`
 - D) `hello world`
+
+B
 
 ---
 
@@ -149,6 +168,8 @@ print(m[1])
 - C) `2`
 - D) `TypeError`
 
+C
+
 ---
 
 ### Q9
@@ -157,6 +178,9 @@ What does `from package import *` import?
 - B) Only names listed in `__all__` (if defined)
 - C) Nothing
 - D) Only the `__init__.py` file
+
+
+B
 
 ---
 
@@ -170,6 +194,9 @@ print(sum(gen))
 - B) `9`
 - C) `14`
 - D) `TypeError`
+
+C
+
 
 ---
 
@@ -194,6 +221,8 @@ print(a.value)
 - C) `25`
 - D) `AttributeError`
 
+B
+
 ---
 
 ### Q12
@@ -213,6 +242,8 @@ print(Parent.class_attr)
 - C) `None`
 - D) `AttributeError`
 
+A
+
 ---
 
 ### Q13
@@ -231,6 +262,9 @@ print(list(g))
 - C) `[1, 2, None]`
 - D) `StopIteration`
 
+B
+
+
 ---
 
 ### Q14
@@ -248,6 +282,8 @@ print(5 in a, -3 in a)
 - C) `False True`
 - D) `TypeError`
 
+B
+
 ---
 
 ### Q15
@@ -260,6 +296,8 @@ print(len(text.split(",")))
 - B) `4`
 - C) `2`
 - D) `5`
+
+B
 
 ---
 
@@ -286,6 +324,8 @@ print(b.value, c.value)
 - C) `AttributeError`
 - D) `None 3`
 
+B
+
 ---
 
 ### Q17
@@ -294,6 +334,8 @@ What does `sys.argv[0]` contain?
 - B) The script name
 - C) The Python version
 - D) The current directory
+
+B
 
 ---
 
@@ -315,6 +357,8 @@ print(repr(a))
 - C) `<__main__.A object>`
 - D) `A() Instance of A`
 
+B
+
 ---
 
 ### Q19
@@ -332,6 +376,9 @@ print(a == b, a is b)
 - B) `True False`
 - C) `False False`
 - D) `False True`
+
+
+B
 
 ---
 
@@ -352,6 +399,9 @@ except:
 - C) `after inner`
 - D) Raises `Exception`
 
+B
+
+
 ---
 
 ### Q21
@@ -364,6 +414,8 @@ print(s[10:])
 - B) `""`
 - C) `None`
 - D) `"f"`
+
+B
 
 ---
 
@@ -386,6 +438,8 @@ print(a.method())
 - C) `TypeError`
 - D) `instance class`
 
+A
+
 ---
 
 ### Q23
@@ -402,6 +456,8 @@ for x in gen:
 - C) `0 1 2 0 1 2`
 - D) `0 1`
 
+B
+
 ---
 
 ### Q24
@@ -410,6 +466,9 @@ What is the purpose of `__init__.py` in a package?
 - B) It marks a directory as a Python package
 - C) It is required only for Python 2
 - D) It stores package documentation
+
+
+B
 
 ---
 
@@ -432,6 +491,8 @@ print([x.val for x in items])
 - C) `TypeError`
 - D) `[2, 1, 3]`
 
+B
+
 ---
 
 ### Q26
@@ -451,6 +512,9 @@ print(next(gen), next(gen))
 - B) `1 1`
 - C) `NameError`
 - D) `StopIteration`
+
+A
+
 
 ---
 
@@ -474,6 +538,8 @@ print(a.x)
 - C) `AttributeError`
 - D) `None`
 
+C
+
 ---
 
 ### Q28
@@ -486,6 +552,9 @@ print(s.replace("o", "0").replace("n", "N"))
 - B) `Pyth0N`
 - C) `PythoN`
 - D) `Python`
+
+
+B
 
 ---
 
@@ -508,6 +577,8 @@ print(issubclass(C, A))
 - C) `TypeError`
 - D) `None`
 
+A
+
 ---
 
 ### Q30
@@ -528,6 +599,10 @@ print(nums)
 - C) `[]`
 - D) `[2, 4, 6, None]`
 
+A
+
+
+#Koniec 10:23
 ---
 
 ## Answer Sheet

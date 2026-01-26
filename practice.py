@@ -3370,3 +3370,77 @@ When creating a new class object (as c1, c2), we increase that count value by 1,
 # print("Profitable trades:")
 # for ticker, pnl in tm.profitable_trades():
 #     print(f"  {ticker}: ${pnl}")
+
+#W4 D1 T1
+
+# def count():
+#     n = 0
+#     while True:
+#         yield n
+#         n += 1
+
+# c = count()
+# print(next(c), next(c), next(c))
+
+
+# try:
+#     x = int("abc")
+# except ValueError:
+#     print("V", end=" ")
+# except TypeError:
+#     print("T", end=" ")
+# else:
+#     print("E", end=" ")
+# finally:
+#     print("F")
+
+# import sys
+
+# print(sys.argv[0])
+
+# class A:
+#     def method(self):
+#         return "instance"
+
+#     @classmethod
+#     def method(cls):
+#         return "class"
+
+# a = A()
+# print(a.method())
+
+
+# class A:
+#     def __init__(self):
+#         self._x = 0
+
+#     @property
+#     def x(self):
+#         return self._x
+
+# a = A()
+# a.x = 10
+# print(a.x) #AttributeError - brak settera
+
+
+# class A:
+#     pass
+
+# class B(A):
+#     pass
+
+# class C(B):
+#     pass
+
+# print(issubclass(C, A)) #True 
+
+
+def gen():
+    nums = [1, 2, 3]
+    for n in nums:
+        yield n * 2
+
+result = gen()
+nums = list(result)
+nums.extend(list(result))
+print(nums)
