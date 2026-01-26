@@ -595,3 +595,41 @@ Format: Date | Topic | Score | Difficulty | Notes
 
 ---
 
+## Week 4, Day 1 - 2026-01-26 (Monday)
+
+**Topic:** Lambda Functions, map() & filter()
+**Score:** 98% (A+)
+**Difficulty:** 5/10
+**Time Spent:** 70 minutes (including lesson)
+
+**Tasks Completed:**
+1. Lambda basics (4 questions - 4/4)
+2. Lambda with ternary expression (perfect nested ternary)
+3. map() practice (3 questions - 2.5/3)
+4. filter() practice (3 questions - 3/3)
+5. Sorting with lambda key (3 questions - 3/3)
+6. PROJECT: Trade filtering with lambda (perfect)
+7. PCAP multiple choice (4 questions - 4/4)
+8. Combining map() and filter() (works, bonus correct)
+
+**Key Learnings:**
+- Lambda syntax: `lambda params: expression`
+- Lambda can only have ONE expression (no statements, no return keyword)
+- `map()` applies function to all items, returns map object
+- `filter()` selects items where function returns True
+- `filter(None, items)` keeps truthy values (NOT searches for None)
+- Sorting with `key=lambda x: ...`
+
+**Student Question:**
+- "Why does `filter(None, items)` remove falsy values?"
+- Answered: `None` as function means "use truthiness", not "find None objects"
+
+**Corrections:**
+- Task 3 Q1: First `print(result)` shows `<map object at 0x...>`, not the list
+
+**Project Milestones:**
+- Trade filtering with lambda functions
+- Combined conditions in filter
+
+---
+

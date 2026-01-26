@@ -1789,3 +1789,105 @@ When you do `Child.class_var = "child"`, Python creates a **new** class attribut
 
 ---
 
+## Week 3, Weekend Exams - 2026-01-25/26
+
+### Exam A Results
+
+**Time:** 12 minutes
+**Score: 26/30 (86.7%)** ✅ PASSED
+
+**Incorrect answers:**
+- Q1: Class variable inheritance (answered A, correct C)
+- Q10: Exception hierarchy order (answered B, correct A)
+- Q26: issubclass/isinstance (answered B, correct A)
+- Q29: type(e).__name__ (answered C, correct B)
+
+### Exam B Results
+
+**Time:** 20 minutes
+**Score: 28/30 (93.3%)** ✅ PASSED
+
+**Incorrect answers:**
+- Q22: Method overwriting (answered A, correct B)
+- Q23: Generator consumption (answered B, correct A)
+
+### Weekend Average: 90% (A-)
+
+### Key Patterns to Review
+1. **Class variable assignment** - `Child.x = value` creates NEW attribute on Child, doesn't modify Parent
+2. **Exception hierarchy** - Parent exceptions catch children if listed first
+3. **Method overwriting** - Second definition with same name replaces first
+4. **Generator state** - Generators remember position, don't reset
+
+### Overall Week 3 Performance
+
+| Assessment | Score |
+|------------|-------|
+| Day 1 | 92% |
+| Day 2 | 91% |
+| Day 3 | 89% |
+| Day 4 | 91% |
+| Day 5 | 91% |
+| Exam A | 86.7% |
+| Exam B | 93.3% |
+
+**Week 3 Overall: 90.6% (A-)**
+
+Student passed both mock exams on first attempt. Strong performance across all topics. Ready for Week 4.
+
+---
+
+## Week 4, Day 1 - 2026-01-26
+
+**Topic:** Lambda Functions, map() & filter()
+
+### Mentor Assessment
+
+**Task 1: Lambda Basics - 100%**
+- Q1: ✅ 10
+- Q2: ✅ 7
+- Q3: ✅ 50, 10
+- Q4: ✅ Correct explanation
+
+**Task 2: Lambda with Ternary - 100%**
+- ✅ Perfect nested ternary expression
+
+**Task 3: map() Practice - 95%**
+- Q1: ⚠️ Missed that first print shows `<map object>`
+- Q2: ✅ Perfect lambda
+- Q3: ✅ Correct
+
+**Task 4: filter() Practice - 100%**
+- All correct
+- Good question about `filter(None, items)`
+
+**Task 5: Sorting with Lambda - 100%**
+- All three lambdas perfect
+
+**Task 6: PROJECT Trade Filtering - 100%**
+- All filters correct
+
+**Task 7: PCAP Multiple Choice - 100%**
+- 4/4 correct
+
+**Task 8: Combining map() and filter() - 90%**
+- Works correctly (two steps instead of chained)
+- Bonus list comprehension correct
+
+### Final Score: 98% (A+)
+
+### Question Answered
+**Student asked:** "Why does `filter(None, items)` remove falsy values?"
+
+**Answer:** When `None` is passed as the function to `filter()`, it means "use the truthiness of each item as the filter condition". It's NOT searching for `None` objects - the `None` replaces a lambda function. To actually find `None` objects, you'd use `filter(lambda x: x is None, items)`.
+
+### Strengths
+- Lambda syntax mastered immediately
+- Excellent understanding of ternary expressions
+- PCAP multiple choice perfect
+- Good critical thinking (questioning filter behavior)
+
+**Ready for Day 2:** Closures and factory functions
+
+---
+

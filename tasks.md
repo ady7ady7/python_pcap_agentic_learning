@@ -1,11 +1,9 @@
-# Week 3, Day 5 - Friday
-## Topic: Generators Practice, Week Review & Exam Prep
+# Week 4, Day 2 - Tuesday
+## Topic: Closures & Factory Functions
 
-**Date:** 2026-01-23
+**Date:** 2026-01-27
 
-**IMPORTANT:** READ `lessons/week3_generators.md` FIRST before starting tasks!
-
-The lesson is now available with full scaffolded examples. Study it before attempting these tasks.
+**IMPORTANT:** Re-read the **Closures** section in `lessons/week4_lambda_closures.md` before starting!
 
 **Target Difficulty:** 5/10
 
@@ -13,331 +11,206 @@ The lesson is now available with full scaffolded examples. Study it before attem
 
 ---
 
-## Task 1: Generator Basics (After Reading Lesson)
+## Task 1: Closure Basics (PCAP Warm-up)
 
-**Instructions:** Answer these questions AFTER reading the generators lesson.
+**Instructions:** Answer after reading the closures section.
 
 **Q1:** What is the output?
 ```python
-def gen():
-    yield 1
-    yield 2
-    yield 3
+def outer(x):
+    def inner(y):
+        return x + y
+    return inner
 
-g = gen()
-print(next(g))
-print(next(g))
-
+add_5 = outer(5)
+print(add_5(3))
 ```
 
 **Q2:** What is the output?
 ```python
-def gen():
-    yield "a"
-    yield "b"
+def make_multiplier(n):
+    def multiply(x):
+        return x * n
+    return multiply
 
-g = gen()
-result = list(g)
-print(result)
-print(list(g))  # Called again on same generator
+double = make_multiplier(2)
+triple = make_multiplier(3)
+print(double(10), triple(10))
 ```
 
-**Q3:** What's the difference between these two?
-```python
-a = [x**2 for x in range(5)]
-b = (x**2 for x in range(5))
-print(type(a))
-print(type(b))
-```
+**Q3:** True or False: The inner function in a closure can access variables from the outer function even after the outer function has finished executing.
 
-**Q4:** What exception is raised?
+**Q4:** What does this print?
 ```python
-def simple():
-    yield 1
+def outer():
+    message = "Hello"
+    def inner():
+        return message
+    return inner
 
-g = simple()
-next(g)
-next(g)  # What happens here?
+greet = outer()
+print(greet())
 ```
 
 **Your answers:**
 ```
-Q1: 1 2 (below)
-
-Q2: [a, b], StopIteration error
-
-Q3: First is a list, the second one is a generator.
-
-Q4: StopIteration exception
+Q1:
+Q2:
+Q3:
+Q4:
 ```
 
 ---
 
-## Task 2: Write Your First Generator
+## Task 2: Create a Closure - make_counter
 
-**Instructions:** Write a generator function called `countdown` that yields numbers from `n` down to 1.
+**Instructions:** Create a factory function that creates counters.
 
 ```python
-def countdown(n):
-    # Your code here - use yield!
+def make_counter(start=0):
+    """
+    Create a counter that remembers its count.
+
+    Args:
+        start: Initial count value (default 0)
+
+    Returns:
+        A function that increments and returns the count
+    """
+    # Your code here
     pass
 
-# Test it:
-for num in countdown(5):
-    print(num)
+# Test:
+counter_a = make_counter(0)
+counter_b = make_counter(100)
 
-# Expected output:
-# 5
-# 4
-# 3
-# 2
-# 1
+print(counter_a())  # 1
+print(counter_a())  # 2
+print(counter_a())  # 3
+
+print(counter_b())  # 101
+print(counter_b())  # 102
 ```
+
+**Hint:** You'll need the `nonlocal` keyword to modify the outer variable.
 
 **Your code:**
 ```python
-
-
-def countdown(n):
-    for num in range(n, 0, -1): #I assume we want to include 1
-        yield num
 
 ```
 
 **Test output:**
 ```
 
-$ python practice.py
-5
-4
-3
-2
-1
-
 ```
 
 ---
 
-## Task 3: Generator Expression Practice
+## Task 3: nonlocal vs global
 
-**Instructions:** Convert these list comprehensions to generator expressions.
-
+**Q1:** What is the output?
 ```python
-# A) Convert this list comprehension to a generator expression
-squares_list = [x**2 for x in range(10)]
+x = 10
 
-# Your generator expression (hint: change [ ] to ( ))
-squares_gen = ???
+def outer():
+    x = 20
 
-# B) Convert this filtered list comprehension to a generator expression
-evens_list = [x for x in range(20) if x % 2 == 0]
+    def inner():
+        nonlocal x
+        x = 30
 
-# Your generator expression:
-evens_gen = ???
+    inner()
+    print("outer x:", x)
 
-# C) Predict the output:
-gen = (x * 2 for x in [1, 2, 3])
-print(next(gen))
-print(next(gen))
-print(list(gen))  # What remains?
+outer()
+print("global x:", x)
 ```
+
+**Q2:** What would happen if we used `global x` instead of `nonlocal x` in the inner function?
+
+**Q3:** When do you use `nonlocal` vs `global`?
 
 **Your answers:**
 ```
-# A) Convert this list comprehension to a generator expression
-squares_list = [x**2 for x in range(10)]
+Q1:
 
-# Your generator expression (hint: change [ ] to ( ))
-squares_gen = (x ** 2 for x in range (10))
+Q2:
 
-# B) Convert this filtered list comprehension to a generator expression
-evens_list = [x for x in range(20) if x % 2 == 0]
+Q3:
+```
 
-# Your generator expression:
-evens_gen = (x for x in range (20) if x % 2 == 0)
+---
 
-# C) Predict the output:
-gen = (x * 2 for x in [1, 2, 3])
-print(next(gen)) # 2
-print(next(gen)) # 4
-print(list(gen))  # What remains? [6]
+## Task 4: Closure Trap - Late Binding
+
+**Instructions:** This is a PCAP trap. Predict the output, then explain why.
+
+```python
+functions = []
+for i in range(3):
+    functions.append(lambda: i)
+
+print(functions[0]())
+print(functions[1]())
+print(functions[2]())
+```
+
+**Q1:** What is the output?
+
+**Q2:** Why does this happen? (Explain the "late binding" trap)
+
+**Q3:** How do you fix it? Write the corrected version.
+
+**Your answers:**
+```
+Q1 Output:
+
+Q2 Explanation:
+
+Q3 Fixed code:
 
 ```
 
 ---
 
-## Task 4: PROJECT - PriceTickGenerator (Proper Version)
+## Task 5: PROJECT - make_price_validator
 
-**Instructions:** Create a generator that simulates price movements. Use `yield` this time!
+**Instructions:** Create a closure that validates prices against a threshold.
 
 ```python
-import random
-
-def price_ticks(start_price: float, num_ticks: int):
+def make_price_validator(min_price: float, max_price: float):
     """
-    Generate simulated price movements.
-
-    Each tick moves the price by -1% to +1% randomly.
+    Create a price validator function.
 
     Args:
-        start_price: Starting price
-        num_ticks: Number of prices to generate
+        min_price: Minimum acceptable price
+        max_price: Maximum acceptable price
 
-    Yields:
-        float: Each new price (rounded to 2 decimals)
+    Returns:
+        A function that takes a price and returns (is_valid, message)
     """
-    # Your code here - use yield!
+    # Your code here
     pass
 
 # Test:
-random.seed(42)  # For reproducible results
-for price in price_ticks(100.0, 5):
-    print(f"${price:.2f}")
-```
+validate_stock = make_price_validator(0.01, 10000.0)
+validate_crypto = make_price_validator(0.0001, 100000.0)
 
-**Requirements:**
-1. Use `yield` (NOT return a list)
-2. Each tick: `price = price * (1 + random.uniform(-0.01, 0.01))`
-3. Round each price to 2 decimal places: `round(price, 2)`
-4. Never let price go below 0.01
+print(validate_stock(150.50))     # (True, "Price 150.5 is valid")
+print(validate_stock(-5.0))       # (False, "Price -5.0 below minimum 0.01")
+print(validate_stock(50000.0))    # (False, "Price 50000.0 above maximum 10000.0")
 
-**Your code:**
-```python
-
-
-import random
-
-def price_ticks(start_price: float, num_ticks: int):
-    """
-    Generate simulated price movements.
-
-    Each tick moves the price by -1% to +1% randomly.
-
-    Args:
-        start_price: Starting price
-        num_ticks: Number of prices to generate
-
-    Yields:
-        float: Each new price (rounded to 2 decimals)
-    """
-
-    for num in range(num_ticks):
-        exit_price = round(random.uniform(start_price * 0.99, start_price * 1.01), 2)
-        yield exit_price
-```
-
-**Test output:**
-```
-$ python practice.py
-$100.28
-$99.05
-$99.55
-$99.45
-$100.47
-```
-
----
-
-## Task 5: Week 3 Review - Portfolio Class
-
-**Instructions:** Create a `Portfolio` class that combines Properties + Dunder Methods from Week 3.
-
-```python
-class Portfolio:
-    """
-    A portfolio that holds cash and tracks transactions.
-
-    Requirements:
-    1. __init__(self, initial_cash: float) - store as _cash (protected)
-    2. cash property (read-only) - returns current cash
-    3. _transactions list (protected) - stores all deposit/withdrawal amounts
-    4. deposit(amount) - adds to cash, appends amount to transactions
-    5. withdraw(amount) - subtracts from cash (raise ValueError if insufficient), appends negative amount
-    6. __len__ - returns number of transactions
-    7. __iter__ - iterates over transactions
-    8. __str__ - returns "Portfolio: $X.XX (N transactions)"
-    """
-    pass
-
-# Test:
-p = Portfolio(1000.0)
-p.deposit(500.0)
-p.withdraw(200.0)
-print(p)              # Portfolio: $1300.00 (2 transactions)
-print(len(p))         # 2
-for t in p:
-    print(t)          # Should print: 500.0, then -200.0
+print(validate_crypto(0.00001))   # (False, "Price 1e-05 below minimum 0.0001")
+print(validate_crypto(45000.0))   # (True, "Price 45000.0 is valid")
 ```
 
 **Your code:**
 ```python
 
-
-class Portfolio:
-    """
-    A portfolio that holds cash and tracks transactions.
-
-    Requirements:
-    1. __init__(self, initial_cash: float) - store as _cash (protected)
-    2. cash property (read-only) - returns current cash
-    3. _transactions list (protected) - stores all deposit/withdrawal amounts
-    4. deposit(amount) - adds to cash, appends amount to transactions
-    5. withdraw(amount) - subtracts from cash (raise ValueError if insufficient), appends negative amount
-    6. __len__ - returns number of transactions
-    7. __iter__ - iterates over transactions
-    8. __str__ - returns "Portfolio: $X.XX (N transactions)"
-    """
-
-    def __init__(self, initial_cash: float):
-        self._cash = initial_cash
-        self._transactions_list = []
-        
-    def __str__(self) -> str:
-        return f'{__class__.__name__}: ${self._cash:.2f}, ({len(self._transactions_list)} transactions)'
-        
-    def __len__(self) -> int:
-        '''Dunder method that allows to check the current length of the transactions list'''
-        return len(self._transactions_list)
-    
-    def __iter__(self) -> iter:
-        '''Dunder method that allows us to iterate over transactions'''
-        return iter(self._transactions_list)
-        
-    @property
-    def cash(self) -> float:
-        '''A read-only property which returns the current amount of cash'''
-        return self._cash
-    
-    
-    def deposit(self, amount):
-        '''A method used to deposit any positive amount into our account'''
-        if amount < 0:
-            raise ValueError('The deposited amount has to be above 0!')
-        else:
-            self._cash += amount
-            self._transactions_list.append(('deposit', amount))
-    
-    def withdraw(self, amount):
-        '''A method used to withdraw funds if there is a sufficient amount available'''
-        if amount > self._cash:
-            raise ValueError('Deposit impossible, not enough funds')
-        else:
-            self._cash -= amount
-            self._transactions_list.append(('withdraw', amount))
-    
-
-    #Please note that I've decided to use tuples in transactions list - as they're clearer
-
 ```
 
 **Test output:**
 ```
-$ python practice.py
-Portfolio: $1300.00, (2 transactions)
-2
-('deposit', 500.0)
-('withdraw', -200.0)
-(.venv) 
 
 ```
 
@@ -345,229 +218,156 @@ Portfolio: $1300.00, (2 transactions)
 
 ## Task 6: PCAP Multiple Choice
 
-**Q1:** What is the output?
+**Q1:** What is a closure?
+- A) A function that closes files automatically
+- B) A function that remembers variables from its enclosing scope
+- C) A function that cannot be called
+- D) A function with no parameters
+
+**Q2:** What keyword is used to modify a variable in an enclosing (non-global) scope?
+- A) `global`
+- B) `local`
+- C) `nonlocal`
+- D) `outer`
+
+**Q3:** What is the output?
 ```python
-class A:
-    def __init__(self):
-        self.value = 1
+def make_adder(n):
+    return lambda x: x + n
 
-class B(A):
-    def __init__(self):
-        super().__init__()
-        self.value = self.value + 1
-
-b = B()
-print(b.value)
+add10 = make_adder(10)
+print(add10(5))
 ```
-- A) 1
-- B) 2
-- C) AttributeError
-- D) None
+- A) `5`
+- B) `10`
+- C) `15`
+- D) `TypeError`
 
-Answer: B
-
-**Q2:** Which correctly creates a read-only property?
-```python
-# Option A
-class A:
-    def __init__(self):
-        self._x = 10
-    @property
-    def x(self):
-        return self._x
-
-# Option B
-class B:
-    def __init__(self):
-        self.x = 10
-    @property
-    def x(self):
-        return self.x
-
-# Option C
-class C:
-    def __init__(self):
-        self.__x = 10
-    def x(self):
-        return self.__x
-```
-- A) Option A only
-- B) Option B only
-- C) Option C only
-- D) Options A and C
-
-Answer: D 
-
-**Q3:** What happens when you iterate over an exhausted generator?
-```python
-gen = (x for x in [1, 2, 3])
-list(gen)  # Consumes it
-for item in gen:
-    print(item)
-```
-- A) Prints 1, 2, 3
-- B) Prints nothing (empty loop)
-- C) Raises StopIteration
-- D) Raises TypeError
-
-Answer: B
-
-**Q4:** What is the output?
-```python
-def gen():
-    yield 1
-    return "done"
-    yield 2
-
-g = gen()
-print(next(g))
-print(next(g))
-```
-- A) 1, 2
-- B) 1, then StopIteration
-- C) 1, "done"
-- D) SyntaxError
-
-Answer: B
+**Q4:** In the late binding trap, why do all functions return the same value?
+- A) Python has a bug
+- B) The lambda captures the variable reference, not the value at creation time
+- C) Lists cannot store functions
+- D) Lambda functions don't work in loops
 
 **Your answers:**
 ```
-They're above as it was more convenient for me
-
----
-
-## Task 7: Debug This Generator
-
-**Instructions:** This generator has a bug. Find and fix it.
-
-```python
-def even_numbers(limit):
-    """Generate even numbers from 0 up to (not including) limit."""
-    n = 0
-    while n < limit:
-        if n % 2 == 0:
-            return n  # BUG: What's wrong here?
-        n += 1
-
-# Expected behavior:
-for num in even_numbers(10):
-    print(num)
-# Should print: 0, 2, 4, 6, 8
-```
-
-**Questions:**
-1. What's the bug?
-2. What does the current code actually do?
-3. Write the corrected version.
-
-**Your answers:**
-```
-1. Bug:
-
-The return statement will STOP the loop.
-
-2. Current behavior:
-It stops the toop after the first iteration.
-
-3. Fixed code:
-
-def even_numbers(limit):
-    """Generate even numbers from 0 up to (not including) limit."""
-    n = 0
-    while n < limit:
-        if n % 2 == 0:
-            yield n  # BUG - IT WILL STOP THE LOOP
-        n += 1
-        
-
+Q1:
+Q2:
+Q3:
+Q4:
 ```
 
 ---
 
-## Task 8: Integration - Generator Method in Class
+## Task 7: PROJECT - make_trade_logger
 
-**Instructions:** Add a generator method to your TradeManager class (or create a simplified version here).
+**Instructions:** Create a closure that logs trades with a customizable prefix.
 
 ```python
-class SimpleTradeManager:
-    """Simplified version for this exercise."""
+def make_trade_logger(prefix: str):
+    """
+    Create a trade logger with a specific prefix.
 
-    def __init__(self):
-        self._trades = []  # List of (ticker, pnl) tuples
+    The logger should also track the total number of trades logged.
 
-    def add_trade(self, ticker: str, pnl: float):
-        self._trades.append((ticker, pnl))
+    Args:
+        prefix: String prefix for log messages (e.g., "INFO", "TRADE")
 
-    def profitable_trades(self):
-        """
-        Generator that yields only profitable trades.
-
-        Yields:
-            tuple: (ticker, pnl) where pnl > 0
-        """
-        # Your code here - use yield!
-        pass
+    Returns:
+        A tuple of (log_trade, get_count) functions
+    """
+    # Your code here
+    pass
 
 # Test:
-tm = SimpleTradeManager()
-tm.add_trade("AAPL", 100.0)
-tm.add_trade("GOOGL", -50.0)
-tm.add_trade("MSFT", 200.0)
-tm.add_trade("TSLA", -75.0)
+log_trade, get_count = make_trade_logger("TRADE")
 
-print("Profitable trades:")
-for ticker, pnl in tm.profitable_trades():
-    print(f"  {ticker}: ${pnl:.2f}")
+log_trade("AAPL", "BUY", 150.0)   # [TRADE] AAPL BUY @ $150.00
+log_trade("GOOGL", "SELL", 2800.0) # [TRADE] GOOGL SELL @ $2800.00
+log_trade("MSFT", "BUY", 300.0)   # [TRADE] MSFT BUY @ $300.00
 
-# Expected:
-# Profitable trades:
-#   AAPL: $100.00
-#   MSFT: $200.00
+print(f"Total trades: {get_count()}")  # Total trades: 3
+
+# Create another logger with different prefix
+log_error, error_count = make_trade_logger("ERROR")
+log_error("TSLA", "FAILED", 0.0)  # [ERROR] TSLA FAILED @ $0.00
+print(f"Errors: {error_count()}")  # Errors: 1
 ```
 
 **Your code:**
 ```python
 
-import random
-
-class SimpleTradeManager:
-    """Simplified version for this exercise."""
-
-    def __init__(self):
-        self._trades = []  # List of (ticker, pnl) tuples
-
-    def add_trade(self, ticker: str, pnl: float):
-        self._trades.append((ticker, pnl))
-
-    def profitable_trades(self):
-        """
-        Generator that yields only profitable trades.
-
-        Yields:
-            tuple: (ticker, pnl) where pnl > 0
-        """
-        
-        profitable_trades = ((trade[0], trade[1]) for trade in self._trades if trade[1] > 0)
-        return profitable_trades
-
 ```
 
 **Test output:**
 ```
-$ python practice.py
-Profitable trades:
-  AAPL: $100.0
-  MSFT: $200.0
-(.venv) 
-
 
 ```
 
-**Bonus question:** Why use a generator here instead of returning a list? (1-2 sentences)
+---
+
+## Task 8: Closure vs Class
+
+**Instructions:** The closure pattern can sometimes replace simple classes. Compare these two approaches.
+
+**Closure approach:**
+```python
+def make_account(initial_balance):
+    balance = initial_balance
+
+    def deposit(amount):
+        nonlocal balance
+        balance += amount
+        return balance
+
+    def withdraw(amount):
+        nonlocal balance
+        if amount <= balance:
+            balance -= amount
+            return balance
+        raise ValueError("Insufficient funds")
+
+    def get_balance():
+        return balance
+
+    return deposit, withdraw, get_balance
 ```
 
-If we had lots of trades and a huge file, that could save some memory, as generators are way more memory-efficient.
+**Class approach:**
+```python
+class Account:
+    def __init__(self, initial_balance):
+        self._balance = initial_balance
 
+    def deposit(self, amount):
+        self._balance += amount
+        return self._balance
+
+    def withdraw(self, amount):
+        if amount <= self._balance:
+            self._balance -= amount
+            return self._balance
+        raise ValueError("Insufficient funds")
+
+    def get_balance(self):
+        return self._balance
+```
+
+**Questions:**
+
+**Q1:** What are the advantages of the closure approach?
+
+**Q2:** What are the advantages of the class approach?
+
+**Q3:** When would you prefer closures over classes?
+
+**Your answers:**
+```
+Q1 (Closure advantages):
+
+Q2 (Class advantages):
+
+Q3 (When to use closures):
 
 ```
 
@@ -575,14 +375,14 @@ If we had lots of trades and a huge file, that could save some memory, as genera
 
 ## Solutions Checklist
 
-- [ ] Task 1: Generator basics (4 questions)
-- [ ] Task 2: countdown generator
-- [ ] Task 3: Generator expressions (A, B, C)
-- [ ] Task 4: price_ticks generator (PROJECT)
-- [ ] Task 5: Portfolio class (Week 3 review)
-- [ ] Task 6: Multiple choice (4 questions)
-- [ ] Task 7: Debug generator bug
-- [ ] Task 8: profitable_trades generator method
+- [ ] Task 1: Closure basics (4 questions)
+- [ ] Task 2: make_counter closure
+- [ ] Task 3: nonlocal vs global (3 questions)
+- [ ] Task 4: Late binding trap
+- [ ] Task 5: PROJECT - make_price_validator
+- [ ] Task 6: PCAP Multiple choice (4 questions)
+- [ ] Task 7: PROJECT - make_trade_logger
+- [ ] Task 8: Closure vs Class comparison
 
 ---
 
@@ -604,5 +404,3 @@ If we had lots of trades and a huge file, that could save some memory, as genera
 ---
 
 **When complete:** Fill out feedback section and notify me for assessment.
-
-**Weekend:** After assessment, you'll receive Week 3 Exam A and Exam B (30 questions each).

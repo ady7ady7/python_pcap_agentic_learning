@@ -3371,6 +3371,9 @@ When creating a new class object (as c1, c2), we increase that count value by 1,
 # for ticker, pnl in tm.profitable_trades():
 #     print(f"  {ticker}: ${pnl}")
 
+
+
+#Start 12:30
 #W4 D1 T1
 
 # def count():
@@ -3435,12 +3438,124 @@ When creating a new class object (as c1, c2), we increase that count value by 1,
 # print(issubclass(C, A)) #True 
 
 
-def gen():
-    nums = [1, 2, 3]
-    for n in nums:
-        yield n * 2
+# gen = (i for i in range(3))  # [0, 1, 2]
+# for _ in range(2):
+#     print(next(gen), end=" ")  # Prints: 0 1 
+# for x in gen:
+#     print(x, end=" ")          # Prints: 2 (only one left!)
 
-result = gen()
-nums = list(result)
-nums.extend(list(result))
-print(nums)
+
+#W4 D1 T2
+
+# classify = lambda x: 'positive' if x > 0 else 'zero' if x == 0 else 'negative'
+
+# print(classify(5))   # "positive"
+# print(classify(-3))  # "negative"
+# print(classify(0))   # "zero"
+
+#W4 D1 T3
+# numbers = [1, 2, 3, 4, 5]
+# result = map(lambda x: x ** 2, numbers)
+# print(result)
+# print(list(result))
+
+
+# celsius = [0, 10, 20, 30, 40]
+# # Formula: F = C * 9/5 + 32
+
+# fahrenheit = list(map(lambda x: x * (9/5) + 32, celsius))
+# print(fahrenheit)  # [32.0, 50.0, 68.0, 86.0, 104.0]
+
+
+
+# a = [1, 2, 3]
+# b = [10, 20, 30]
+# result = list(map(lambda x, y: x + y, a, b))
+# print(result)
+
+#W4 D1 T4 - filter practice
+
+
+# numbers = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
+# evens = filter(lambda x: x % 2 == 0, numbers)
+# print(list(evens))
+
+
+# words = ["hi", "hello", "bye", "goodbye", "ok", "python"]
+# long_words = list(filter(lambda x: len(x) > 3, words))
+# print(long_words)  # ['hello', 'goodbye', 'python']
+
+
+# items = [0, 1, "", "hello", None, 42, [], [1, 2]]
+# truthy = list(filter(None, items))
+# print(truthy)
+
+
+
+#W4 D1 T5 - lambda sorting
+
+
+# pairs = [(1, 'c'), (2, 'a'), (3, 'b')]
+# pairs.sort(key = lambda x: x[1])
+# print(pairs)  # [(2, 'a'), (3, 'b'), (1, 'c')]
+
+
+# products = [
+#     {'name': 'Apple', 'price': 1.50},
+#     {'name': 'Banana', 'price': 0.75},
+#     {'name': 'Cherry', 'price': 2.00}
+# ]
+# products.sort(key = lambda x: x['price'])
+# print([p['name'] for p in products])  # ['Banana', 'Apple', 'Cherry']
+
+
+# words = ["python", "java", "c", "javascript"]
+# words.sort(key = lambda x: len(x))
+# print(words)  # ['c', 'java', 'python', 'javascript']
+
+
+#W4 D1 T6 - lambda filtering
+
+# trades = [
+#     ("AAPL", 150.0, "BUY"),
+#     ("GOOGL", -50.0, "SELL"),
+#     ("MSFT", 200.0, "BUY"),
+#     ("TSLA", -100.0, "BUY"),
+#     ("AMZN", 75.0, "SELL"),
+#     ("META", -25.0, "SELL"),
+# ]
+
+# # 1. Filter profitable trades (pnl > 0)
+# profitable = list(filter(lambda x: x[1] > 0, trades))
+# print("Profitable:", profitable)
+
+# # 2. Filter BUY trades only
+# buys = list(filter(lambda x: x[2] == 'BUY', trades))
+# print("BUY trades:", buys)
+
+# # 3. Filter profitable BUY trades (combine conditions)
+# profitable_buys = list(filter(lambda x: x[2] == 'BUY' and x[1] > 0, trades))
+# print("Profitable BUYs:", profitable_buys)
+
+#W4 D1 T7
+# result = list(filter(lambda x: x, [0, 1, 2, '', 'a']))
+# print(result)
+
+#W4 D1 T8
+# numbers = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
+
+# # Step 1: Filter to keep only even numbers
+# # Step 2: Square each remaining number
+# # Result should be: [4, 16, 36, 64, 100]
+
+# even_nums = list(filter(lambda x: x % 2 == 0, numbers))
+# print(even_nums)
+# squared = list(map(lambda x : x ** 2, even_nums))
+# print(squared)
+
+# #Bonus - the same thing using list comprehensions
+
+# squared_evens = [x ** 2 for x in numbers if x % 2 == 0]
+# print(squared_evens)
+
+#finish 13:51

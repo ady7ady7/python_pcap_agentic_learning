@@ -108,7 +108,21 @@ This directory contains all theoretical lessons organized by week and topic.
 
 ---
 
-## Week 4-8: Advanced Topics (Planned)
+## Week 4: Functional Programming & The Backtesting Engine
+
+### [Lambda Functions, Closures & Functional Programming](week4_lambda_closures.md)
+- Lambda syntax and rules (single expression only)
+- Lambda use cases (sorting keys, quick functions)
+- `map()` - apply function to all items
+- `filter()` - select items by condition
+- Closures - functions that remember their environment
+- `nonlocal` keyword for modifying enclosing scope
+- Factory functions and data hiding with closures
+- **PCAP Traps:** Lambda can't have statements, late binding in loops, map/filter return iterators
+
+---
+
+## Week 5-8: Advanced Topics (Planned)
 
 *Topics will be added as we progress through the course*
 

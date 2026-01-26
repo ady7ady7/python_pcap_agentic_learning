@@ -1,53 +1,46 @@
-# Weekend Exam Feedback
+# Daily Feedback Template
 
-**Date:** 2026-01-24 / 2026-01-25
-**Week:** 3 | **Weekend Exams**
+**Date:** 2026-01-27
+**Week:** 4 | **Day:** 2 (Tuesday)
+**Topic:** Closures & Factory Functions
 
 ---
 
-## Exam A Feedback
+## Self-Assessment
 
-**Score:** ___/30
+**Tasks Completed:** ___/8
+
+**Difficulty Rating:**
+[ ] Too Easy
+[ ] Just Right
+[ ] Too Hard
 
 **Time Spent:** ___ minutes
 
-**Difficulty (1-10):**
+---
 
-**Questions I guessed on:**
+## Reflection Questions
+
+**1. What concept clicked for you today?**
 
 
-**Topics I need to review:**
+**2. What's still confusing?**
+
+
+**3. Which task was most challenging and why?**
+
+
+**4. Did you encounter any bugs/errors that taught you something?**
+
+
+**5. How confident do you feel about today's topic?**
 
 
 ---
 
-## Exam B Feedback
-
-**Score:** ___/30
-
-**Time Spent:** ___ minutes
-
-**Difficulty (1-10):**
-
-**Questions I guessed on:**
-
-
-**Topics I need to review:**
+## Questions for Mentor
 
 
 ---
 
-## Weekend Reflection
-
-**What concepts feel solid now?**
-
-
-**What still needs work before Week 4?**
-
-
-**Any questions for mentor?**
-
-
----
-
-**Instructions:** Complete both exams (no IDE!), then fill this out. Submit your answer sheets and I'll provide detailed feedback with explanations.
+**Instructions:** Fill this out after completing the day's tasks. I'll archive it and provide assessment.
