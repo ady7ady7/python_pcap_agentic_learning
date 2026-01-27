@@ -3559,3 +3559,182 @@ When creating a new class object (as c1, c2), we increase that count value by 1,
 # print(squared_evens)
 
 #finish 13:51
+
+
+#9:53
+#W4 D2 T1
+
+# def outer():
+#     message = "Hello"
+#     def inner():
+#         return message
+#     return inner
+
+# greet = outer()
+# print(greet())
+
+#W4 D2 T2
+
+
+# def make_counter(start=0):
+#     """
+#     Create a counter that remembers its count.
+
+#     Args:
+#         start: Initial count value (default 0)
+
+#     Returns:
+#         A function that increments and returns the count
+#     """
+#     # Your code here
+    
+#     counter = start
+
+#     def increase_counter():
+#         nonlocal counter 
+#         counter += 1
+#         return counter
+    
+#     return increase_counter
+
+# # Test:
+# counter_a = make_counter(0)
+# counter_b = make_counter(100)
+
+# print(counter_a())  # 1
+# print(counter_a())  # 2
+# print(counter_a())  # 3
+
+# print(counter_b())  # 101
+# print(counter_b())  # 102
+
+
+#W4 D2 T3
+
+# x = 10
+
+# def outer():
+#     x = 20
+
+#     def inner():
+#         nonlocal x
+#         x = 30
+
+#     inner()
+#     print("outer x:", x)
+
+# outer()
+# print("global x:", x)
+
+
+#30, 10
+
+
+#W4 D2 T4 - Late Binding Trap
+    
+# functions = []
+# for i in range(3):
+#     functions.append(lambda: i)
+
+# print(functions[0]())
+# print(functions[1]())
+# print(functions[2]())
+# print(functions)
+#We'd get 2 as an output in every single case
+
+# functions = []
+# functions = [i for i in range(3)]
+
+# print(functions[0])
+# print(functions[1])
+# print(functions[2]())
+# print(functions)
+
+
+#W4 D2 T5
+
+# def make_price_validator(min_price: float, max_price: float):
+#     """
+#     Create a price validator function.
+
+#     Args:
+#         min_price: Minimum acceptable price
+#         max_price: Maximum acceptable price
+
+#     Returns:
+#         A function that takes a price and returns (is_valid, message)
+#     """
+
+#     min_price = min_price
+#     max_price = max_price
+    
+#     def validate_price(price):
+#         nonlocal min_price
+#         nonlocal max_price
+        
+#         if price > min_price and price < max_price:
+#             print(f'Price {price:.2f} is valid')
+#             return True
+#         else:
+#             print(f'Price {price:.2f} is invalid!')
+#             return False
+        
+#     return validate_price
+    
+    
+# # Test:
+# validate_stock = make_price_validator(0.01, 10000.0)
+# validate_crypto = make_price_validator(0.0001, 100000.0)
+
+# print(validate_stock(150.50))     # (True, "Price 150.5 is valid")
+# print(validate_stock(-5.0))       # (False, "Price -5.0 below minimum 0.01")
+# print(validate_stock(50000.0))    # (False, "Price 50000.0 above maximum 10000.0")
+
+# print(validate_crypto(0.00001))   # (False, "Price 1e-05 below minimum 0.0001")
+# print(validate_crypto(45000.0))   # (True, "Price 45000.0 is valid")
+
+
+#W4 D2 T7
+
+# def make_trade_logger(prefix: str):
+#     """
+#     Create a trade logger with a specific prefix.
+
+#     The logger should also track the total number of trades logged.
+
+#     Args:
+#         prefix: String prefix for log messages (e.g., "INFO", "TRADE")
+
+#     Returns:
+#         A tuple of (log_trade, get_count) functions
+#     """
+#     # Your code here
+#     prefix = prefix
+#     trades = []
+    
+#     def add_trade(ticker: str, side: str, price: float):
+#         nonlocal prefix
+#         trades.append([prefix, ticker, side, price])
+#         print(f'[{prefix}] {ticker} {side} @ ${price:.2f}')
+           
+#     def get_count():
+#         return len(trades)
+    
+#     return add_trade, get_count
+    
+# # Test:
+# log_trade, get_count = make_trade_logger("TRADE")
+
+# log_trade("AAPL", "BUY", 150.0)   # [TRADE] AAPL BUY @ $150.00
+# log_trade("GOOGL", "SELL", 2800.0) # [TRADE] GOOGL SELL @ $2800.00
+# log_trade("MSFT", "BUY", 300.0)   # [TRADE] MSFT BUY @ $300.00
+
+# print(f"Total trades: {get_count()}")  # Total trades: 3
+
+# # Create another logger with different prefix
+# log_error, error_count = make_trade_logger("ERROR")
+# log_error("TSLA", "FAILED", 0.0)  # [ERROR] TSLA FAILED @ $0.00
+# print(f"Errors: {error_count()}")  # Errors: 1
+
+#10;41
+

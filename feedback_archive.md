@@ -1891,3 +1891,102 @@ Student passed both mock exams on first attempt. Strong performance across all t
 
 ---
 
+## Week 4, Day 2 - 2026-01-27
+
+**Topic:** Closures & Factory Functions
+
+### Student Self-Assessment
+- **Tasks Completed:** 8/8
+- **Difficulty:** 4/10
+- **Time Spent:** 50 minutes
+
+### Student Reflection
+- Difficulty appropriate for PCAP level
+- Session was short but effective for reinforcement
+- Recognizes closures need practice to internalize
+- Appreciates revisiting concepts after time
+
+### Mentor Assessment
+
+**Task 1: Closure Basics - 100%**
+- Q1: ✅ 8
+- Q2: ✅ 20, 30
+- Q3: ✅ True
+- Q4: ✅ Hello
+- **Good question about Q4:** Asked why reading outer variable works without `nonlocal`
+
+**Task 2: make_counter - 100%**
+- ✅ Perfect implementation
+- ✅ Correct use of `nonlocal`
+- ✅ All tests pass
+
+**Task 3: nonlocal vs global - 100%**
+- Q1: ✅ 30, 10 (correct)
+- Q2: ✅ "we'd modify the global x" (correct)
+- Q3: ✅ Good explanation
+
+**Task 4: Late Binding Trap - 67%**
+- Q1: ✅ Correct (2, 2, 2)
+- Q2: ⚠️ Partial explanation - understood it's about capturing reference but phrasing unclear
+- Q3: ❌ Didn't provide the fix with `lambda i=i: i`
+
+**Task 5: make_price_validator - 75%**
+- ✅ Logic works correctly
+- ❌ Returns bool instead of tuple `(is_valid, message)` as spec required
+- ⚠️ Unnecessary `nonlocal` when only reading
+- ⚠️ Redundant `min_price = min_price` line
+
+**Task 6: PCAP Multiple Choice - 75%**
+- Q1: ✅ B
+- Q2: ✅ C
+- Q3: ✅ C (15)
+- Q4: ❌ **Answered D, correct is B** - Lambda functions DO work in loops, the trap is late binding
+
+**Task 7: make_trade_logger - 100%**
+- ✅ Perfect implementation
+- ✅ Returns tuple correctly
+- ✅ Tracks count properly
+- ✅ Output matches expected
+
+**Task 8: Closure vs Class - 100%**
+- Q1: ✅ Good answer about simplicity
+- Q2: ✅ Excellent answer about scalability, classmethods, abstractions
+- Q3: ✅ Pragmatic preference for classes in most cases
+
+### Final Score: 90% (A-)
+
+### Key Corrections
+
+**Q4 Task 1 - Why reading works without `nonlocal`:**
+`nonlocal` is only needed when you want to **modify** (assign to) an enclosing variable. When you only **read** a variable, Python's LEGB lookup finds it automatically. Rule: **Read = automatic. Write = needs `nonlocal`/`global`.**
+
+**Task 4 Q3 - The Late Binding Fix:**
+```python
+# FIXED: Capture value via default argument
+functions = []
+for i in range(3):
+    functions.append(lambda i=i: i)  # i=i captures value at definition time
+```
+
+**Task 6 Q4 - Contradiction:**
+Student explained late binding correctly in Task 4 but chose D ("Lambda functions don't work in loops") in Task 6. Lambda works fine in loops - the issue is capturing variable references, not lambda functionality.
+
+### Strengths
+- ✅ Quick completion (50 minutes)
+- ✅ Good understanding of closure basics
+- ✅ Excellent make_trade_logger implementation
+- ✅ Thoughtful closure vs class comparison
+- ✅ Asks good clarifying questions
+
+### Areas for Improvement
+- Late binding fix pattern (`lambda i=i: i`)
+- Spec compliance (return types)
+- Distinguish "read" vs "write" for nonlocal usage
+
+### Project Milestones
+- ✅ Closure concepts understood
+- ✅ Factory functions demonstrated
+- Ready for Day 3 topics
+
+---
+

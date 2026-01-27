@@ -120,6 +120,16 @@ This directory contains all theoretical lessons organized by week and topic.
 - Factory functions and data hiding with closures
 - **PCAP Traps:** Lambda can't have statements, late binding in loops, map/filter return iterators
 
+### [pip, Packages & Environment Management](week4_pip_packages.md) *(Reference)*
+- Locating Python on your system (Windows `py` launcher, Linux/macOS)
+- Python version management and switching
+- pip fundamentals (`install`, `uninstall`, `list`, `show`, `freeze`)
+- pip flags (`-U`, `-r`, `-e`, `--user`, `--no-cache-dir`, etc.)
+- Virtual environments (`venv`) - creation, activation, workflow
+- `requirements.txt` format and version specifiers
+- Common troubleshooting scenarios
+- **PCAP Notes:** Module vs Package distinction, PyPI, pip conceptual questions
+
 ---
 
 ## Week 5-8: Advanced Topics (Planned)

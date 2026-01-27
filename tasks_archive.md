@@ -633,3 +633,43 @@ Format: Date | Topic | Score | Difficulty | Notes
 
 ---
 
+## Week 4, Day 2 - 2026-01-27 (Tuesday)
+
+**Topic:** Closures & Factory Functions
+**Score:** 90% (A-)
+**Difficulty:** 4/10
+**Time Spent:** 50 minutes
+
+**Tasks Completed:**
+1. Closure basics (4 questions - 4/4)
+2. make_counter closure (perfect implementation)
+3. nonlocal vs global (3 questions - 3/3)
+4. Late binding trap (Q1-Q2 correct, Q3 fix missed)
+5. PROJECT: make_price_validator (logic works, spec deviation)
+6. PCAP multiple choice (4 questions - 3/4)
+7. PROJECT: make_trade_logger (perfect implementation)
+8. Closure vs class comparison (thoughtful analysis)
+
+**Key Learnings:**
+- Closures remember variables from enclosing scope
+- `nonlocal` needed only for MODIFYING enclosing variables, not reading
+- Late binding trap: lambda captures variable reference, not value
+- Fix: `lambda i=i: i` captures value at definition time
+- Factory functions create customized functions
+
+**Critical Corrections:**
+- Task 4 Q3: Fix is `lambda i=i: i` (default argument captures value)
+- Task 6 Q4: Lambda works in loops! Issue is late binding, not lambda functionality
+- Reading outer variables doesn't need `nonlocal` - only writing does
+
+**Student Question:**
+- "Why does reading outer variable work without `nonlocal`?"
+- Answered: Read = LEGB lookup automatic. Write = needs `nonlocal`/`global`
+
+**Project Milestones:**
+- make_counter closure working
+- make_trade_logger with tuple return
+- make_price_validator with validation logic
+
+---
+

@@ -24,6 +24,7 @@ def outer(x):
 
 add_5 = outer(5)
 print(add_5(3))
+
 ```
 
 **Q2:** What is the output?
@@ -54,10 +55,10 @@ print(greet())
 
 **Your answers:**
 ```
-Q1:
-Q2:
-Q3:
-Q4:
+Q1: 8
+Q2: 20, 30
+Q3: True, we could use nonlocal etc.
+Q4: Hello - although it's weird since we are not accessing the message with nonlocal. I'd normally expect an error in such a situation. Could you further explain why this does not produce an error?
 ```
 
 ---
@@ -97,11 +98,37 @@ print(counter_b())  # 102
 **Your code:**
 ```python
 
+def make_counter(start=0):
+    """
+    Create a counter that remembers its count.
+
+    Args:
+        start: Initial count value (default 0)
+
+    Returns:
+        A function that increments and returns the count
+    """
+    # Your code here
+    
+    counter = start
+
+    def increase_counter():
+        nonlocal counter 
+        counter += 1
+        return counter
+    
+    return increase_counter
+
 ```
 
 **Test output:**
 ```
-
+$ python practice.py
+1
+2
+3
+101
+102
 ```
 
 ---
@@ -132,11 +159,11 @@ print("global x:", x)
 
 **Your answers:**
 ```
-Q1:
+Q1: 30, 10
 
-Q2:
+Q2: we'd modify the global x actually
 
-Q3:
+Q3: We use nonlocal when we want to access a variable from the outer scope; we use global when we want to use a global variable
 ```
 
 ---
@@ -156,10 +183,21 @@ print(functions[2]())
 ```
 
 **Q1:** What is the output?
+2 - the last i from range in every output
 
 **Q2:** Why does this happen? (Explain the "late binding" trap)
+I guess it's how the Python code execution is ordered - it seems like first we use lambda through the range and we end up at the last element, which then gets appended to the list. Also, we add lambda and not the actual i.
 
 **Q3:** How do you fix it? Write the corrected version.
+I'm not sure, to be honest if we had to use lambda, as it's a loop... Definitely we don't need lambda here and can't use it...
+
+functions = [i for i in range(3)]
+
+print(functions[0])
+print(functions[1])
+print(functions[2])
+print(functions)
+
 
 **Your answers:**
 ```
@@ -206,12 +244,51 @@ print(validate_crypto(45000.0))   # (True, "Price 45000.0 is valid")
 
 **Your code:**
 ```python
+def make_price_validator(min_price: float, max_price: float):
+    """
+    Create a price validator function.
 
+    Args:
+        min_price: Minimum acceptable price
+        max_price: Maximum acceptable price
+
+    Returns:
+        A function that takes a price and returns (is_valid, message)
+    """
+
+    min_price = min_price
+    max_price = max_price
+    
+    def validate_price(price):
+        nonlocal min_price
+        nonlocal max_price
+        
+        if price > min_price and price < max_price:
+            print(f'Price {price:.2f} is valid')
+            return True
+        else:
+            print(f'Price {price:.2f} is invalid!')
+            return False
+        
+    return validate_price
 ```
 
 **Test output:**
 ```
+$ python practice.py
+Price 150.50 is valid
+True
+Price -5.00 is invalid!
+False
+Price 50000.00 is invalid!
+False
+Price 0.00 is invalid!
+False
+Price 45000.00 is valid
+True
 
+
+I've used simpler output - I COULD ALSO check it separately for min/max prices and give more precise description, but IT'S ABSOLUTELY UNNECESSARY IN THIS CONTEXT, and my approach is also a lot cleaner.
 ```
 
 ---
@@ -229,6 +306,8 @@ print(validate_crypto(45000.0))   # (True, "Price 45000.0 is valid")
 - B) `local`
 - C) `nonlocal`
 - D) `outer`
+
+
 
 **Q3:** What is the output?
 ```python
@@ -251,10 +330,10 @@ print(add10(5))
 
 **Your answers:**
 ```
-Q1:
-Q2:
-Q3:
-Q4:
+Q1: B
+Q2: C
+Q3: C
+Q4: D
 ```
 
 ---
@@ -296,12 +375,42 @@ print(f"Errors: {error_count()}")  # Errors: 1
 
 **Your code:**
 ```python
+def make_trade_logger(prefix: str):
+    """
+    Create a trade logger with a specific prefix.
 
+    The logger should also track the total number of trades logged.
+
+    Args:
+        prefix: String prefix for log messages (e.g., "INFO", "TRADE")
+
+    Returns:
+        A tuple of (log_trade, get_count) functions
+    """
+    # Your code here
+    prefix = prefix
+    trades = []
+    
+    def add_trade(ticker: str, side: str, price: float):
+        nonlocal prefix
+        trades.append([prefix, ticker, side, price])
+        print(f'[{prefix}] {ticker} {side} @ ${price:.2f}')
+           
+    def get_count():
+        return len(trades)
+    
+    return add_trade, get_count
 ```
 
 **Test output:**
 ```
-
+$ python practice.py
+[TRADE] AAPL BUY @ $150.00
+[TRADE] GOOGL SELL @ $2800.00
+[TRADE] MSFT BUY @ $300.00
+Total trades: 3
+[ERROR] TSLA FAILED @ $0.00
+Errors: 1
 ```
 
 ---
@@ -356,10 +465,13 @@ class Account:
 **Questions:**
 
 **Q1:** What are the advantages of the closure approach?
+It's a bit simpler - lack of self, class syntax etc. - it's kind of a create-and-use-quickly schema, and it's easier to learn + maybe less trickier in terms of potential traps, although I'm personally NOT a fan.
 
 **Q2:** What are the advantages of the class approach?
+Solid and more bulletproof construction, once we grasp classes we can definitely use them to our advantage - A LOT BETTER SCALABILITY, much more possibilities (classmethods, abstractmethods, etc.) and the ability to use it as a building block in a large scale and more robust code structures, yet still keeping a very organized structure and it's pretty easy to read anyway once you know classes.
 
 **Q3:** When would you prefer closures over classes?
+Personally, probably never at this point - maybe for some very basic and simply functions, but that would be an edge case I'd say. Generally ONLY in very simple scenarios, when using classes is not necessary and I can keep track of my code with closures only, but I doubt it honestly.
 
 **Your answers:**
 ```

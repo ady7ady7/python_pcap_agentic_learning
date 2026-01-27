@@ -1,8 +1,8 @@
 # Daily Feedback Template
 
-**Date:** 2026-01-27
-**Week:** 4 | **Day:** 2 (Tuesday)
-**Topic:** Closures & Factory Functions
+**Date:** 2026-01-28
+**Week:** 4 | **Day:** 3 (Wednesday)
+**Topic:** TBD
 
 ---
 
