@@ -1990,3 +1990,110 @@ Student explained late binding correctly in Task 4 but chose D ("Lambda function
 
 ---
 
+## Week 4, Day 3 - 2026-01-28
+
+**Topic:** reduce(), Decorators & Functional Patterns
+
+### Student Self-Assessment
+- **Tasks Completed:** 8/8
+- **Difficulty:** 5/10
+- **Time Spent:** 55 minutes
+
+### Student Reflection
+- Difficulty was appropriate
+- Recognizes functional patterns (list comprehensions vs lambda/reduce/map) can mingle
+- Hopes to master with regular practice
+
+### Mentor Assessment
+
+**Task 1: reduce() Basics - 100%**
+- Q1: ✅ 10
+- Q2: ✅ 24
+- Q3: ✅ 16
+- Q4: ✅ "abc"
+
+**Task 2: reduce() Implementation - 100%**
+- Part A: ✅ Product = 120
+- Part B: ✅ Maximum = 9
+- Part C: ✅ Flatten works (slightly verbose but correct)
+
+**Task 3: Decorator Basics - 75%**
+- Q1: ✅ Before/Hi!/After
+- Q2: ❌ `my_decorator.foo()` - should be `my_decorator(foo)`
+- Q3: ✅ True
+- Q4: ✅ 30
+
+**Task 4: announce decorator - 80%**
+- ⚠️ Bug: Calls function TWICE (once discarded, once returned)
+- Should only call `return func(*args, **kwargs)` once
+- Concept understood, noted needs practice
+
+**Task 5: PROJECT Trade Stats - 100%**
+- Part A: ✅ Total PnL with initializer
+- Part B: ✅ Win count
+- Part C: ✅ Best trade
+- **Key insight noted:** Initializer crucial when reducing dicts to numbers
+
+**Task 6: PCAP Multiple Choice - 75%**
+- Q1: ✅ B (reduce definition)
+- Q2: ✅ C (finds max = 5)
+- Q3: ✅ B (12 + 10 = 22)
+- Q4: ❌ Answered D, correct is **B** (decorators replace function)
+
+**Task 7: log_call decorator - 80%**
+- ✅ Works and logs function calls
+- ⚠️ Output format differs from expected (uses set unpacking)
+- Concept understood
+
+**Task 8: Combining map/filter/reduce - 100%**
+- ✅ All steps correct
+- ✅ **Caught mentor's calculation error!**
+- Correct: 4 winners, $1050 (not 3 winners, $950)
+
+### Final Score: 89% (B+)
+
+### Key Corrections
+
+**Task 3 Q2 - Decorator shorthand:**
+```python
+@my_decorator
+def foo():
+    pass
+# Equivalent to:
+foo = my_decorator(foo)  # NOT my_decorator.foo()
+```
+
+**Task 4 - Double function call bug:**
+```python
+# Bug: calls function twice
+func(*args, **kwargs)           # Result discarded
+return func(*args, **kwargs)    # Called again
+
+# Fix: only call once
+return func(*args, **kwargs)
+```
+
+**Task 6 Q4 - Decorators CAN access arguments:**
+That's how `log_call` decorator works - via `*args, **kwargs`.
+
+**Task 8 - Mentor error acknowledged:**
+GOOGL SELL: (2800-2750)*5 = $250 (winner). Correct totals: 4 winners, $1050.
+
+### Strengths
+- ✅ reduce() mechanics understood quickly
+- ✅ Good insight about initializer necessity
+- ✅ Caught mentor's calculation error
+- ✅ Good self-awareness about needing practice
+
+### Areas for Improvement
+- Decorator syntax: `decorator(func)` not `decorator.func()`
+- Don't call wrapped function twice in decorator wrapper
+- Decorators CAN access arguments via *args/**kwargs
+
+### Project Milestones
+- ✅ reduce() for trade statistics
+- ✅ Decorator concept demonstrated
+- ✅ Combined map/filter/reduce pipeline
+
+---
+

@@ -1,5 +1,6 @@
 import pandas as pd #added on W1 D4, and I will be definitely using both pd/np
 import numpy as np
+from functools import reduce #Added on W4 D3
 
 
 #This file will be used for me to test the code and complete the tasks - but it will not be checked by the agent,
@@ -3736,5 +3737,199 @@ When creating a new class object (as c1, c2), we increase that count value by 1,
 # log_error("TSLA", "FAILED", 0.0)  # [ERROR] TSLA FAILED @ $0.00
 # print(f"Errors: {error_count()}")  # Errors: 1
 
-#10;41
+#Start 10:06
+#W4 D3 T1
 
+# numbers = [1, 2, 3, 4]
+# result = reduce(lambda acc, x: acc + x, numbers)
+# print(result)
+
+
+# numbers = [1, 2, 3, 4]
+# result = reduce(lambda acc, x: acc * x, numbers)
+# print(result)
+
+# numbers = [1, 2, 3]
+# result = reduce(lambda acc, x: acc + x, numbers, 10)
+# print(result)
+
+# words = ["a", "b", "c"]
+# result = reduce(lambda acc, x: acc + x, words)
+# print(result)
+
+#W4 D3 T2 - reduce practice
+
+# from functools import reduce
+
+# numbers = [2, 3, 4, 5]
+# calc = reduce(lambda acc, x: acc * x, numbers)
+# print(calc)
+
+
+# numbers = [3, 7, 2, 9, 4]
+# maximum = reduce(lambda acc, x: x if x > acc else acc, numbers)
+# print(maximum)
+
+
+# nested = [[1, 2], [3, 4], [5, 6]]
+# flattened = reduce(lambda acc, x: acc + x if type(x) == list else x, nested)
+# print(flattened)
+
+#W4 D3 T3 decorator basics
+
+# def my_decorator(func):
+#     def wrapper():
+#         print("Before")
+#         func()
+#         print("After")
+#     return wrapper
+
+# @my_decorator
+# def say_hi():
+#     print("Hi!")
+
+# say_hi()
+
+
+# def double_result(func):
+#     def wrapper(x):
+#         return func(x) * 2
+#     return wrapper
+
+# @double_result
+# def add_ten(n):
+#     return n + 10
+
+# print(add_ten(5))
+
+
+#W4 D3 T4 - Decorator continuation
+
+# def announce(func):
+#     '''A decorator that wraps a function which prints 'Executing' before calling the function'''
+    
+#     def wrapper(*args, **kwargs):
+#         print(f'Executing...')
+#         func(*args, **kwargs) 
+#         return func(*args, **kwargs)
+    
+#     return wrapper
+
+# @announce
+# def greet(name: str):
+#     print(f'Hello, {name}')
+    
+# @announce
+# def add(a, b):
+#     return a + b
+
+# greet("Alice")
+# result = add(3, 5)
+# print(result)
+
+
+
+#W4 D3 T5 - reduce practice
+
+# trades = [
+#     {"ticker": "AAPL", "pnl": 150.0},
+#     {"ticker": "GOOGL", "pnl": -50.0},
+#     {"ticker": "MSFT", "pnl": 200.0},
+#     {"ticker": "TSLA", "pnl": -100.0},
+#     {"ticker": "NVDA", "pnl": 300.0},
+# ]
+
+# # Part A: Calculate total PnL using reduce
+# total_pnl = reduce(lambda acc, value: acc + value['pnl'], trades, 0)
+# print(f"Total PnL: ${total_pnl}")  # Total PnL: $500.0
+# #Tutaj kluczowe było dodanie 0 jako wartości startowej, bo inaczej nie mogłem tego chwycić i wyskakiwały TypeErrory!
+
+
+# # Part B: Count winning trades using reduce
+# win_count = reduce(lambda acc, trade: acc + 1 if trade['pnl'] > 0 else acc, trades, 0)
+# print(f"Winning trades: {win_count}")  # Winning trades: 3
+
+# # Part C: Find the best trade (highest pnl) using reduce
+# best_trade = reduce(lambda acc, trade: acc if acc['pnl'] > trade['pnl'] else trade, trades)
+# print(f"Best trade: {best_trade['ticker']} with ${best_trade['pnl']}")
+# # Best trade: NVDA with $300.0
+
+
+#W4 D3 T6
+# def decorator(func):
+#     def wrapper(*args):
+#         return func(*args) + 10
+#     return wrapper
+
+# @decorator
+# def multiply(a, b):
+#     return a * b
+
+# print(multiply(3, 4))
+
+#W4 D3 T7 - Building a decorator
+
+# def log_call(func):
+#     """
+#     Decorator that prints the function name and arguments when called.
+
+#     Example output:
+#     Calling calculate_pnl(entry=100, exit=110, qty=10)
+#     """
+#     def wrapper(*args, **kwargs):
+#         print(f'Executing {func.__name__}({*args, *kwargs})')
+#         return func(*args, **kwargs)
+    
+#     return wrapper
+
+# # Test:
+# @log_call
+# def calculate_pnl(entry: float, exit: float, qty: float) -> float:
+#     return (exit - entry) * qty
+
+# @log_call
+# def is_winner(pnl: float) -> bool:
+#     return pnl > 0
+
+
+# result = calculate_pnl(100.0, 110.0, 10.0)
+# # Expected: Calling calculate_pnl(100.0, 110.0, 10.0)
+# print(f"PnL: {result}")  # PnL: 100.0
+# win = is_winner(result)
+# # Expected: Calling is_winner(100.0)
+# print(f"Winner: {win}")  # Winner: True
+
+
+#W4 D3 T8 - combined lambda, map, filter, reduce
+
+# trades = [
+#     {"ticker": "AAPL", "side": "BUY", "entry": 150, "exit": 160, "qty": 10},
+#     {"ticker": "GOOGL", "side": "SELL", "entry": 2800, "exit": 2750, "qty": 5},
+#     {"ticker": "MSFT", "side": "BUY", "entry": 300, "exit": 290, "qty": 20},
+#     {"ticker": "TSLA", "side": "BUY", "entry": 700, "exit": 750, "qty": 8},
+#     {"ticker": "NVDA", "side": "SELL", "entry": 500, "exit": 480, "qty": 15},
+# ]
+
+# # Step 1: Calculate PnL for each trade using map
+# # Step 2: Filter only winning trades using filter
+# # Step 3: Calculate total winning PnL using reduce
+
+# trades_with_pnl = list(map(
+#     lambda t: {**t, "pnl": (t['exit'] - t['entry']) * t['qty']} if t['side'] == 'BUY' else
+#     {**t, "pnl": (t['entry'] - t['exit']) * t['qty']},
+#     trades
+# ))
+
+# print(trades_with_pnl)
+
+
+# winning_trades = list(filter(lambda t: t if t['pnl'] > 0 else 0, trades_with_pnl))
+# print(winning_trades)
+
+# total_winning_pnl = reduce(lambda acc, t: acc + t['pnl'], winning_trades, 0)
+
+
+# print(f"Winning trades: {len(winning_trades)}")
+# print(f"Total winning PnL: ${total_winning_pnl}")
+
+#10:59

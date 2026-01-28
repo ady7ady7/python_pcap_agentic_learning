@@ -673,3 +673,41 @@ Format: Date | Topic | Score | Difficulty | Notes
 
 ---
 
+## Week 4, Day 3 - 2026-01-28 (Wednesday)
+
+**Topic:** reduce(), Decorators & Functional Patterns
+**Score:** 89% (B+)
+**Difficulty:** 5/10
+**Time Spent:** 55 minutes
+
+**Tasks Completed:**
+1. reduce() basics (4 questions - 4/4)
+2. reduce() implementations (product, max, flatten - 3/3)
+3. Decorator basics (4 questions - 3/4)
+4. announce decorator (works, but calls function twice)
+5. PROJECT: Trade stats with reduce (3/3)
+6. PCAP multiple choice (4 questions - 3/4)
+7. PROJECT: log_call decorator (works)
+8. Combining map/filter/reduce (caught mentor error!)
+
+**Key Learnings:**
+- reduce() requires initializer when reducing dicts to numbers
+- Decorator syntax: `foo = decorator(foo)` not `decorator.foo()`
+- Decorators use closures to "remember" the wrapped function
+- Don't call wrapped function twice in decorator wrapper
+
+**Critical Corrections:**
+- Task 3 Q2: `@decorator` = `foo = decorator(foo)` not dot notation
+- Task 4: Call wrapped function ONCE, not twice
+- Task 6 Q4: Decorators CAN access arguments (that's their purpose!)
+
+**Student Caught Mentor Error:**
+Task 8 expected values were wrong. Correct: 4 winners, $1050 total PnL.
+
+**Project Milestones:**
+- reduce() for trade statistics
+- Decorator logging pattern demonstrated
+- map/filter/reduce pipeline for trade processing
+
+---
+

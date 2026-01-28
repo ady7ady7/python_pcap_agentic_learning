@@ -16,6 +16,8 @@
 | [Closures](#closures) | Functions that remember their environment | ~290 |
 | [Closure Use Cases](#closure-use-cases) | Practical applications | ~380 |
 | [PCAP Traps](#pcap-traps) | Common exam pitfalls | ~430 |
+| [reduce() Function](#reduce-function-from-functools) | Cumulative reduction | ~545 |
+| [Decorators](#decorators-closures-in-action) | Function wrappers using closures | ~610 |
 
 ---
 
@@ -511,7 +513,7 @@ print(functions[2]())  # 2
 
 # FIX: Capture the value at definition time
 functions = []
-for i in range(3):
+for i in range(3):lsy
     functions.append(lambda i=i: i)  # Default argument captures current value
 
 print(functions[0]())  # 0
@@ -537,6 +539,219 @@ def outer():
 outer()
 print(x)  # 10 (global unchanged)
 ```
+
+---
+
+## reduce() Function (from functools)
+
+`reduce()` applies a function cumulatively to items, reducing a sequence to a single value.
+
+### Import Required
+
+```python
+from functools import reduce
+```
+
+### How reduce() Works
+
+```python
+from functools import reduce
+
+# reduce(function, iterable, [initializer])
+# function takes TWO arguments: accumulator and current item
+
+numbers = [1, 2, 3, 4, 5]
+
+# Sum all numbers
+total = reduce(lambda acc, x: acc + x, numbers)
+print(total)  # 15
+
+# Step by step:
+# Step 1: acc=1, x=2 → 1+2=3
+# Step 2: acc=3, x=3 → 3+3=6
+# Step 3: acc=6, x=4 → 6+4=10
+# Step 4: acc=10, x=5 → 10+5=15
+```
+
+### Common reduce() Patterns
+
+```python
+from functools import reduce
+
+numbers = [1, 2, 3, 4, 5]
+
+# Sum (same as sum())
+total = reduce(lambda acc, x: acc + x, numbers)
+print(total)  # 15
+
+# Product (multiply all)
+product = reduce(lambda acc, x: acc * x, numbers)
+print(product)  # 120
+
+# Maximum (same as max())
+maximum = reduce(lambda acc, x: acc if acc > x else x, numbers)
+print(maximum)  # 5
+
+# With initializer (starting value)
+total = reduce(lambda acc, x: acc + x, numbers, 100)
+print(total)  # 115 (100 + 1 + 2 + 3 + 4 + 5)
+
+#Flattening a list
+nested = [[1, 2], [3, 4], [5, 6]]
+flattened = reduce(lambda acc, x: acc + x if type(x) == list else x, nested)
+print(flattened) #[1, 2, 3, 4, 5, 6]
+
+```
+
+### reduce() with Strings
+
+```python
+from functools import reduce
+
+words = ["Hello", " ", "World", "!"]
+
+# Concatenate
+sentence = reduce(lambda acc, x: acc + x, words)
+print(sentence)  # "Hello World!"
+
+# Or use str.join (more Pythonic)
+sentence = "".join(words)
+```
+
+### When to Use reduce()
+
+- **Use reduce:** When you need to combine all elements into one result
+- **Don't use:** When built-in functions exist (sum, max, min, any, all)
+- **Pythonic preference:** List comprehensions and built-ins are usually clearer
+
+```python
+# Prefer this:
+total = sum(numbers)
+
+# Over this:
+total = reduce(lambda acc, x: acc + x, numbers)
+```
+
+---
+
+## Decorators (Closures in Action)
+
+A **decorator** is a function that wraps another function to modify its behavior. Decorators use closures!
+
+### Basic Decorator Pattern
+
+```python
+def my_decorator(func):
+    def wrapper():
+        print("Before function call")
+        func()
+        print("After function call")
+    return wrapper
+
+@my_decorator
+def say_hello():
+    print("Hello!")
+
+say_hello()
+# Output:
+# Before function call
+# Hello!
+# After function call
+```
+
+### How It Works
+
+The `@decorator` syntax is just shorthand:
+
+```python
+@my_decorator
+def say_hello():
+    print("Hello!")
+
+# Is equivalent to:
+def say_hello():
+    print("Hello!")
+say_hello = my_decorator(say_hello)
+```
+
+### Decorator with Arguments (Using *args, **kwargs)
+
+```python
+def my_decorator(func):
+    def wrapper(*args, **kwargs):
+        print(f"Calling {func.__name__}")
+        result = func(*args, **kwargs)
+        print(f"Finished {func.__name__}")
+        return result
+    return wrapper
+
+@my_decorator
+def add(a, b):
+    return a + b
+
+result = add(3, 5)
+# Output:
+# Calling add
+# Finished add
+print(result)  # 8
+```
+
+### Practical Decorator: Timing
+
+```python
+import time
+
+def timer(func):
+    def wrapper(*args, **kwargs):
+        start = time.time()
+        result = func(*args, **kwargs)
+        end = time.time()
+        print(f"{func.__name__} took {end - start:.4f} seconds")
+        return result
+    return wrapper
+
+@timer
+def slow_function():
+    time.sleep(1)
+    return "Done"
+
+slow_function()  # slow_function took 1.0012 seconds
+```
+
+### Decorator Factory (Decorator with Parameters)
+
+```python
+def repeat(times):
+    def decorator(func):
+        def wrapper(*args, **kwargs):
+            for _ in range(times):
+                result = func(*args, **kwargs)
+            return result
+        return wrapper
+    return decorator
+
+@repeat(3)
+def greet(name):
+    print(f"Hello, {name}!")
+
+greet("Alice")
+# Output:
+# Hello, Alice!
+# Hello, Alice!
+# Hello, Alice!
+```
+
+### Why Decorators Use Closures
+
+```python
+def my_decorator(func):    # Outer function receives the function to wrap
+    def wrapper(*args, **kwargs):  # Inner function (closure)
+        # Can access 'func' from enclosing scope
+        return func(*args, **kwargs)
+    return wrapper  # Returns the closure
+```
+
+The `wrapper` function is a closure that "remembers" the `func` variable from `my_decorator`'s scope.
 
 ---
 

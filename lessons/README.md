@@ -118,6 +118,8 @@ This directory contains all theoretical lessons organized by week and topic.
 - Closures - functions that remember their environment
 - `nonlocal` keyword for modifying enclosing scope
 - Factory functions and data hiding with closures
+- `reduce()` from functools - cumulative reduction
+- Decorators - closures in action, wrapping functions
 - **PCAP Traps:** Lambda can't have statements, late binding in loops, map/filter return iterators
 
 ### [pip, Packages & Environment Management](week4_pip_packages.md) *(Reference)*

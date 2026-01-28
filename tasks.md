@@ -1,9 +1,9 @@
-# Week 4, Day 2 - Tuesday
-## Topic: Closures & Factory Functions
+# Week 4, Day 3 - Wednesday
+## Topic: reduce(), Decorators & Functional Patterns
 
-**Date:** 2026-01-27
+**Date:** 2026-01-28
 
-**IMPORTANT:** Re-read the **Closures** section in `lessons/week4_lambda_closures.md` before starting!
+**NEW CONTENT:** Read the **reduce()** and **Decorators** sections added to `lessons/week4_lambda_closures.md` before starting!
 
 **Target Difficulty:** 5/10
 
@@ -11,475 +11,481 @@
 
 ---
 
-## Task 1: Closure Basics (PCAP Warm-up)
+## Task 1: reduce() Basics (PCAP Warm-up)
 
-**Instructions:** Answer after reading the closures section.
+**Instructions:** You need `from functools import reduce` for these.
 
 **Q1:** What is the output?
 ```python
-def outer(x):
-    def inner(y):
-        return x + y
-    return inner
+from functools import reduce
 
-add_5 = outer(5)
-print(add_5(3))
+numbers = [1, 2, 3, 4]
+result = reduce(lambda acc, x: acc + x, numbers)
+print(result)
 
+Answer: 10
 ```
 
 **Q2:** What is the output?
 ```python
-def make_multiplier(n):
-    def multiply(x):
-        return x * n
-    return multiply
+from functools import reduce
 
-double = make_multiplier(2)
-triple = make_multiplier(3)
-print(double(10), triple(10))
+numbers = [1, 2, 3, 4]
+result = reduce(lambda acc, x: acc * x, numbers)
+print(result)
+
+Answer: 24
 ```
 
-**Q3:** True or False: The inner function in a closure can access variables from the outer function even after the outer function has finished executing.
-
-**Q4:** What does this print?
+**Q3:** What is the output? (Notice the initializer!)
 ```python
-def outer():
-    message = "Hello"
-    def inner():
-        return message
-    return inner
+from functools import reduce
 
-greet = outer()
-print(greet())
+numbers = [1, 2, 3]
+result = reduce(lambda acc, x: acc + x, numbers, 10)
+print(result)
+
+Answer: 16
+```
+
+**Q4:** What is the output?
+```python
+from functools import reduce
+
+words = ["a", "b", "c"]
+result = reduce(lambda acc, x: acc + x, words)
+print(result)
+
+Answer: abc
 ```
 
 **Your answers:**
 ```
-Q1: 8
-Q2: 20, 30
-Q3: True, we could use nonlocal etc.
-Q4: Hello - although it's weird since we are not accessing the message with nonlocal. I'd normally expect an error in such a situation. Could you further explain why this does not produce an error?
+Q1:
+Q2:
+Q3:
+Q4:
 ```
 
 ---
 
-## Task 2: Create a Closure - make_counter
+## Task 2: reduce() Implementation
 
-**Instructions:** Create a factory function that creates counters.
+**Instructions:** Use `reduce()` to solve these. Import functools.
+
+**Part A:** Calculate the product of all numbers in a list.
+```python
+from functools import reduce
+
+numbers = [2, 3, 4, 5]
+# Your code here - should print 120
+
+calc = reduce(lambda acc, x: acc * x, numbers)
+print(calc)
+```
+
+**Part B:** Find the maximum value using reduce (don't use max()).
+```python
+from functools import reduce
+
+numbers = [3, 7, 2, 9, 4]
+# Your code here - should print 9
+
+maximum = reduce(lambda acc, x: x if x > acc else acc, numbers)
+print(maximum)
+
+```
+
+**Part C:** Flatten a nested list using reduce.
+```python
+from functools import reduce
+
+nested = [[1, 2], [3, 4], [5, 6]]
+# Result should be [1, 2, 3, 4, 5, 6]
+# Hint: acc + x where both are lists
+
+
+flattened = reduce(lambda acc, x: acc + x if type(x) == list else x, nested)
+print(flattened)
+
+```
+
+**Your code:**
+```python
+# Part A:
+
+
+# Part B:
+
+
+# Part C:
+
+```
+
+---
+
+## Task 3: Decorator Basics
+
+**Q1:** What is the output?
+```python
+def my_decorator(func):
+    def wrapper():
+        print("Before")
+        func()
+        print("After")
+    return wrapper
+
+@my_decorator
+def say_hi():
+    print("Hi!")
+
+say_hi()
+
+Before
+Hi!
+After
+```
+
+**Q2:** The `@decorator` syntax is shorthand for what?
+```python
+@my_decorator
+def foo():
+    pass
+
+# Is equivalent to: foo = ???
+
+foo = my_decorator.foo() #foo function wrapped in a decorator
+```
+
+**Q3:** True or False: A decorator is essentially a closure that wraps a function.
+
+True
+
+**Q4:** What is the output?
+```python
+def double_result(func):
+    def wrapper(x):
+        return func(x) * 2
+    return wrapper
+
+@double_result
+def add_ten(n):
+    return n + 10
+
+print(add_ten(5))
+
+
+30
+
+```
+
+**Your answers:**
+```
+Q1:
+
+Q2: foo =
+
+Q3:
+
+Q4:
+```
+
+---
+
+## Task 4: Create a Simple Decorator
+
+**Instructions:** Create a decorator that prints "Executing..." before a function runs.
 
 ```python
-def make_counter(start=0):
+def announce(func):
     """
-    Create a counter that remembers its count.
-
-    Args:
-        start: Initial count value (default 0)
-
-    Returns:
-        A function that increments and returns the count
+    Decorator that prints 'Executing...' before calling the function.
     """
     # Your code here
     pass
 
 # Test:
-counter_a = make_counter(0)
-counter_b = make_counter(100)
+@announce
+def greet(name):
+    print(f"Hello, {name}!")
 
-print(counter_a())  # 1
-print(counter_a())  # 2
-print(counter_a())  # 3
+@announce
+def add(a, b):
+    return a + b
 
-print(counter_b())  # 101
-print(counter_b())  # 102
+greet("Alice")
+# Expected output:
+# Executing...
+# Hello, Alice!
+
+result = add(3, 5)
+# Expected output:
+# Executing...
+print(result)  # 8
 ```
 
-**Hint:** You'll need the `nonlocal` keyword to modify the outer variable.
+**Hint:** Use `*args, **kwargs` to handle any function signature.
 
 **Your code:**
 ```python
 
-def make_counter(start=0):
-    """
-    Create a counter that remembers its count.
 
-    Args:
-        start: Initial count value (default 0)
-
-    Returns:
-        A function that increments and returns the count
-    """
-    # Your code here
+def announce(func):
+    '''A decorator that wraps a function which prints 'Executing' before calling the function'''
     
-    counter = start
-
-    def increase_counter():
-        nonlocal counter 
-        counter += 1
-        return counter
+    def wrapper(*args, **kwargs):
+        print(f'Executing...')
+        func(*args, **kwargs) 
+        return func(*args, **kwargs)
     
-    return increase_counter
+    return wrapper
 
-```
+Your hint was very important here - but anyway I need to practice this, as it's unintuitive at this point.
 
-**Test output:**
-```
-$ python practice.py
-1
-2
-3
-101
-102
-```
-
----
-
-## Task 3: nonlocal vs global
-
-**Q1:** What is the output?
-```python
-x = 10
-
-def outer():
-    x = 20
-
-    def inner():
-        nonlocal x
-        x = 30
-
-    inner()
-    print("outer x:", x)
-
-outer()
-print("global x:", x)
-```
-
-**Q2:** What would happen if we used `global x` instead of `nonlocal x` in the inner function?
-
-**Q3:** When do you use `nonlocal` vs `global`?
-
-**Your answers:**
-```
-Q1: 30, 10
-
-Q2: we'd modify the global x actually
-
-Q3: We use nonlocal when we want to access a variable from the outer scope; we use global when we want to use a global variable
-```
-
----
-
-## Task 4: Closure Trap - Late Binding
-
-**Instructions:** This is a PCAP trap. Predict the output, then explain why.
-
-```python
-functions = []
-for i in range(3):
-    functions.append(lambda: i)
-
-print(functions[0]())
-print(functions[1]())
-print(functions[2]())
-```
-
-**Q1:** What is the output?
-2 - the last i from range in every output
-
-**Q2:** Why does this happen? (Explain the "late binding" trap)
-I guess it's how the Python code execution is ordered - it seems like first we use lambda through the range and we end up at the last element, which then gets appended to the list. Also, we add lambda and not the actual i.
-
-**Q3:** How do you fix it? Write the corrected version.
-I'm not sure, to be honest if we had to use lambda, as it's a loop... Definitely we don't need lambda here and can't use it...
-
-functions = [i for i in range(3)]
-
-print(functions[0])
-print(functions[1])
-print(functions[2])
-print(functions)
-
-
-**Your answers:**
-```
-Q1 Output:
-
-Q2 Explanation:
-
-Q3 Fixed code:
 
 ```
 
 ---
 
-## Task 5: PROJECT - make_price_validator
+## Task 5: PROJECT - Trade Statistics with reduce()
 
-**Instructions:** Create a closure that validates prices against a threshold.
+**Instructions:** Use `reduce()` to calculate trade statistics.
 
 ```python
-def make_price_validator(min_price: float, max_price: float):
-    """
-    Create a price validator function.
+from functools import reduce
 
-    Args:
-        min_price: Minimum acceptable price
-        max_price: Maximum acceptable price
+trades = [
+    {"ticker": "AAPL", "pnl": 150.0},
+    {"ticker": "GOOGL", "pnl": -50.0},
+    {"ticker": "MSFT", "pnl": 200.0},
+    {"ticker": "TSLA", "pnl": -100.0},
+    {"ticker": "NVDA", "pnl": 300.0},
+]
 
-    Returns:
-        A function that takes a price and returns (is_valid, message)
-    """
-    # Your code here
-    pass
+# Part A: Calculate total PnL using reduce
+total_pnl = # Your code here
+print(f"Total PnL: ${total_pnl}")  # Total PnL: $500.0
 
-# Test:
-validate_stock = make_price_validator(0.01, 10000.0)
-validate_crypto = make_price_validator(0.0001, 100000.0)
+# Part B: Count winning trades using reduce
+# Hint: accumulator is a count, increment if pnl > 0
+win_count = # Your code here
+print(f"Winning trades: {win_count}")  # Winning trades: 3
 
-print(validate_stock(150.50))     # (True, "Price 150.5 is valid")
-print(validate_stock(-5.0))       # (False, "Price -5.0 below minimum 0.01")
-print(validate_stock(50000.0))    # (False, "Price 50000.0 above maximum 10000.0")
-
-print(validate_crypto(0.00001))   # (False, "Price 1e-05 below minimum 0.0001")
-print(validate_crypto(45000.0))   # (True, "Price 45000.0 is valid")
+# Part C: Find the best trade (highest pnl) using reduce
+best_trade = # Your code here
+print(f"Best trade: {best_trade['ticker']} with ${best_trade['pnl']}")
+# Best trade: NVDA with $300.0
 ```
 
 **Your code:**
 ```python
-def make_price_validator(min_price: float, max_price: float):
-    """
-    Create a price validator function.
 
-    Args:
-        min_price: Minimum acceptable price
-        max_price: Maximum acceptable price
-
-    Returns:
-        A function that takes a price and returns (is_valid, message)
-    """
-
-    min_price = min_price
-    max_price = max_price
-    
-    def validate_price(price):
-        nonlocal min_price
-        nonlocal max_price
-        
-        if price > min_price and price < max_price:
-            print(f'Price {price:.2f} is valid')
-            return True
-        else:
-            print(f'Price {price:.2f} is invalid!')
-            return False
-        
-    return validate_price
-```
-
-**Test output:**
-```
-$ python practice.py
-Price 150.50 is valid
-True
-Price -5.00 is invalid!
-False
-Price 50000.00 is invalid!
-False
-Price 0.00 is invalid!
-False
-Price 45000.00 is valid
-True
+# Part A: Calculate total PnL using reduce
+total_pnl = reduce(lambda acc, value: acc + value['pnl'], trades, 0)
+print(f"Total PnL: ${total_pnl}")  # Total PnL: $500.0
+#Tutaj kluczowe było dodanie 0 jako wartości startowej, bo inaczej nie mogłem tego chwycić i wyskakiwały TypeErrory!
 
 
-I've used simpler output - I COULD ALSO check it separately for min/max prices and give more precise description, but IT'S ABSOLUTELY UNNECESSARY IN THIS CONTEXT, and my approach is also a lot cleaner.
+# Part B: Count winning trades using reduce
+win_count = reduce(lambda acc, trade: acc + 1 if trade['pnl'] > 0 else acc, trades, 0)
+print(f"Winning trades: {win_count}")  # Winning trades: 3
+
+# Part C: Find the best trade (highest pnl) using reduce
+best_trade = reduce(lambda acc, trade: acc if acc['pnl'] > trade['pnl'] else trade, trades)
+print(f"Best trade: {best_trade['ticker']} with ${best_trade['pnl']}")
+# Best trade: NVDA with $300.0
+
+
 ```
 
 ---
 
 ## Task 6: PCAP Multiple Choice
 
-**Q1:** What is a closure?
-- A) A function that closes files automatically
-- B) A function that remembers variables from its enclosing scope
-- C) A function that cannot be called
-- D) A function with no parameters
+**Q1:** What does `reduce()` do?
+- A) Removes elements from a list
+- B) Applies a function cumulatively to reduce a sequence to a single value
+- C) Filters elements based on a condition
+- D) Maps a function to all elements
 
-**Q2:** What keyword is used to modify a variable in an enclosing (non-global) scope?
-- A) `global`
-- B) `local`
-- C) `nonlocal`
-- D) `outer`
+B
 
+**Q2:** What is the output?
+```python
+from functools import reduce
+result = reduce(lambda a, b: a if a > b else b, [3, 1, 4, 1, 5])
+print(result)
+```
+- A) 3
+- B) 1
+- C) 5
+- D) 14
 
+C
 
 **Q3:** What is the output?
 ```python
-def make_adder(n):
-    return lambda x: x + n
+def decorator(func):
+    def wrapper(*args):
+        return func(*args) + 10
+    return wrapper
 
-add10 = make_adder(10)
-print(add10(5))
+@decorator
+def multiply(a, b):
+    return a * b
+
+print(multiply(3, 4))
 ```
-- A) `5`
-- B) `10`
-- C) `15`
-- D) `TypeError`
+- A) 12
+- B) 22
+- C) 10
+- D) Error
 
-**Q4:** In the late binding trap, why do all functions return the same value?
-- A) Python has a bug
-- B) The lambda captures the variable reference, not the value at creation time
-- C) Lists cannot store functions
-- D) Lambda functions don't work in loops
+B
+
+**Q4:** Which statement about decorators is TRUE?
+- A) Decorators can only wrap functions with no parameters
+- B) Decorators replace the original function with a new function
+- C) Decorators must return None
+- D) Decorators cannot access the wrapped function's arguments
+
+D
+
 
 **Your answers:**
 ```
-Q1: B
-Q2: C
-Q3: C
-Q4: D
+Q1:
+Q2:
+Q3:
+Q4:
 ```
 
 ---
 
-## Task 7: PROJECT - make_trade_logger
+## Task 7: PROJECT - Simple Logging Decorator
 
-**Instructions:** Create a closure that logs trades with a customizable prefix.
+**Instructions:** Create a decorator that logs function calls for the backtesting project.
 
 ```python
-def make_trade_logger(prefix: str):
+def log_call(func):
     """
-    Create a trade logger with a specific prefix.
+    Decorator that prints the function name and arguments when called.
 
-    The logger should also track the total number of trades logged.
-
-    Args:
-        prefix: String prefix for log messages (e.g., "INFO", "TRADE")
-
-    Returns:
-        A tuple of (log_trade, get_count) functions
+    Example output:
+    Calling calculate_pnl(entry=100, exit=110, qty=10)
     """
-    # Your code here
-    pass
+    def wrapper(*args, **kwargs):
+        # Your code here
+        # 1. Build a string showing function name and arguments
+        # 2. Print the log message
+        # 3. Call and return the original function
+        pass
+    return wrapper
 
 # Test:
-log_trade, get_count = make_trade_logger("TRADE")
+@log_call
+def calculate_pnl(entry: float, exit: float, qty: float) -> float:
+    return (exit - entry) * qty
 
-log_trade("AAPL", "BUY", 150.0)   # [TRADE] AAPL BUY @ $150.00
-log_trade("GOOGL", "SELL", 2800.0) # [TRADE] GOOGL SELL @ $2800.00
-log_trade("MSFT", "BUY", 300.0)   # [TRADE] MSFT BUY @ $300.00
+@log_call
+def is_winner(pnl: float) -> bool:
+    return pnl > 0
 
-print(f"Total trades: {get_count()}")  # Total trades: 3
+result = calculate_pnl(100.0, 110.0, 10.0)
+# Expected: Calling calculate_pnl(100.0, 110.0, 10.0)
+print(f"PnL: {result}")  # PnL: 100.0
 
-# Create another logger with different prefix
-log_error, error_count = make_trade_logger("ERROR")
-log_error("TSLA", "FAILED", 0.0)  # [ERROR] TSLA FAILED @ $0.00
-print(f"Errors: {error_count()}")  # Errors: 1
+win = is_winner(result)
+# Expected: Calling is_winner(100.0)
+print(f"Winner: {win}")  # Winner: True
 ```
 
 **Your code:**
 ```python
-def make_trade_logger(prefix: str):
+
+def log_call(func):
     """
-    Create a trade logger with a specific prefix.
+    Decorator that prints the function name and arguments when called.
 
-    The logger should also track the total number of trades logged.
-
-    Args:
-        prefix: String prefix for log messages (e.g., "INFO", "TRADE")
-
-    Returns:
-        A tuple of (log_trade, get_count) functions
+    Example output:
+    Calling calculate_pnl(entry=100, exit=110, qty=10)
     """
-    # Your code here
-    prefix = prefix
-    trades = []
+    def wrapper(*args, **kwargs):
+        print(f'Executing {func.__name__}({*args, *kwargs})')
+        return func(*args, **kwargs)
     
-    def add_trade(ticker: str, side: str, price: float):
-        nonlocal prefix
-        trades.append([prefix, ticker, side, price])
-        print(f'[{prefix}] {ticker} {side} @ ${price:.2f}')
-           
-    def get_count():
-        return len(trades)
-    
-    return add_trade, get_count
-```
+    return wrapper
 
-**Test output:**
-```
-$ python practice.py
-[TRADE] AAPL BUY @ $150.00
-[TRADE] GOOGL SELL @ $2800.00
-[TRADE] MSFT BUY @ $300.00
-Total trades: 3
-[ERROR] TSLA FAILED @ $0.00
-Errors: 1
 ```
 
 ---
 
-## Task 8: Closure vs Class
+## Task 8: Combining Everything
 
-**Instructions:** The closure pattern can sometimes replace simple classes. Compare these two approaches.
+**Instructions:** Combine lambda, map, filter, and reduce to process trade data.
 
-**Closure approach:**
 ```python
-def make_account(initial_balance):
-    balance = initial_balance
+from functools import reduce
 
-    def deposit(amount):
-        nonlocal balance
-        balance += amount
-        return balance
+trades = [
+    {"ticker": "AAPL", "side": "BUY", "entry": 150, "exit": 160, "qty": 10},
+    {"ticker": "GOOGL", "side": "SELL", "entry": 2800, "exit": 2750, "qty": 5},
+    {"ticker": "MSFT", "side": "BUY", "entry": 300, "exit": 290, "qty": 20},
+    {"ticker": "TSLA", "side": "BUY", "entry": 700, "exit": 750, "qty": 8},
+    {"ticker": "NVDA", "side": "SELL", "entry": 500, "exit": 480, "qty": 15},
+]
 
-    def withdraw(amount):
-        nonlocal balance
-        if amount <= balance:
-            balance -= amount
-            return balance
-        raise ValueError("Insufficient funds")
+# Step 1: Calculate PnL for each trade using map
+# BUY: (exit - entry) * qty
+# SELL: (entry - exit) * qty
+# Add 'pnl' key to each trade dict
+trades_with_pnl = list(map(
+    lambda t: {**t, "pnl": # Your expression here },
+    trades
+))
 
-    def get_balance():
-        return balance
+# Step 2: Filter only winning trades using filter
+winners = list(filter(
+    lambda t: # Your condition here,
+    trades_with_pnl
+))
 
-    return deposit, withdraw, get_balance
+# Step 3: Calculate total winning PnL using reduce
+total_winning_pnl = reduce(
+    lambda acc, t: # Your expression here,
+    winners,
+    0  # Initial value
+)
+
+print(f"Winning trades: {len(winners)}")
+print(f"Total winning PnL: ${total_winning_pnl}")
+
+# Expected:
+# Winning trades: 3
+# Total winning PnL: $950.0
 ```
 
-**Class approach:**
+**Your code:**
 ```python
-class Account:
-    def __init__(self, initial_balance):
-        self._balance = initial_balance
 
-    def deposit(self, amount):
-        self._balance += amount
-        return self._balance
+trades_with_pnl = list(map(
+    lambda t: {**t, "pnl": (t['exit'] - t['entry']) * t['qty']} if t['side'] == 'BUY' else
+    {**t, "pnl": (t['entry'] - t['exit']) * t['qty']},
+    trades
+))
 
-    def withdraw(self, amount):
-        if amount <= self._balance:
-            self._balance -= amount
-            return self._balance
-        raise ValueError("Insufficient funds")
+winning_trades = list(filter(lambda t: t if t['pnl'] > 0 else 0, trades_with_pnl))
 
-    def get_balance(self):
-        return self._balance
-```
+total_winning_pnl = reduce(lambda acc, t: acc + t['pnl'], winning_trades, 0)
 
-**Questions:**
+Also, you are wrong as there are clearly 4 winning trades with total PNL of 1050$
 
-**Q1:** What are the advantages of the closure approach?
-It's a bit simpler - lack of self, class syntax etc. - it's kind of a create-and-use-quickly schema, and it's easier to learn + maybe less trickier in terms of potential traps, although I'm personally NOT a fan.
 
-**Q2:** What are the advantages of the class approach?
-Solid and more bulletproof construction, once we grasp classes we can definitely use them to our advantage - A LOT BETTER SCALABILITY, much more possibilities (classmethods, abstractmethods, etc.) and the ability to use it as a building block in a large scale and more robust code structures, yet still keeping a very organized structure and it's pretty easy to read anyway once you know classes.
-
-**Q3:** When would you prefer closures over classes?
-Personally, probably never at this point - maybe for some very basic and simply functions, but that would be an edge case I'd say. Generally ONLY in very simple scenarios, when using classes is not necessary and I can keep track of my code with closures only, but I doubt it honestly.
-
-**Your answers:**
-```
-Q1 (Closure advantages):
-
-Q2 (Class advantages):
-
-Q3 (When to use closures):
+$ python practice.py
+[{'ticker': 'AAPL', 'side': 'BUY', 'entry': 150, 'exit': 160, 'qty': 10, 'pnl': 100}, {'ticker': 'GOOGL', 'side': 'SELL', 'entry': 2800, 'exit': 2750, 'qty': 5, 'pnl': 250}, {'ticker': 'MSFT', 'side': 'BUY', 'entry': 300, 'exit': 290, 'qty': 20, 'pnl': -200}, {'ticker': 'TSLA', 'side': 'BUY', 'entry': 700, 'exit': 750, 'qty': 8, 'pnl': 400}, {'ticker': 'NVDA', 'side': 'SELL', 'entry': 500, 'exit': 480, 'qty': 15, 'pnl': 300}]
+[{'ticker': 'AAPL', 'side': 'BUY', 'entry': 150, 'exit': 160, 'qty': 10, 'pnl': 100}, {'ticker': 'GOOGL', 'side': 'SELL', 'entry': 2800, 'exit': 2750, 'qty': 5, 'pnl': 250}, {'ticker': 'TSLA', 'side': 'BUY', 'entry': 700, 'exit': 750, 'qty': 8, 'pnl': 400}, {'ticker': 'NVDA', 'side': 'SELL', 'entry': 500, 'exit': 480, 'qty': 15, 'pnl': 300}]
+Winning trades: 4
+Total winning PnL: $1050
 
 ```
 
@@ -487,14 +493,14 @@ Q3 (When to use closures):
 
 ## Solutions Checklist
 
-- [ ] Task 1: Closure basics (4 questions)
-- [ ] Task 2: make_counter closure
-- [ ] Task 3: nonlocal vs global (3 questions)
-- [ ] Task 4: Late binding trap
-- [ ] Task 5: PROJECT - make_price_validator
+- [ ] Task 1: reduce() basics (4 questions)
+- [ ] Task 2: reduce() implementations (3 parts)
+- [ ] Task 3: Decorator basics (4 questions)
+- [ ] Task 4: Create announce decorator
+- [ ] Task 5: PROJECT - Trade stats with reduce (3 parts)
 - [ ] Task 6: PCAP Multiple choice (4 questions)
-- [ ] Task 7: PROJECT - make_trade_logger
-- [ ] Task 8: Closure vs Class comparison
+- [ ] Task 7: PROJECT - log_call decorator
+- [ ] Task 8: Combining map/filter/reduce
 
 ---
 
