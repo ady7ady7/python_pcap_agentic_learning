@@ -1,8 +1,8 @@
 # Daily Feedback Template
 
-**Date:** 2026-01-29
-**Week:** 4 | **Day:** 4 (Thursday)
-**Topic:** TBD
+**Date:** 2026-01-30
+**Week:** 4 | **Day:** 5 (Friday)
+**Topic:** PCAP Mock Exams (Weekend)
 
 ---
 

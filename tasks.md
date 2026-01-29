@@ -1,9 +1,9 @@
-# Week 4, Day 3 - Wednesday
-## Topic: reduce(), Decorators & Functional Patterns
+# Week 4, Day 4 - Thursday
+## Topic: Week 4 Review & PCAP Drills (Pre-Exam)
 
-**Date:** 2026-01-28
+**Date:** 2026-01-29
 
-**NEW CONTENT:** Read the **reduce()** and **Decorators** sections added to `lessons/week4_lambda_closures.md` before starting!
+**Purpose:** Review all Week 4 topics before Friday's exams. Heavy PCAP focus.
 
 **Target Difficulty:** 5/10
 
@@ -11,53 +11,97 @@
 
 ---
 
-## Task 1: reduce() Basics (PCAP Warm-up)
+## Task 1: Quick Fire Review (10 Questions)
 
-**Instructions:** You need `from functools import reduce` for these.
+**Instructions:** Answer quickly - these test your Week 4 knowledge.
 
-**Q1:** What is the output?
+**Q1:** What does lambda return if you write `lambda x: x > 5`?
+- A) True or False
+- B) x
+- C) A function that returns True or False
+- D) Nothing
+
+D - if we assume that we only have that
+
+**Q2:** What is the output?
 ```python
-from functools import reduce
-
-numbers = [1, 2, 3, 4]
-result = reduce(lambda acc, x: acc + x, numbers)
+result = list(map(lambda x: x * 2, [1, 2, 3]))
 print(result)
+
+Answer: [2, 4, 6]
+```
+
+**Q3:** What is the output?
+```python
+result = list(filter(lambda x: x % 2 == 0, [1, 2, 3, 4, 5]))
+print(result)
+
+Answer: [2, 4]
+```
+
+**Q4:** What does `nonlocal` do?
+- A) Creates a global variable
+- B) Allows modifying a variable in an enclosing (non-global) scope
+- C) Prevents variable modification
+- D) Deletes a variable
+
+Answer: B
+
+**Q5:** What is the output?
+```python
+def outer():
+    x = 10
+    def inner():
+        return x
+    return inner
+
+f = outer()
+print(f())
+
 
 Answer: 10
 ```
 
-**Q2:** What is the output?
+**Q6:** What is the output?
 ```python
 from functools import reduce
+print(reduce(lambda a, b: a + b, [1, 2, 3, 4], 10))
 
-numbers = [1, 2, 3, 4]
-result = reduce(lambda acc, x: acc * x, numbers)
-print(result)
-
-Answer: 24
+Answer: 20
 ```
 
-**Q3:** What is the output? (Notice the initializer!)
+**Q7:** What does `@decorator` above a function definition do?
+- A) Deletes the function
+- B) Calls the function immediately
+- C) Replaces the function with `decorator(function)`
+- D) Creates a copy of the function
+
+Answer: C
+
+**Q8:** True or False: `map()` and `filter()` return lists in Python 3.
+
+Answer: False - you'd have to manually convert them to lists as normally they return map/filter object respectively (a memory object string as in <filter object at 0x0000018D79150130>
+<map object at 0x0000018D1930C700>)
+
+**Q9:** What is the late binding trap?
+- A) Lambda functions are slow
+- B) Lambda captures variable reference, not value at creation time
+- C) Lambda cannot use variables
+- D) Lambda runs too late
+
+Answer: B
+
+**Q10:** How do you fix the late binding trap in a loop?
 ```python
-from functools import reduce
+# Broken:
+functions = [lambda: i for i in range(3)]
 
-numbers = [1, 2, 3]
-result = reduce(lambda acc, x: acc + x, numbers, 10)
-print(result)
-
-Answer: 16
+# Fixed:
+functions = [i for i in range(3)]
+print(functions)
 ```
 
-**Q4:** What is the output?
-```python
-from functools import reduce
-
-words = ["a", "b", "c"]
-result = reduce(lambda acc, x: acc + x, words)
-print(result)
-
-Answer: abc
-```
+The best way would be to use a list comprehension instead
 
 **Your answers:**
 ```
@@ -65,292 +109,331 @@ Q1:
 Q2:
 Q3:
 Q4:
+Q5:
+Q6:
+Q7:
+Q8:
+Q9:
+Q10:
 ```
 
 ---
 
-## Task 2: reduce() Implementation
+## Task 2: PCAP Output Predictions (6 Snippets)
 
-**Instructions:** Use `reduce()` to solve these. Import functools.
+**Instructions:** Predict the exact output for each.
 
-**Part A:** Calculate the product of all numbers in a list.
+**Snippet A:**
+```python
+f = lambda x, y=10: x + y
+print(f(5))
+print(f(5, 5))
+```
+
+**Snippet B:**
+```python
+nums = [1, 2, 3, 4, 5]
+result = map(lambda x: x ** 2, nums)
+print(next(result))
+print(next(result))
+```
+
+**Snippet C:**
+```python
+def make_power(n):
+    return lambda x: x ** n
+
+square = make_power(2)
+cube = make_power(3)
+print(square(4), cube(2))
+```
+
+**Snippet D:**
 ```python
 from functools import reduce
 
-numbers = [2, 3, 4, 5]
-# Your code here - should print 120
-
-calc = reduce(lambda acc, x: acc * x, numbers)
-print(calc)
+words = ["P", "C", "A", "P"]
+result = reduce(lambda a, b: a + b, words)
+print(result)
 ```
 
-**Part B:** Find the maximum value using reduce (don't use max()).
+**Snippet E:**
 ```python
-from functools import reduce
+def add_prefix(prefix):
+    def decorator(func):
+        def wrapper(*args):
+            return prefix + func(*args)
+        return wrapper
+    return decorator
 
-numbers = [3, 7, 2, 9, 4]
-# Your code here - should print 9
+@add_prefix("Hello, ")
+def greet(name):
+    return name
 
-maximum = reduce(lambda acc, x: x if x > acc else acc, numbers)
-print(maximum)
-
+print(greet("World"))
 ```
 
-**Part C:** Flatten a nested list using reduce.
+**Snippet F:**
 ```python
-from functools import reduce
+funcs = []
+for i in range(3):
+    funcs.append(lambda i=i: i * 2)
 
-nested = [[1, 2], [3, 4], [5, 6]]
-# Result should be [1, 2, 3, 4, 5, 6]
-# Hint: acc + x where both are lists
-
-
-flattened = reduce(lambda acc, x: acc + x if type(x) == list else x, nested)
-print(flattened)
-
-```
-
-**Your code:**
-```python
-# Part A:
-
-
-# Part B:
-
-
-# Part C:
-
-```
-
----
-
-## Task 3: Decorator Basics
-
-**Q1:** What is the output?
-```python
-def my_decorator(func):
-    def wrapper():
-        print("Before")
-        func()
-        print("After")
-    return wrapper
-
-@my_decorator
-def say_hi():
-    print("Hi!")
-
-say_hi()
-
-Before
-Hi!
-After
-```
-
-**Q2:** The `@decorator` syntax is shorthand for what?
-```python
-@my_decorator
-def foo():
-    pass
-
-# Is equivalent to: foo = ???
-
-foo = my_decorator.foo() #foo function wrapped in a decorator
-```
-
-**Q3:** True or False: A decorator is essentially a closure that wraps a function.
-
-True
-
-**Q4:** What is the output?
-```python
-def double_result(func):
-    def wrapper(x):
-        return func(x) * 2
-    return wrapper
-
-@double_result
-def add_ten(n):
-    return n + 10
-
-print(add_ten(5))
-
-
-30
-
+print(funcs[0](), funcs[1](), funcs[2]())
 ```
 
 **Your answers:**
 ```
-Q1:
+A: 15, 10
 
-Q2: foo =
+B: 1, 4
 
-Q3:
+C: 16, 8
 
-Q4:
+D: PCAP
+
+E: Hello, World
+
+F: 0 2 4
+
 ```
 
 ---
 
-## Task 4: Create a Simple Decorator
+## Task 3: Debug the Decorator
 
-**Instructions:** Create a decorator that prints "Executing..." before a function runs.
+**Instructions:** This decorator has bugs. Find and fix them.
 
 ```python
-def announce(func):
+def validate_positive(func):
+    """Decorator that ensures the result is positive."""
+    def wrapper(args):
+        result = func(args)
+        if result < 0:
+            raise ValueError("Result must be positive")
+        return result
+    return wrapper
+
+@validate_positive
+def subtract(a, b):
+    return a - b
+
+# Should work:
+print(subtract(10, 3))  # 7
+
+# Should raise ValueError:
+print(subtract(3, 10))  # -7 → ValueError
+```
+
+**Bugs found:**
+```
+1. Asterisk missing in wrapper function
+2. Asterisk missing in result processing 
+```
+
+**Fixed code:**
+```python
+
+def validate_positive(func):
+    """Decorator that ensures the result is positive."""
+    def wrapper(*args):
+        result = func(*args)
+        if result < 0:
+            raise ValueError("Result must be positive")
+        return result
+    return wrapper
+
+@validate_positive
+def subtract(a, b):
+    return a - b
+
+```
+
+---
+
+## Task 4: Closure State Challenge
+
+**Instructions:** Create a closure that tracks running statistics.
+
+```python
+def make_stats_tracker():
     """
-    Decorator that prints 'Executing...' before calling the function.
+    Create a statistics tracker using closures.
+
+    Returns a function that:
+    - Accepts a number
+    - Tracks count, sum, min, max
+    - Returns a dict with current stats
+
+    Example:
+        track = make_stats_tracker()
+        print(track(10))  # {'count': 1, 'sum': 10, 'min': 10, 'max': 10, 'avg': 10.0}
+        print(track(20))  # {'count': 2, 'sum': 30, 'min': 10, 'max': 20, 'avg': 15.0}
+        print(track(5))   # {'count': 3, 'sum': 35, 'min': 5, 'max': 20, 'avg': 11.67}
     """
     # Your code here
     pass
 
 # Test:
-@announce
-def greet(name):
-    print(f"Hello, {name}!")
-
-@announce
-def add(a, b):
-    return a + b
-
-greet("Alice")
-# Expected output:
-# Executing...
-# Hello, Alice!
-
-result = add(3, 5)
-# Expected output:
-# Executing...
-print(result)  # 8
+track = make_stats_tracker()
+print(track(10))
+print(track(20))
+print(track(5))
+print(track(15))
 ```
-
-**Hint:** Use `*args, **kwargs` to handle any function signature.
 
 **Your code:**
 ```python
 
+def make_stats_tracker():
+    """
+    Create a statistics tracker using closures.
 
-def announce(func):
-    '''A decorator that wraps a function which prints 'Executing' before calling the function'''
-    
-    def wrapper(*args, **kwargs):
-        print(f'Executing...')
-        func(*args, **kwargs) 
-        return func(*args, **kwargs)
-    
-    return wrapper
+    Returns a function that:
+    - Accepts a number
+    - Tracks count, sum, min, max
+    - Returns a dict with current stats
 
-Your hint was very important here - but anyway I need to practice this, as it's unintuitive at this point.
+    Example:
+        track = make_stats_tracker()
+        print(track(10))  # {'count': 1, 'sum': 10, 'min': 10, 'max': 10, 'avg': 10.0}
+        print(track(20))  # {'count': 2, 'sum': 30, 'min': 10, 'max': 20, 'avg': 15.0}
+        print(track(5))   # {'count': 3, 'sum': 35, 'min': 5, 'max': 20, 'avg': 11.67}
+    """
+    
+    tracker = defaultdict(int)
+    tracker['max'] = 0
+    tracker['min'] = 999
+    
+    def track(number):
+        tracker['sum'] += number
+        tracker['count'] += 1
+        if number < tracker['min']:
+            tracker['min'] = number
+        elif number > tracker['max']:
+            tracker['max'] = number
+        tracker['avg'] = round(tracker['sum'] / tracker['count'], 2)
+        return tracker
+    return track
+
+
+$ python practice.py
+defaultdict(<class 'int'>, {'max': 0, 'min': 10, 'sum': 10, 'count': 1, 'avg': 10.0})
+defaultdict(<class 'int'>, {'max': 20, 'min': 10, 'sum': 30, 'count': 2, 'avg': 15.0})
+defaultdict(<class 'int'>, {'max': 20, 'min': 5, 'sum': 35, 'count': 3, 'avg': 11.666666666666666})
+defaultdict(<class 'int'>, {'max': 20, 'min': 5, 'sum': 50, 'count': 4, 'avg': 12.5})
 
 
 ```
 
 ---
 
-## Task 5: PROJECT - Trade Statistics with reduce()
+## Task 5: PCAP Multiple Choice (8 Questions)
 
-**Instructions:** Use `reduce()` to calculate trade statistics.
-
+**Q1:** What is the output?
 ```python
-from functools import reduce
-
-trades = [
-    {"ticker": "AAPL", "pnl": 150.0},
-    {"ticker": "GOOGL", "pnl": -50.0},
-    {"ticker": "MSFT", "pnl": 200.0},
-    {"ticker": "TSLA", "pnl": -100.0},
-    {"ticker": "NVDA", "pnl": 300.0},
-]
-
-# Part A: Calculate total PnL using reduce
-total_pnl = # Your code here
-print(f"Total PnL: ${total_pnl}")  # Total PnL: $500.0
-
-# Part B: Count winning trades using reduce
-# Hint: accumulator is a count, increment if pnl > 0
-win_count = # Your code here
-print(f"Winning trades: {win_count}")  # Winning trades: 3
-
-# Part C: Find the best trade (highest pnl) using reduce
-best_trade = # Your code here
-print(f"Best trade: {best_trade['ticker']} with ${best_trade['pnl']}")
-# Best trade: NVDA with $300.0
+print((lambda: 42)())
 ```
+- A) `<function>`
+- B) `42`
+- C) `None`
+- D) Error
 
-**Your code:**
-```python
-
-# Part A: Calculate total PnL using reduce
-total_pnl = reduce(lambda acc, value: acc + value['pnl'], trades, 0)
-print(f"Total PnL: ${total_pnl}")  # Total PnL: $500.0
-#Tutaj kluczowe było dodanie 0 jako wartości startowej, bo inaczej nie mogłem tego chwycić i wyskakiwały TypeErrory!
-
-
-# Part B: Count winning trades using reduce
-win_count = reduce(lambda acc, trade: acc + 1 if trade['pnl'] > 0 else acc, trades, 0)
-print(f"Winning trades: {win_count}")  # Winning trades: 3
-
-# Part C: Find the best trade (highest pnl) using reduce
-best_trade = reduce(lambda acc, trade: acc if acc['pnl'] > trade['pnl'] else trade, trades)
-print(f"Best trade: {best_trade['ticker']} with ${best_trade['pnl']}")
-# Best trade: NVDA with $300.0
-
-
-```
-
----
-
-## Task 6: PCAP Multiple Choice
-
-**Q1:** What does `reduce()` do?
-- A) Removes elements from a list
-- B) Applies a function cumulatively to reduce a sequence to a single value
-- C) Filters elements based on a condition
-- D) Maps a function to all elements
-
-B
+Answer: B
 
 **Q2:** What is the output?
 ```python
-from functools import reduce
-result = reduce(lambda a, b: a if a > b else b, [3, 1, 4, 1, 5])
-print(result)
+x = [1, 2, 3]
+y = map(str, x)
+print(type(y))
 ```
-- A) 3
-- B) 1
-- C) 5
-- D) 14
+- A) `<class 'list'>`
+- B) `<class 'map'>`
+- C) `<class 'str'>`
+- D) `<class 'generator'>`
 
-C
+Answer: B
 
 **Q3:** What is the output?
 ```python
-def decorator(func):
-    def wrapper(*args):
-        return func(*args) + 10
-    return wrapper
-
-@decorator
-def multiply(a, b):
-    return a * b
-
-print(multiply(3, 4))
+from functools import reduce
+result = reduce(lambda a, b: a * b, [2, 3, 4])
+print(result)
 ```
-- A) 12
-- B) 22
-- C) 10
+- A) 9
+- B) 24
+- C) 6
+- D) [2, 3, 4]
+
+Answer: B
+
+**Q4:** What is the output?
+```python
+def outer():
+    count = 0
+    def inner():
+        nonlocal count
+        count += 1
+        return count
+    return inner
+
+counter = outer()
+print(counter(), counter(), counter())
+```
+- A) 0 0 0
+- B) 1 1 1
+- C) 1 2 3
 - D) Error
 
-B
+Answer: C
 
-**Q4:** Which statement about decorators is TRUE?
-- A) Decorators can only wrap functions with no parameters
-- B) Decorators replace the original function with a new function
-- C) Decorators must return None
-- D) Decorators cannot access the wrapped function's arguments
+**Q5:** Which creates a closure?
+- A) `def f(): return 42`
+- B) `lambda x: x + 1`
+- C) `def outer(n): def inner(): return n; return inner`
+- D) `class C: pass`
 
-D
+Answer: C
 
+**Q6:** What is the output?
+```python
+def deco(f):
+    def w():
+        return f() + "!"
+    return w
+
+@deco
+def say():
+    return "Hi"
+
+print(say())
+```
+- A) Hi
+- B) Hi!
+- C) !Hi
+- D) Error
+
+Answer : B
+
+**Q7:** What does `filter(None, [0, 1, "", "a", [], [1]])` return (as a list)?
+- A) `[None]`
+- B) `[0, 1, "", "a", [], [1]]`
+- C) `[1, "a", [1]]`
+- D) `[]`
+
+Answer: C - Could you however EXPLAIN this to me, because to me it looks like we are filtering for None objects, so that we're looking for None objects, AND YET here all we get is NOT None objects in return.
+
+**Q8:** What is the output?
+```python
+add = lambda a, b: a + b
+print(add.__name__)
+```
+- A) `add`
+- B) `lambda`
+- C) `<lambda>`
+- D) Error
+
+Answer: C
 
 **Your answers:**
 ```
@@ -358,134 +441,287 @@ Q1:
 Q2:
 Q3:
 Q4:
+Q5:
+Q6:
+Q7:
+Q8:
 ```
 
 ---
 
-## Task 7: PROJECT - Simple Logging Decorator
+## Task 6: PROJECT - Functional Trade Processor
 
-**Instructions:** Create a decorator that logs function calls for the backtesting project.
-
-```python
-def log_call(func):
-    """
-    Decorator that prints the function name and arguments when called.
-
-    Example output:
-    Calling calculate_pnl(entry=100, exit=110, qty=10)
-    """
-    def wrapper(*args, **kwargs):
-        # Your code here
-        # 1. Build a string showing function name and arguments
-        # 2. Print the log message
-        # 3. Call and return the original function
-        pass
-    return wrapper
-
-# Test:
-@log_call
-def calculate_pnl(entry: float, exit: float, qty: float) -> float:
-    return (exit - entry) * qty
-
-@log_call
-def is_winner(pnl: float) -> bool:
-    return pnl > 0
-
-result = calculate_pnl(100.0, 110.0, 10.0)
-# Expected: Calling calculate_pnl(100.0, 110.0, 10.0)
-print(f"PnL: {result}")  # PnL: 100.0
-
-win = is_winner(result)
-# Expected: Calling is_winner(100.0)
-print(f"Winner: {win}")  # Winner: True
-```
-
-**Your code:**
-```python
-
-def log_call(func):
-    """
-    Decorator that prints the function name and arguments when called.
-
-    Example output:
-    Calling calculate_pnl(entry=100, exit=110, qty=10)
-    """
-    def wrapper(*args, **kwargs):
-        print(f'Executing {func.__name__}({*args, *kwargs})')
-        return func(*args, **kwargs)
-    
-    return wrapper
-
-```
-
----
-
-## Task 8: Combining Everything
-
-**Instructions:** Combine lambda, map, filter, and reduce to process trade data.
+**Instructions:** Create a complete trade processing pipeline using functional patterns.
 
 ```python
 from functools import reduce
+from typing import List, Dict, Callable
 
+# Sample trades
 trades = [
-    {"ticker": "AAPL", "side": "BUY", "entry": 150, "exit": 160, "qty": 10},
-    {"ticker": "GOOGL", "side": "SELL", "entry": 2800, "exit": 2750, "qty": 5},
-    {"ticker": "MSFT", "side": "BUY", "entry": 300, "exit": 290, "qty": 20},
-    {"ticker": "TSLA", "side": "BUY", "entry": 700, "exit": 750, "qty": 8},
-    {"ticker": "NVDA", "side": "SELL", "entry": 500, "exit": 480, "qty": 15},
+    {"id": 1, "ticker": "AAPL", "side": "BUY", "entry": 150, "exit": 165, "qty": 10},
+    {"id": 2, "ticker": "GOOGL", "side": "BUY", "entry": 2800, "exit": 2750, "qty": 5},
+    {"id": 3, "ticker": "MSFT", "side": "SELL", "entry": 300, "exit": 280, "qty": 20},
+    {"id": 4, "ticker": "TSLA", "side": "BUY", "entry": 700, "exit": 720, "qty": 8},
+    {"id": 5, "ticker": "NVDA", "side": "SELL", "entry": 500, "exit": 520, "qty": 15},
 ]
 
-# Step 1: Calculate PnL for each trade using map
-# BUY: (exit - entry) * qty
-# SELL: (entry - exit) * qty
-# Add 'pnl' key to each trade dict
-trades_with_pnl = list(map(
-    lambda t: {**t, "pnl": # Your expression here },
-    trades
-))
+# Part A: Create a function that calculates PnL based on side
+def calculate_pnl(trade: Dict) -> float:
+    """Calculate PnL: BUY = (exit-entry)*qty, SELL = (entry-exit)*qty"""
+    # Your code here (use ternary expression)
+    pass
 
-# Step 2: Filter only winning trades using filter
-winners = list(filter(
-    lambda t: # Your condition here,
-    trades_with_pnl
-))
+# Part B: Add PnL to each trade using map
+trades_with_pnl = # Your code using map and calculate_pnl
 
-# Step 3: Calculate total winning PnL using reduce
-total_winning_pnl = reduce(
-    lambda acc, t: # Your expression here,
-    winners,
-    0  # Initial value
-)
+# Part C: Create filter functions
+is_winner = lambda t: # Your code - returns True if pnl > 0
+is_loser = lambda t:  # Your code - returns True if pnl < 0
+is_buy = lambda t:    # Your code - returns True if side == "BUY"
 
-print(f"Winning trades: {len(winners)}")
-print(f"Total winning PnL: ${total_winning_pnl}")
+# Part D: Get statistics using reduce
+def get_stats(trades_list: List[Dict]) -> Dict:
+    """
+    Calculate: total_pnl, win_count, loss_count, best_trade, worst_trade
+    """
+    if not trades_list:
+        return {}
 
-# Expected:
-# Winning trades: 3
-# Total winning PnL: $950.0
+    total_pnl = # reduce to sum all pnl
+    win_count = # reduce to count winners
+    loss_count = # reduce to count losers
+    best = # reduce to find max pnl trade
+    worst = # reduce to find min pnl trade
+
+    return {
+        "total_pnl": total_pnl,
+        "win_count": win_count,
+        "loss_count": loss_count,
+        "best_ticker": best["ticker"],
+        "worst_ticker": worst["ticker"],
+    }
+
+# Test:
+print("All trades with PnL:")
+for t in trades:
+    print(f"  {t['ticker']}: ${t['pnl']}")
+
+print(f"\nWinners: {[t['ticker'] for t in filter(is_winner, trades_with_pnl)]}")
+print(f"Losers: {[t['ticker'] for t in filter(is_loser, trades_with_pnl)]}")
+print(f"BUY trades: {[t['ticker'] for t in filter(is_buy, trades_with_pnl)]}")
+
+stats = get_stats(trades_with_pnl)
+print(f"\nStats: {stats}")
 ```
 
 **Your code:**
 ```python
 
-trades_with_pnl = list(map(
-    lambda t: {**t, "pnl": (t['exit'] - t['entry']) * t['qty']} if t['side'] == 'BUY' else
-    {**t, "pnl": (t['entry'] - t['exit']) * t['qty']},
-    trades
-))
+from functools import reduce
+from typing import List, Dict, Callable
 
-winning_trades = list(filter(lambda t: t if t['pnl'] > 0 else 0, trades_with_pnl))
+# Sample trades
+trades = [
+    {"id": 1, "ticker": "AAPL", "side": "BUY", "entry": 150, "exit": 165, "qty": 10},
+    {"id": 2, "ticker": "GOOGL", "side": "BUY", "entry": 2800, "exit": 2750, "qty": 5},
+    {"id": 3, "ticker": "MSFT", "side": "SELL", "entry": 300, "exit": 280, "qty": 20},
+    {"id": 4, "ticker": "TSLA", "side": "BUY", "entry": 700, "exit": 720, "qty": 8},
+    {"id": 5, "ticker": "NVDA", "side": "SELL", "entry": 500, "exit": 520, "qty": 15},
+]
 
-total_winning_pnl = reduce(lambda acc, t: acc + t['pnl'], winning_trades, 0)
+def calculate_pnl(trade: Dict) -> float:
+    """Calculate PnL: BUY = (exit-entry)*qty, SELL = (entry-exit)*qty"""
+    # Your code here (use ternary expression)
+    trade['pnl'] = (trade['exit'] - trade['entry']) * trade['qty'] if trade['side'] == 'BUY' else (trade['entry'] - trade['exit']) * trade['qty']
 
-Also, you are wrong as there are clearly 4 winning trades with total PNL of 1050$
 
+for trade in trades:
+    calculate_pnl(trade)
+
+# unnecessary and weird, as I instantly add pnl with a single line in calculate_pnl, but I wanted to try and practice this
+# trades_with_pnl = map(lambda t: {t** 'pnl': calculate_pnl(t)}, trades)
+
+is_winner = lambda t: t['pnl'] > 0
+is_loser = lambda t: t['pnl'] < 0
+is_buy = lambda t: t['side'] == 'BUY'
+
+total_pnl = reduce(lambda acc, t: acc + t['pnl'], trades, 0)
+win_count = reduce(lambda acc, t: acc + 1 if t['pnl'] > 0 else acc, trades, 0)
+loss_count = reduce(lambda acc, t: acc + 1 if t['pnl'] < 0 else acc, trades, 0)
+best = reduce(lambda acc, t: t if t['pnl'] > acc['pnl'] else acc, trades)
+worst = reduce(lambda acc, t: t if t['pnl'] < acc['pnl'] else acc, trades)
+print(best)
+print(worst)
+
+
+def get_stats(trades_list: List[Dict]) -> Dict:
+    """
+    Calculate: total_pnl, win_count, loss_count, best_trade, worst_trade
+    """
+    if not trades_list:
+        return {}
+
+    total_pnl = reduce(lambda acc, t: acc + t['pnl'], trades, 0)
+    win_count = reduce(lambda acc, t: acc + 1 if t['pnl'] > 0 else acc, trades, 0)
+    loss_count = reduce(lambda acc, t: acc + 1 if t['pnl'] < 0 else acc, trades, 0)
+    best = reduce(lambda acc, t: t if t['pnl'] > acc['pnl'] else acc, trades)
+    worst = reduce(lambda acc, t: t if t['pnl'] < acc['pnl'] else acc, trades)
+
+    return {
+        "total_pnl": total_pnl,
+        "win_count": win_count,
+        "loss_count": loss_count,
+        "best_ticker": best["ticker"],
+        "worst_ticker": worst["ticker"],
+    }
+    
+    
+print("All trades with PnL:")
+for t in trades:
+    print(f"  {t['ticker']}: ${t['pnl']}")
+
+print(f"\nWinners: {[t['ticker'] for t in filter(is_winner, trades)]}")
+print(f"Losers: {[t['ticker'] for t in filter(is_loser, trades)]}")
+print(f"BUY trades: {[t['ticker'] for t in filter(is_buy, trades)]}")
+
+stats = get_stats(trades)
+print(f"\nStats: {stats}")
+
+OUTPUT:
 
 $ python practice.py
-[{'ticker': 'AAPL', 'side': 'BUY', 'entry': 150, 'exit': 160, 'qty': 10, 'pnl': 100}, {'ticker': 'GOOGL', 'side': 'SELL', 'entry': 2800, 'exit': 2750, 'qty': 5, 'pnl': 250}, {'ticker': 'MSFT', 'side': 'BUY', 'entry': 300, 'exit': 290, 'qty': 20, 'pnl': -200}, {'ticker': 'TSLA', 'side': 'BUY', 'entry': 700, 'exit': 750, 'qty': 8, 'pnl': 400}, {'ticker': 'NVDA', 'side': 'SELL', 'entry': 500, 'exit': 480, 'qty': 15, 'pnl': 300}]
-[{'ticker': 'AAPL', 'side': 'BUY', 'entry': 150, 'exit': 160, 'qty': 10, 'pnl': 100}, {'ticker': 'GOOGL', 'side': 'SELL', 'entry': 2800, 'exit': 2750, 'qty': 5, 'pnl': 250}, {'ticker': 'TSLA', 'side': 'BUY', 'entry': 700, 'exit': 750, 'qty': 8, 'pnl': 400}, {'ticker': 'NVDA', 'side': 'SELL', 'entry': 500, 'exit': 480, 'qty': 15, 'pnl': 300}]
-Winning trades: 4
-Total winning PnL: $1050
+{'id': 3, 'ticker': 'MSFT', 'side': 'SELL', 'entry': 300, 'exit': 280, 'qty': 20, 'pnl': 400}
+{'id': 5, 'ticker': 'NVDA', 'side': 'SELL', 'entry': 500, 'exit': 520, 'qty': 15, 'pnl': -300}
+All trades with PnL:
+  AAPL: $150
+  GOOGL: $-250
+  MSFT: $400
+  TSLA: $160
+  NVDA: $-300
+
+Winners: ['AAPL', 'MSFT', 'TSLA']
+Losers: ['GOOGL', 'NVDA']
+BUY trades: ['AAPL', 'GOOGL', 'TSLA']
+
+Stats: {'total_pnl': 160, 'win_count': 3, 'loss_count': 2, 'best_ticker': 'MSFT', 'worst_ticker': 'NVDA'}
+
+I've used trades and not trades_with_pnl FOR SIMPLICITY, not overoccupying the namespace + generally I think it's much clearer and makes a lot more sense.
+
+
+```
+
+---
+
+## Task 7: Decorator with functools.wraps
+
+**Instructions:** Learn about `functools.wraps` - it preserves the original function's metadata.
+
+```python
+from functools import wraps
+
+# Without @wraps - function metadata is lost
+def bad_decorator(func):
+    def wrapper(*args, **kwargs):
+        return func(*args, **kwargs)
+    return wrapper
+
+@bad_decorator
+def greet(name):
+    """Greets a person by name."""
+    return f"Hello, {name}!"
+
+print(greet.__name__)  # What does this print?
+print(greet.__doc__)   # What does this print?
+```
+
+**Q1:** What does `greet.__name__` print without `@wraps`?
+It prints the wrapper's name as metadata is lost.
+
+**Q2:** What does `greet.__doc__` print without `@wraps`?
+Nothing here, as it prints the wrapper's docstring, and it's empty here.
+
+**Q3:** Now fix the decorator using `@wraps(func)`:
+
+```python
+from functools import wraps
+
+def good_decorator(func):
+    @wraps(func)  # Add this line
+    def wrapper(*args, **kwargs):
+        return func(*args, **kwargs)
+    return wrapper
+
+@good_decorator
+def greet(name):
+    """Greets a person by name."""
+    return f"Hello, {name}!"
+
+print(greet.__name__)  # Now what?
+print(greet.__doc__)   # Now what?
+```
+
+**Your answers:**
+```
+Q1 (without @wraps): It prints the wrapper's name as metadata is lost.
+
+
+Q2 (without @wraps): Nothing here, as it prints the wrapper's docstring, and it's empty here.
+
+Q3 (with @wraps):
+__name__: greet
+__doc__: Greets a person by name.
+```
+
+---
+
+## Task 8: Integration - Putting It All Together
+
+**Instructions:** Answer these conceptual questions about when to use what.
+
+**Q1:** When would you use `map()` vs a list comprehension?
+```python
+# Option A: map
+result = list(map(lambda x: x * 2, numbers))
+
+# Option B: list comprehension
+result = [x * 2 for x in numbers]
+
+Answer: I would honestly use list comprehensions in most cases and it's easier to read and understand and would probably be in most cases.
+```
+
+**Q2:** When would you use `filter()` vs a list comprehension with `if`?
+```python
+# Option A: filter
+result = list(filter(lambda x: x > 0, numbers))
+
+# Option B: list comprehension
+result = [x for x in numbers if x > 0]
+
+Same case as above, I'd rather use list comprehensions - it's more Pythonic and readable.
+```
+
+**Q3:** When would you use a closure vs a class?
+
+I'd use class in 90% cases - closures mostly for very simple cases or to show I understand how they work.
+
+**Q4:** When would you use `reduce()` vs a simple loop?
+Reduce seems a good alternative - it's a one-liner and a great way to quickly sum PNLs, find the best/worst/ any particular data value - that's very useful and also more Pythonic than a loop in many cases and it takes less space.
+
+**Q5:** What's the main advantage of decorators?
+They allow you to wrap a function with them to add additional information - they also allow to keep the original function's metadata if we use wraps.
+
+**Your answers:**
+```
+Q1:
+
+Q2:
+
+Q3:
+
+Q4:
+
+Q5:
 
 ```
 
@@ -493,14 +729,14 @@ Total winning PnL: $1050
 
 ## Solutions Checklist
 
-- [ ] Task 1: reduce() basics (4 questions)
-- [ ] Task 2: reduce() implementations (3 parts)
-- [ ] Task 3: Decorator basics (4 questions)
-- [ ] Task 4: Create announce decorator
-- [ ] Task 5: PROJECT - Trade stats with reduce (3 parts)
-- [ ] Task 6: PCAP Multiple choice (4 questions)
-- [ ] Task 7: PROJECT - log_call decorator
-- [ ] Task 8: Combining map/filter/reduce
+- [ ] Task 1: Quick fire review (10 questions)
+- [ ] Task 2: Output predictions (6 snippets)
+- [ ] Task 3: Debug the decorator
+- [ ] Task 4: Closure state challenge
+- [ ] Task 5: PCAP multiple choice (8 questions)
+- [ ] Task 6: PROJECT - Functional trade processor
+- [ ] Task 7: functools.wraps
+- [ ] Task 8: Integration concepts (5 questions)
 
 ---
 
@@ -510,15 +746,13 @@ Total winning PnL: $1050
 
 **Difficulty (1-10):**
 
-**What clicked:**
-
-
-**What's confusing:**
-
+**Ready for Friday's exams?**
+[ ] Yes
+[ ] Need more practice on: _______________
 
 **Questions for mentor:**
 
 
 ---
 
-**When complete:** Fill out feedback section and notify me for assessment.
+**When complete:** Notify me for assessment. Friday = 2 PCAP Mock Exams!

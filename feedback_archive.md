@@ -2097,3 +2097,121 @@ GOOGL SELL: (2800-2750)*5 = $250 (winner). Correct totals: 4 winners, $1050.
 
 ---
 
+## Week 4, Day 4 - 2026-01-29
+
+**Topic:** Week 4 Review & PCAP Drills (Pre-Exam)
+
+### Student Self-Assessment
+- **Tasks Completed:** 8/8
+- **Difficulty:** 5/10
+- **Time Spent:** 80 minutes
+
+### Student Reflection
+- Concepts like map/filter don't seem friendly compared to list comprehensions
+- Worried about forgetting them without regular use
+- Asked if they're commonly used in industry
+
+### Mentor Assessment
+
+**Task 1: Quick Fire Review - 80%**
+- Q1: ❌ Answered D, correct is **C** (lambda returns a function, not True/False)
+- Q2-Q9: ✅ All correct
+- Q10: ⚠️ Avoided the question (used list comprehension instead of fixing lambda)
+
+**Task 2: Output Predictions - 100%**
+- A: ✅ 15, 10
+- B: ✅ 1, 4
+- C: ✅ 16, 8
+- D: ✅ PCAP
+- E: ✅ Hello, World
+- F: ✅ 0 2 4
+
+**Task 3: Debug Decorator - 90%**
+- ✅ Fixed correctly with *args
+- ⚠️ Bug description imprecise (both bugs are same issue)
+
+**Task 4: Closure Stats Tracker - 80%**
+- ✅ Works using defaultdict
+- ❌ Bug: `elif` should be `if` (first value doesn't set max)
+- Output shows max=0 when first value is 10
+
+**Task 5: PCAP Multiple Choice - 100%**
+- All 8 questions correct
+- **Great question about filter(None, ...)** - explained
+
+**Task 6: Functional Trade Processor - 100%**
+- ✅ All parts working correctly
+- ✅ Good use of reduce for statistics
+- Modified trades in-place (valid approach)
+
+**Task 7: functools.wraps - 100%**
+- ✅ Understood wrapper loses metadata
+- ✅ Correct answers for with/without @wraps
+
+**Task 8: Integration Concepts - 100%**
+- ✅ Good reasoning for list comprehensions preference
+- ✅ Pragmatic view on closures vs classes
+- ✅ Understood decorator advantages
+
+### Final Score: 89% (B+)
+
+### Key Corrections
+
+**Task 1 Q1 - Lambda returns a FUNCTION:**
+```python
+f = lambda x: x > 5  # f is a function object
+print(type(f))       # <class 'function'>
+print(f(10))         # True - NOW it returns True/False
+```
+
+**Task 1 Q10 - Late binding fix with lambda:**
+```python
+functions = [lambda i=i: i for i in range(3)]  # i=i captures value
+```
+
+**Task 4 - elif bug:**
+```python
+if number < tracker['min']:
+    tracker['min'] = number
+if number > tracker['max']:  # Separate if, not elif!
+    tracker['max'] = number
+```
+
+**filter(None, ...) explained:**
+`None` as function means "use truthiness of each item", NOT "find None objects".
+
+### Student Question: map/filter in industry
+- List comprehensions ARE preferred (Guido agrees)
+- map/filter useful when: named functions exist, FP codebases, reading libraries
+- **For PCAP:** Must know them
+- **For career:** List comprehensions 90% of the time
+
+### Strengths
+- ✅ Excellent output predictions
+- ✅ Perfect PCAP multiple choice
+- ✅ Complete trade processor implementation
+- ✅ Good conceptual understanding
+
+### Areas for Improvement
+- Lambda returns a function, not the result
+- Late binding fix: `lambda i=i: i` not "use list comprehension"
+- Watch for elif vs if when both conditions can be true
+
+### Week 4 Summary
+
+| Day | Score | Topic |
+|-----|-------|-------|
+| 1 | 98% | Lambda, map(), filter() |
+| 2 | 90% | Closures & Factory Functions |
+| 3 | 89% | reduce(), Decorators |
+| 4 | 89% | Week Review & PCAP Drills |
+
+**Week 4 Average: 91.5% (A-)**
+
+### Weekend Tasks
+- PCAP Mock Exam A (30 questions)
+- PCAP Mock Exam B (30 questions)
+- Target: 70%+ (21/30) on each
+
+---
+

@@ -18,6 +18,7 @@
 | [PCAP Traps](#pcap-traps) | Common exam pitfalls | ~430 |
 | [reduce() Function](#reduce-function-from-functools) | Cumulative reduction | ~545 |
 | [Decorators](#decorators-closures-in-action) | Function wrappers using closures | ~610 |
+| [functools.wraps](#functoolswraps---preserving-function-metadata) | Preserving decorated function metadata | ~755 |
 
 ---
 
@@ -752,6 +753,73 @@ def my_decorator(func):    # Outer function receives the function to wrap
 ```
 
 The `wrapper` function is a closure that "remembers" the `func` variable from `my_decorator`'s scope.
+
+---
+
+## functools.wraps - Preserving Function Metadata
+
+When you decorate a function, the wrapper replaces it. This loses the original function's metadata (`__name__`, `__doc__`, etc.).
+
+### The Problem
+
+```python
+def my_decorator(func):
+    def wrapper(*args, **kwargs):
+        return func(*args, **kwargs)
+    return wrapper
+
+@my_decorator
+def greet(name):
+    """Greets a person by name."""
+    return f"Hello, {name}!"
+
+print(greet.__name__)  # 'wrapper' - NOT 'greet'!
+print(greet.__doc__)   # None - docstring lost!
+```
+
+### The Solution: @wraps
+
+```python
+from functools import wraps
+
+def my_decorator(func):
+    @wraps(func)  # This preserves func's metadata
+    def wrapper(*args, **kwargs):
+        return func(*args, **kwargs)
+    return wrapper
+
+@my_decorator
+def greet(name):
+    """Greets a person by name."""
+    return f"Hello, {name}!"
+
+print(greet.__name__)  # 'greet' - preserved!
+print(greet.__doc__)   # 'Greets a person by name.' - preserved!
+```
+
+### Why It Matters
+
+1. **Debugging:** Stack traces show correct function names
+2. **Documentation:** `help(greet)` shows the right docstring
+3. **Introspection:** Tools that inspect functions work correctly
+4. **Professional code:** Always use `@wraps` in production decorators
+
+### Complete Decorator Template
+
+```python
+from functools import wraps
+
+def my_decorator(func):
+    @wraps(func)
+    def wrapper(*args, **kwargs):
+        # Before
+        result = func(*args, **kwargs)
+        # After
+        return result
+    return wrapper
+```
+
+This is the standard pattern for production-quality decorators.
 
 ---
 

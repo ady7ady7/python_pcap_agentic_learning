@@ -711,3 +711,48 @@ Task 8 expected values were wrong. Correct: 4 winners, $1050 total PnL.
 
 ---
 
+## Week 4, Day 4 - 2026-01-29 (Thursday)
+
+**Topic:** Week 4 Review & PCAP Drills (Pre-Exam)
+**Score:** 89% (B+)
+**Difficulty:** 5/10
+**Time Spent:** 80 minutes
+
+**Tasks Completed:**
+1. Quick fire review (10 questions - 8/10)
+2. Output predictions (6 snippets - 6/6)
+3. Debug decorator (fixed correctly)
+4. Closure stats tracker (works with minor elif bug)
+5. PCAP multiple choice (8 questions - 8/8)
+6. PROJECT: Functional trade processor (complete)
+7. functools.wraps (understood)
+8. Integration concepts (good answers)
+
+**Key Learnings:**
+- Lambda returns a FUNCTION, not the result directly
+- Late binding fix: `lambda i=i: i` captures value at definition
+- `filter(None, items)` uses truthiness, NOT searches for None
+- `@wraps(func)` preserves function metadata in decorators
+- List comprehensions preferred over map/filter in most cases
+
+**Critical Corrections:**
+- Q1: `lambda x: x > 5` returns a function (C), not True/False (D)
+- Q10: Fix with `lambda i=i: i`, not "use list comprehension"
+- Task 4: Use `if` not `elif` when both conditions can be true
+
+**Student Questions Answered:**
+- filter(None, ...) explained: None = "use truthiness"
+- map/filter in industry: List comprehensions preferred 90% of time
+
+**Week 4 Summary:**
+| Day | Score | Topic |
+|-----|-------|-------|
+| 1 | 98% | Lambda, map(), filter() |
+| 2 | 90% | Closures & Factory Functions |
+| 3 | 89% | reduce(), Decorators |
+| 4 | 89% | Week Review |
+
+**Week 4 Average: 91.5% (A-)**
+
+---
+

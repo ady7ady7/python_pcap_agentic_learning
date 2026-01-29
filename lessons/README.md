@@ -120,6 +120,7 @@ This directory contains all theoretical lessons organized by week and topic.
 - Factory functions and data hiding with closures
 - `reduce()` from functools - cumulative reduction
 - Decorators - closures in action, wrapping functions
+- `functools.wraps` - preserving decorated function metadata
 - **PCAP Traps:** Lambda can't have statements, late binding in loops, map/filter return iterators
 
 ### [pip, Packages & Environment Management](week4_pip_packages.md) *(Reference)*

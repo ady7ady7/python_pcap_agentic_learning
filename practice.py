@@ -3932,4 +3932,312 @@ When creating a new class object (as c1, c2), we increase that count value by 1,
 # print(f"Winning trades: {len(winning_trades)}")
 # print(f"Total winning PnL: ${total_winning_pnl}")
 
-#10:59
+#Below is a quick recap of string operations, since I'm also following the Edube course from Python Institute (PCAP preparation)
+#I'm familiar with these concepts, but a little review didn't harm anyone
+
+# str1 = 'a'
+# str2 = 'b'
+
+# print(str1 + str2) #'ab'
+# print(str2 + str1) # 'ba
+# print(5 * 'a') #aaaaa
+# print('b' * 4) #bbbb
+
+
+# print(ord('a')) #using the ord() we can print the code point of a given symbol (ASCII)
+
+# print(chr(97)) #using the chr() function, we can take a code point and return a character
+# print(chr(945))
+
+# print(chr(ord('x')) == 'x') #True
+
+
+# the_string = 'silly walks'
+
+# for ix in range(len(the_string)):
+#     print(the_string[ix], end=' ')
+    
+
+# alpha = "abdefg"
+
+# print(alpha[1:3]) #bd
+# print(alpha[3:]) #efg
+# print(alpha[:3]) #abd
+# print(alpha[3:-2]) #e
+# print(alpha[-3:4]) #e
+# print(alpha[::2]) #adf
+# print(alpha[1::2]) #beg
+
+#Remember that PYTHON STRINGS ARE IMMUTABLE
+
+#WE CANNOT USE append, insert etc.
+#We can only use del to remove the string as a WHOLE!
+
+
+# alphabet = "abcdefghijklmnopqrstuvwxyz"
+# #del alphabet[0] #ERROR!
+# print(alphabet)
+# del(alphabet) #WE CAN DELETE THE WHOLE STRING
+# print(alphabet) #Now this won't work, as we've deleted the string
+
+
+# alphabet = "bcdefghijklmnopqrstuvwxy"
+# alphabet = "a" + alphabet
+# alphabet = alphabet + "z" #works well
+
+# print(alphabet)
+
+
+#WE CAN ALSO USE index() method to find the index of a specific element specified in index's argument
+# alphabet = "bcdefghijklmnopqrstuvwxy"
+# print(alphabet.index('p'))
+# print(alphabet.index('a')) #Value absent - RETURNS A VALUEERROR!
+
+# print("Alpha".capitalize()) #Alpha
+# print('ALPHA'.capitalize()) #Alpha
+# print(' Alpha'.capitalize()) #  alpha
+# print('123'.capitalize()) #123
+# print("αβγδ".capitalize()) #Αβγδ
+
+#W4 D4 T1
+
+# def outer():
+#     x = 10
+#     def inner():
+#         return x
+#     return inner
+
+# f = outer()
+# print(f())
+
+# from functools import reduce
+# print(reduce(lambda a, b: a + b, [1, 2, 3, 4], 10))
+
+# result = (filter(lambda x: x % 2 == 0, [1, 2, 3, 4, 5]))
+# print(result)
+
+# result = map(lambda x: x * 2, [1, 2, 3])
+# print(result)
+
+
+# Broken:
+# functions = [lambda: i for i in range(3)]
+# print(functions)
+
+# list = []
+# functions = [i for i in range(3)]
+# print(functions)
+
+#W4 D4 T2
+# nums = [1, 2, 3, 4, 5]
+# result = map(lambda x: x ** 2, nums)
+# print(next(result))
+# print(next(result))
+
+
+# funcs = []
+# for i in range(3):
+#     funcs.append(lambda i=i: i * 2)
+
+# print(funcs[0](), funcs[1](), funcs[2]())
+
+
+#W4 D4 T3
+
+# def validate_positive(func):
+#     """Decorator that ensures the result is positive."""
+#     def wrapper(*args):
+#         result = func(*args)
+#         if result < 0:
+#             raise ValueError("Result must be positive")
+#         return result
+#     return wrapper
+
+# @validate_positive
+# def subtract(a, b):
+#     return a - b
+
+# # Should work:
+# print(subtract(10, 3))  # 7
+
+# # Should raise ValueError:
+# print(subtract(3, 10))  # -7 → ValueError
+
+# from collections import defaultdict
+
+#W4 D4 T4
+# def make_stats_tracker():
+#     """
+#     Create a statistics tracker using closures.
+
+#     Returns a function that:
+#     - Accepts a number
+#     - Tracks count, sum, min, max
+#     - Returns a dict with current stats
+
+#     Example:
+#         track = make_stats_tracker()
+#         print(track(10))  # {'count': 1, 'sum': 10, 'min': 10, 'max': 10, 'avg': 10.0}
+#         print(track(20))  # {'count': 2, 'sum': 30, 'min': 10, 'max': 20, 'avg': 15.0}
+#         print(track(5))   # {'count': 3, 'sum': 35, 'min': 5, 'max': 20, 'avg': 11.67}
+#     """
+    
+#     tracker = defaultdict(int)
+#     tracker['max'] = 0
+#     tracker['min'] = 999
+    
+#     def track(number):
+#         tracker['sum'] += number
+#         tracker['count'] += 1
+#         if number < tracker['min']:
+#             tracker['min'] = number
+#         elif number > tracker['max']:
+#             tracker['max'] = number
+#         tracker['avg'] = round(tracker['sum'] / tracker['count'], 2)
+#         return tracker
+#     return track
+        
+
+# # Test:
+# track = make_stats_tracker()
+# print(track(10))
+# print(track(20))
+# print(track(5))
+# print(track(15))
+
+#W4 D4 T5
+# def outer():
+#     count = 0
+#     def inner():
+#         nonlocal count
+#         count += 1
+#         return count
+#     return inner
+
+# counter = outer()
+# print(counter(), counter(), counter())
+
+
+# def deco(f):
+#     def w():
+#         return f() + "!"
+#     return w
+
+# @deco
+# def say():
+#     return "Hi"
+
+# print(say())
+
+# x = list(filter(None, [0, 1, "", "a", [], [1]]))
+# print(x)
+
+# add = lambda a, b: a + b
+# print(add.__name__)
+
+
+#W4 D4 T6 - creating a complete processing pipeline with functional patterns
+
+# from functools import reduce
+# from typing import List, Dict, Callable
+
+# Sample trades
+# trades = [
+#     {"id": 1, "ticker": "AAPL", "side": "BUY", "entry": 150, "exit": 165, "qty": 10},
+#     {"id": 2, "ticker": "GOOGL", "side": "BUY", "entry": 2800, "exit": 2750, "qty": 5},
+#     {"id": 3, "ticker": "MSFT", "side": "SELL", "entry": 300, "exit": 280, "qty": 20},
+#     {"id": 4, "ticker": "TSLA", "side": "BUY", "entry": 700, "exit": 720, "qty": 8},
+#     {"id": 5, "ticker": "NVDA", "side": "SELL", "entry": 500, "exit": 520, "qty": 15},
+# ]
+
+# def calculate_pnl(trade: Dict) -> float:
+#     """Calculate PnL: BUY = (exit-entry)*qty, SELL = (entry-exit)*qty"""
+#     # Your code here (use ternary expression)
+#     trade['pnl'] = (trade['exit'] - trade['entry']) * trade['qty'] if trade['side'] == 'BUY' else (trade['entry'] - trade['exit']) * trade['qty']
+
+
+# for trade in trades:
+#     calculate_pnl(trade)
+
+# # unnecessary and weird, as I instantly add pnl with a single line in calculate_pnl, but I wanted to try and practice this
+# # trades_with_pnl = map(lambda t: {t** 'pnl': calculate_pnl(t)}, trades)
+
+# is_winner = lambda t: t['pnl'] > 0
+# is_loser = lambda t: t['pnl'] < 0
+# is_buy = lambda t: t['side'] == 'BUY'
+
+# total_pnl = reduce(lambda acc, t: acc + t['pnl'], trades, 0)
+# win_count = reduce(lambda acc, t: acc + 1 if t['pnl'] > 0 else acc, trades, 0)
+# loss_count = reduce(lambda acc, t: acc + 1 if t['pnl'] < 0 else acc, trades, 0)
+# best = reduce(lambda acc, t: t if t['pnl'] > acc['pnl'] else acc, trades)
+# worst = reduce(lambda acc, t: t if t['pnl'] < acc['pnl'] else acc, trades)
+# print(best)
+# print(worst)
+
+
+# def get_stats(trades_list: List[Dict]) -> Dict:
+#     """
+#     Calculate: total_pnl, win_count, loss_count, best_trade, worst_trade
+#     """
+#     if not trades_list:
+#         return {}
+
+#     total_pnl = reduce(lambda acc, t: acc + t['pnl'], trades, 0)
+#     win_count = reduce(lambda acc, t: acc + 1 if t['pnl'] > 0 else acc, trades, 0)
+#     loss_count = reduce(lambda acc, t: acc + 1 if t['pnl'] < 0 else acc, trades, 0)
+#     best = reduce(lambda acc, t: t if t['pnl'] > acc['pnl'] else acc, trades)
+#     worst = reduce(lambda acc, t: t if t['pnl'] < acc['pnl'] else acc, trades)
+
+#     return {
+#         "total_pnl": total_pnl,
+#         "win_count": win_count,
+#         "loss_count": loss_count,
+#         "best_ticker": best["ticker"],
+#         "worst_ticker": worst["ticker"],
+#     }
+    
+    
+# print("All trades with PnL:")
+# for t in trades:
+#     print(f"  {t['ticker']}: ${t['pnl']}")
+
+# print(f"\nWinners: {[t['ticker'] for t in filter(is_winner, trades)]}")
+# print(f"Losers: {[t['ticker'] for t in filter(is_loser, trades)]}")
+# print(f"BUY trades: {[t['ticker'] for t in filter(is_buy, trades)]}")
+
+# stats = get_stats(trades)
+# print(f"\nStats: {stats}")
+
+
+#W4 D4 T7
+from functools import wraps
+
+# Without @wraps - function metadata is lost
+# def bad_decorator(func):
+#     def wrapper(*args, **kwargs):
+#         '''Wrapper test metadata'''
+#         return func(*args, **kwargs)
+#     return wrapper
+
+# @bad_decorator
+# def greet(name):
+#     """Greets a person by name."""
+#     return f"Hello, {name}!"
+
+# print(greet.__name__)  # What does this print? - wrapper - the wrapper's name as metadata is lost
+# print(greet.__doc__)   # What does this print? - None - as wrapper function has no metadata
+
+
+# def good_decorator(func):
+#     @wraps(func)  # Add this line
+#     def wrapper(*args, **kwargs):
+#         return func(*args, **kwargs)
+#     return wrapper
+
+# @good_decorator
+# def greet(name):
+#     """Greets a person by name."""
+#     return f"Hello, {name}!"
+
+# print(greet.__name__)  # Now what?
+# print(greet.__doc__)   # Now what?
