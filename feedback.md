@@ -1,46 +1,63 @@
-# Daily Feedback Template
+# Weekend Exam Feedback Template
 
-**Date:** 2026-01-30
-**Week:** 4 | **Day:** 5 (Friday)
-**Topic:** PCAP Mock Exams (Weekend)
-
----
-
-## Self-Assessment
-
-**Tasks Completed:** ___/8
-
-**Difficulty Rating:**
-[ ] Too Easy
-[ ] Just Right
-[ ] Too Hard
-
-**Time Spent:** ___ minutes
+**Date:** 2026-01-30 to 2026-02-01
+**Week:** 4 | **Weekend Exams**
+**Exams:** Week4_Exam_A.md & Week4_Exam_B.md
 
 ---
 
-## Reflection Questions
+## Exam A Self-Assessment
 
-**1. What concept clicked for you today?**
+**Time spent:** ___ minutes
+
+**Score:** ___/30
+
+**Confidence level before checking answers:**
+[ ] Very confident
+[ ] Somewhat confident
+[ ] Uncertain
+
+**Questions you found tricky:**
 
 
-**2. What's still confusing?**
-
-
-**3. Which task was most challenging and why?**
-
-
-**4. Did you encounter any bugs/errors that taught you something?**
-
-
-**5. How confident do you feel about today's topic?**
+**Questions you guessed on:**
 
 
 ---
 
-## Questions for Mentor
+## Exam B Self-Assessment
+
+**Time spent:** ___ minutes
+
+**Score:** ___/30
+
+**Confidence level before checking answers:**
+[ ] Very confident
+[ ] Somewhat confident
+[ ] Uncertain
+
+**Questions you found tricky:**
+
+
+**Questions you guessed on:**
 
 
 ---
 
-**Instructions:** Fill this out after completing the day's tasks. I'll archive it and provide assessment.
+## Post-Exam Reflection
+
+**1. Topics that went well:**
+
+
+**2. Topics that need more review:**
+
+
+**3. Patterns/traps you fell for:**
+
+
+**4. Questions for mentor:**
+
+
+---
+
+**Instructions:** Complete both exams, then fill this out before submitting for grading. I'll assess both exams and provide detailed feedback.

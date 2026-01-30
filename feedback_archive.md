@@ -2215,3 +2215,166 @@ if number > tracker['max']:  # Separate if, not elif!
 
 ---
 
+## Week 4, Day 5 - 2026-01-30 (Friday)
+
+**Topic:** Final Functional Programming Review & Exam Prep
+
+### Student Self-Assessment
+- **Tasks Completed:** 8/8
+- **Difficulty:** 5-7/10
+- **Time Spent:** 90 minutes
+
+### Student Reflection
+- map/filter functions still feel unnatural compared to list comprehensions
+- Would use list comprehensions 9/10 times if given choice
+- Wants more practice on functional patterns
+- Honest self-ratings showing areas of uncertainty
+
+### Mentor Assessment
+
+**Task 1: Lambda Expression Mastery - 100%**
+- Q1: ✅ 7 (1 + 2*3)
+- Q2: ✅ 12, 12, 12 (late binding trap)
+- Q3: ✅ 10, 11, 12 (late binding fix with i=i)
+- Q4: ✅ B (lambda can't have return/assignment/multiple statements)
+- Q5: ✅ 10 (nested lambda IIFE)
+- Q6: ✅ 10 (*args with sum)
+- **Perfect score on lambda fundamentals!**
+
+**Task 2: Closure Deep Dive - 100%**
+- Q1: ✅ 24 (4² + 2³ = 16 + 8)
+- Q2: ✅ 1, 2, 2 (inc twice, get returns current)
+- Q3: ✅ 20 (i=2 captured, 10*2)
+- Q4: ✅ 15, 105, 20 (separate closures maintain state)
+- **Perfect closure tracing!**
+
+**Task 3: map/filter/reduce Pipeline - 90%**
+- ✅ Part A: Excellent use of spread operator `{**t, 'net_amount': ...}`
+- ✅ Part B: filter() correct
+- ✅ Part C: reduce() with initializer correct
+- ⚠️ Minor: `new_trades` loop is redundant (could use `result` directly)
+- Valid comment about list comprehension being simpler approach
+
+**Task 4: Decorator with Arguments - 100%**
+- ✅ Perfect three-level implementation: repeat(times) → decorator(func) → wrapper(*args)
+- ✅ Returns last result correctly
+- Student noted difficulty - wants more practice (valid)
+
+**Task 5: PCAP Multiple Choice - 75%**
+- Q1: ✅ B (map returns map object)
+- Q2: ✅ A (10-2-3 = 5)
+- Q3: ❌ **Answered D, correct is C (20)**
+- Q4: ✅ A (global x = 10)
+- Q5: ❌ **Answered A, correct is B** (`x % 2` returns 1 for odd = truthy)
+- Q6: ✅ C (closure definition)
+- Q7: ✅ C (15)
+- Q8: ✅ B (['A', 'B', 'C'])
+
+**Task 6: PROJECT Signal Generator - 100%**
+- ✅ Closure `make_level_detector` implemented correctly
+- ✅ price_pairs using map - correct approach
+- ✅ Signal logic correct (BUY on cross up, SELL on cross down)
+- ✅ filter() for action signals
+- ✅ reduce() for counting
+- **Student CORRECTLY challenged mentor's expected output!**
+  - My expected signals were wrong
+  - Price going from 108→106 stays ABOVE 105, doesn't cross it = HOLD
+  - Student's output ['HOLD', 'BUY', 'SELL', 'BUY', ...] is CORRECT
+  - Mentor error acknowledged
+
+**Task 7: Decorator Stacking Order - 0%**
+- Q1: ❌ **Answered B, correct is A** (`<b><i>Hello, World</i></b>`)
+- Q2: ❌ **Answered A, correct is B** (italic applied first, then bold)
+- Q3: ❌ Should be `<i><b>Hello, World</b></i>`
+
+**Task 8: Self-Assessment - Complete**
+- Honest self-ratings across all Week 4 topics
+- Correctly identified weak spots (decorators, late binding fix, factory functions with nesting)
+- Valid feedback about wanting more practice
+
+### Final Score: 85% (B+)
+
+### Critical Corrections
+
+**Task 5 Q3 - Stacked Decorators:**
+```python
+@deco
+@deco
+def five():
+    return 5
+```
+This means: `five = deco(deco(five))`
+- Inner deco: wrapper returns `five() * 2` = 5 * 2 = 10
+- Outer deco: wrapper returns `inner_wrapper() * 2` = 10 * 2 = 20
+- **Answer: C (20)**
+
+**Task 5 Q5 - filter() with modulo:**
+```python
+filter(lambda x: x % 2, nums)  # [1, 2, 3, 4, 5]
+```
+- 1 % 2 = 1 (truthy) → kept
+- 2 % 2 = 0 (falsy) → filtered out
+- 3 % 2 = 1 (truthy) → kept
+- **Result: [1, 3, 5]** (odd numbers)
+
+**Task 7 - Decorator Stacking Order:**
+```python
+@bold
+@italic
+def greet(name):
+    return f"Hello, {name}"
+```
+- **Application order (bottom-up):** italic first, then bold
+- **Execution order (top-down):** bold wrapper runs first, calls italic wrapper
+- `greet = bold(italic(greet))`
+- **Output:** `<b><i>Hello, World</i></b>`
+
+If reversed to `@italic @bold`:
+- `greet = italic(bold(greet))`
+- **Output:** `<i><b>Hello, World</b></i>`
+
+**Key rule:** Decorators wrap from bottom-up, execute from top-down. The innermost function result gets wrapped by outer decorators.
+
+### Strengths
+- ✅ Perfect lambda fundamentals (Task 1: 100%)
+- ✅ Perfect closure tracing (Task 2: 100%)
+- ✅ Solid decorator implementation with arguments
+- ✅ **Caught mentor error on signal generator** - excellent critical thinking
+- ✅ Honest self-assessment showing learning maturity
+
+### Areas for Improvement
+- ⚠️ Decorator stacking order (0% - needs practice)
+- ⚠️ Stacked decorator output prediction
+- ⚠️ filter() with truthy/falsy (not `== 0` but truthiness)
+
+### Student Feedback Addressed
+
+**"map/filter feel unnatural"**
+Your instinct is correct. List comprehensions ARE more Pythonic for most cases. Guido himself prefers them. For PCAP, you must know map/filter. For industry, list comprehensions 90% of the time. Your preference is valid.
+
+**"Decorators need more practice"**
+Agreed. Task 7 showed this gap. For weekend study:
+1. Practice: `@a @b def f()` = `f = a(b(f))`
+2. Execution: outer wrapper runs first, calls inner
+3. Draw the wrapping visually if needed
+
+### Week 4 Final Summary
+
+| Day | Score | Topic |
+|-----|-------|-------|
+| 1 | 98% | Lambda, map(), filter() |
+| 2 | 90% | Closures & Factory Functions |
+| 3 | 89% | reduce(), Decorators |
+| 4 | 89% | Week Review & PCAP Drills |
+| 5 | 85% | Final Review & Exam Prep |
+
+**Week 4 Average: 90.2% (A-)**
+
+### Weekend Tasks
+- Week4_Exam_A.md (30 questions)
+- Week4_Exam_B.md (30 questions)
+- Target: 70%+ (21/30) on each
+- Focus areas: decorator stacking, filter() truthiness
+
+---
+

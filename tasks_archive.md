@@ -744,6 +744,42 @@ Task 8 expected values were wrong. Correct: 4 winners, $1050 total PnL.
 - filter(None, ...) explained: None = "use truthiness"
 - map/filter in industry: List comprehensions preferred 90% of time
 
+---
+
+## Week 4, Day 5 - 2026-01-30
+
+**Topic:** Final Functional Programming Review & Exam Prep
+**Score:** 8/8 tasks completed | 85% (B+)
+**Difficulty:** 5-7/10
+**Time Spent:** 90 minutes
+
+**Tasks Completed:**
+1. Lambda Expression Mastery (6 questions - 6/6)
+2. Closure Deep Dive (4 questions - 4/4)
+3. map/filter/reduce Pipeline (working implementation)
+4. Decorator with Arguments (repeat(n) pattern)
+5. PCAP Multiple Choice (6/8)
+6. PROJECT: Strategy Signal Generator (caught mentor error!)
+7. Decorator Stacking Order (0/3 - weak spot)
+8. Week 4 Self-Assessment
+
+**Key Learnings:**
+- Lambda fundamentals solid (100% on Task 1)
+- Closure tracing mastered (100% on Task 2)
+- Decorator stacking: `@a @b def f()` = `f = a(b(f))`
+- Application order: bottom-up, Execution order: top-down
+- filter(lambda x: x % 2, nums) keeps ODD numbers (truthy)
+
+**Critical Corrections:**
+- Stacked decorators: `@deco @deco def five(): return 5` → 5*2*2 = 20 (not error)
+- filter(x % 2) keeps truthy (1 for odd), not even numbers
+- Decorator stacking output: `<b><i>Hello</i></b>` not `<i><b>Hello</b></i>`
+
+**Student Caught Mentor Error:**
+- Task 6 expected output was wrong
+- Price 108→106 stays above 105 = HOLD (not SELL)
+- Student's signal logic was CORRECT
+
 **Week 4 Summary:**
 | Day | Score | Topic |
 |-----|-------|-------|
@@ -751,8 +787,14 @@ Task 8 expected values were wrong. Correct: 4 winners, $1050 total PnL.
 | 2 | 90% | Closures & Factory Functions |
 | 3 | 89% | reduce(), Decorators |
 | 4 | 89% | Week Review |
+| 5 | 85% | Final Review & Exam Prep |
 
-**Week 4 Average: 91.5% (A-)**
+**Week 4 Average: 90.2% (A-)**
+
+**Weekend Tasks:**
+- PCAP Mock Exam A (30 questions)
+- PCAP Mock Exam B (30 questions)
+- Target: 70%+ (21/30) on each
 
 ---
 

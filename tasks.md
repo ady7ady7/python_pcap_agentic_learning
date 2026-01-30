@@ -1,9 +1,9 @@
-# Week 4, Day 4 - Thursday
-## Topic: Week 4 Review & PCAP Drills (Pre-Exam)
+# Week 4, Day 5 - Friday
+## Topic: Final Functional Programming Review & Exam Prep
 
-**Date:** 2026-01-29
+**Date:** 2026-01-30
 
-**Purpose:** Review all Week 4 topics before Friday's exams. Heavy PCAP focus.
+**Purpose:** Final PCAP drills before weekend exams. Master Week 4 functional patterns.
 
 **Target Difficulty:** 5/10
 
@@ -11,97 +11,57 @@
 
 ---
 
-## Task 1: Quick Fire Review (10 Questions)
+## Task 1: Lambda Expression Mastery (6 Questions)
 
-**Instructions:** Answer quickly - these test your Week 4 knowledge.
+**Instructions:** Answer quickly - these are classic PCAP traps.
 
-**Q1:** What does lambda return if you write `lambda x: x > 5`?
-- A) True or False
-- B) x
-- C) A function that returns True or False
-- D) Nothing
+**Q1:** What is the output?
+```python
+f = lambda x, y, z=3: x + y * z
+print(f(1, 2))
 
-D - if we assume that we only have that
+7
+```
 
 **Q2:** What is the output?
 ```python
-result = list(map(lambda x: x * 2, [1, 2, 3]))
-print(result)
+funcs = [(lambda x: x + i) for i in range(3)]
+print(funcs[0](10), funcs[1](10), funcs[2](10))
 
-Answer: [2, 4, 6]
+12, 12, 12
 ```
 
 **Q3:** What is the output?
 ```python
-result = list(filter(lambda x: x % 2 == 0, [1, 2, 3, 4, 5]))
-print(result)
+funcs = [(lambda x, i=i: x + i) for i in range(3)]
+print(funcs[0](10), funcs[1](10), funcs[2](10))
 
-Answer: [2, 4]
+10, 11, 12
 ```
 
-**Q4:** What does `nonlocal` do?
-- A) Creates a global variable
-- B) Allows modifying a variable in an enclosing (non-global) scope
-- C) Prevents variable modification
-- D) Deletes a variable
+**Q4:** Which is valid?
+- A) `lambda x: return x + 1`
+- B) `lambda x: x + 1`
+- C) `lambda: x = 5`
+- D) `lambda x: print(x); x + 1`
 
-Answer: B
+B
 
 **Q5:** What is the output?
 ```python
-def outer():
-    x = 10
-    def inner():
-        return x
-    return inner
+result = (lambda: (lambda x: x * 2)(5))()
+print(result)
 
-f = outer()
-print(f())
-
-
-Answer: 10
+10
 ```
 
 **Q6:** What is the output?
 ```python
-from functools import reduce
-print(reduce(lambda a, b: a + b, [1, 2, 3, 4], 10))
+g = lambda *args: sum(args)
+print(g(1, 2, 3, 4))
 
-Answer: 20
+10
 ```
-
-**Q7:** What does `@decorator` above a function definition do?
-- A) Deletes the function
-- B) Calls the function immediately
-- C) Replaces the function with `decorator(function)`
-- D) Creates a copy of the function
-
-Answer: C
-
-**Q8:** True or False: `map()` and `filter()` return lists in Python 3.
-
-Answer: False - you'd have to manually convert them to lists as normally they return map/filter object respectively (a memory object string as in <filter object at 0x0000018D79150130>
-<map object at 0x0000018D1930C700>)
-
-**Q9:** What is the late binding trap?
-- A) Lambda functions are slow
-- B) Lambda captures variable reference, not value at creation time
-- C) Lambda cannot use variables
-- D) Lambda runs too late
-
-Answer: B
-
-**Q10:** How do you fix the late binding trap in a loop?
-```python
-# Broken:
-functions = [lambda: i for i in range(3)]
-
-# Fixed:
-functions = [i for i in range(3)]
-print(functions)
-```
-
-The best way would be to use a list comprehension instead
 
 **Your answers:**
 ```
@@ -111,218 +71,204 @@ Q3:
 Q4:
 Q5:
 Q6:
-Q7:
-Q8:
-Q9:
-Q10:
 ```
 
 ---
 
-## Task 2: PCAP Output Predictions (6 Snippets)
+## Task 2: Closure Deep Dive (4 Questions)
 
-**Instructions:** Predict the exact output for each.
+**Instructions:** Trace the execution carefully.
 
-**Snippet A:**
+**Q1:** What is the output?
 ```python
-f = lambda x, y=10: x + y
-print(f(5))
-print(f(5, 5))
+def outer(n):
+    def inner(x):
+        return x ** n
+    return inner
+
+square = outer(2)
+cube = outer(3)
+print(square(4) + cube(2))
+
+Answer: 24
 ```
 
-**Snippet B:**
+**Q2:** What is the output?
 ```python
-nums = [1, 2, 3, 4, 5]
-result = map(lambda x: x ** 2, nums)
-print(next(result))
-print(next(result))
+def counter():
+    count = 0
+    def increment():
+        nonlocal count
+        count += 1
+        return count
+    def get():
+        return count
+    return increment, get
+
+inc, get = counter()
+print(inc(), inc(), get())
+
+
+Answer: 1, 2, 2
 ```
 
-**Snippet C:**
+**Q3:** What is the output?
 ```python
-def make_power(n):
-    return lambda x: x ** n
+def make_multipliers():
+    return [lambda x, i=i: x * i for i in range(4)]
 
-square = make_power(2)
-cube = make_power(3)
-print(square(4), cube(2))
+mults = make_multipliers()
+print(mults[2](10))
+
+Answer: 20
 ```
 
-**Snippet D:**
+**Q4:** What is printed?
 ```python
-from functools import reduce
+def factory(start):
+    value = start
+    def add(x):
+        nonlocal value
+        value += x
+        return value
+    return add
 
-words = ["P", "C", "A", "P"]
-result = reduce(lambda a, b: a + b, words)
-print(result)
-```
+adder1 = factory(10)
+adder2 = factory(100)
+print(adder1(5), adder2(5), adder1(5))
 
-**Snippet E:**
-```python
-def add_prefix(prefix):
-    def decorator(func):
-        def wrapper(*args):
-            return prefix + func(*args)
-        return wrapper
-    return decorator
-
-@add_prefix("Hello, ")
-def greet(name):
-    return name
-
-print(greet("World"))
-```
-
-**Snippet F:**
-```python
-funcs = []
-for i in range(3):
-    funcs.append(lambda i=i: i * 2)
-
-print(funcs[0](), funcs[1](), funcs[2]())
+Answer: 15, 105, 20
 ```
 
 **Your answers:**
 ```
-A: 15, 10
-
-B: 1, 4
-
-C: 16, 8
-
-D: PCAP
-
-E: Hello, World
-
-F: 0 2 4
-
+Q1:
+Q2:
+Q3:
+Q4:
 ```
 
 ---
 
-## Task 3: Debug the Decorator
+## Task 3: map/filter/reduce Pipeline
 
-**Instructions:** This decorator has bugs. Find and fix them.
-
-```python
-def validate_positive(func):
-    """Decorator that ensures the result is positive."""
-    def wrapper(args):
-        result = func(args)
-        if result < 0:
-            raise ValueError("Result must be positive")
-        return result
-    return wrapper
-
-@validate_positive
-def subtract(a, b):
-    return a - b
-
-# Should work:
-print(subtract(10, 3))  # 7
-
-# Should raise ValueError:
-print(subtract(3, 10))  # -7 → ValueError
-```
-
-**Bugs found:**
-```
-1. Asterisk missing in wrapper function
-2. Asterisk missing in result processing 
-```
-
-**Fixed code:**
-```python
-
-def validate_positive(func):
-    """Decorator that ensures the result is positive."""
-    def wrapper(*args):
-        result = func(*args)
-        if result < 0:
-            raise ValueError("Result must be positive")
-        return result
-    return wrapper
-
-@validate_positive
-def subtract(a, b):
-    return a - b
-
-```
-
----
-
-## Task 4: Closure State Challenge
-
-**Instructions:** Create a closure that tracks running statistics.
+**Instructions:** Build a complete data processing pipeline.
 
 ```python
-def make_stats_tracker():
-    """
-    Create a statistics tracker using closures.
+from functools import reduce
 
-    Returns a function that:
-    - Accepts a number
-    - Tracks count, sum, min, max
-    - Returns a dict with current stats
+transactions = [
+    {"id": 1, "type": "BUY", "amount": 1000, "fee": 10},
+    {"id": 2, "type": "SELL", "amount": 500, "fee": 5},
+    {"id": 3, "type": "BUY", "amount": 2000, "fee": 20},
+    {"id": 4, "type": "SELL", "amount": 800, "fee": 8},
+    {"id": 5, "type": "BUY", "amount": 300, "fee": 3},
+]
 
-    Example:
-        track = make_stats_tracker()
-        print(track(10))  # {'count': 1, 'sum': 10, 'min': 10, 'max': 10, 'avg': 10.0}
-        print(track(20))  # {'count': 2, 'sum': 30, 'min': 10, 'max': 20, 'avg': 15.0}
-        print(track(5))   # {'count': 3, 'sum': 35, 'min': 5, 'max': 20, 'avg': 11.67}
-    """
-    # Your code here
-    pass
+# Part A: Use map to add net_amount (amount - fee) to each transaction
+# HINT: Create a function that returns a NEW dict with net_amount added
 
-# Test:
-track = make_stats_tracker()
-print(track(10))
-print(track(20))
-print(track(5))
-print(track(15))
+# Part B: Use filter to get only BUY transactions with net_amount > 500
+
+# Part C: Use reduce to calculate total net_amount of filtered transactions
+
+# Expected output:
+# All transactions with net_amount: [990, 495, 1980, 792, 297]
+# Filtered BUY transactions: [id=1, id=3]
+# Total net amount: 2970
 ```
 
 **Your code:**
 ```python
 
-def make_stats_tracker():
-    """
-    Create a statistics tracker using closures.
+result = list(map(lambda t: {**t, 'net_amount': t['amount'] - t['fee']}, transactions))
 
-    Returns a function that:
-    - Accepts a number
-    - Tracks count, sum, min, max
-    - Returns a dict with current stats
+
+new_trades = [] #Look, adding a new dict would be absolutely retarded, as we'd have to have a key for each trade, which doesn't make sense imo.
+for transaction in result:
+    new_trades.append(transaction)
+    
+filtered_buys = [t for t in new_trades if t['type'] == 'BUY' and t['net_amount'] > 500] #started with this, much simpler approach, but then I read your instructions and used filter below
+filtered_buys = list(filter(lambda t: t['type'] == 'BUY' and t['net_amount'] > 500, new_trades))
+print(filtered_buys)
+
+total_net_amount = reduce(lambda acc, t: acc + t['net_amount'], filtered_buys, 0)
+print(total_net_amount)
+
+
+```
+
+---
+
+## Task 4: Decorator with Arguments
+
+**Instructions:** Create a decorator that accepts arguments.
+
+```python
+def repeat(times):
+    """
+    Decorator that runs a function multiple times.
 
     Example:
-        track = make_stats_tracker()
-        print(track(10))  # {'count': 1, 'sum': 10, 'min': 10, 'max': 10, 'avg': 10.0}
-        print(track(20))  # {'count': 2, 'sum': 30, 'min': 10, 'max': 20, 'avg': 15.0}
-        print(track(5))   # {'count': 3, 'sum': 35, 'min': 5, 'max': 20, 'avg': 11.67}
+        @repeat(3)
+        def say_hello():
+            print("Hello!")
+
+        say_hello()
+        # Output:
+        # Hello!
+        # Hello!
+        # Hello!
+    """
+    # Your code here
+    pass
+
+# Test 1: Basic
+@repeat(3)
+def greet(name):
+    print(f"Hi, {name}!")
+
+greet("Alice")
+
+# Test 2: With return value (should return last result)
+@repeat(2)
+def double(x):
+    print(f"Doubling {x}")
+    return x * 2
+
+result = double(5)
+print(f"Final result: {result}")
+```
+
+**Your code:**
+```python
+
+def repeat(times):
+    """
+    Decorator that runs a function multiple times.
+
+    Example:
+        @repeat(3)
+        def say_hello():
+            print("Hello!")
+
+        say_hello()
+        # Output:
+        # Hello!
+        # Hello!
+        # Hello!
     """
     
-    tracker = defaultdict(int)
-    tracker['max'] = 0
-    tracker['min'] = 999
-    
-    def track(number):
-        tracker['sum'] += number
-        tracker['count'] += 1
-        if number < tracker['min']:
-            tracker['min'] = number
-        elif number > tracker['max']:
-            tracker['max'] = number
-        tracker['avg'] = round(tracker['sum'] / tracker['count'], 2)
-        return tracker
-    return track
+    def decorator(func):
+        def wrapper(*args, **kwargs):
+            for i in range(times):
+                result = func(*args, **kwargs)
+            return result
+        return wrapper
+    return decorator
 
-
-$ python practice.py
-defaultdict(<class 'int'>, {'max': 0, 'min': 10, 'sum': 10, 'count': 1, 'avg': 10.0})
-defaultdict(<class 'int'>, {'max': 20, 'min': 10, 'sum': 30, 'count': 2, 'avg': 15.0})
-defaultdict(<class 'int'>, {'max': 20, 'min': 5, 'sum': 35, 'count': 3, 'avg': 11.666666666666666})
-defaultdict(<class 'int'>, {'max': 20, 'min': 5, 'sum': 50, 'count': 4, 'avg': 12.5})
-
+#Although please mind, that this was very fdifficult and unintuitive for me and I had to check for materials.
+#I'd like to practice decorators more, especially if they're PCAP relevant and generally used in Mid-Senior level programming or a good practice
 
 ```
 
@@ -330,110 +276,114 @@ defaultdict(<class 'int'>, {'max': 20, 'min': 5, 'sum': 50, 'count': 4, 'avg': 1
 
 ## Task 5: PCAP Multiple Choice (8 Questions)
 
-**Q1:** What is the output?
-```python
-print((lambda: 42)())
-```
-- A) `<function>`
-- B) `42`
-- C) `None`
+**Q1:** What does `map(str, [1, 2, 3])` return?
+- A) `['1', '2', '3']`
+- B) `<map object>`
+- C) `('1', '2', '3')`
 - D) Error
 
-Answer: B
+
+B
 
 **Q2:** What is the output?
 ```python
-x = [1, 2, 3]
-y = map(str, x)
-print(type(y))
+from functools import reduce
+print(reduce(lambda a, b: a - b, [10, 2, 3]))
 ```
-- A) `<class 'list'>`
-- B) `<class 'map'>`
-- C) `<class 'str'>`
-- D) `<class 'generator'>`
+- A) 5
+- B) 15
+- C) -5
+- D) Error
 
-Answer: B
+A
 
 **Q3:** What is the output?
 ```python
-from functools import reduce
-result = reduce(lambda a, b: a * b, [2, 3, 4])
-print(result)
-```
-- A) 9
-- B) 24
-- C) 6
-- D) [2, 3, 4]
+def deco(f):
+    def wrapper():
+        return f() * 2
+    return wrapper
 
-Answer: B
+@deco
+@deco
+def five():
+    return 5
+
+print(five())
+```
+- A) 5
+- B) 10
+- C) 20
+- D) Error
+
+D
 
 **Q4:** What is the output?
 ```python
+x = 10
 def outer():
-    count = 0
+    x = 20
     def inner():
-        nonlocal count
-        count += 1
-        return count
-    return inner
+        global x
+        return x
+    return inner()
 
-counter = outer()
-print(counter(), counter(), counter())
+print(outer())
 ```
-- A) 0 0 0
-- B) 1 1 1
-- C) 1 2 3
-- D) Error
+- A) 10
+- B) 20
+- C) Error
+- D) None
 
-Answer: C
+A
 
-**Q5:** Which creates a closure?
-- A) `def f(): return 42`
-- B) `lambda x: x + 1`
-- C) `def outer(n): def inner(): return n; return inner`
-- D) `class C: pass`
-
-Answer: C
-
-**Q6:** What is the output?
+**Q5:** What is the output?
 ```python
-def deco(f):
-    def w():
-        return f() + "!"
-    return w
-
-@deco
-def say():
-    return "Hi"
-
-print(say())
+nums = [1, 2, 3, 4, 5]
+result = list(filter(lambda x: x % 2, nums))
+print(result)
 ```
-- A) Hi
-- B) Hi!
-- C) !Hi
-- D) Error
-
-Answer : B
-
-**Q7:** What does `filter(None, [0, 1, "", "a", [], [1]])` return (as a list)?
-- A) `[None]`
-- B) `[0, 1, "", "a", [], [1]]`
-- C) `[1, "a", [1]]`
+- A) `[2, 4]`
+- B) `[1, 3, 5]`
+- C) `[1, 2, 3, 4, 5]`
 - D) `[]`
 
-Answer: C - Could you however EXPLAIN this to me, because to me it looks like we are filtering for None objects, so that we're looking for None objects, AND YET here all we get is NOT None objects in return.
+a
+
+**Q6:** Which creates a closure?
+- A) `def f(): return 42`
+- B) `def f(x): return x + 1`
+- C) `def f(n): def g(): return n; return g`
+- D) `lambda x: x * 2`
+
+C
+
+**Q7:** What is the output?
+```python
+make_adder = lambda n: lambda x: x + n
+add_five = make_adder(5)
+print(add_five(10))
+```
+- A) 5
+- B) 10
+- C) 15
+- D) Error
+
+C
 
 **Q8:** What is the output?
 ```python
-add = lambda a, b: a + b
-print(add.__name__)
+from functools import reduce
+words = ["a", "b", "c"]
+result = reduce(lambda acc, w: acc + [w.upper()], words, [])
+print(result)
 ```
-- A) `add`
-- B) `lambda`
-- C) `<lambda>`
+- A) `['a', 'b', 'c']`
+- B) `['A', 'B', 'C']`
+- C) `ABC`
 - D) Error
 
-Answer: C
+B
 
 **Your answers:**
 ```
@@ -449,279 +399,196 @@ Q8:
 
 ---
 
-## Task 6: PROJECT - Functional Trade Processor
+## Task 6: PROJECT - Strategy Signal Generator with Functional Patterns
 
-**Instructions:** Create a complete trade processing pipeline using functional patterns.
+**Instructions:** Create a signal generator using everything from Week 4.
 
 ```python
 from functools import reduce
 from typing import List, Dict, Callable
 
-# Sample trades
-trades = [
-    {"id": 1, "ticker": "AAPL", "side": "BUY", "entry": 150, "exit": 165, "qty": 10},
-    {"id": 2, "ticker": "GOOGL", "side": "BUY", "entry": 2800, "exit": 2750, "qty": 5},
-    {"id": 3, "ticker": "MSFT", "side": "SELL", "entry": 300, "exit": 280, "qty": 20},
-    {"id": 4, "ticker": "TSLA", "side": "BUY", "entry": 700, "exit": 720, "qty": 8},
-    {"id": 5, "ticker": "NVDA", "side": "SELL", "entry": 500, "exit": 520, "qty": 15},
-]
+prices = [100, 102, 105, 103, 108, 106, 110, 112, 109, 115]
 
-# Part A: Create a function that calculates PnL based on side
-def calculate_pnl(trade: Dict) -> float:
-    """Calculate PnL: BUY = (exit-entry)*qty, SELL = (entry-exit)*qty"""
-    # Your code here (use ternary expression)
+# Part A: Create a closure that generates crossover signals
+def make_level_detector(level: float):
+    """
+    Returns a function that detects when price crosses a level.
+
+    The returned function should:
+    - Accept current_price and previous_price
+    - Return "BUY" if price crosses UP through level
+    - Return "SELL" if price crosses DOWN through level
+    - Return "HOLD" otherwise
+
+    Example:
+        detect_105 = make_level_detector(105)
+        detect_105(106, 104)  # Returns "BUY" (crossed up through 105)
+        detect_105(104, 106)  # Returns "SELL" (crossed down through 105)
+        detect_105(107, 106)  # Returns "HOLD" (didn't cross 105)
+    """
     pass
 
-# Part B: Add PnL to each trade using map
-trades_with_pnl = # Your code using map and calculate_pnl
+# Part B: Use map to create price pairs [(prev, curr), ...]
+# prices[0] has no previous, so start from index 1
+# Result: [(100, 102), (102, 105), (105, 103), ...]
 
-# Part C: Create filter functions
-is_winner = lambda t: # Your code - returns True if pnl > 0
-is_loser = lambda t:  # Your code - returns True if pnl < 0
-is_buy = lambda t:    # Your code - returns True if side == "BUY"
+# Part C: Use the detector + map to generate signals for each pair
 
-# Part D: Get statistics using reduce
-def get_stats(trades_list: List[Dict]) -> Dict:
-    """
-    Calculate: total_pnl, win_count, loss_count, best_trade, worst_trade
-    """
-    if not trades_list:
-        return {}
+# Part D: Use filter to get only BUY and SELL signals (not HOLD)
 
-    total_pnl = # reduce to sum all pnl
-    win_count = # reduce to count winners
-    loss_count = # reduce to count losers
-    best = # reduce to find max pnl trade
-    worst = # reduce to find min pnl trade
+# Part E: Use reduce to count total BUY signals
 
-    return {
-        "total_pnl": total_pnl,
-        "win_count": win_count,
-        "loss_count": loss_count,
-        "best_ticker": best["ticker"],
-        "worst_ticker": worst["ticker"],
-    }
-
-# Test:
-print("All trades with PnL:")
-for t in trades:
-    print(f"  {t['ticker']}: ${t['pnl']}")
-
-print(f"\nWinners: {[t['ticker'] for t in filter(is_winner, trades_with_pnl)]}")
-print(f"Losers: {[t['ticker'] for t in filter(is_loser, trades_with_pnl)]}")
-print(f"BUY trades: {[t['ticker'] for t in filter(is_buy, trades_with_pnl)]}")
-
-stats = get_stats(trades_with_pnl)
-print(f"\nStats: {stats}")
+# Expected behavior:
+# detect_105 = make_level_detector(105)
+# Signals: ['HOLD', 'BUY', 'SELL', 'BUY', 'HOLD', 'HOLD', 'HOLD', 'SELL', 'BUY']
+# Action signals (no HOLD): ['BUY', 'SELL', 'BUY', 'SELL', 'BUY']
+# Total BUY signals: 3
 ```
 
 **Your code:**
 ```python
 
-from functools import reduce
-from typing import List, Dict, Callable
-
-# Sample trades
-trades = [
-    {"id": 1, "ticker": "AAPL", "side": "BUY", "entry": 150, "exit": 165, "qty": 10},
-    {"id": 2, "ticker": "GOOGL", "side": "BUY", "entry": 2800, "exit": 2750, "qty": 5},
-    {"id": 3, "ticker": "MSFT", "side": "SELL", "entry": 300, "exit": 280, "qty": 20},
-    {"id": 4, "ticker": "TSLA", "side": "BUY", "entry": 700, "exit": 720, "qty": 8},
-    {"id": 5, "ticker": "NVDA", "side": "SELL", "entry": 500, "exit": 520, "qty": 15},
-]
-
-def calculate_pnl(trade: Dict) -> float:
-    """Calculate PnL: BUY = (exit-entry)*qty, SELL = (entry-exit)*qty"""
-    # Your code here (use ternary expression)
-    trade['pnl'] = (trade['exit'] - trade['entry']) * trade['qty'] if trade['side'] == 'BUY' else (trade['entry'] - trade['exit']) * trade['qty']
-
-
-for trade in trades:
-    calculate_pnl(trade)
-
-# unnecessary and weird, as I instantly add pnl with a single line in calculate_pnl, but I wanted to try and practice this
-# trades_with_pnl = map(lambda t: {t** 'pnl': calculate_pnl(t)}, trades)
-
-is_winner = lambda t: t['pnl'] > 0
-is_loser = lambda t: t['pnl'] < 0
-is_buy = lambda t: t['side'] == 'BUY'
-
-total_pnl = reduce(lambda acc, t: acc + t['pnl'], trades, 0)
-win_count = reduce(lambda acc, t: acc + 1 if t['pnl'] > 0 else acc, trades, 0)
-loss_count = reduce(lambda acc, t: acc + 1 if t['pnl'] < 0 else acc, trades, 0)
-best = reduce(lambda acc, t: t if t['pnl'] > acc['pnl'] else acc, trades)
-worst = reduce(lambda acc, t: t if t['pnl'] < acc['pnl'] else acc, trades)
-print(best)
-print(worst)
-
-
-def get_stats(trades_list: List[Dict]) -> Dict:
+def make_level_detector(level: float):
     """
-    Calculate: total_pnl, win_count, loss_count, best_trade, worst_trade
+    Returns a function that detects when price crosses a level.
+
+    The returned function should:
+    - Accept current_price and previous_price
+    - Return "BUY" if price crosses UP through level
+    - Return "SELL" if price crosses DOWN through level
+    - Return "HOLD" otherwise
+
+    Example:
+        detect_105 = make_level_detector(105)
+        detect_105(106, 104)  # Returns "BUY" (crossed up through 105)
+        detect_105(104, 106)  # Returns "SELL" (crossed down through 105)
+        detect_105(107, 106)  # Returns "HOLD" (didn't cross 105)
     """
-    if not trades_list:
-        return {}
-
-    total_pnl = reduce(lambda acc, t: acc + t['pnl'], trades, 0)
-    win_count = reduce(lambda acc, t: acc + 1 if t['pnl'] > 0 else acc, trades, 0)
-    loss_count = reduce(lambda acc, t: acc + 1 if t['pnl'] < 0 else acc, trades, 0)
-    best = reduce(lambda acc, t: t if t['pnl'] > acc['pnl'] else acc, trades)
-    worst = reduce(lambda acc, t: t if t['pnl'] < acc['pnl'] else acc, trades)
-
-    return {
-        "total_pnl": total_pnl,
-        "win_count": win_count,
-        "loss_count": loss_count,
-        "best_ticker": best["ticker"],
-        "worst_ticker": worst["ticker"],
-    }
     
-    
-print("All trades with PnL:")
-for t in trades:
-    print(f"  {t['ticker']}: ${t['pnl']}")
+    def generate_signal(current_price: float, previous_price: float):
+        '''Closure used to generate signals based on previous price, current price and the set price level'''
+        if previous_price <= level and current_price >= level:
+            return 'BUY'
+        elif previous_price >= level and current_price <= level:
+            return 'SELL'
+        elif (previous_price >= level and current_price >= level) or (previous_price <= level and current_price <= level):
+            return 'HOLD'
+              
+    return generate_signal
 
-print(f"\nWinners: {[t['ticker'] for t in filter(is_winner, trades)]}")
-print(f"Losers: {[t['ticker'] for t in filter(is_loser, trades)]}")
-print(f"BUY trades: {[t['ticker'] for t in filter(is_buy, trades)]}")
+prices = [100, 102, 105, 103, 108, 106, 110, 112, 109, 115]
 
-stats = get_stats(trades)
-print(f"\nStats: {stats}")
+price_pairs = list(map(lambda i: (prices[i-1], prices[i]), range(1, len(prices))))
+print(price_pairs)
+signals = []
+for price_pair in price_pairs:
+    result = detect_105(price_pair[1], price_pair[0]) #current, previous
+    signals.append(result)
 
-OUTPUT:
+print(signals)
+
+action_signals = list(filter(lambda signal: signal == 'BUY' or signal == 'SELL', signals))
+print(action_signals)
+buy_signals = reduce(lambda acc, x: acc + 1 if x == 'BUY' else acc, action_signals, 0)
+print(buy_signals)
 
 $ python practice.py
-{'id': 3, 'ticker': 'MSFT', 'side': 'SELL', 'entry': 300, 'exit': 280, 'qty': 20, 'pnl': 400}
-{'id': 5, 'ticker': 'NVDA', 'side': 'SELL', 'entry': 500, 'exit': 520, 'qty': 15, 'pnl': -300}
-All trades with PnL:
-  AAPL: $150
-  GOOGL: $-250
-  MSFT: $400
-  TSLA: $160
-  NVDA: $-300
-
-Winners: ['AAPL', 'MSFT', 'TSLA']
-Losers: ['GOOGL', 'NVDA']
-BUY trades: ['AAPL', 'GOOGL', 'TSLA']
-
-Stats: {'total_pnl': 160, 'win_count': 3, 'loss_count': 2, 'best_ticker': 'MSFT', 'worst_ticker': 'NVDA'}
-
-I've used trades and not trades_with_pnl FOR SIMPLICITY, not overoccupying the namespace + generally I think it's much clearer and makes a lot more sense.
+[(100, 102), (102, 105), (105, 103), (103, 108), (108, 106), (106, 110), (110, 112), (112, 109), (109, 115)]
+['HOLD', 'BUY', 'SELL', 'BUY', 'HOLD', 'HOLD', 'HOLD', 'HOLD', 'HOLD']
+['BUY', 'SELL', 'BUY']
+2
 
 
+#And your expectations are wrong, we're not CROSSING any level if the previous and the current price is already above a given level, so we have 2 buy signals and it's logically correct.
 ```
 
 ---
 
-## Task 7: Decorator with functools.wraps
+## Task 7: Decorator Stacking & Order
 
-**Instructions:** Learn about `functools.wraps` - it preserves the original function's metadata.
+**Instructions:** Understand decorator execution order.
 
 ```python
-from functools import wraps
-
-# Without @wraps - function metadata is lost
-def bad_decorator(func):
+def bold(func):
     def wrapper(*args, **kwargs):
-        return func(*args, **kwargs)
+        return f"<b>{func(*args, **kwargs)}</b>"
     return wrapper
 
-@bad_decorator
-def greet(name):
-    """Greets a person by name."""
-    return f"Hello, {name}!"
-
-print(greet.__name__)  # What does this print?
-print(greet.__doc__)   # What does this print?
-```
-
-**Q1:** What does `greet.__name__` print without `@wraps`?
-It prints the wrapper's name as metadata is lost.
-
-**Q2:** What does `greet.__doc__` print without `@wraps`?
-Nothing here, as it prints the wrapper's docstring, and it's empty here.
-
-**Q3:** Now fix the decorator using `@wraps(func)`:
-
-```python
-from functools import wraps
-
-def good_decorator(func):
-    @wraps(func)  # Add this line
+def italic(func):
     def wrapper(*args, **kwargs):
-        return func(*args, **kwargs)
+        return f"<i>{func(*args, **kwargs)}</i>"
     return wrapper
 
-@good_decorator
+@bold
+@italic
 def greet(name):
-    """Greets a person by name."""
-    return f"Hello, {name}!"
+    return f"Hello, {name}"
 
-print(greet.__name__)  # Now what?
-print(greet.__doc__)   # Now what?
+print(greet("World"))
 ```
 
-**Your answers:**
-```
-Q1 (without @wraps): It prints the wrapper's name as metadata is lost.
+**Q1:** What is the output?
+- A) `<b><i>Hello, World</i></b>`
+- B) `<i><b>Hello, World</b></i>`
+- C) `<b>Hello, World</b>`
+- D) `<i>Hello, World</i>`
+
+B
+
+**Q2:** In what order are the decorators applied?
+- A) bold first, then italic
+- B) italic first, then bold
+- C) Both at the same time
+- D) Depends on Python version
 
 
-Q2 (without @wraps): Nothing here, as it prints the wrapper's docstring, and it's empty here.
+A
 
-Q3 (with @wraps):
-__name__: greet
-__doc__: Greets a person by name.
-```
+**Q3:** If we changed it to `@italic @bold`, what would the output be?
 
----
-
-## Task 8: Integration - Putting It All Together
-
-**Instructions:** Answer these conceptual questions about when to use what.
-
-**Q1:** When would you use `map()` vs a list comprehension?
-```python
-# Option A: map
-result = list(map(lambda x: x * 2, numbers))
-
-# Option B: list comprehension
-result = [x * 2 for x in numbers]
-
-Answer: I would honestly use list comprehensions in most cases and it's easier to read and understand and would probably be in most cases.
-```
-
-**Q2:** When would you use `filter()` vs a list comprehension with `if`?
-```python
-# Option A: filter
-result = list(filter(lambda x: x > 0, numbers))
-
-# Option B: list comprehension
-result = [x for x in numbers if x > 0]
-
-Same case as above, I'd rather use list comprehensions - it's more Pythonic and readable.
-```
-
-**Q3:** When would you use a closure vs a class?
-
-I'd use class in 90% cases - closures mostly for very simple cases or to show I understand how they work.
-
-**Q4:** When would you use `reduce()` vs a simple loop?
-Reduce seems a good alternative - it's a one-liner and a great way to quickly sum PNLs, find the best/worst/ any particular data value - that's very useful and also more Pythonic than a loop in many cases and it takes less space.
-
-**Q5:** What's the main advantage of decorators?
-They allow you to wrap a function with them to add additional information - they also allow to keep the original function's metadata if we use wraps.
+`<b><i>Hello, World</i></b>`
 
 **Your answers:**
 ```
 Q1:
-
 Q2:
-
 Q3:
+```
 
-Q4:
+---
 
-Q5:
+## Task 8: Week 4 Self-Assessment & Exam Readiness
+
+**Instructions:** Rate yourself honestly (1-5 scale) and identify weak spots.
+
+| Concept | Rating (1-5) | Confident for Exam? |
+|---------|--------------|---------------------|
+| Lambda syntax - 4 - depends on the context
+| Lambda with defaults 4-5 - depends on the context
+| Late binding trap 4.5
+| Late binding fix 2 - I don't get it yet, would appreciate a simple task with a few simple examples
+| map() returns - 3, This is really weird and unnatural for me, I'd use list comprehension in 9/10 cases if I had a choice myself
+| filter() returns - 3, same as above, definitely needs practice
+| filter(None, ...) - 3, same as above - I find it unnatural, as normally we use filter to identify things with that feature and here we kinda elliminate them
+| reduce() with initializer - 5, it's pretty easyt for me
+| reduce() without initializer - 5, same - it makes the most sense out of lambda/map/filter concepts and I will likely use it
+| Closure definition - 4, I could mix it up If I were to combine several functions within a closure
+| nonlocal keyword - 5, I get it
+| Factory functions - 3-4 - if we get 3 levels of nesting it gets really weird and I'm getting lost
+| Basic decorators - 3-4, not feeling confident - too much output prediciton, not too much actual decorator creating practice - I'd appreciate that,  from simple exampl;es to more difficult, especially if it's PCAP relevant and mid-senior devs relevant
+| Decorators with args - same as above
+| functools.wraps - 3, same as above, I totally get the idea but could have issues applying it without looking it up
+| Decorator stacking order - IDK, it's first time we stack decorators today
+
+**Topics I need to review before the exam:**
+```
+1.
+2.
+3.
+```
+
+**Questions I still have:**
+```
 
 ```
 
@@ -729,14 +596,14 @@ Q5:
 
 ## Solutions Checklist
 
-- [ ] Task 1: Quick fire review (10 questions)
-- [ ] Task 2: Output predictions (6 snippets)
-- [ ] Task 3: Debug the decorator
-- [ ] Task 4: Closure state challenge
+- [ ] Task 1: Lambda expressions (6 questions)
+- [ ] Task 2: Closure deep dive (4 questions)
+- [ ] Task 3: map/filter/reduce pipeline
+- [ ] Task 4: Decorator with arguments
 - [ ] Task 5: PCAP multiple choice (8 questions)
-- [ ] Task 6: PROJECT - Functional trade processor
-- [ ] Task 7: functools.wraps
-- [ ] Task 8: Integration concepts (5 questions)
+- [ ] Task 6: PROJECT - Signal generator
+- [ ] Task 7: Decorator stacking order
+- [ ] Task 8: Self-assessment
 
 ---
 
@@ -746,8 +613,8 @@ Q5:
 
 **Difficulty (1-10):**
 
-**Ready for Friday's exams?**
-[ ] Yes
+**Ready for weekend exams?**
+[ ] Yes - bring them on!
 [ ] Need more practice on: _______________
 
 **Questions for mentor:**
@@ -755,4 +622,4 @@ Q5:
 
 ---
 
-**When complete:** Notify me for assessment. Friday = 2 PCAP Mock Exams!
+**When complete:** Notify me for assessment. Weekend = 2 PCAP Mock Exams (30 questions each)!
