@@ -1,63 +1,44 @@
-# Weekend Exam Feedback Template
+# Daily Feedback - Week 5, Day 2
 
-**Date:** 2026-01-30 to 2026-02-01
-**Week:** 4 | **Weekend Exams**
-**Exams:** Week4_Exam_A.md & Week4_Exam_B.md
+**Date:** 2026-02-03
 
----
-
-## Exam A Self-Assessment
-
-**Time spent:** ___ minutes
-
-**Score:** ___/30
-
-**Confidence level before checking answers:**
-[ ] Very confident
-[ ] Somewhat confident
-[ ] Uncertain
-
-**Questions you found tricky:**
-
-
-**Questions you guessed on:**
-
+**Topic:** datetime Practice & File I/O Applications
 
 ---
 
-## Exam B Self-Assessment
+## Self-Assessment
 
-**Time spent:** ___ minutes
+**Tasks Completed:** ___ / 8
 
-**Score:** ___/30
+**Time Spent:** ___ minutes
 
-**Confidence level before checking answers:**
-[ ] Very confident
-[ ] Somewhat confident
-[ ] Uncertain
+**Difficulty Rating (1-10):**
 
-**Questions you found tricky:**
+---
+
+## Reflection
+
+**What clicked today:**
 
 
-**Questions you guessed on:**
+**What's still confusing:**
+
+
+**What I want to practice more:**
 
 
 ---
 
-## Post-Exam Reflection
-
-**1. Topics that went well:**
-
-
-**2. Topics that need more review:**
-
-
-**3. Patterns/traps you fell for:**
-
-
-**4. Questions for mentor:**
+## Questions for Mentor
 
 
 ---
 
-**Instructions:** Complete both exams, then fill this out before submitting for grading. I'll assess both exams and provide detailed feedback.
+## Project Progress
+
+**TradeLogger enhancements:**
+
+
+---
+
+**When complete:** Submit for mentor review.

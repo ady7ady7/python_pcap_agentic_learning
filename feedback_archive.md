@@ -2378,3 +2378,87 @@ Agreed. Task 7 showed this gap. For weekend study:
 
 ---
 
+## Week 5, Day 1 - 2026-02-02
+
+**Topic:** datetime Module & File I/O Basics
+
+### Mentor Assessment
+
+**Score: 89% (B+)**
+
+**Task Breakdown:**
+
+| Task | Score | Notes |
+|------|-------|-------|
+| 1. datetime basics | 100% | All 6 questions correct |
+| 2. File reading methods | 60% | Used `/n` instead of `\n`, missed list format for readlines() |
+| 3. File writing practice | 100% | Correct use of 'w', 'a' modes and context managers |
+| 4. File mode traps | 100% | Perfect understanding of 'w' vs 'a' and FileNotFoundError |
+| 5. TradeLogger class | 85% | Functional but format deviations, includes `\n` in output |
+| 6. PCAP multiple choice | 100% | All 8 correct, including write() return value |
+| 7. Context managers | 70% | Incomplete exception explanation, missing variable assignment |
+| 8. datetime edge cases | 100% | Leap year and default values correct |
+
+### Detailed Corrections
+
+**Task 2 - File Reading Methods:**
+
+1. **Notation:** Use `\n` (backslash), not `/n` (forward slash)
+2. **readline():** Returns `'line1\n'` - includes the newline character
+3. **readlines():** Returns a **LIST**: `['line1\n', 'line2\n', 'line3']`
+4. **Memory efficiency:** Iterating over file object is BEST:
+   ```python
+   for line in f:  # Reads one line at a time
+       process(line)
+   ```
+
+**Task 5 - TradeLogger:**
+
+1. **Timestamp format:** Use `.strftime()` to avoid microseconds:
+   ```python
+   datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+   ```
+2. **get_trades():** Strip newlines:
+   ```python
+   trade_list.append(line.strip())
+   ```
+3. **Format string:** Used `||` instead of spec's `|` (minor)
+
+**Task 6 Q2 Explanation:**
+`f.write('Hello')` returns `5` because `write()` returns the number of characters written. This is useful for verifying writes or tracking file position.
+
+**Task 7 - Context Managers:**
+
+1. **Q2 incomplete:** File IS closed despite exception, THEN exception propagates. `'start'` is written, `'end'` is not.
+2. **Q3 missing assignment:**
+   ```python
+   with open('data.txt', 'r') as f:
+       content = f.read()  # You wrote just f.read()
+   ```
+
+### Strengths
+- ✅ Excellent datetime understanding (strftime/strptime distinction)
+- ✅ Perfect file mode knowledge (PCAP traps nailed)
+- ✅ Strong PCAP multiple choice (100%)
+- ✅ TradeLogger is fully functional
+- ✅ Edge cases handled well (leap year, defaults)
+
+### Areas for Improvement
+- ⚠️ File method return types (especially readlines → list)
+- ⚠️ Context manager exception behavior (file closes THEN exception raises)
+- ⚠️ Including `\n` in strings from file reads
+
+### Student Feedback Addressed
+
+**"More practice-based tasks"**
+Day 2 will include:
+- Hands-on datetime manipulation exercises
+- File I/O coding challenges (not just theory)
+- Build on TradeLogger with new features
+- Integration with past concepts (closures, properties)
+
+**"datetime needs reinforcement"**
+Agreed. Day 2 will focus on practical datetime scenarios used in trading systems.
+
+---
+

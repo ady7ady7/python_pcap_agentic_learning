@@ -792,9 +792,47 @@ Task 8 expected values were wrong. Correct: 4 winners, $1050 total PnL.
 **Week 4 Average: 90.2% (A-)**
 
 **Weekend Tasks:**
-- PCAP Mock Exam A (30 questions)
-- PCAP Mock Exam B (30 questions)
-- Target: 70%+ (21/30) on each
+- PCAP Mock Exam A (30 questions) - 93.3%
+- PCAP Mock Exam B (30 questions) - 86.7%
+- Average: 90%
+
+---
+
+## Week 5, Day 1 - 2026-02-02 (Monday)
+
+**Topic:** datetime Module & File I/O Basics
+**Score:** 89% (B+)
+**Difficulty:** 5/10
+**Time Spent:** 70 minutes
+
+**Tasks Completed:**
+1. datetime basics (6 questions - 6/6)
+2. File reading methods (4 questions - 2.5/4)
+3. File writing practice (3 parts - 3/3)
+4. File mode PCAP traps (4 questions - 4/4)
+5. PROJECT: TradeLogger class (functional, minor deviations)
+6. PCAP multiple choice (8 questions - 8/8)
+7. Context manager understanding (3 questions - 2/3)
+8. datetime edge cases (3 questions - 3/3)
+
+**Key Learnings:**
+- weekday() (0-6) vs isoweekday() (1-7)
+- strftime (datetime→string) vs strptime (string→datetime)
+- timedelta arithmetic
+- File modes: 'w' overwrites, 'a' appends, 'x' creates (fails if exists)
+- read() vs readline() vs readlines() - different return types
+- Context managers ensure cleanup even on exception
+
+**Areas Needing Practice:**
+- readline() includes `\n` character
+- readlines() returns LIST of strings
+- Context manager exception behavior (file closes, exception propagates)
+- strftime timestamp formatting (avoid microseconds)
+
+**Student Feedback:**
+- Wants more practice-based tasks (less theory)
+- datetime module needs reinforcement through coding
+- Requested past concept integration (1-2 tasks)
 
 ---
 

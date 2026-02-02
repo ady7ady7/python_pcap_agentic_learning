@@ -1,17 +1,19 @@
-# Week 3: Useful Standard Library Modules
+# Weeks 3-5: Standard Library Modules & File I/O
 
-This lesson covers several useful modules from Python's standard library. These are **built-in** - no installation required.
+This lesson covers essential modules from Python's standard library. These are **built-in** - no installation required.
 
 ---
 
 ## Table of Contents
 
-| Module | Description | Line |
-|--------|-------------|------|
-| [`random`](#the-random-module) | Pseudo-random number generation | ~20 |
-| [`platform`](#the-platform-module) | System and hardware information | ~160 |
-| [`sys`](#the-sys-module) | Python interpreter interaction | ~280 |
-| [`os`](#the-os-module) | Operating system interaction | ~380 |
+| Module | Description |
+|--------|-------------|
+| [`random`](#the-random-module) | Pseudo-random number generation |
+| [`platform`](#the-platform-module) | System and hardware information |
+| [`sys`](#the-sys-module) | Python interpreter interaction |
+| [`os`](#the-os-module) | Operating system interaction |
+| [`datetime`](#the-datetime-module) | Date and time manipulation |
+| [File I/O](#file-io) | Reading and writing files |
 
 ---
 
@@ -647,6 +649,267 @@ if __name__ == '__main__':
 
 ---
 
+---
+
+## The `datetime` Module
+
+The `datetime` module provides classes for working with dates and times.
+
+```python
+from datetime import date, time, datetime, timedelta
+```
+
+### `date` - Date Objects
+
+```python
+from datetime import date
+
+# Create a date
+d = date(2026, 2, 2)  # year, month, day
+print(d)  # 2026-02-02
+
+# Today's date
+today = date.today()
+
+# Access components
+print(today.year)   # 2026
+print(today.month)  # 2
+print(today.day)    # 2
+
+# Day of week (Monday = 0, Sunday = 6)
+print(today.weekday())     # 0 (Monday)
+print(today.isoweekday())  # 1 (Monday = 1)
+```
+
+### `time` - Time Objects
+
+```python
+from datetime import time
+
+# Create a time
+t = time(14, 30, 45)  # hour, minute, second
+print(t)  # 14:30:45
+
+# Access components
+print(t.hour)    # 14
+print(t.minute)  # 30
+print(t.second)  # 45
+```
+
+### `datetime` - Combined Date and Time
+
+```python
+from datetime import datetime
+
+# Create datetime
+dt = datetime(2026, 2, 2, 14, 30, 45)
+print(dt)  # 2026-02-02 14:30:45
+
+# Current datetime
+now = datetime.now()
+
+# From timestamp (Unix time)
+dt = datetime.fromtimestamp(1738500000)
+
+# To timestamp
+ts = now.timestamp()
+```
+
+### `strftime` and `strptime` - Formatting
+
+```python
+from datetime import datetime
+
+now = datetime.now()
+
+# strftime = "string format time" → datetime to string
+formatted = now.strftime("%Y-%m-%d %H:%M:%S")
+# '2026-02-02 14:30:45'
+
+# strptime = "string parse time" → string to datetime
+dt = datetime.strptime("2026-02-02", "%Y-%m-%d")
+
+# Common format codes:
+# %Y - 4-digit year (2026)
+# %m - 2-digit month (02)
+# %d - 2-digit day (02)
+# %H - 24-hour (14)
+# %M - minute (30)
+# %S - second (45)
+# %A - weekday name (Monday)
+# %B - month name (February)
+```
+
+**PCAP Trap:** `strftime` vs `strptime`
+- strftime = **f**ormat → datetime to string
+- strptime = **p**arse → string to datetime
+
+### `timedelta` - Date Arithmetic
+
+```python
+from datetime import datetime, timedelta
+
+now = datetime.now()
+
+# Create timedelta
+delta = timedelta(days=7, hours=3, minutes=30)
+
+# Add/subtract
+future = now + delta
+past = now - delta
+
+# Difference between datetimes
+dt1 = datetime(2026, 2, 10)
+dt2 = datetime(2026, 2, 2)
+diff = dt1 - dt2
+print(diff.days)  # 8
+print(diff.total_seconds())  # 691200.0
+```
+
+### `datetime` Quick Reference
+
+| Class/Function | Description | Example |
+|----------------|-------------|---------|
+| `date(y, m, d)` | Create date | `date(2026, 2, 2)` |
+| `date.today()` | Current date | `date(2026, 2, 2)` |
+| `time(h, m, s)` | Create time | `time(14, 30, 45)` |
+| `datetime(...)` | Create datetime | `datetime(2026, 2, 2, 14, 30)` |
+| `datetime.now()` | Current datetime | Current timestamp |
+| `strftime(fmt)` | Format to string | `"%Y-%m-%d"` |
+| `strptime(s, fmt)` | Parse from string | String to datetime |
+| `timedelta(...)` | Duration | `timedelta(days=7)` |
+
+---
+
+## File I/O
+
+### Opening Files - The `with` Statement
+
+```python
+# ALWAYS use context manager (auto-closes file)
+with open('file.txt', 'r') as f:
+    content = f.read()
+# File automatically closed here
+
+# WITHOUT context manager (NOT recommended)
+f = open('file.txt', 'r')
+content = f.read()
+f.close()  # Easy to forget!
+```
+
+### File Modes
+
+```python
+'r'   # Read (default) - file must exist
+'w'   # Write - creates new or TRUNCATES existing
+'a'   # Append - creates new or appends to existing
+'x'   # Exclusive create - fails if file exists
+
+'rb'  # Read binary
+'wb'  # Write binary
+
+'r+'  # Read and write (file must exist)
+'w+'  # Write and read (truncates)
+```
+
+### Reading Files
+
+```python
+# Read entire file as string
+with open('file.txt', 'r') as f:
+    content = f.read()
+
+# Read specific number of characters
+with open('file.txt', 'r') as f:
+    chunk = f.read(100)  # First 100 chars
+
+# Read one line (includes \n!)
+with open('file.txt', 'r') as f:
+    line = f.readline()
+
+# Read all lines as list
+with open('file.txt', 'r') as f:
+    lines = f.readlines()  # ['line1\n', 'line2\n', ...]
+
+# Iterate line by line (MEMORY EFFICIENT!)
+with open('file.txt', 'r') as f:
+    for line in f:
+        print(line.strip())  # Remove trailing \n
+```
+
+### Writing Files
+
+```python
+
+#We can create an empty file like that - using w.write() WOULD cause a TypeError
+with open(self.filepath, 'w') as w:
+    pass
+
+# Write string
+#Also remember that 'w' mode OVERWRITES previous data - so we might consider using append if we want to add content
+with open('file.txt', 'w') as f:
+    f.write('Hello, World!\n')
+
+# Write multiple lines
+with open('file.txt', 'w') as f:
+    lines = ['line1\n', 'line2\n', 'line3\n']
+    f.writelines(lines)  # Does NOT add \n automatically!
+
+# Append to file
+with open('file.txt', 'a') as f:
+    f.write('Appended line\n')
+```
+
+### File Position
+
+```python
+with open('file.txt', 'r') as f:
+    pos = f.tell()  # Get current position (0 at start)
+
+    f.read(10)
+    pos = f.tell()  # Now 10
+
+    f.seek(0)       # Go back to start
+    f.seek(0, 2)    # Go to end (offset 0 from end)
+```
+
+### PCAP Traps - File I/O
+
+```python
+# TRAP 1: read() vs readline() vs readlines()
+f.read()       # Entire file as ONE string
+f.readline()   # ONE line (with \n)
+f.readlines()  # ALL lines as list
+
+# TRAP 2: writelines() does NOT add newlines
+f.writelines(['a', 'b', 'c'])  # Writes 'abc', not 'a\nb\nc\n'
+
+# TRAP 3: 'w' mode TRUNCATES existing files
+with open('existing.txt', 'w') as f:  # File is now EMPTY
+    f.write('new content')
+
+# TRAP 4: readline() includes \n
+line = f.readline()  # 'hello\n'
+line = line.strip()  # 'hello' (use strip() to remove)
+```
+
+### File I/O Quick Reference
+
+| Function | Description | Returns |
+|----------|-------------|---------|
+| `open(path, mode)` | Open file | File object |
+| `f.read()` | Read entire file | String |
+| `f.read(n)` | Read n characters | String |
+| `f.readline()` | Read one line | String (with \n) |
+| `f.readlines()` | Read all lines | List of strings |
+| `f.write(s)` | Write string | Number of chars |
+| `f.writelines(lst)` | Write list of strings | None |
+| `f.tell()` | Get position | Integer |
+| `f.seek(pos)` | Move to position | New position |
+| `f.close()` | Close file | None |
+
+---
+
 ## PCAP Traps - All Modules
 
 1. **`sys.argv[0]`** is the script name, not the first argument
@@ -655,3 +918,7 @@ if __name__ == '__main__':
 4. **`os.makedirs()`** creates all intermediate directories, `os.mkdir()` doesn't
 5. **`os.rmdir()`** only works on EMPTY directories
 6. **`os.environ.get()`** is safer than `os.environ[]` (returns None vs raises KeyError)
+7. **`strftime`** = format (dt→str), **`strptime`** = parse (str→dt)
+8. **`f.read()`** reads entire file, **`f.readline()`** reads ONE line
+9. **`f.writelines()`** does NOT add newlines automatically
+10. **`'w'` mode TRUNCATES** existing files - use `'a'` to append

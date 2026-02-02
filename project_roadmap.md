@@ -6,72 +6,73 @@
 
 ---
 
-## Phase 1: Foundations & Data (Weeks 1-3)
+## Phase 1: Foundations & Data (Weeks 1-3) ✅ COMPLETE
 
-### Week 1: Project Setup ✅ COMPLETE
+### Week 1: Project Setup ✅
 - [x] Create package structure (`algo_backtest/`, `data/`, `engine/`, `strategies/`)
 - [x] Setup `requirements.txt` (Pandas, NumPy)
 - [x] Create `main.py` entry point
 - [x] Version tracking in `__init__.py`
 
-### Week 2: OOP Foundations ✅ COMPLETE
+### Week 2: OOP Foundations ✅
 - [x] Inheritance & Polymorphism (BaseStrategy ABC)
 - [x] LevelCrossStrategy & MovingAverageStrategy
 - [x] @classmethod for position sizing
 - [x] `Position` class with SL/TP, PnL calculation, `should_close()`
 - [x] `calculate_position_size` classmethod
 
-### Week 3: Encapsulation & Trade Class (CURRENT)
-- [ ] `Trade` class with encapsulated PnL (using @property)
-- [ ] Protected/private attributes (`_protected`, `__private`)
-- [ ] Property decorators for controlled access
-- [ ] Position-to-Trade conversion workflow
-- [ ] Unit tests for Trade class
+### Week 3: Encapsulation & Properties ✅
+- [x] `Trade` class with encapsulated PnL (using @property)
+- [x] Protected/private attributes (`_protected`, `__private`)
+- [x] Property decorators for controlled access
+- [x] `TradeManager` class with dunder methods
+- [x] Portfolio class
 
 ---
 
 ## Phase 2: The Engine (Weeks 4-6)
 
-### Week 4: Strategy Architecture
-- [ ] `Strategy` Abstract Base Class (ABC)
-- [ ] Define `entry_condition(price)` abstract method
-- [ ] Define `exit_condition(price, sl, tp)` abstract method
-- [ ] Implement `LevelCrossStrategy` (inherits from Strategy)
+### Week 4: Functional Programming ✅ COMPLETE
+- [x] Lambda functions & closures
+- [x] map(), filter(), reduce()
+- [x] Decorators with/without arguments
+- [x] Signal generator with functional patterns
 
-### Week 5: Backtesting Engine
+### Week 5: BacktestEngine & File I/O (CURRENT)
 - [ ] `BacktestEngine` class
+- [ ] File I/O: Load CSV data, save results
 - [ ] Private attribute `__pnl` (encapsulation)
-- [ ] Method: `simulate_trades(data, strategy)`
-- [ ] Event loop: check triggers row-by-row
+- [ ] Method: `run(data, strategy)` → simulates trades
+- [ ] Trade logging to file
 
 ### Week 6: Event-Driven Architecture
 - [ ] Convert DataFrame to generator (yield row as namedtuple)
 - [ ] Implement tick-by-tick simulation
-- [ ] Log trade execution events
+- [ ] Performance metrics calculation
 
 ---
 
 ## Phase 3: Polish & Documentation (Weeks 7-8)
 
-### Week 7: Logging & Debugging
+### Week 7: Logging & Standard Library
 - [ ] Add Python `logging` module
 - [ ] Log: Trade opened, SL hit, TP hit, Trade closed
+- [ ] datetime for trade timestamps
 - [ ] Error handling for edge cases
 
 ### Week 8: Finalization
 - [ ] Add docstrings to all classes/methods
-- [ ] Generate performance charts (optional: matplotlib)
+- [ ] Complete backtest with real strategy
 - [ ] Final project demo script
 
 ---
 
-## Strategies to Implement (Priority Order)
+## Strategies Implemented
 
-1. **LevelCrossStrategy:** Enter when price crosses X, exit at SL/TP
-2. **TouchAndRetraceStrategy:** Enter on level touch + pullback confirmation
-3. **RangeBreakoutStrategy:** Enter on breakout above/below defined range
+1. **LevelCrossStrategy** ✅ - Enter when price crosses level
+2. **MovingAverageStrategy** ✅ - Enter on MA crossover signals
 
 ---
 
-**Current Status:** Week 3, Day 1 - Encapsulation & Trade Class
-**Last Updated:** 2026-01-19
+**Current Status:** Week 5, Day 1 - BacktestEngine & File I/O
+**Last Updated:** 2026-02-02

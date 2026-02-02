@@ -1,9 +1,9 @@
-# Week 4, Day 5 - Friday
-## Topic: Final Functional Programming Review & Exam Prep
+# Week 5, Day 2 - Tuesday
+## Topic: datetime Practice & File I/O Applications
 
-**Date:** 2026-01-30
+**Date:** 2026-02-03
 
-**Purpose:** Final PCAP drills before weekend exams. Master Week 4 functional patterns.
+**Lesson File:** [week3_5_stdlib_fileio.md](lessons/week3_5_stdlib_fileio.md)
 
 **Target Difficulty:** 5/10
 
@@ -11,379 +11,321 @@
 
 ---
 
-## Task 1: Lambda Expression Mastery (6 Questions)
+## Task 1: datetime Coding Practice (No Theory!)
 
-**Instructions:** Answer quickly - these are classic PCAP traps.
+**Instructions:** Write working code for each scenario. Run and verify.
 
-**Q1:** What is the output?
+**Part A:** Create a function that calculates how many days until a given date.
 ```python
-f = lambda x, y, z=3: x + y * z
-print(f(1, 2))
+from datetime import date
 
-7
+def days_until(target_year: int, target_month: int, target_day: int) -> int:
+    """Return number of days from today until target date. Negative if past."""
+    # Your code:
+
+# Test:
+# print(days_until(2026, 12, 31))  # Days until end of year
+# print(days_until(2026, 1, 1))    # Days since start of year (negative)
 ```
 
-**Q2:** What is the output?
+**Part B:** Create a function that formats a timestamp for trade logging.
 ```python
-funcs = [(lambda x: x + i) for i in range(3)]
-print(funcs[0](10), funcs[1](10), funcs[2](10))
+from datetime import datetime
 
-12, 12, 12
+def format_trade_timestamp(dt: datetime) -> str:
+    """Return timestamp as 'YYYY-MM-DD HH:MM:SS' string."""
+    # Your code (use strftime):
+
+# Test:
+# print(format_trade_timestamp(datetime(2026, 2, 14, 10, 30, 45)))
+# Expected: "2026-02-14 10:30:45"
 ```
 
-**Q3:** What is the output?
+**Part C:** Create a function that parses a date string from CSV data.
 ```python
-funcs = [(lambda x, i=i: x + i) for i in range(3)]
-print(funcs[0](10), funcs[1](10), funcs[2](10))
+from datetime import datetime
 
-10, 11, 12
-```
+def parse_csv_date(date_str: str) -> datetime:
+    """Parse date string in format 'DD/MM/YYYY' to datetime object."""
+    # Your code (use strptime):
 
-**Q4:** Which is valid?
-- A) `lambda x: return x + 1`
-- B) `lambda x: x + 1`
-- C) `lambda: x = 5`
-- D) `lambda x: print(x); x + 1`
-
-B
-
-**Q5:** What is the output?
-```python
-result = (lambda: (lambda x: x * 2)(5))()
-print(result)
-
-10
-```
-
-**Q6:** What is the output?
-```python
-g = lambda *args: sum(args)
-print(g(1, 2, 3, 4))
-
-10
-```
-
-**Your answers:**
-```
-Q1:
-Q2:
-Q3:
-Q4:
-Q5:
-Q6:
-```
-
----
-
-## Task 2: Closure Deep Dive (4 Questions)
-
-**Instructions:** Trace the execution carefully.
-
-**Q1:** What is the output?
-```python
-def outer(n):
-    def inner(x):
-        return x ** n
-    return inner
-
-square = outer(2)
-cube = outer(3)
-print(square(4) + cube(2))
-
-Answer: 24
-```
-
-**Q2:** What is the output?
-```python
-def counter():
-    count = 0
-    def increment():
-        nonlocal count
-        count += 1
-        return count
-    def get():
-        return count
-    return increment, get
-
-inc, get = counter()
-print(inc(), inc(), get())
-
-
-Answer: 1, 2, 2
-```
-
-**Q3:** What is the output?
-```python
-def make_multipliers():
-    return [lambda x, i=i: x * i for i in range(4)]
-
-mults = make_multipliers()
-print(mults[2](10))
-
-Answer: 20
-```
-
-**Q4:** What is printed?
-```python
-def factory(start):
-    value = start
-    def add(x):
-        nonlocal value
-        value += x
-        return value
-    return add
-
-adder1 = factory(10)
-adder2 = factory(100)
-print(adder1(5), adder2(5), adder1(5))
-
-Answer: 15, 105, 20
-```
-
-**Your answers:**
-```
-Q1:
-Q2:
-Q3:
-Q4:
-```
-
----
-
-## Task 3: map/filter/reduce Pipeline
-
-**Instructions:** Build a complete data processing pipeline.
-
-```python
-from functools import reduce
-
-transactions = [
-    {"id": 1, "type": "BUY", "amount": 1000, "fee": 10},
-    {"id": 2, "type": "SELL", "amount": 500, "fee": 5},
-    {"id": 3, "type": "BUY", "amount": 2000, "fee": 20},
-    {"id": 4, "type": "SELL", "amount": 800, "fee": 8},
-    {"id": 5, "type": "BUY", "amount": 300, "fee": 3},
-]
-
-# Part A: Use map to add net_amount (amount - fee) to each transaction
-# HINT: Create a function that returns a NEW dict with net_amount added
-
-# Part B: Use filter to get only BUY transactions with net_amount > 500
-
-# Part C: Use reduce to calculate total net_amount of filtered transactions
-
-# Expected output:
-# All transactions with net_amount: [990, 495, 1980, 792, 297]
-# Filtered BUY transactions: [id=1, id=3]
-# Total net amount: 2970
+# Test:
+# dt = parse_csv_date("14/02/2026")
+# print(dt.year, dt.month, dt.day)  # 2026 2 14
 ```
 
 **Your code:**
 ```python
 
-result = list(map(lambda t: {**t, 'net_amount': t['amount'] - t['fee']}, transactions))
-
-
-new_trades = [] #Look, adding a new dict would be absolutely retarded, as we'd have to have a key for each trade, which doesn't make sense imo.
-for transaction in result:
-    new_trades.append(transaction)
-    
-filtered_buys = [t for t in new_trades if t['type'] == 'BUY' and t['net_amount'] > 500] #started with this, much simpler approach, but then I read your instructions and used filter below
-filtered_buys = list(filter(lambda t: t['type'] == 'BUY' and t['net_amount'] > 500, new_trades))
-print(filtered_buys)
-
-total_net_amount = reduce(lambda acc, t: acc + t['net_amount'], filtered_buys, 0)
-print(total_net_amount)
-
-
 ```
 
 ---
 
-## Task 4: Decorator with Arguments
+## Task 2: File I/O Coding Practice
 
-**Instructions:** Create a decorator that accepts arguments.
+**Instructions:** Write and run each exercise. Create actual files.
 
+**Part A:** Write a function that counts lines in a file.
 ```python
-def repeat(times):
-    """
-    Decorator that runs a function multiple times.
+def count_lines(filepath: str) -> int:
+    """Return the number of lines in a file."""
+    # Your code:
 
-    Example:
-        @repeat(3)
-        def say_hello():
-            print("Hello!")
+# Test with any file you have
+```
 
-        say_hello()
-        # Output:
-        # Hello!
-        # Hello!
-        # Hello!
-    """
-    # Your code here
-    pass
+**Part B:** Write a function that reads a file and returns non-empty lines only.
+```python
+from typing import List
 
-# Test 1: Basic
-@repeat(3)
-def greet(name):
-    print(f"Hi, {name}!")
+def read_non_empty_lines(filepath: str) -> List[str]:
+    """Return list of non-empty lines (stripped, no blank lines)."""
+    # Your code:
 
-greet("Alice")
+# Test: Create a file with some blank lines, then read it
+```
 
-# Test 2: With return value (should return last result)
-@repeat(2)
-def double(x):
-    print(f"Doubling {x}")
-    return x * 2
+**Part C:** Write a function that appends a timestamped entry to a log file.
+```python
+from datetime import datetime
 
-result = double(5)
-print(f"Final result: {result}")
+def log_entry(filepath: str, message: str) -> None:
+    """Append '[YYYY-MM-DD HH:MM:SS] message' to file."""
+    # Your code:
+
+# Test:
+# log_entry("app.log", "Application started")
+# log_entry("app.log", "User logged in")
+# Then read and print the file contents
 ```
 
 **Your code:**
 ```python
 
-def repeat(times):
+```
+
+---
+
+## Task 3: CLOSURE + datetime Integration
+
+**Instructions:** Combine closures with datetime (Week 4 + Week 5).
+
+**Part A:** Create a `make_date_formatter` factory function.
+```python
+from datetime import datetime
+
+def make_date_formatter(format_string: str):
     """
-    Decorator that runs a function multiple times.
+    Return a function that formats datetime objects using the given format.
 
     Example:
-        @repeat(3)
-        def say_hello():
-            print("Hello!")
+        us_format = make_date_formatter("%m/%d/%Y")
+        eu_format = make_date_formatter("%d/%m/%Y")
 
-        say_hello()
-        # Output:
-        # Hello!
-        # Hello!
-        # Hello!
+        dt = datetime(2026, 2, 14)
+        print(us_format(dt))  # "02/14/2026"
+        print(eu_format(dt))  # "14/02/2026"
     """
-    
-    def decorator(func):
-        def wrapper(*args, **kwargs):
-            for i in range(times):
-                result = func(*args, **kwargs)
-            return result
-        return wrapper
-    return decorator
+    # Your code:
 
-#Although please mind, that this was very fdifficult and unintuitive for me and I had to check for materials.
-#I'd like to practice decorators more, especially if they're PCAP relevant and generally used in Mid-Senior level programming or a good practice
+# Test with different formats
+```
+
+**Part B:** Create a `make_time_tracker` closure that tracks elapsed time.
+```python
+from datetime import datetime
+
+def make_time_tracker():
+    """
+    Return a function that returns seconds elapsed since tracker was created.
+
+    Example:
+        tracker = make_time_tracker()
+        # ... do some work ...
+        print(tracker())  # e.g., 2.5 (seconds elapsed)
+    """
+    # Your code (hint: store start_time in closure):
+
+# Test by creating tracker, sleeping briefly, then calling it
+```
+
+**Your code:**
+```python
 
 ```
 
 ---
 
-## Task 5: PCAP Multiple Choice (8 Questions)
+## Task 4: TradeLogger Enhancement (PROJECT)
 
-**Q1:** What does `map(str, [1, 2, 3])` return?
-- A) `['1', '2', '3']`
-- B) `<map object>`
-- C) `('1', '2', '3')`
+**Instructions:** Extend your TradeLogger from Day 1 with new features.
+
+```python
+from datetime import datetime, timedelta
+from typing import List, Optional
+
+class TradeLogger:
+    """
+    Enhanced TradeLogger with filtering capabilities.
+
+    New methods to implement:
+    1. get_trades_since(dt: datetime) -> List[str]
+       - Return only trades logged after the given datetime
+       - Hint: You'll need to parse the timestamp from each line
+
+    2. get_trades_by_symbol(symbol: str) -> List[str]
+       - Return only trades for a specific symbol (e.g., "AAPL")
+
+    3. get_trade_count() -> int
+       - Return total number of trades logged
+
+    Keep existing methods: __init__, log_trade, get_trades, clear_log
+    """
+
+    def __init__(self, filepath: str):
+        # Your existing code
+        pass
+
+    def log_trade(self, symbol: str, side: str, price: float, quantity: int):
+        # Your existing code (fix format if needed)
+        pass
+
+    def get_trades(self) -> List[str]:
+        # Your existing code (add .strip())
+        pass
+
+    def clear_log(self):
+        # Your existing code
+        pass
+
+    # NEW METHODS:
+
+    def get_trades_since(self, dt: datetime) -> List[str]:
+        """Return trades logged after the given datetime."""
+        # Your code:
+        pass
+
+    def get_trades_by_symbol(self, symbol: str) -> List[str]:
+        """Return trades for a specific symbol."""
+        # Your code:
+        pass
+
+    def get_trade_count(self) -> int:
+        """Return total number of trades."""
+        # Your code:
+        pass
+
+# Test:
+logger = TradeLogger('test_trades.log')
+logger.clear_log()
+logger.log_trade('AAPL', 'BUY', 150.50, 100)
+logger.log_trade('GOOGL', 'SELL', 2800.00, 10)
+logger.log_trade('AAPL', 'SELL', 155.00, 50)
+
+print(f"Total trades: {logger.get_trade_count()}")
+print(f"AAPL trades: {logger.get_trades_by_symbol('AAPL')}")
+```
+
+**Your code:**
+```python
+
+```
+
+---
+
+## Task 5: PCAP Multiple Choice (6 Questions)
+
+**Q1:** What is the output?
+```python
+from datetime import datetime, timedelta
+
+dt = datetime(2026, 2, 28, 23, 30)
+dt2 = dt + timedelta(hours=1)
+print(dt2.day, dt2.month)
+```
+- A) 28 2
+- B) 1 3
+- C) 29 2
 - D) Error
-
-
-B
 
 **Q2:** What is the output?
 ```python
-from functools import reduce
-print(reduce(lambda a, b: a - b, [10, 2, 3]))
-```
-- A) 5
-- B) 15
-- C) -5
-- D) Error
+with open('test.txt', 'w') as f:
+    f.write('abc')
+    f.write('def')
 
-A
+with open('test.txt', 'r') as f:
+    print(f.readline())
+```
+- A) abc
+- B) abcdef
+- C) abc\ndef
+- D) Error
 
 **Q3:** What is the output?
 ```python
-def deco(f):
-    def wrapper():
-        return f() * 2
-    return wrapper
+from datetime import date
 
-@deco
-@deco
-def five():
-    return 5
-
-print(five())
+d = date.today()
+print(type(d.year).__name__)
 ```
-- A) 5
-- B) 10
-- C) 20
-- D) Error
-
-D
+- A) date
+- B) int
+- C) str
+- D) datetime
 
 **Q4:** What is the output?
 ```python
-x = 10
-def outer():
-    x = 20
-    def inner():
-        global x
-        return x
-    return inner()
+lines = []
+with open('test.txt', 'w') as f:
+    f.writelines(['a\n', 'b\n'])
 
-print(outer())
+with open('test.txt', 'r') as f:
+    for line in f:
+        lines.append(line.strip())
+print(lines)
 ```
-- A) 10
-- B) 20
-- C) Error
-- D) None
-
-A
+- A) ['a\n', 'b\n']
+- B) ['a', 'b']
+- C) ['ab']
+- D) Error
 
 **Q5:** What is the output?
 ```python
-nums = [1, 2, 3, 4, 5]
-result = list(filter(lambda x: x % 2, nums))
-print(result)
+from datetime import datetime
+
+dt1 = datetime(2026, 2, 1, 12, 0)
+dt2 = datetime(2026, 2, 1, 14, 30)
+diff = dt2 - dt1
+print(type(diff).__name__)
 ```
-- A) `[2, 4]`
-- B) `[1, 3, 5]`
-- C) `[1, 2, 3, 4, 5]`
-- D) `[]`
+- A) int
+- B) float
+- C) timedelta
+- D) datetime
 
-a
-
-**Q6:** Which creates a closure?
-- A) `def f(): return 42`
-- B) `def f(x): return x + 1`
-- C) `def f(n): def g(): return n; return g`
-- D) `lambda x: x * 2`
-
-C
-
-**Q7:** What is the output?
+**Q6:** Which statement will raise an exception?
 ```python
-make_adder = lambda n: lambda x: x + n
-add_five = make_adder(5)
-print(add_five(10))
+# A:
+with open('newfile.txt', 'w') as f:
+    f.write('test')
+
+# B:
+with open('nonexistent.txt', 'r') as f:
+    f.read()
+
+# C:
+with open('newfile.txt', 'a') as f:
+    f.write('test')
+
+# D:
+with open('newfile.txt', 'x') as f:
+    f.write('test')  # Assume file already exists
 ```
-- A) 5
-- B) 10
-- C) 15
-- D) Error
-
-C
-
-**Q8:** What is the output?
-```python
-from functools import reduce
-words = ["a", "b", "c"]
-result = reduce(lambda acc, w: acc + [w.upper()], words, [])
-print(result)
-```
-- A) `['a', 'b', 'c']`
-- B) `['A', 'B', 'C']`
-- C) `ABC`
-- D) Error
-
-B
+- A) Statement A
+- B) Statement B
+- C) Statement C
+- D) Both B and D
 
 **Your answers:**
 ```
@@ -393,217 +335,211 @@ Q3:
 Q4:
 Q5:
 Q6:
-Q7:
-Q8:
 ```
 
 ---
 
-## Task 6: PROJECT - Strategy Signal Generator with Functional Patterns
+## Task 6: Property + File I/O Integration
 
-**Instructions:** Create a signal generator using everything from Week 4.
+**Instructions:** Create a class that uses properties with file backing.
 
 ```python
-from functools import reduce
-from typing import List, Dict, Callable
+from datetime import datetime
+from typing import Optional
 
-prices = [100, 102, 105, 103, 108, 106, 110, 112, 109, 115]
-
-# Part A: Create a closure that generates crossover signals
-def make_level_detector(level: float):
+class ConfigManager:
     """
-    Returns a function that detects when price crosses a level.
+    A configuration manager that persists settings to a file.
 
-    The returned function should:
-    - Accept current_price and previous_price
-    - Return "BUY" if price crosses UP through level
-    - Return "SELL" if price crosses DOWN through level
-    - Return "HOLD" otherwise
+    Properties:
+    - last_updated (read-only): datetime of last config change
+    - debug_mode: bool, with getter and setter
+    - max_trades: int, with validation (must be > 0)
 
-    Example:
-        detect_105 = make_level_detector(105)
-        detect_105(106, 104)  # Returns "BUY" (crossed up through 105)
-        detect_105(104, 106)  # Returns "SELL" (crossed down through 105)
-        detect_105(107, 106)  # Returns "HOLD" (didn't cross 105)
+    The config file format (config.txt):
+    debug_mode=True
+    max_trades=100
+    last_updated=2026-02-03 10:30:45
     """
-    pass
 
-# Part B: Use map to create price pairs [(prev, curr), ...]
-# prices[0] has no previous, so start from index 1
-# Result: [(100, 102), (102, 105), (105, 103), ...]
+    def __init__(self, filepath: str):
+        self.filepath = filepath
+        self._debug_mode = False
+        self._max_trades = 10
+        self._last_updated: Optional[datetime] = None
+        self._load_config()
 
-# Part C: Use the detector + map to generate signals for each pair
+    def _load_config(self):
+        """Load config from file if exists."""
+        # Your code:
+        pass
 
-# Part D: Use filter to get only BUY and SELL signals (not HOLD)
+    def _save_config(self):
+        """Save current config to file."""
+        # Your code:
+        pass
 
-# Part E: Use reduce to count total BUY signals
+    @property
+    def last_updated(self) -> Optional[datetime]:
+        """Read-only: when config was last modified."""
+        # Your code:
+        pass
 
-# Expected behavior:
-# detect_105 = make_level_detector(105)
-# Signals: ['HOLD', 'BUY', 'SELL', 'BUY', 'HOLD', 'HOLD', 'HOLD', 'SELL', 'BUY']
-# Action signals (no HOLD): ['BUY', 'SELL', 'BUY', 'SELL', 'BUY']
-# Total BUY signals: 3
+    @property
+    def debug_mode(self) -> bool:
+        # Your code:
+        pass
+
+    @debug_mode.setter
+    def debug_mode(self, value: bool):
+        # Your code (update _last_updated, save to file):
+        pass
+
+    @property
+    def max_trades(self) -> int:
+        # Your code:
+        pass
+
+    @max_trades.setter
+    def max_trades(self, value: int):
+        # Your code (validate > 0, update _last_updated, save):
+        pass
+
+# Test:
+config = ConfigManager('config.txt')
+config.debug_mode = True
+config.max_trades = 50
+print(f"Debug: {config.debug_mode}, Max: {config.max_trades}")
+print(f"Last updated: {config.last_updated}")
 ```
 
 **Your code:**
 ```python
 
-def make_level_detector(level: float):
-    """
-    Returns a function that detects when price crosses a level.
-
-    The returned function should:
-    - Accept current_price and previous_price
-    - Return "BUY" if price crosses UP through level
-    - Return "SELL" if price crosses DOWN through level
-    - Return "HOLD" otherwise
-
-    Example:
-        detect_105 = make_level_detector(105)
-        detect_105(106, 104)  # Returns "BUY" (crossed up through 105)
-        detect_105(104, 106)  # Returns "SELL" (crossed down through 105)
-        detect_105(107, 106)  # Returns "HOLD" (didn't cross 105)
-    """
-    
-    def generate_signal(current_price: float, previous_price: float):
-        '''Closure used to generate signals based on previous price, current price and the set price level'''
-        if previous_price <= level and current_price >= level:
-            return 'BUY'
-        elif previous_price >= level and current_price <= level:
-            return 'SELL'
-        elif (previous_price >= level and current_price >= level) or (previous_price <= level and current_price <= level):
-            return 'HOLD'
-              
-    return generate_signal
-
-prices = [100, 102, 105, 103, 108, 106, 110, 112, 109, 115]
-
-price_pairs = list(map(lambda i: (prices[i-1], prices[i]), range(1, len(prices))))
-print(price_pairs)
-signals = []
-for price_pair in price_pairs:
-    result = detect_105(price_pair[1], price_pair[0]) #current, previous
-    signals.append(result)
-
-print(signals)
-
-action_signals = list(filter(lambda signal: signal == 'BUY' or signal == 'SELL', signals))
-print(action_signals)
-buy_signals = reduce(lambda acc, x: acc + 1 if x == 'BUY' else acc, action_signals, 0)
-print(buy_signals)
-
-$ python practice.py
-[(100, 102), (102, 105), (105, 103), (103, 108), (108, 106), (106, 110), (110, 112), (112, 109), (109, 115)]
-['HOLD', 'BUY', 'SELL', 'BUY', 'HOLD', 'HOLD', 'HOLD', 'HOLD', 'HOLD']
-['BUY', 'SELL', 'BUY']
-2
-
-
-#And your expectations are wrong, we're not CROSSING any level if the previous and the current price is already above a given level, so we have 2 buy signals and it's logically correct.
 ```
 
 ---
 
-## Task 7: Decorator Stacking & Order
+## Task 7: Decorator + File I/O (Week 4 Review)
 
-**Instructions:** Understand decorator execution order.
+**Instructions:** Create a decorator that logs function calls to a file.
 
 ```python
-def bold(func):
-    def wrapper(*args, **kwargs):
-        return f"<b>{func(*args, **kwargs)}</b>"
-    return wrapper
+from datetime import datetime
+from functools import wraps
 
-def italic(func):
-    def wrapper(*args, **kwargs):
-        return f"<i>{func(*args, **kwargs)}</i>"
-    return wrapper
+def log_to_file(filepath: str):
+    """
+    Decorator factory that logs function calls to a file.
 
-@bold
-@italic
+    Log format: "YYYY-MM-DD HH:MM:SS | function_name(args) -> result"
+
+    Example usage:
+        @log_to_file("calls.log")
+        def add(a, b):
+            return a + b
+
+        add(2, 3)  # Logs: "2026-02-03 10:30:45 | add(2, 3) -> 5"
+    """
+    def decorator(func):
+        @wraps(func)
+        def wrapper(*args, **kwargs):
+            # Your code:
+            # 1. Call the original function
+            # 2. Log the call to file
+            # 3. Return the result
+            pass
+        return wrapper
+    return decorator
+
+# Test:
+@log_to_file("function_calls.log")
+def multiply(a, b):
+    return a * b
+
+@log_to_file("function_calls.log")
 def greet(name):
-    return f"Hello, {name}"
+    return f"Hello, {name}!"
 
-print(greet("World"))
+multiply(3, 4)
+multiply(5, 6)
+greet("Alice")
+
+# Read and print the log file
+with open("function_calls.log", "r") as f:
+    print(f.read())
 ```
 
-**Q1:** What is the output?
-- A) `<b><i>Hello, World</i></b>`
-- B) `<i><b>Hello, World</b></i>`
-- C) `<b>Hello, World</b>`
-- D) `<i>Hello, World</i>`
+**Your code:**
+```python
 
-B
+```
 
-**Q2:** In what order are the decorators applied?
-- A) bold first, then italic
-- B) italic first, then bold
-- C) Both at the same time
-- D) Depends on Python version
+---
 
+## Task 8: timedelta Deep Practice
 
-A
+**Instructions:** Solve these practical datetime problems.
 
-**Q3:** If we changed it to `@italic @bold`, what would the output be?
+**Q1:** Write code to find all Mondays in February 2026.
+```python
+from datetime import date, timedelta
 
-`<b><i>Hello, World</i></b>`
+def mondays_in_month(year: int, month: int) -> list:
+    """Return list of all Monday dates in the given month."""
+    # Your code:
+
+# Test:
+print(mondays_in_month(2026, 2))
+# Expected: [date(2026, 2, 2), date(2026, 2, 9), date(2026, 2, 16), date(2026, 2, 23)]
+```
+
+**Q2:** Write code to calculate trading days between two dates (exclude weekends).
+```python
+from datetime import date, timedelta
+
+def trading_days_between(start: date, end: date) -> int:
+    """Return count of weekdays (Mon-Fri) between start and end (exclusive)."""
+    # Your code:
+
+# Test:
+print(trading_days_between(date(2026, 2, 2), date(2026, 2, 9)))  # Mon to Mon = 5 trading days
+```
+
+**Q3:** What is the output?
+```python
+from datetime import datetime, timedelta
+
+start = datetime(2026, 1, 1)
+deltas = [timedelta(days=30) for _ in range(3)]
+current = start
+
+for d in deltas:
+    current += d
+    print(current.strftime("%B"), end=" ")
+```
 
 **Your answers:**
 ```
-Q1:
-Q2:
-Q3:
-```
+Q1 code:
 
----
+Q2 code:
 
-## Task 8: Week 4 Self-Assessment & Exam Readiness
-
-**Instructions:** Rate yourself honestly (1-5 scale) and identify weak spots.
-
-| Concept | Rating (1-5) | Confident for Exam? |
-|---------|--------------|---------------------|
-| Lambda syntax - 4 - depends on the context
-| Lambda with defaults 4-5 - depends on the context
-| Late binding trap 4.5
-| Late binding fix 2 - I don't get it yet, would appreciate a simple task with a few simple examples
-| map() returns - 3, This is really weird and unnatural for me, I'd use list comprehension in 9/10 cases if I had a choice myself
-| filter() returns - 3, same as above, definitely needs practice
-| filter(None, ...) - 3, same as above - I find it unnatural, as normally we use filter to identify things with that feature and here we kinda elliminate them
-| reduce() with initializer - 5, it's pretty easyt for me
-| reduce() without initializer - 5, same - it makes the most sense out of lambda/map/filter concepts and I will likely use it
-| Closure definition - 4, I could mix it up If I were to combine several functions within a closure
-| nonlocal keyword - 5, I get it
-| Factory functions - 3-4 - if we get 3 levels of nesting it gets really weird and I'm getting lost
-| Basic decorators - 3-4, not feeling confident - too much output prediciton, not too much actual decorator creating practice - I'd appreciate that,  from simple exampl;es to more difficult, especially if it's PCAP relevant and mid-senior devs relevant
-| Decorators with args - same as above
-| functools.wraps - 3, same as above, I totally get the idea but could have issues applying it without looking it up
-| Decorator stacking order - IDK, it's first time we stack decorators today
-
-**Topics I need to review before the exam:**
-```
-1.
-2.
-3.
-```
-
-**Questions I still have:**
-```
-
+Q3 output:
 ```
 
 ---
 
 ## Solutions Checklist
 
-- [ ] Task 1: Lambda expressions (6 questions)
-- [ ] Task 2: Closure deep dive (4 questions)
-- [ ] Task 3: map/filter/reduce pipeline
-- [ ] Task 4: Decorator with arguments
-- [ ] Task 5: PCAP multiple choice (8 questions)
-- [ ] Task 6: PROJECT - Signal generator
-- [ ] Task 7: Decorator stacking order
-- [ ] Task 8: Self-assessment
+- [ ] Task 1: datetime coding practice (3 parts)
+- [ ] Task 2: File I/O coding practice (3 parts)
+- [ ] Task 3: Closure + datetime integration (2 parts)
+- [ ] Task 4: PROJECT - TradeLogger enhancement
+- [ ] Task 5: PCAP multiple choice (6 questions)
+- [ ] Task 6: Property + File I/O integration
+- [ ] Task 7: Decorator + File I/O (Week 4 review)
+- [ ] Task 8: timedelta deep practice (3 questions)
 
 ---
 
@@ -613,13 +549,15 @@ Q3:
 
 **Difficulty (1-10):**
 
-**Ready for weekend exams?**
-[ ] Yes - bring them on!
-[ ] Need more practice on: _______________
+**What clicked today:**
+
+
+**What's confusing:**
+
 
 **Questions for mentor:**
 
 
 ---
 
-**When complete:** Notify me for assessment. Weekend = 2 PCAP Mock Exams (30 questions each)!
+**When complete:** Notify me for assessment.
