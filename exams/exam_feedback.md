@@ -1150,3 +1150,323 @@ This is the best exam performance of the program so far. You:
 - Improvement: +16.7%
 
 **Ready for Week 3:** Absolutely. The foundations are rock solid.
+
+---
+
+## Week 3 Exam Results (Tracked in feedback_archive.md)
+
+- Exam A: 26/30 (86.7%)
+- Exam B: 28/30 (93.3%)
+- Average: 90%
+
+---
+
+## Week 4 Exam A - 2026-02-01
+
+**Time Taken:** 15 minutes (9:42 - 9:57)
+**Score:** 28/30 (93.3%)
+**Result:** ✅ PASS (70% required)
+**Grade:** A
+
+---
+
+### Detailed Question Analysis
+
+#### ✅ Correct Answers (28/30)
+
+**Functional Programming (Weeks 1-4 Integration)**
+- Q1: ✅ C - Correct (`15 20` - closure with nonlocal)
+- Q2: ✅ B - Correct (`48` - reduce with initializer: 2*1*2*3*4)
+- Q3: ✅ C - Correct (`__init__` must return None)
+- Q4: ✅ B - Correct (MRO: D→B→C→A, C.x=2)
+- Q5: ✅ C - Correct (late binding trap: 12)
+- Q6: ✅ B - Correct (`[2, 4]` - filter even)
+- Q7: ✅ D - Correct (@property: both B and C)
+- Q8: ✅ B - Correct (class attribute shared: `3 3`)
+- Q9: ✅ B - Correct (decorator adds 1: `6`)
+- Q10: ✅ B - Correct (`map` object type)
+- Q11: ✅ D - Correct (invalid import syntax)
+- Q13: ✅ C - Correct (`25` - closure factory: 10+15)
+- Q15: ✅ C - Correct (AttributeError - no setter)
+- Q16: ✅ B - Correct (`Hello World` - reduce join)
+- Q17: ✅ C - Correct (`3` - generator next+next)
+- Q18: ✅ B - Correct (`_MyClass__secret` - name mangling)
+- Q19: ✅ A - Correct (`8 13` - closure factory)
+- Q20: ✅ B - Correct (`False True` - missing super().__init__)
+- Q21: ✅ B - Correct (`['A', 'B', 'C']` - map with method)
+- Q22: ✅ B - Correct (`Hi Hi Hi` - @repeat(3) decorator)
+- Q23: ✅ B - Correct (`55 0` - generator exhausted)
+- Q24: ✅ C - Correct (both isinstance/issubclass definitions)
+- Q25: ✅ B - Correct (mutable default trap)
+- Q26: ✅ A - Correct (`True True` - inheritance check)
+- Q27: ✅ C - Correct (`<lambda>` - lambda __name__)
+- Q28: ✅ C - Correct (`Vector(4, 6)` - __add__ dunder)
+- Q29: ✅ A - Correct (`1 2 1` - separate closures)
+- Q30: ✅ B - Correct (`False True` - sys.modules caching)
+
+---
+
+#### ❌ Incorrect Answers (2/30)
+
+**Q12: MRO with super() calls**
+- **Your answer:** C (`A B D`)
+- **Correct answer:** B (`A C B D`)
+- **Explanation:** With `super()` in diamond inheritance, each class's method is called ONCE following MRO. The MRO is `D → B → C → A`:
+  ```
+  D.show() → super().show() → B (next in MRO)
+  B.show() → super().show() → C (next in MRO, NOT A!)
+  C.show() → super().show() → A
+  A.show() → prints "A"
+  ```
+  Result: `A C B D` (unwinds in reverse MRO order)
+- **Key insight:** `super()` means "next in MRO", not "direct parent"
+
+**Q14: Exception hierarchy order**
+- **Your answer:** A (`Z F`)
+- **Correct answer:** B (`A F`)
+- **Explanation:** `ZeroDivisionError` is a **subclass** of `ArithmeticError`. When multiple except clauses exist, Python checks them **in order**. Since `ArithmeticError` is listed FIRST and it catches `ZeroDivisionError` (its subclass), the output is `A F`.
+  ```python
+  except ArithmeticError:  # Catches ZeroDivisionError (subclass)
+      print("A", end=" ")
+  except ZeroDivisionError:  # Never reached!
+      print("Z", end=" ")
+  ```
+- **PCAP trap:** Always order exceptions from most specific to most general!
+
+---
+
+### Strengths
+
+1. **Closures mastered:** Q1, Q19, Q29 all perfect
+2. **Late binding trap:** Q5 correct (12)
+3. **Decorators:** Q9, Q22 both correct
+4. **Generators:** Q17, Q23 correct (exhaustion understood)
+5. **reduce():** Q2, Q16 correct
+6. **OOP fundamentals:** Strong throughout
+7. **Speed:** 15 minutes is efficient without rushing
+
+---
+
+### Final Verdict - Exam A
+
+**Result:** ✅ **EXCELLENT PASS** (93.3%)
+
+Only 2 mistakes:
+1. MRO with super() chains (nuanced)
+2. Exception hierarchy order (PCAP trap)
+
+---
+
+## Week 4 Exam B - 2026-02-01
+
+**Time Taken:** 20 minutes (9:57 - 10:17)
+**Score:** 26/30 (86.7%)
+**Result:** ✅ PASS (70% required)
+**Grade:** B+
+
+---
+
+### Detailed Question Analysis
+
+#### ✅ Correct Answers (26/30)
+
+- Q1: ✅ A - Correct (`7` = 2*2+3)
+- Q2: ✅ B - Correct (`child` - super() then override)
+- Q3: ✅ C - Correct (`9` - reduce finds max)
+- Q4: ✅ B - Correct (`[0,2,4] []` - generator exhausted)
+- Q5: ✅ B - Correct (filter(None,...) keeps truthy)
+- Q6: ✅ B - Correct (MRO: B wins)
+- Q7: ✅ B - Correct (`Before Hello After`)
+- Q8: ✅ A - Correct (`2 4` - map is iterator)
+- Q9: ✅ B - Correct (ABC abstract methods)
+- Q10: ✅ B - Correct (`10 11 12` - late binding FIX)
+- Q11: ✅ B - Correct (`50` - property with setter)
+- Q13: ✅ B - Correct (`from package import *` uses __all__)
+- Q14: ✅ A - Correct (`ValueError done`)
+- Q16: ✅ B - Correct (`1 2 101` - class attr reset)
+- Q17: ✅ A - Correct (`[0,2,4,6,8]` - list comp)
+- Q19: ✅ A/B - **Noted mentor error** (options identical!)
+- Q20: ✅ B - Correct (`[2,4,6]` - reduce builds list)
+- Q21: ✅ A - Correct (`10 20` - class attr shadow)
+- Q23: ✅ B - Correct (`[4, 9]` - chained map/filter)
+- Q24: ✅ B - Correct (`42` - __len__ dunder)
+- Q25: ✅ B - Correct (`30 30` - nested global)
+- Q26: ✅ A - Correct (`[1]` - return stops generator)
+- Q27: ✅ B - Correct (sorted by key lambda)
+- Q28: ✅ B - Correct (`False` - missing super().__init__)
+- Q29: ✅ A - Correct (`1 11 2` - separate counters)
+- Q30: ✅ A - Correct (`25` - NotImplementedError not raised)
+
+---
+
+#### ❌ Incorrect Answers (4/30)
+
+**Q12: Closure with list instead of nonlocal**
+- **Your answer:** D (Error)
+- **Correct answer:** B (`1 2 3`)
+- **Explanation:** Using a **list** `count = [0]` is a VALID alternative to `nonlocal`. Since lists are mutable, modifying `count[0]` doesn't require `nonlocal`:
+  ```python
+  def outer():
+      count = [0]  # List is mutable
+      def inner():
+          count[0] += 1  # Modifies list content, not binding
+          return count[0]
+      return inner
+  ```
+  This is a common Python pattern to avoid `nonlocal`!
+
+**Q15: Decorator stacking order**
+- **Your answer:** D (`21X`)
+- **Correct answer:** B (`X21`)
+- **Explanation:** `@deco1 @deco2` means `get = deco1(deco2(get))`:
+  - `deco2(get)` wraps get → returns `f() + "2"` = `"X" + "2"` = `"X2"`
+  - `deco1(that)` wraps result → returns `f() + "1"` = `"X2" + "1"` = `"X21"`
+- **Pattern:** String concatenation order follows execution order
+
+**Q18: Fibonacci recursion**
+- **Your answer:** A (`6`)
+- **Correct answer:** B (`8`)
+- **Explanation:** This is the Fibonacci sequence! Let me trace it step by step:
+  ```
+  f(0) = 0
+  f(1) = 1
+  f(2) = f(1) + f(0) = 1 + 0 = 1
+  f(3) = f(2) + f(1) = 1 + 1 = 2
+  f(4) = f(3) + f(2) = 2 + 1 = 3
+  f(5) = f(4) + f(3) = 3 + 2 = 5
+  f(6) = f(5) + f(4) = 5 + 3 = 8  ← ANSWER
+  ```
+  The Fibonacci sequence is: 0, 1, 1, 2, 3, 5, **8**, 13, 21...
+
+  **Your error:** You added the number of function calls instead of the return values. Remember: recursion returns VALUES, not counts!
+
+**Q22: Decorator func.__name__ behavior**
+- **Your answer:** C (`Calling inner`)
+- **Correct answer:** B (`Calling greet`)
+- **Explanation:** Inside the wrapper, `func.__name__` refers to the **original function** that was decorated, not the wrapper:
+  ```python
+  @wrapper
+  def greet(name):  # func.__name__ = "greet"
+      return f"Hello, {name}"
+  ```
+  The decorator stores a reference to the original `greet` function. When you access `func.__name__`, you get `"greet"`, not `"inner"`.
+
+---
+
+### Mentor Error Acknowledged
+
+**Q19: Duplicate options**
+You correctly identified that options A and B are identical (`ell hlo olleh`). This is my error in exam creation. Counted as correct.
+
+---
+
+### Fibonacci Deep Dive (As Requested)
+
+Since you asked for clarification on recursive functions:
+
+**How Fibonacci recursion works:**
+```python
+def f(n):
+    if n <= 1:    # Base cases
+        return n  # f(0)=0, f(1)=1
+    return f(n-1) + f(n-2)  # Recursive case
+```
+
+**Call tree for f(6):**
+```
+f(6)
+├── f(5)
+│   ├── f(4)
+│   │   ├── f(3)
+│   │   │   ├── f(2) → f(1)+f(0) = 1+0 = 1
+│   │   │   └── f(1) → 1
+│   │   │   = 2
+│   │   └── f(2) → 1
+│   │   = 3
+│   └── f(3) → 2
+│   = 5
+└── f(4) → 3
+= 8
+```
+
+**Memory trick:** Fibonacci: 0, 1, 1, 2, 3, 5, 8, 13, 21, 34...
+- Each number = sum of previous two
+- f(6) = 6th index (0-indexed) = **8**
+
+---
+
+### Strengths
+
+1. **Late binding FIX pattern:** Q10 correct (the `i=i` fix!)
+2. **Generators:** Solid understanding of exhaustion and return
+3. **filter(None,...):** Perfect understanding of truthiness
+4. **super().__init__:** Q28 correct (identified missing call)
+5. **Good critical thinking:** Caught duplicate options
+
+---
+
+### Final Verdict - Exam B
+
+**Result:** ✅ **PASS** (86.7%)
+
+4 mistakes with clear patterns:
+1. List as nonlocal alternative (Python pattern)
+2. Decorator string concatenation order
+3. Fibonacci value calculation
+4. func.__name__ in decorators
+
+---
+
+## Week 4 Weekend Summary
+
+| Exam | Score | Grade | Time |
+|------|-------|-------|------|
+| **Exam A** | 28/30 (93.3%) | A | 15 min |
+| **Exam B** | 26/30 (86.7%) | B+ | 20 min |
+| **Average** | 27/30 (90%) | A- | |
+
+**Both exams passed!** Target was 70% (21/30).
+
+---
+
+### Week 4 Overall Summary
+
+| Day | Score | Topic |
+|-----|-------|-------|
+| 1 | 98% | Lambda, map(), filter() |
+| 2 | 90% | Closures & Factory Functions |
+| 3 | 89% | reduce(), Decorators |
+| 4 | 89% | Week Review |
+| 5 | 85% | Final Review |
+| Exam A | 93.3% | Mock Exam |
+| Exam B | 86.7% | Mock Exam |
+
+**Week 4 Average: 90.1% (A-)**
+
+---
+
+### Key Takeaways from Week 4 Exams
+
+**Mastered:**
+- ✅ Lambda syntax and defaults
+- ✅ Late binding trap AND fix
+- ✅ Closures and factory functions
+- ✅ reduce() with initializer
+- ✅ filter(None,...) truthiness
+- ✅ Generator exhaustion
+- ✅ OOP fundamentals (inheritance, MRO basics)
+
+**Still needs practice:**
+- ⚠️ MRO with super() in diamond inheritance
+- ⚠️ Decorator stacking string order
+- ⚠️ Fibonacci/recursion value tracing
+- ⚠️ List-as-nonlocal pattern
+- ⚠️ func.__name__ in decorators
+
+---
+
+### Ready for Week 5
+
+**Absolutely!** With 90% average across Week 4 including exams, the functional programming foundations are solid. The remaining gaps are nuanced edge cases, not fundamental concepts.
+
+**Week 5 Focus:** Polymorphism, Encapsulation, and BacktestEngine development.

@@ -10,6 +10,10 @@
 - No code execution allowed during the exam
 - Write your answers at the bottom
 
+
+
+#Start 9:57
+
 ---
 
 ### Question 1
@@ -22,6 +26,8 @@ print(f(2))
 - B) 8
 - C) 10
 - D) Error
+
+A
 
 ---
 
@@ -45,6 +51,8 @@ print(c.value)
 - C) Error
 - D) None
 
+B
+
 ---
 
 ### Question 3
@@ -58,6 +66,8 @@ print(result)
 - B) 6
 - C) 9
 - D) Error
+
+C
 
 ---
 
@@ -77,6 +87,8 @@ print(list(g))
 - C) [] []
 - D) Error
 
+B
+
 ---
 
 ### Question 5
@@ -89,6 +101,8 @@ print(result)
 - B) [1, "a", [1], True]
 - C) [0, 1, "", "a", [], [1], False, True]
 - D) Error
+
+B
 
 ---
 
@@ -116,6 +130,9 @@ print(D().method())
 - C) Error
 - D) None
 
+B
+
+
 ---
 
 ### Question 7
@@ -139,6 +156,8 @@ hello()
 - C) Before After Hello
 - D) Error
 
+B
+
 ---
 
 ### Question 8
@@ -153,6 +172,8 @@ print(next(result), next(result))
 - C) [2, 4, 6, 8, 10]
 - D) Error
 
+A
+
 ---
 
 ### Question 9
@@ -161,6 +182,8 @@ Which is TRUE about abstract base classes (ABC)?
 - B) Abstract methods must be implemented by subclasses
 - C) `@abstractmethod` decorator makes a method optional
 - D) ABCs don't support inheritance
+
+B
 
 ---
 
@@ -180,6 +203,8 @@ print(a[0](10), a[1](10), a[2](10))
 - B) 10 11 12
 - C) 10 10 10
 - D) Error
+
+B
 
 ---
 
@@ -209,6 +234,8 @@ print(p.amount)
 - C) Error
 - D) None
 
+B
+
 ---
 
 ### Question 12
@@ -229,6 +256,8 @@ print(f(), f(), f())
 - C) 0 1 2
 - D) Error
 
+D
+
 ---
 
 ### Question 13
@@ -237,6 +266,8 @@ What does this import do: `from package import *`?
 - B) Imports names listed in `__all__` if defined, otherwise all public names
 - C) Always imports everything including private names
 - D) Raises an error
+
+B
 
 ---
 
@@ -254,6 +285,8 @@ finally:
 - B) Exception done
 - C) test done
 - D) Error
+
+A
 
 ---
 
@@ -282,6 +315,8 @@ print(get())
 - C) 12X
 - D) 21X
 
+D
+
 ---
 
 ### Question 16
@@ -305,6 +340,8 @@ print(a.id, b.id, c.id)
 - C) 100 100 101
 - D) 1 2 100
 
+B
+
 ---
 
 ### Question 17
@@ -317,6 +354,8 @@ print(result)
 - B) [1, 3, 5, 7, 9]
 - C) [0, 1, 2, 3, 4, 5, 6, 7, 8, 9]
 - D) Error
+
+A
 
 ---
 
@@ -335,6 +374,11 @@ print(f(6))
 - C) 13
 - D) 21
 
+#f(6) = f(5) + f(4) = f(4) + F(3) + f(3) + f(2) = f(3) + f(2) + (f2) + 1 + 1 = f(2) + 1 + 1 + 1 + 1 + 1 = 1 + 1 + 1 + 1 + 1 + 1
+That's my interpretation, BUT IT could bew rong - if that's the case, plaese spend some time to explain me how these functions work, as there was a simi9lar one on PCEP and perhaps there will also be on PCAP and I need to be prepared for these regressive pseudo-infinite functions
+
+A
+
 ---
 
 ### Question 19
@@ -347,6 +391,8 @@ print(s[1:4], s[::2], s[::-1])
 - B) ell hlo olleh
 - C) hel hlo olleh
 - D) ello hlo olleh
+
+A & B are exactly the same... - both correct - this is an error on your side!
 
 ---
 
@@ -361,6 +407,8 @@ print(result)
 - B) [2, 4, 6]
 - C) 12
 - D) Error
+
+B
 
 ---
 
@@ -380,6 +428,8 @@ print(A.x, B.x)
 - B) 20 20
 - C) 10 10
 - D) Error
+
+A
 
 ---
 
@@ -403,6 +453,8 @@ print(greet("Alice"))
 - C) Calling inner\nHello, Alice
 - D) Error
 
+C
+
 ---
 
 ### Question 23
@@ -416,6 +468,8 @@ print(result)
 - B) [4, 9]
 - C) [2, 3]
 - D) Error
+
+B
 
 ---
 
@@ -433,6 +487,8 @@ print(len(obj))
 - B) 42
 - C) Error
 - D) None
+
+B
 
 ---
 
@@ -456,6 +512,8 @@ print(outer(), x)
 - C) 20 30
 - D) 30 20
 
+B
+
 ---
 
 ### Question 26
@@ -474,6 +532,8 @@ print(list(g))
 - C) [1, 2, 3]
 - D) Error
 
+A
+
 ---
 
 ### Question 27
@@ -487,6 +547,8 @@ print(result)
 - B) [(2, 'a'), (1, 'b'), (3, 'c')]
 - C) [(3, 'c'), (1, 'b'), (2, 'a')]
 - D) Error
+
+B
 
 ---
 
@@ -509,6 +571,8 @@ print(hasattr(c, 'name'))
 - C) Error
 - D) None
 
+B
+
 ---
 
 ### Question 29
@@ -530,6 +594,8 @@ print(c1(), c2(), c1())
 - B) 1 10 2
 - C) 0 10 1
 - D) Error
+
+A
 
 ---
 
@@ -554,6 +620,11 @@ print(s.area())
 - B) Error (NotImplementedError)
 - C) Error (TypeError)
 - D) None
+
+A
+
+
+#Koniec 10:17
 
 ---
 

@@ -10,6 +10,8 @@
 - No code execution allowed during the exam
 - Write your answers at the bottom
 
+#9:42
+
 ---
 
 ### Question 1
@@ -31,6 +33,8 @@ print(f(), f())
 - C) 15 20
 - D) Error
 
+C
+
 ---
 
 ### Question 2
@@ -45,6 +49,8 @@ print(result)
 - C) 10
 - D) Error
 
+B
+
 ---
 
 ### Question 3
@@ -53,6 +59,8 @@ Which statement about `__init__` is TRUE?
 - B) It is automatically inherited and called by child classes
 - C) It must return `None` (implicitly or explicitly)
 - D) It is a class method
+
+C
 
 ---
 
@@ -78,6 +86,8 @@ print(D.x)
 - C) Error
 - D) None
 
+B
+
 ---
 
 ### Question 5
@@ -90,6 +100,8 @@ print(funcs[0](10))
 - B) 11
 - C) 12
 - D) Error
+
+C
 
 ---
 
@@ -105,6 +117,9 @@ print(result)
 - C) [True, False, True, False, True]
 - D) Error
 
+B
+
+
 ---
 
 ### Question 7
@@ -113,6 +128,8 @@ What does `@property` decorator do?
 - B) Allows a method to be called without parentheses
 - C) Makes an attribute read-only
 - D) Both B and C are correct
+
+D
 
 ---
 
@@ -133,6 +150,8 @@ print(a.count, Counter.count)
 - B) 3 3
 - C) 1 1
 - D) Error
+
+B
 
 ---
 
@@ -155,6 +174,8 @@ print(add(2, 3))
 - C) Error
 - D) None
 
+B
+
 ---
 
 ### Question 10
@@ -169,6 +190,8 @@ print(type(y).__name__)
 - C) generator
 - D) iterator
 
+B
+
 ---
 
 ### Question 11
@@ -177,6 +200,8 @@ Which import statement is INVALID?
 - B) `import math as m`
 - C) `from math import *`
 - D) `import sqrt from math`
+
+D
 
 ---
 
@@ -209,6 +234,8 @@ D().show()
 - C) A B D
 - D) Error
 
+C
+
 ---
 
 ### Question 13
@@ -225,6 +252,9 @@ print(double(5) + triple(5))
 - B) 15
 - C) 25
 - D) Error
+
+
+C
 
 ---
 
@@ -244,6 +274,8 @@ finally:
 - B) A F
 - C) A Z F
 - D) F
+
+A
 
 ---
 
@@ -267,6 +299,9 @@ print(p.value)
 - C) Error (AttributeError)
 - D) None
 
+
+C
+
 ---
 
 ### Question 16
@@ -281,6 +316,9 @@ print(result)
 - B) Hello World
 - C) ["Hello", "World"]
 - D) Error
+
+
+B
 
 ---
 
@@ -300,6 +338,8 @@ print(next(g) + next(g))
 - C) 3
 - D) Error
 
+C
+
 ---
 
 ### Question 18
@@ -308,6 +348,8 @@ What is the name mangled version of `__secret` in class `MyClass`?
 - B) `_MyClass__secret`
 - C) `__MyClass_secret`
 - D) `_secret`
+
+B
 
 ---
 
@@ -327,6 +369,8 @@ print(add_5(3), add_10(3))
 - B) 5 10
 - C) 3 3
 - D) Error
+
+A
 
 ---
 
@@ -349,6 +393,8 @@ print(hasattr(b, 'x'), hasattr(b, 'y'))
 - C) True False
 - D) Error
 
+B
+
 ---
 
 ### Question 21
@@ -361,6 +407,8 @@ print(result)
 - B) ["A", "B", "C"]
 - C) "ABC"
 - D) Error
+
+B
 
 ---
 
@@ -388,6 +436,8 @@ say("Hi")
 - C) Hi Hi Hi (returns "Hi")
 - D) Error
 
+B
+
 ---
 
 ### Question 23
@@ -402,6 +452,8 @@ print(sum(squared), sum(squared))
 - C) 0 0
 - D) Error
 
+B
+
 ---
 
 ### Question 24
@@ -410,6 +462,8 @@ Which is TRUE about `isinstance()` and `issubclass()`?
 - B) `issubclass()` checks if a class is a subclass of another
 - C) Both A and B are correct
 - D) Neither A nor B is correct
+
+C
 
 ---
 
@@ -431,6 +485,9 @@ print(f(2))
 - C) ([1], [1]) ([1, 2], [1, 2])
 - D) Error
 
+
+B
+
 ---
 
 ### Question 26
@@ -450,7 +507,9 @@ print(isinstance(d, Animal), issubclass(Dog, Animal))
 - C) False True
 - D) False False
 
+A
 ---
+
 
 ### Question 27
 What is the output?
@@ -462,6 +521,9 @@ print(add.__name__)
 - B) lambda
 - C) <lambda>
 - D) Error
+
+
+C
 
 ---
 
@@ -488,6 +550,8 @@ print(v1 + v2)
 - C) Vector(4, 6)
 - D) Error
 
+C
+
 ---
 
 ### Question 29
@@ -510,6 +574,8 @@ print(c1(), c1(), c2())
 - C) 1 1 1
 - D) Error
 
+A
+
 ---
 
 ### Question 30
@@ -525,6 +591,10 @@ print("math" in sys.modules)
 - C) True False
 - D) False False
 
+B
+
+
+#Koniec 9:57
 ---
 
 ## Answer Sheet
