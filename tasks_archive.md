@@ -836,3 +836,40 @@ Task 8 expected values were wrong. Correct: 4 winners, $1050 total PnL.
 
 ---
 
+## Week 5, Day 2 - 2026-02-03 (Tuesday)
+
+**Topic:** datetime Practice & File I/O Applications
+**Score:** 78% (C+)
+**Difficulty:** 6-7/10
+**Time Spent:** Long session (practice-heavy)
+
+**Tasks Completed:**
+1. datetime coding practice (3 parts - 3/3)
+2. File I/O coding practice (3 parts - 2/3, missing read_non_empty_lines)
+3. Closure + datetime integration (2 parts - functional)
+4. PROJECT: TradeLogger enhancement (type confusion bug)
+5. PCAP multiple choice (6 questions - 6/6)
+6. ConfigManager with properties (incomplete implementation)
+7. Decorator + File I/O (identified bugs, needs help)
+8. timedelta deep practice (3 questions - mostly correct)
+
+**Key Issues:**
+- File mode 'w' vs 'a' confusion in decorator (overwrites vs appends)
+- Calling function twice in decorator wrapper
+- Type hint confusion: datetime parameter treated as string
+- _load_config printed but didn't actually parse/load values
+- December edge case in mondays_in_month
+
+**Strengths:**
+- datetime fundamentals solid
+- PCAP theory 100%
+- Closure concepts understood
+- Good debugging instincts (correctly identified decorator issues)
+
+**Areas for Day 3:**
+- Decorator patterns (append mode, single function call)
+- Property setters with validation and side effects
+- Edge cases in date calculations
+
+---
+

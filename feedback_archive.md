@@ -2462,3 +2462,115 @@ Agreed. Day 2 will focus on practical datetime scenarios used in trading systems
 
 ---
 
+## Week 5, Day 2 - 2026-02-03
+
+**Topic:** datetime Practice & File I/O Applications
+
+### Mentor Assessment
+
+**Score: 78% (C+)**
+
+**Task Breakdown:**
+
+| Task | Score | Notes |
+|------|-------|-------|
+| 1. datetime coding | 100% | All 3 functions perfect |
+| 2. File I/O coding | 70% | Missing read_non_empty_lines, microseconds in log |
+| 3. Closure + datetime | 85% | Works, should use .total_seconds() |
+| 4. TradeLogger | 75% | Type confusion: dt already datetime, can't strptime |
+| 5. PCAP MC | 100% | All 6 correct |
+| 6. ConfigManager | 60% | _load_config doesn't parse, setter incomplete |
+| 7. Decorator | 50% | 'w' vs 'a', double func call, format mismatch |
+| 8. timedelta | 85% | December edge case, missing () on weekday |
+
+### Detailed Corrections
+
+**Task 2 - read_non_empty_lines (missing):**
+```python
+def read_non_empty_lines(filepath: str) -> List[str]:
+    with open(filepath, 'r') as f:
+        return [line.strip() for line in f if line.strip()]
+```
+
+**Task 4 - get_trades_since bug:**
+```python
+# WRONG: dt is already datetime!
+converted_dt = datetime.strptime(dt, '%Y-%m-%d')
+
+# CORRECT: Compare directly
+if datetime_date > dt:
+```
+
+**Task 6 - _load_config should parse:**
+```python
+def _load_config(self):
+    try:
+        with open(self.filepath, 'r') as r:
+            for line in r:
+                key, value = line.strip().split('=')
+                if key == 'debug_mode':
+                    self._debug_mode = value == 'True'
+                elif key == 'max_trades':
+                    self._max_trades = int(value)
+    except FileNotFoundError:
+        pass
+```
+
+**Task 7 - Decorator (3 bugs):**
+1. Use `'a'` mode (append), not `'w'` (overwrite)
+2. Call `func(*args, **kwargs)` ONCE, store in `result`
+3. Format: `f'{timestamp} | {func.__name__}{args} -> {result}'`
+
+```python
+def log_to_file(filepath: str):
+    def decorator(func):
+        @wraps(func)
+        def wrapper(*args, **kwargs):
+            result = func(*args, **kwargs)  # ONE call
+            timestamp = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+            with open(filepath, 'a') as f:  # APPEND
+                f.write(f'{timestamp} | {func.__name__}{args} -> {result}\n')
+            return result
+        return wrapper
+    return decorator
+```
+
+**Task 8 Q1 - December edge case:**
+```python
+if month == 12:
+    last_day = date(year, 12, 31)
+else:
+    last_day = date(year, month + 1, 1) - timedelta(1)
+```
+
+### Strengths
+- ✅ datetime fundamentals now solid (100% on Task 1)
+- ✅ PCAP theory maintained at 100%
+- ✅ Closure concepts well understood
+- ✅ Good debugging instincts (identified decorator issues)
+- ✅ Code is readable and follows PEP 8
+
+### Areas for Improvement
+- ⚠️ File mode: 'w' overwrites, 'a' appends (critical for logging!)
+- ⚠️ Type hints are contracts: if param is `datetime`, don't parse it
+- ⚠️ DRY: don't duplicate _save_config logic in setters
+- ⚠️ Edge cases: December, empty files, etc.
+
+### Student Feedback
+
+**"Decorator was overwhelming"**
+Decorators with arguments have 3 layers:
+1. **Outer function** (`log_to_file`) - receives decorator arguments
+2. **Middle function** (`decorator`) - receives the function to wrap
+3. **Inner function** (`wrapper`) - replaces the original function
+
+Key patterns to memorize:
+- Store result ONCE: `result = func(*args, **kwargs)`
+- Use append mode for logging: `'a'`
+- `@wraps(func)` preserves function metadata
+
+**"Practice-heavy day"**
+This was intentional per your feedback. The 78% reflects realistic complexity—these are the kinds of bugs you'll encounter in real projects. Day 3 will reinforce the decorator pattern.
+
+---
+

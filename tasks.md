@@ -1,57 +1,187 @@
-# Week 5, Day 2 - Tuesday
-## Topic: datetime Practice & File I/O Applications
+# Week 5, Day 3 - Wednesday
+## Topic: Decorator Mastery & File Modes Deep Dive
 
-**Date:** 2026-02-03
+**Date:** 2026-02-04
 
 **Lesson File:** [week3_5_stdlib_fileio.md](lessons/week3_5_stdlib_fileio.md)
 
-**Target Difficulty:** 5/10
+**Target Difficulty:** 6/10
+
+**Focus Areas:** Decorator patterns, file modes, type hint contracts
 
 **Remember:** Work in `practice.py`, paste FINAL answers here for review.
 
 ---
 
-## Task 1: datetime Coding Practice (No Theory!)
+## Task 1: File Mode Drill (Reinforce 'w' vs 'a')
 
-**Instructions:** Write working code for each scenario. Run and verify.
+**Instructions:** Predict the output WITHOUT running. Then verify.
 
-**Part A:** Create a function that calculates how many days until a given date.
+**Q1:**
 ```python
-from datetime import date
+with open('test.txt', 'w') as f:
+    f.write('first')
 
-def days_until(target_year: int, target_month: int, target_day: int) -> int:
-    """Return number of days from today until target date. Negative if past."""
-    # Your code:
+with open('test.txt', 'w') as f:
+    f.write('second')
 
-# Test:
-# print(days_until(2026, 12, 31))  # Days until end of year
-# print(days_until(2026, 1, 1))    # Days since start of year (negative)
+with open('test.txt', 'r') as f:
+    print(f.read())
 ```
 
-**Part B:** Create a function that formats a timestamp for trade logging.
+**Q2:**
 ```python
-from datetime import datetime
+with open('test.txt', 'w') as f:
+    f.write('first')
 
-def format_trade_timestamp(dt: datetime) -> str:
-    """Return timestamp as 'YYYY-MM-DD HH:MM:SS' string."""
-    # Your code (use strftime):
+with open('test.txt', 'a') as f:
+    f.write('second')
 
-# Test:
-# print(format_trade_timestamp(datetime(2026, 2, 14, 10, 30, 45)))
-# Expected: "2026-02-14 10:30:45"
+with open('test.txt', 'r') as f:
+    print(f.read())
 ```
 
-**Part C:** Create a function that parses a date string from CSV data.
+**Q3:**
+```python
+# File doesn't exist yet
+with open('new.txt', 'a') as f:
+    f.write('hello')
+
+with open('new.txt', 'r') as f:
+    print(f.read())
+```
+
+**Q4:** You want to create a log file that accumulates entries over time. Which mode?
+- A) 'w'
+- B) 'a'
+- C) 'r'
+- D) 'x'
+
+**Your answers:**
+```
+Q1:
+Q2:
+Q3:
+Q4:
+```
+
+---
+
+## Task 2: Decorator Pattern Practice
+
+**Instructions:** Fix each broken decorator. Explain what was wrong.
+
+**Part A:** This decorator should log every call, but it only shows the last call.
+```python
+from functools import wraps
+
+def log_calls(func):
+    @wraps(func)
+    def wrapper(*args, **kwargs):
+        result = func(*args, **kwargs)
+        with open('calls.log', 'w') as f:  # BUG HERE
+            f.write(f'{func.__name__} called\n')
+        return result
+    return wrapper
+
+@log_calls
+def greet(name):
+    return f'Hello, {name}'
+
+greet('Alice')
+greet('Bob')
+greet('Charlie')
+
+# Expected in calls.log:
+# greet called
+# greet called
+# greet called
+
+# Actual in calls.log:
+# greet called  (only one!)
+```
+**Fix and explain:**
+```python
+
+```
+
+**Part B:** This decorator calls the function twice (wasteful!). Fix it.
+```python
+from functools import wraps
+
+def debug(func):
+    @wraps(func)
+    def wrapper(*args, **kwargs):
+        print(f'Calling {func.__name__} with {args}')
+        print(f'Result: {func(*args, **kwargs)}')  # First call
+        return func(*args, **kwargs)  # Second call!
+    return wrapper
+
+@debug
+def expensive_operation(n):
+    print('Doing expensive work...')
+    return n * 2
+
+expensive_operation(5)
+# Prints "Doing expensive work..." TWICE!
+```
+**Fix and explain:**
+```python
+
+```
+
+---
+
+## Task 3: Decorator with Arguments (Corrected Pattern)
+
+**Instructions:** Implement a working `@log_to_file` decorator.
+
 ```python
 from datetime import datetime
+from functools import wraps
 
-def parse_csv_date(date_str: str) -> datetime:
-    """Parse date string in format 'DD/MM/YYYY' to datetime object."""
-    # Your code (use strptime):
+def log_to_file(filepath: str):
+    """
+    Decorator factory that logs function calls to a file.
+
+    Requirements:
+    1. APPEND to file (don't overwrite)
+    2. Call wrapped function ONCE only
+    3. Format: "TIMESTAMP | func_name(args) -> result"
+    4. Preserve function metadata with @wraps
+    """
+    def decorator(func):
+        @wraps(func)
+        def wrapper(*args, **kwargs):
+            # YOUR CODE HERE
+            pass
+        return wrapper
+    return decorator
 
 # Test:
-# dt = parse_csv_date("14/02/2026")
-# print(dt.year, dt.month, dt.day)  # 2026 2 14
+@log_to_file('operations.log')
+def add(a, b):
+    return a + b
+
+@log_to_file('operations.log')
+def multiply(a, b):
+    return a * b
+
+# Clear log first
+open('operations.log', 'w').close()
+
+add(2, 3)
+add(10, 20)
+multiply(4, 5)
+
+# Print the log
+with open('operations.log', 'r') as f:
+    print(f.read())
+
+# Expected output (3 lines):
+# 2026-02-04 10:30:45 | add(2, 3) -> 5
+# 2026-02-04 10:30:45 | add(10, 20) -> 30
+# 2026-02-04 10:30:45 | multiply(4, 5) -> 20
 ```
 
 **Your code:**
@@ -61,169 +191,150 @@ def parse_csv_date(date_str: str) -> datetime:
 
 ---
 
-## Task 2: File I/O Coding Practice
+## Task 4: Type Hint Contracts
 
-**Instructions:** Write and run each exercise. Create actual files.
+**Instructions:** The function signature tells you what types to expect. Don't re-convert!
 
-**Part A:** Write a function that counts lines in a file.
-```python
-def count_lines(filepath: str) -> int:
-    """Return the number of lines in a file."""
-    # Your code:
-
-# Test with any file you have
-```
-
-**Part B:** Write a function that reads a file and returns non-empty lines only.
-```python
-from typing import List
-
-def read_non_empty_lines(filepath: str) -> List[str]:
-    """Return list of non-empty lines (stripped, no blank lines)."""
-    # Your code:
-
-# Test: Create a file with some blank lines, then read it
-```
-
-**Part C:** Write a function that appends a timestamped entry to a log file.
+**Q1:** What's wrong with this code?
 ```python
 from datetime import datetime
 
-def log_entry(filepath: str, message: str) -> None:
-    """Append '[YYYY-MM-DD HH:MM:SS] message' to file."""
-    # Your code:
-
-# Test:
-# log_entry("app.log", "Application started")
-# log_entry("app.log", "User logged in")
-# Then read and print the file contents
+def format_date(dt: datetime) -> str:
+    """Format datetime as string."""
+    parsed = datetime.strptime(dt, '%Y-%m-%d')  # ???
+    return parsed.strftime('%B %d, %Y')
 ```
 
-**Your code:**
+**Q2:** Fix the function:
 ```python
+from datetime import datetime
 
+def format_date(dt: datetime) -> str:
+    """Format datetime as string."""
+    # Your fix:
+```
+
+**Q3:** What's wrong here?
+```python
+def process_count(count: int) -> str:
+    num = int(count)  # ???
+    return f'Count is {num}'
+```
+
+**Your answers:**
+```
+Q1 explanation:
+
+Q2 code:
+
+Q3 explanation:
 ```
 
 ---
 
-## Task 3: CLOSURE + datetime Integration
+## Task 5: PROJECT - BacktestEngine Start
 
-**Instructions:** Combine closures with datetime (Week 4 + Week 5).
+**Instructions:** Begin the core backtesting engine for AlgoBacktest.
 
-**Part A:** Create a `make_date_formatter` factory function.
 ```python
 from datetime import datetime
+from typing import List, Dict, Optional
+from dataclasses import dataclass
 
-def make_date_formatter(format_string: str):
-    """
-    Return a function that formats datetime objects using the given format.
+@dataclass
+class Trade:
+    """Represents a single trade."""
+    symbol: str
+    side: str  # 'BUY' or 'SELL'
+    entry_price: float
+    quantity: int
+    entry_time: datetime
+    exit_price: Optional[float] = None
+    exit_time: Optional[datetime] = None
 
-    Example:
-        us_format = make_date_formatter("%m/%d/%Y")
-        eu_format = make_date_formatter("%d/%m/%Y")
-
-        dt = datetime(2026, 2, 14)
-        print(us_format(dt))  # "02/14/2026"
-        print(eu_format(dt))  # "14/02/2026"
-    """
-    # Your code:
-
-# Test with different formats
-```
-
-**Part B:** Create a `make_time_tracker` closure that tracks elapsed time.
-```python
-from datetime import datetime
-
-def make_time_tracker():
-    """
-    Return a function that returns seconds elapsed since tracker was created.
-
-    Example:
-        tracker = make_time_tracker()
-        # ... do some work ...
-        print(tracker())  # e.g., 2.5 (seconds elapsed)
-    """
-    # Your code (hint: store start_time in closure):
-
-# Test by creating tracker, sleeping briefly, then calling it
-```
-
-**Your code:**
-```python
-
-```
-
----
-
-## Task 4: TradeLogger Enhancement (PROJECT)
-
-**Instructions:** Extend your TradeLogger from Day 1 with new features.
-
-```python
-from datetime import datetime, timedelta
-from typing import List, Optional
-
-class TradeLogger:
-    """
-    Enhanced TradeLogger with filtering capabilities.
-
-    New methods to implement:
-    1. get_trades_since(dt: datetime) -> List[str]
-       - Return only trades logged after the given datetime
-       - Hint: You'll need to parse the timestamp from each line
-
-    2. get_trades_by_symbol(symbol: str) -> List[str]
-       - Return only trades for a specific symbol (e.g., "AAPL")
-
-    3. get_trade_count() -> int
-       - Return total number of trades logged
-
-    Keep existing methods: __init__, log_trade, get_trades, clear_log
-    """
-
-    def __init__(self, filepath: str):
-        # Your existing code
-        pass
-
-    def log_trade(self, symbol: str, side: str, price: float, quantity: int):
-        # Your existing code (fix format if needed)
-        pass
-
-    def get_trades(self) -> List[str]:
-        # Your existing code (add .strip())
-        pass
-
-    def clear_log(self):
-        # Your existing code
-        pass
-
-    # NEW METHODS:
-
-    def get_trades_since(self, dt: datetime) -> List[str]:
-        """Return trades logged after the given datetime."""
+    @property
+    def is_closed(self) -> bool:
+        """Return True if trade has been exited."""
         # Your code:
         pass
 
-    def get_trades_by_symbol(self, symbol: str) -> List[str]:
-        """Return trades for a specific symbol."""
+    @property
+    def pnl(self) -> Optional[float]:
+        """
+        Calculate profit/loss if trade is closed.
+        BUY: (exit_price - entry_price) * quantity
+        SELL: (entry_price - exit_price) * quantity
+        Return None if trade is still open.
+        """
         # Your code:
         pass
 
-    def get_trade_count(self) -> int:
-        """Return total number of trades."""
+
+class BacktestEngine:
+    """
+    Simple backtesting engine that tracks trades and calculates performance.
+    """
+
+    def __init__(self):
+        self._trades: List[Trade] = []
+        self._start_time: Optional[datetime] = None
+
+    def start(self) -> None:
+        """Start the backtest session."""
+        self._start_time = datetime.now()
+        self._trades = []
+
+    def open_trade(self, symbol: str, side: str, price: float, quantity: int) -> Trade:
+        """
+        Open a new trade and add it to the list.
+        Return the created Trade object.
+        """
+        # Your code:
+        pass
+
+    def close_trade(self, trade: Trade, exit_price: float) -> None:
+        """
+        Close an existing trade by setting exit_price and exit_time.
+        """
+        # Your code:
+        pass
+
+    @property
+    def open_trades(self) -> List[Trade]:
+        """Return list of trades that haven't been closed."""
+        # Your code:
+        pass
+
+    @property
+    def closed_trades(self) -> List[Trade]:
+        """Return list of trades that have been closed."""
+        # Your code:
+        pass
+
+    @property
+    def total_pnl(self) -> float:
+        """Return sum of PnL from all closed trades."""
         # Your code:
         pass
 
 # Test:
-logger = TradeLogger('test_trades.log')
-logger.clear_log()
-logger.log_trade('AAPL', 'BUY', 150.50, 100)
-logger.log_trade('GOOGL', 'SELL', 2800.00, 10)
-logger.log_trade('AAPL', 'SELL', 155.00, 50)
+engine = BacktestEngine()
+engine.start()
 
-print(f"Total trades: {logger.get_trade_count()}")
-print(f"AAPL trades: {logger.get_trades_by_symbol('AAPL')}")
+# Open some trades
+trade1 = engine.open_trade('AAPL', 'BUY', 150.0, 100)
+trade2 = engine.open_trade('GOOGL', 'SELL', 2800.0, 10)
+
+print(f'Open trades: {len(engine.open_trades)}')  # 2
+print(f'Closed trades: {len(engine.closed_trades)}')  # 0
+
+# Close trades
+engine.close_trade(trade1, 155.0)  # BUY at 150, SELL at 155 = +500
+engine.close_trade(trade2, 2750.0)  # SELL at 2800, BUY at 2750 = +500
+
+print(f'Open trades: {len(engine.open_trades)}')  # 0
+print(f'Closed trades: {len(engine.closed_trades)}')  # 2
+print(f'Total PnL: ${engine.total_pnl}')  # $1000.0
 ```
 
 **Your code:**
@@ -233,99 +344,91 @@ print(f"AAPL trades: {logger.get_trades_by_symbol('AAPL')}")
 
 ---
 
-## Task 5: PCAP Multiple Choice (6 Questions)
+## Task 6: PCAP Multiple Choice (6 Questions)
 
 **Q1:** What is the output?
 ```python
-from datetime import datetime, timedelta
+def outer(func):
+    def inner(*args):
+        print('before')
+        result = func(*args)
+        print('after')
+        return result
+    return inner
 
-dt = datetime(2026, 2, 28, 23, 30)
-dt2 = dt + timedelta(hours=1)
-print(dt2.day, dt2.month)
+@outer
+def say(msg):
+    print(msg)
+    return msg.upper()
+
+x = say('hello')
+print(x)
 ```
-- A) 28 2
-- B) 1 3
-- C) 29 2
-- D) Error
+- A) hello, HELLO
+- B) before, hello, after, HELLO
+- C) hello, before, after, HELLO
+- D) before, after, hello, HELLO
 
-**Q2:** What is the output?
-```python
-with open('test.txt', 'w') as f:
-    f.write('abc')
-    f.write('def')
-
-with open('test.txt', 'r') as f:
-    print(f.readline())
-```
-- A) abc
-- B) abcdef
-- C) abc\ndef
-- D) Error
+**Q2:** What does `@wraps(func)` do?
+- A) Calls the wrapped function
+- B) Preserves the original function's metadata (__name__, __doc__)
+- C) Makes the function run faster
+- D) Prevents the function from being called twice
 
 **Q3:** What is the output?
 ```python
-from datetime import date
-
-d = date.today()
-print(type(d.year).__name__)
-```
-- A) date
-- B) int
-- C) str
-- D) datetime
-
-**Q4:** What is the output?
-```python
-lines = []
 with open('test.txt', 'w') as f:
-    f.writelines(['a\n', 'b\n'])
-
-with open('test.txt', 'r') as f:
-    for line in f:
-        lines.append(line.strip())
-print(lines)
+    result = f.write('hello')
+print(result)
 ```
-- A) ['a\n', 'b\n']
-- B) ['a', 'b']
-- C) ['ab']
-- D) Error
+- A) None
+- B) 'hello'
+- C) 5
+- D) True
+
+**Q4:** Which correctly implements a decorator with arguments?
+```python
+# A:
+def deco(arg):
+    def wrapper(func):
+        return func
+    return wrapper
+
+# B:
+def deco(func, arg):
+    def wrapper():
+        return func()
+    return wrapper
+
+# C:
+def deco(func):
+    def wrapper(arg):
+        return func(arg)
+    return wrapper
+```
+- A) Option A
+- B) Option B
+- C) Option C
+- D) None of the above
 
 **Q5:** What is the output?
 ```python
-from datetime import datetime
+from datetime import datetime, timedelta
 
-dt1 = datetime(2026, 2, 1, 12, 0)
-dt2 = datetime(2026, 2, 1, 14, 30)
-diff = dt2 - dt1
-print(type(diff).__name__)
+dt = datetime(2026, 3, 1, 0, 0)
+dt2 = dt - timedelta(hours=1)
+print(dt2.month, dt2.day)
 ```
-- A) int
-- B) float
-- C) timedelta
-- D) datetime
+- A) 3 1
+- B) 2 28
+- C) 2 29
+- D) Error
 
-**Q6:** Which statement will raise an exception?
-```python
-# A:
-with open('newfile.txt', 'w') as f:
-    f.write('test')
-
-# B:
-with open('nonexistent.txt', 'r') as f:
-    f.read()
-
-# C:
-with open('newfile.txt', 'a') as f:
-    f.write('test')
-
-# D:
-with open('newfile.txt', 'x') as f:
-    f.write('test')  # Assume file already exists
-```
-- A) Statement A
-- B) Statement B
-- C) Statement C
-- D) Both B and D
+**Q6:** What happens when you open a file with mode 'x' and the file already exists?
+- A) The file is overwritten
+- B) Content is appended
+- C) FileExistsError is raised
+- D) FileNotFoundError is raised
 
 **Your answers:**
 ```
@@ -339,78 +442,40 @@ Q6:
 
 ---
 
-## Task 6: Property + File I/O Integration
+## Task 7: Missing Function from Day 2
 
-**Instructions:** Create a class that uses properties with file backing.
+**Instructions:** Implement the function you missed yesterday.
 
 ```python
-from datetime import datetime
-from typing import Optional
+from typing import List
 
-class ConfigManager:
+def read_non_empty_lines(filepath: str) -> List[str]:
     """
-    A configuration manager that persists settings to a file.
+    Read a file and return only non-empty lines.
 
-    Properties:
-    - last_updated (read-only): datetime of last config change
-    - debug_mode: bool, with getter and setter
-    - max_trades: int, with validation (must be > 0)
+    Requirements:
+    1. Strip whitespace from each line
+    2. Skip lines that are empty after stripping
+    3. Return as a list of strings (without newlines)
 
-    The config file format (config.txt):
-    debug_mode=True
-    max_trades=100
-    last_updated=2026-02-03 10:30:45
+    Example:
+        File contents:
+        "hello\n"
+        "\n"
+        "  \n"
+        "world\n"
+
+        Returns: ['hello', 'world']
     """
-
-    def __init__(self, filepath: str):
-        self.filepath = filepath
-        self._debug_mode = False
-        self._max_trades = 10
-        self._last_updated: Optional[datetime] = None
-        self._load_config()
-
-    def _load_config(self):
-        """Load config from file if exists."""
-        # Your code:
-        pass
-
-    def _save_config(self):
-        """Save current config to file."""
-        # Your code:
-        pass
-
-    @property
-    def last_updated(self) -> Optional[datetime]:
-        """Read-only: when config was last modified."""
-        # Your code:
-        pass
-
-    @property
-    def debug_mode(self) -> bool:
-        # Your code:
-        pass
-
-    @debug_mode.setter
-    def debug_mode(self, value: bool):
-        # Your code (update _last_updated, save to file):
-        pass
-
-    @property
-    def max_trades(self) -> int:
-        # Your code:
-        pass
-
-    @max_trades.setter
-    def max_trades(self, value: int):
-        # Your code (validate > 0, update _last_updated, save):
-        pass
+    # Your code:
 
 # Test:
-config = ConfigManager('config.txt')
-config.debug_mode = True
-config.max_trades = 50
-print(f"Debug: {config.debug_mode}, Max: {config.max_trades}")
-print(f"Last updated: {config.last_updated}")
+# Create test file
+with open('test_lines.txt', 'w') as f:
+    f.write('hello\n\n   \nworld\n  python  \n')
+
+result = read_non_empty_lines('test_lines.txt')
+print(result)  # ['hello', 'world', 'python']
 ```
 
 **Your code:**
@@ -420,126 +485,60 @@ print(f"Last updated: {config.last_updated}")
 
 ---
 
-## Task 7: Decorator + File I/O (Week 4 Review)
+## Task 8: Closure + Decorator Integration
 
-**Instructions:** Create a decorator that logs function calls to a file.
+**Instructions:** Create a decorator factory using closure concepts.
 
 ```python
-from datetime import datetime
-from functools import wraps
-
-def log_to_file(filepath: str):
+def rate_limiter(max_calls: int):
     """
-    Decorator factory that logs function calls to a file.
+    Decorator factory that limits how many times a function can be called.
 
-    Log format: "YYYY-MM-DD HH:MM:SS | function_name(args) -> result"
+    After max_calls, the function returns None without executing.
 
-    Example usage:
-        @log_to_file("calls.log")
-        def add(a, b):
-            return a + b
+    Example:
+        @rate_limiter(3)
+        def greet(name):
+            return f'Hello, {name}'
 
-        add(2, 3)  # Logs: "2026-02-03 10:30:45 | add(2, 3) -> 5"
+        print(greet('A'))  # Hello, A
+        print(greet('B'))  # Hello, B
+        print(greet('C'))  # Hello, C
+        print(greet('D'))  # None (limit reached)
+
+    Hint: Use a list to track call count (closure trick from Week 4)
     """
-    def decorator(func):
-        @wraps(func)
-        def wrapper(*args, **kwargs):
-            # Your code:
-            # 1. Call the original function
-            # 2. Log the call to file
-            # 3. Return the result
-            pass
-        return wrapper
-    return decorator
+    # Your code:
 
 # Test:
-@log_to_file("function_calls.log")
-def multiply(a, b):
-    return a * b
+@rate_limiter(3)
+def expensive_api_call(query):
+    return f'Results for: {query}'
 
-@log_to_file("function_calls.log")
-def greet(name):
-    return f"Hello, {name}!"
-
-multiply(3, 4)
-multiply(5, 6)
-greet("Alice")
-
-# Read and print the log file
-with open("function_calls.log", "r") as f:
-    print(f.read())
+print(expensive_api_call('python'))  # Results for: python
+print(expensive_api_call('java'))    # Results for: java
+print(expensive_api_call('rust'))    # Results for: rust
+print(expensive_api_call('go'))      # None
+print(expensive_api_call('c++'))     # None
 ```
 
 **Your code:**
 ```python
 
-```
-
----
-
-## Task 8: timedelta Deep Practice
-
-**Instructions:** Solve these practical datetime problems.
-
-**Q1:** Write code to find all Mondays in February 2026.
-```python
-from datetime import date, timedelta
-
-def mondays_in_month(year: int, month: int) -> list:
-    """Return list of all Monday dates in the given month."""
-    # Your code:
-
-# Test:
-print(mondays_in_month(2026, 2))
-# Expected: [date(2026, 2, 2), date(2026, 2, 9), date(2026, 2, 16), date(2026, 2, 23)]
-```
-
-**Q2:** Write code to calculate trading days between two dates (exclude weekends).
-```python
-from datetime import date, timedelta
-
-def trading_days_between(start: date, end: date) -> int:
-    """Return count of weekdays (Mon-Fri) between start and end (exclusive)."""
-    # Your code:
-
-# Test:
-print(trading_days_between(date(2026, 2, 2), date(2026, 2, 9)))  # Mon to Mon = 5 trading days
-```
-
-**Q3:** What is the output?
-```python
-from datetime import datetime, timedelta
-
-start = datetime(2026, 1, 1)
-deltas = [timedelta(days=30) for _ in range(3)]
-current = start
-
-for d in deltas:
-    current += d
-    print(current.strftime("%B"), end=" ")
-```
-
-**Your answers:**
-```
-Q1 code:
-
-Q2 code:
-
-Q3 output:
 ```
 
 ---
 
 ## Solutions Checklist
 
-- [ ] Task 1: datetime coding practice (3 parts)
-- [ ] Task 2: File I/O coding practice (3 parts)
-- [ ] Task 3: Closure + datetime integration (2 parts)
-- [ ] Task 4: PROJECT - TradeLogger enhancement
-- [ ] Task 5: PCAP multiple choice (6 questions)
-- [ ] Task 6: Property + File I/O integration
-- [ ] Task 7: Decorator + File I/O (Week 4 review)
-- [ ] Task 8: timedelta deep practice (3 questions)
+- [ ] Task 1: File mode drill (4 questions)
+- [ ] Task 2: Decorator bug fixes (2 parts)
+- [ ] Task 3: log_to_file decorator (corrected)
+- [ ] Task 4: Type hint contracts (3 questions)
+- [ ] Task 5: PROJECT - BacktestEngine
+- [ ] Task 6: PCAP multiple choice (6 questions)
+- [ ] Task 7: read_non_empty_lines (Day 2 makeup)
+- [ ] Task 8: rate_limiter decorator
 
 ---
 
