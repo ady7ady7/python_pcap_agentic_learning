@@ -873,3 +873,38 @@ Task 8 expected values were wrong. Correct: 4 winners, $1050 total PnL.
 
 ---
 
+## Week 5, Day 3 - 2026-02-04 (Wednesday)
+
+**Topic:** Decorator Mastery & File Modes Deep Dive
+**Score:** 91% (A-)
+**Difficulty:** 5-6/10
+**Time Spent:** 2 hours
+
+**Tasks Completed:**
+1. File mode drill (4 questions - 4/4)
+2. Decorator bug fixes (2 parts - 2/2)
+3. log_to_file decorator (correct implementation)
+4. Type hint contracts (3 questions - Q3 correct, Q1/Q2 task poorly designed)
+5. PROJECT: BacktestEngine (uses existing Position/Trade/PositionManager)
+6. PCAP multiple choice (6 questions - 5/6)
+7. read_non_empty_lines makeup (functional)
+8. rate_limiter decorator (correct with nonlocal)
+
+**Key Wins:**
+- File mode 'w' vs 'a' mastered
+- Decorator pattern: store result once, use append mode
+- nonlocal keyword used correctly
+- BacktestEngine integrates with existing codebase
+
+**Minor Issues:**
+- open_position missing return statement
+- Q4 PCAP: confused regular decorator with decorator-with-arguments
+- return inside with block (works but suboptimal style)
+
+**Student Feedback:**
+- Decorators need more practice to feel comfortable
+- rate_limiter pattern is useful real-world example
+- 2-hour session was long for one sitting
+
+---
+

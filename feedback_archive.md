@@ -2574,3 +2574,87 @@ This was intentional per your feedback. The 78% reflects realistic complexity—
 
 ---
 
+## Week 5, Day 3 - 2026-02-04
+
+**Topic:** Decorator Mastery & File Modes Deep Dive
+
+### Mentor Assessment
+
+**Score: 91% (A-)**
+
+**Task Breakdown:**
+
+| Task | Score | Notes |
+|------|-------|-------|
+| 1. File mode drill | 100% | All 4 correct - 'w' vs 'a' mastered |
+| 2. Decorator bug fixes | 100% | Both parts with clear explanations |
+| 3. log_to_file | 95% | Works, return inside with block (minor) |
+| 4. Type hint contracts | 70% | Q3 correct, Q1/Q2 task poorly designed |
+| 5. BacktestEngine | 90% | Missing `return position` in open_position |
+| 6. PCAP MC | 83% | Q4 wrong (A not C) |
+| 7. read_non_empty_lines | 90% | Works, minor cleanup needed |
+| 8. rate_limiter | 100% | Perfect nonlocal usage |
+
+### Detailed Corrections
+
+**Task 4 - Type Hint Contracts:**
+The task was poorly designed. The student correctly noted the code works when passing a string. The intended lesson was about type hint consistency (hint says `datetime` but code expects `str`), but this wasn't clearly communicated.
+
+**Task 5 - BacktestEngine:**
+Missing return statement:
+```python
+def open_position(...) -> Position:
+    position = Position(...)
+    self.position_manager.add_position(position)
+    return position  # Add this!
+```
+
+**Task 6 Q4 - Decorator with Arguments:**
+Option A is correct, not C.
+- A: `deco(arg)` returns a function that receives `func` → decorator WITH arguments
+- C: `deco` receives `func`, returns `wrapper(arg)` → regular decorator
+
+The 3-layer pattern for decorator with arguments:
+```python
+def decorator_with_args(arg):      # Layer 1: receives decorator args
+    def decorator(func):            # Layer 2: receives function
+        def wrapper(*args):         # Layer 3: replaces function
+            return func(*args)
+        return wrapper
+    return decorator
+```
+
+**Task 7 - Cleanup suggestions:**
+```python
+# Instead of:
+if content is not None and content != '':
+
+# Use:
+if content:  # Truthy check
+```
+
+### Strengths
+- ✅ File mode distinction now solid
+- ✅ Decorator pattern: single function call, append mode
+- ✅ nonlocal keyword used correctly
+- ✅ BacktestEngine properly integrates existing classes
+- ✅ Good code organization and readability
+
+### Areas for Improvement
+- ⚠️ Remember to return values when method signature indicates it
+- ⚠️ Decorator with arguments pattern: 3 layers, outer receives args
+- ⚠️ Pythonic truthy checks: `if content:` instead of `if content != ''`
+
+### Student Feedback Addressed
+
+**"Decorators need more practice"**
+Agreed. The rate_limiter is a great real-world pattern. Other useful patterns to practice:
+- `@cache` / `@memoize` - store results
+- `@retry` - retry on failure
+- `@timer` - measure execution time
+
+**"2 hours was long"**
+Day 4 will be lighter. Friday is exam prep day.
+
+---
+

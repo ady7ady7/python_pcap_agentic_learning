@@ -1,434 +1,155 @@
-# Week 5, Day 3 - Wednesday
-## Topic: Decorator Mastery & File Modes Deep Dive
+# Week 5, Day 4 - Thursday
+## Topic: Review & Consolidation (Lighter Day)
 
-**Date:** 2026-02-04
+**Date:** 2026-02-05
 
-**Lesson File:** [week3_5_stdlib_fileio.md](lessons/week3_5_stdlib_fileio.md)
+**Target Difficulty:** 4/10
 
-**Target Difficulty:** 6/10
-
-**Focus Areas:** Decorator patterns, file modes, type hint contracts
+**Focus:** Reinforce weak areas, shorter session before Friday exam prep
 
 **Remember:** Work in `practice.py`, paste FINAL answers here for review.
 
 ---
 
-## Task 1: File Mode Drill (Reinforce 'w' vs 'a')
+## Task 1: Decorator with Arguments Pattern (Drill)
 
-**Instructions:** Predict the output WITHOUT running. Then verify.
+**Instructions:** Which is correct for `@decorator(arg)`? Choose and explain.
 
-**Q1:**
 ```python
-with open('test.txt', 'w') as f:
-    f.write('first')
+# A:
+def decorator(arg):
+    def inner(func):
+        def wrapper(*args):
+            return func(*args)
+        return wrapper
+    return inner
 
-with open('test.txt', 'w') as f:
-    f.write('second')
+# B:
+def decorator(func):
+    def inner(arg):
+        def wrapper(*args):
+            return func(*args)
+        return wrapper
+    return inner
 
-with open('test.txt', 'r') as f:
-    print(f.read())
+# C:
+def decorator(func, arg):
+    def wrapper(*args):
+        return func(*args)
+    return wrapper
 ```
 
-**Q2:**
-```python
-with open('test.txt', 'w') as f:
-    f.write('first')
-
-with open('test.txt', 'a') as f:
-    f.write('second')
-
-with open('test.txt', 'r') as f:
-    print(f.read())
+**Your answer and explanation:**
 ```
 
-**Q3:**
-```python
-# File doesn't exist yet
-with open('new.txt', 'a') as f:
-    f.write('hello')
-
-with open('new.txt', 'r') as f:
-    print(f.read())
 ```
 
-**Q4:** You want to create a log file that accumulates entries over time. Which mode?
+---
+
+## Task 2: Quick Decorator Practice
+
+**Instructions:** Implement a `@timer` decorator that prints how long a function takes.
+
+```python
+from datetime import datetime
+from functools import wraps
+
+def timer(func):
+    """
+    Decorator that prints execution time of a function.
+
+    Example output:
+        add took 0.001 seconds
+    """
+    @wraps(func)
+    def wrapper(*args, **kwargs):
+        # Your code:
+        pass
+    return wrapper
+
+# Test:
+@timer
+def slow_function():
+    total = 0
+    for i in range(1000000):
+        total += i
+    return total
+
+result = slow_function()
+print(f'Result: {result}')
+# Expected output:
+# slow_function took X.XXX seconds
+# Result: 499999500000
+```
+
+**Your code:**
+```python
+
+```
+
+---
+
+## Task 3: PCAP Quick Fire (8 Questions)
+
+**Q1:** What is `@decorator` equivalent to?
+- A) `decorator(func)`
+- B) `func(decorator)`
+- C) `decorator = func`
+- D) `func = decorator`
+
+**Q2:** What does `f.seek(0)` do?
+- A) Closes the file
+- B) Moves cursor to beginning
+- C) Reads first byte
+- D) Writes at position 0
+
+**Q3:** What is `datetime.now().strftime("%Y")`?
+- A) "2026"
+- B) 2026
+- C) "26"
+- D) Error
+
+**Q4:** What is the output?
+```python
+def f(x=[]):
+    x.append(1)
+    return x
+
+print(len(f()), len(f()))
+```
+- A) 1 1
+- B) 1 2
+- C) 2 2
+- D) Error
+
+**Q5:** What does `@wraps(func)` preserve?
+- A) Function arguments
+- B) Function return value
+- C) Function metadata (__name__, __doc__)
+- D) Function execution time
+
+**Q6:** What mode creates a file if it doesn't exist but fails if it does?
 - A) 'w'
 - B) 'a'
 - C) 'r'
 - D) 'x'
 
-**Your answers:**
-```
-Q1:
-Q2:
-Q3:
-Q4:
-```
-
----
-
-## Task 2: Decorator Pattern Practice
-
-**Instructions:** Fix each broken decorator. Explain what was wrong.
-
-**Part A:** This decorator should log every call, but it only shows the last call.
+**Q7:** What is the output?
 ```python
-from functools import wraps
-
-def log_calls(func):
-    @wraps(func)
-    def wrapper(*args, **kwargs):
-        result = func(*args, **kwargs)
-        with open('calls.log', 'w') as f:  # BUG HERE
-            f.write(f'{func.__name__} called\n')
-        return result
-    return wrapper
-
-@log_calls
-def greet(name):
-    return f'Hello, {name}'
-
-greet('Alice')
-greet('Bob')
-greet('Charlie')
-
-# Expected in calls.log:
-# greet called
-# greet called
-# greet called
-
-# Actual in calls.log:
-# greet called  (only one!)
+from datetime import date
+d = date(2026, 2, 1)
+print(d.weekday())
 ```
-**Fix and explain:**
-```python
-
-```
-
-**Part B:** This decorator calls the function twice (wasteful!). Fix it.
-```python
-from functools import wraps
-
-def debug(func):
-    @wraps(func)
-    def wrapper(*args, **kwargs):
-        print(f'Calling {func.__name__} with {args}')
-        print(f'Result: {func(*args, **kwargs)}')  # First call
-        return func(*args, **kwargs)  # Second call!
-    return wrapper
-
-@debug
-def expensive_operation(n):
-    print('Doing expensive work...')
-    return n * 2
-
-expensive_operation(5)
-# Prints "Doing expensive work..." TWICE!
-```
-**Fix and explain:**
-```python
-
-```
-
----
-
-## Task 3: Decorator with Arguments (Corrected Pattern)
-
-**Instructions:** Implement a working `@log_to_file` decorator.
-
-```python
-from datetime import datetime
-from functools import wraps
-
-def log_to_file(filepath: str):
-    """
-    Decorator factory that logs function calls to a file.
-
-    Requirements:
-    1. APPEND to file (don't overwrite)
-    2. Call wrapped function ONCE only
-    3. Format: "TIMESTAMP | func_name(args) -> result"
-    4. Preserve function metadata with @wraps
-    """
-    def decorator(func):
-        @wraps(func)
-        def wrapper(*args, **kwargs):
-            # YOUR CODE HERE
-            pass
-        return wrapper
-    return decorator
-
-# Test:
-@log_to_file('operations.log')
-def add(a, b):
-    return a + b
-
-@log_to_file('operations.log')
-def multiply(a, b):
-    return a * b
-
-# Clear log first
-open('operations.log', 'w').close()
-
-add(2, 3)
-add(10, 20)
-multiply(4, 5)
-
-# Print the log
-with open('operations.log', 'r') as f:
-    print(f.read())
-
-# Expected output (3 lines):
-# 2026-02-04 10:30:45 | add(2, 3) -> 5
-# 2026-02-04 10:30:45 | add(10, 20) -> 30
-# 2026-02-04 10:30:45 | multiply(4, 5) -> 20
-```
-
-**Your code:**
-```python
-
-```
-
----
-
-## Task 4: Type Hint Contracts
-
-**Instructions:** The function signature tells you what types to expect. Don't re-convert!
-
-**Q1:** What's wrong with this code?
-```python
-from datetime import datetime
-
-def format_date(dt: datetime) -> str:
-    """Format datetime as string."""
-    parsed = datetime.strptime(dt, '%Y-%m-%d')  # ???
-    return parsed.strftime('%B %d, %Y')
-```
-
-**Q2:** Fix the function:
-```python
-from datetime import datetime
-
-def format_date(dt: datetime) -> str:
-    """Format datetime as string."""
-    # Your fix:
-```
-
-**Q3:** What's wrong here?
-```python
-def process_count(count: int) -> str:
-    num = int(count)  # ???
-    return f'Count is {num}'
-```
-
-**Your answers:**
-```
-Q1 explanation:
-
-Q2 code:
-
-Q3 explanation:
-```
-
----
-
-## Task 5: PROJECT - BacktestEngine Start
-
-**Instructions:** Begin the core backtesting engine for AlgoBacktest.
-
-```python
-from datetime import datetime
-from typing import List, Dict, Optional
-from dataclasses import dataclass
-
-@dataclass
-class Trade:
-    """Represents a single trade."""
-    symbol: str
-    side: str  # 'BUY' or 'SELL'
-    entry_price: float
-    quantity: int
-    entry_time: datetime
-    exit_price: Optional[float] = None
-    exit_time: Optional[datetime] = None
-
-    @property
-    def is_closed(self) -> bool:
-        """Return True if trade has been exited."""
-        # Your code:
-        pass
-
-    @property
-    def pnl(self) -> Optional[float]:
-        """
-        Calculate profit/loss if trade is closed.
-        BUY: (exit_price - entry_price) * quantity
-        SELL: (entry_price - exit_price) * quantity
-        Return None if trade is still open.
-        """
-        # Your code:
-        pass
-
-
-class BacktestEngine:
-    """
-    Simple backtesting engine that tracks trades and calculates performance.
-    """
-
-    def __init__(self):
-        self._trades: List[Trade] = []
-        self._start_time: Optional[datetime] = None
-
-    def start(self) -> None:
-        """Start the backtest session."""
-        self._start_time = datetime.now()
-        self._trades = []
-
-    def open_trade(self, symbol: str, side: str, price: float, quantity: int) -> Trade:
-        """
-        Open a new trade and add it to the list.
-        Return the created Trade object.
-        """
-        # Your code:
-        pass
-
-    def close_trade(self, trade: Trade, exit_price: float) -> None:
-        """
-        Close an existing trade by setting exit_price and exit_time.
-        """
-        # Your code:
-        pass
-
-    @property
-    def open_trades(self) -> List[Trade]:
-        """Return list of trades that haven't been closed."""
-        # Your code:
-        pass
-
-    @property
-    def closed_trades(self) -> List[Trade]:
-        """Return list of trades that have been closed."""
-        # Your code:
-        pass
-
-    @property
-    def total_pnl(self) -> float:
-        """Return sum of PnL from all closed trades."""
-        # Your code:
-        pass
-
-# Test:
-engine = BacktestEngine()
-engine.start()
-
-# Open some trades
-trade1 = engine.open_trade('AAPL', 'BUY', 150.0, 100)
-trade2 = engine.open_trade('GOOGL', 'SELL', 2800.0, 10)
-
-print(f'Open trades: {len(engine.open_trades)}')  # 2
-print(f'Closed trades: {len(engine.closed_trades)}')  # 0
-
-# Close trades
-engine.close_trade(trade1, 155.0)  # BUY at 150, SELL at 155 = +500
-engine.close_trade(trade2, 2750.0)  # SELL at 2800, BUY at 2750 = +500
-
-print(f'Open trades: {len(engine.open_trades)}')  # 0
-print(f'Closed trades: {len(engine.closed_trades)}')  # 2
-print(f'Total PnL: ${engine.total_pnl}')  # $1000.0
-```
-
-**Your code:**
-```python
-
-```
-
----
-
-## Task 6: PCAP Multiple Choice (6 Questions)
-
-**Q1:** What is the output?
-```python
-def outer(func):
-    def inner(*args):
-        print('before')
-        result = func(*args)
-        print('after')
-        return result
-    return inner
-
-@outer
-def say(msg):
-    print(msg)
-    return msg.upper()
-
-x = say('hello')
-print(x)
-```
-- A) hello, HELLO
-- B) before, hello, after, HELLO
-- C) hello, before, after, HELLO
-- D) before, after, hello, HELLO
-
-**Q2:** What does `@wraps(func)` do?
-- A) Calls the wrapped function
-- B) Preserves the original function's metadata (__name__, __doc__)
-- C) Makes the function run faster
-- D) Prevents the function from being called twice
-
-**Q3:** What is the output?
-```python
-with open('test.txt', 'w') as f:
-    result = f.write('hello')
-print(result)
-```
-- A) None
-- B) 'hello'
-- C) 5
-- D) True
-
-**Q4:** Which correctly implements a decorator with arguments?
-```python
-# A:
-def deco(arg):
-    def wrapper(func):
-        return func
-    return wrapper
-
-# B:
-def deco(func, arg):
-    def wrapper():
-        return func()
-    return wrapper
-
-# C:
-def deco(func):
-    def wrapper(arg):
-        return func(arg)
-    return wrapper
-```
-- A) Option A
-- B) Option B
-- C) Option C
-- D) None of the above
-
-**Q5:** What is the output?
-```python
-from datetime import datetime, timedelta
-
-dt = datetime(2026, 3, 1, 0, 0)
-dt2 = dt - timedelta(hours=1)
-print(dt2.month, dt2.day)
-```
-- A) 3 1
-- B) 2 28
-- C) 2 29
-- D) Error
-
-**Q6:** What happens when you open a file with mode 'x' and the file already exists?
-- A) The file is overwritten
-- B) Content is appended
-- C) FileExistsError is raised
-- D) FileNotFoundError is raised
+- A) 1 (Monday)
+- B) 0 (Sunday)
+- C) 6 (Sunday)
+- D) 7 (Sunday)
+
+**Q8:** Which is TRUE about closures?
+- A) Inner function must return outer function
+- B) Inner function can access outer function's variables
+- C) Closures require the `global` keyword
+- D) Closures cannot modify outer variables
 
 **Your answers:**
 ```
@@ -438,107 +159,82 @@ Q3:
 Q4:
 Q5:
 Q6:
+Q7:
+Q8:
 ```
 
 ---
 
-## Task 7: Missing Function from Day 2
+## Task 4: Fix the BacktestEngine Bug
 
-**Instructions:** Implement the function you missed yesterday.
+**Instructions:** You forgot to return the position in `open_position`. Fix it.
 
-```python
-from typing import List
+Open `algo_backtest/engine/backtest_engine.py` and add the missing return statement.
 
-def read_non_empty_lines(filepath: str) -> List[str]:
-    """
-    Read a file and return only non-empty lines.
-
-    Requirements:
-    1. Strip whitespace from each line
-    2. Skip lines that are empty after stripping
-    3. Return as a list of strings (without newlines)
-
-    Example:
-        File contents:
-        "hello\n"
-        "\n"
-        "  \n"
-        "world\n"
-
-        Returns: ['hello', 'world']
-    """
-    # Your code:
-
-# Test:
-# Create test file
-with open('test_lines.txt', 'w') as f:
-    f.write('hello\n\n   \nworld\n  python  \n')
-
-result = read_non_empty_lines('test_lines.txt')
-print(result)  # ['hello', 'world', 'python']
+**Confirm fix:**
+```
+Fixed: yes/no
 ```
 
-**Your code:**
+---
+
+## Task 5: PROJECT - Test Your BacktestEngine
+
+**Instructions:** Write a simple test in `practice.py` that:
+1. Creates a BacktestEngine
+2. Opens 2 positions (one BUY, one SELL)
+3. Processes a price that triggers one of them
+4. Prints the results
+
+```python
+# Run from algo_backtest/engine/ directory or adjust imports
+
+# Your test code:
+
+```
+
+**Paste your test and output:**
 ```python
 
 ```
 
 ---
 
-## Task 8: Closure + Decorator Integration
+## Task 6: Mutable Default Arguments Trap (PCAP Classic)
 
-**Instructions:** Create a decorator factory using closure concepts.
-
+**Q1:** What's the bug in this code?
 ```python
-def rate_limiter(max_calls: int):
-    """
-    Decorator factory that limits how many times a function can be called.
+def add_item(item, items=[]):
+    items.append(item)
+    return items
 
-    After max_calls, the function returns None without executing.
-
-    Example:
-        @rate_limiter(3)
-        def greet(name):
-            return f'Hello, {name}'
-
-        print(greet('A'))  # Hello, A
-        print(greet('B'))  # Hello, B
-        print(greet('C'))  # Hello, C
-        print(greet('D'))  # None (limit reached)
-
-    Hint: Use a list to track call count (closure trick from Week 4)
-    """
-    # Your code:
-
-# Test:
-@rate_limiter(3)
-def expensive_api_call(query):
-    return f'Results for: {query}'
-
-print(expensive_api_call('python'))  # Results for: python
-print(expensive_api_call('java'))    # Results for: java
-print(expensive_api_call('rust'))    # Results for: rust
-print(expensive_api_call('go'))      # None
-print(expensive_api_call('c++'))     # None
+print(add_item('a'))
+print(add_item('b'))
 ```
 
-**Your code:**
-```python
+**Q2:** What is the output?
 
+**Q3:** How do you fix it?
+
+**Your answers:**
+```
+Q1 bug:
+
+Q2 output:
+
+Q3 fix:
 ```
 
 ---
 
 ## Solutions Checklist
 
-- [ ] Task 1: File mode drill (4 questions)
-- [ ] Task 2: Decorator bug fixes (2 parts)
-- [ ] Task 3: log_to_file decorator (corrected)
-- [ ] Task 4: Type hint contracts (3 questions)
-- [ ] Task 5: PROJECT - BacktestEngine
-- [ ] Task 6: PCAP multiple choice (6 questions)
-- [ ] Task 7: read_non_empty_lines (Day 2 makeup)
-- [ ] Task 8: rate_limiter decorator
+- [ ] Task 1: Decorator pattern choice
+- [ ] Task 2: @timer decorator
+- [ ] Task 3: PCAP quick fire (8 questions)
+- [ ] Task 4: Fix BacktestEngine bug
+- [ ] Task 5: Test BacktestEngine
+- [ ] Task 6: Mutable default trap
 
 ---
 
@@ -551,12 +247,11 @@ print(expensive_api_call('c++'))     # None
 **What clicked today:**
 
 
-**What's confusing:**
-
-
-**Questions for mentor:**
+**Ready for Friday exam prep?** yes/no
 
 
 ---
 
 **When complete:** Notify me for assessment.
+
+**Tomorrow:** Friday = Final review + Weekend Mock Exams generated
