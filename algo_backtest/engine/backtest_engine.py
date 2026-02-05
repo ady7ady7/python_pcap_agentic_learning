@@ -1,8 +1,8 @@
 from typing import List
 from datetime import datetime
-from position import Position
-from trade import Trade
-from position_manager import PositionManager
+from algo_backtest.engine.position import Position
+from algo_backtest.engine.trade import Trade
+from algo_backtest.engine.position_manager import PositionManager
 
 
 class BacktestEngine:
@@ -32,6 +32,7 @@ class BacktestEngine:
         
         position = Position(ticker, side, entry, quantity, stop_loss, take_profit)
         self.position_manager.add_position(position)
+        return position
         
     
     def process_price(self, current_price: float) -> List[Trade]:

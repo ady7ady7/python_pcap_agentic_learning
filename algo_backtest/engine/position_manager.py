@@ -3,9 +3,8 @@ A class used to handle multiple positions
 '''
 
 
-from typing import List, Optional
+from typing import List
 from algo_backtest.engine.position import Position
-from algo_backtest.engine.trade import Trade
 
 
 class PositionManager:
@@ -81,3 +80,4 @@ class PositionManager:
         return f"PositionManager: {len(self.positions)} open positions"
     
     
+

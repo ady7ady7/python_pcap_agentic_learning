@@ -908,3 +908,33 @@ Task 8 expected values were wrong. Correct: 4 winners, $1050 total PnL.
 
 ---
 
+## Week 5, Day 4 - 2026-02-05 (Thursday)
+
+**Topic:** Review & Consolidation (Lighter Day)
+**Score:** 93% (A)
+**Difficulty:** 4/10
+**Time Spent:** 45 minutes
+
+**Tasks Completed:**
+1. Decorator with arguments pattern (correct - A)
+2. @timer decorator (working implementation)
+3. PCAP quick fire (7/8 - Q3 strftime returns string)
+4. BacktestEngine bug fix (return statement added)
+5. BacktestEngine test (working, correct PnL calculations)
+6. Mutable default arguments trap (correct fix, minor output format)
+
+**Key Wins:**
+- Decorator with arguments pattern now solid
+- BacktestEngine fully functional
+- @timer decorator another useful pattern learned
+- Mutable default trap understood
+
+**Minor Issue:**
+- Q3: strftime ALWAYS returns string, even "%Y" → "2026" not 2026
+
+**Student Feedback:**
+- Appreciated lighter session on busy day
+- ~45 minutes was manageable
+
+---
+

@@ -41,7 +41,24 @@ def decorator(func, arg):
 
 **Your answer and explanation:**
 ```
+A - it works.
+It's useless here in this form, as it requires an argument and it doesn't really do anything with it in the current state, but it works properly.
 
+def decorator(arg):
+    def inner(func):
+        def wrapper(*args):
+            return func(*args)
+        return wrapper
+    return inner
+
+@decorator(5)
+def add(a, b):
+    return a + b
+
+print(add(4, 15))
+$ python practice.py
+19
+(.venv) 
 ```
 
 ---
@@ -84,7 +101,40 @@ print(f'Result: {result}')
 
 **Your code:**
 ```python
+from datetime import datetime
+from functools import wraps
 
+def timer(func):
+    '''Decorator that prints execution time of a function.
+    
+    
+       Example output: add took 0.001 seconds
+    '''
+    @wraps(func)
+    def wrapper(*args, **kwargs):
+        start = datetime.now()
+        result = func(*args, **kwargs)
+        end = datetime.now()
+        print(f'{func.__name__} took {end - start}')
+        return result
+    return wrapper
+
+
+
+$ python practice.py
+slow_function took 0:00:00.023520
+Result: 499999500000
+(.venv) 
+HARDPC@DESKTOP-5F8NBD1 MINGW64 ~/Desktop/AL/projekty/python_pcap_agentic_learning (main)
+$ python practice.py
+slow_function took 0:00:00.024573
+Result: 499999500000
+(.venv) 
+HARDPC@DESKTOP-5F8NBD1 MINGW64 ~/Desktop/AL/projekty/python_pcap_agentic_learning (main)
+$ python practice.py
+slow_function took 0:00:00.027695
+Result: 499999500000
+(.venv) 
 ```
 
 ---
@@ -97,17 +147,24 @@ print(f'Result: {result}')
 - C) `decorator = func`
 - D) `func = decorator`
 
+A
+
 **Q2:** What does `f.seek(0)` do?
 - A) Closes the file
 - B) Moves cursor to beginning
 - C) Reads first byte
 - D) Writes at position 0
 
+B
+
 **Q3:** What is `datetime.now().strftime("%Y")`?
 - A) "2026"
 - B) 2026
 - C) "26"
 - D) Error
+
+B
+
 
 **Q4:** What is the output?
 ```python
@@ -122,17 +179,23 @@ print(len(f()), len(f()))
 - C) 2 2
 - D) Error
 
+B
+
 **Q5:** What does `@wraps(func)` preserve?
 - A) Function arguments
 - B) Function return value
 - C) Function metadata (__name__, __doc__)
 - D) Function execution time
 
+C
+
 **Q6:** What mode creates a file if it doesn't exist but fails if it does?
 - A) 'w'
 - B) 'a'
 - C) 'r'
 - D) 'x'
+
+D
 
 **Q7:** What is the output?
 ```python
@@ -145,11 +208,15 @@ print(d.weekday())
 - C) 6 (Sunday)
 - D) 7 (Sunday)
 
+C
+
 **Q8:** Which is TRUE about closures?
 - A) Inner function must return outer function
 - B) Inner function can access outer function's variables
 - C) Closures require the `global` keyword
 - D) Closures cannot modify outer variables
+
+B - yes, sometimes with proper keywords (nonlocal)
 
 **Your answers:**
 ```
@@ -175,6 +242,7 @@ Open `algo_backtest/engine/backtest_engine.py` and add the missing return statem
 ```
 Fixed: yes/no
 ```
+Yes
 
 ---
 
@@ -196,6 +264,28 @@ Fixed: yes/no
 **Paste your test and output:**
 ```python
 
+from algo_backtest.engine.backtest_engine import BacktestEngine
+engine = BacktestEngine()
+print(engine)
+
+engine.open_position('FDAX', 'BUY', 24410, 7, 24390, 25600)
+
+engine.process_price(25610)
+engine.open_position('BTCUSD', 'SELL', 70800, 5, 72100, 66400)
+engine.process_price(66300)
+
+print(engine.total_pnl)
+print(engine.win_rate)
+
+
+$ python practice.py
+<algo_backtest.engine.backtest_engine.BacktestEngine object at 0x00000200727AB8C0>
+Position BUY 7 FDAX @ 24410 [SL = 24390, TP = 25600] added successfully
+Position SELL 5 BTCUSD @ 70800 [SL = 72100, TP = 66400] added successfully
+30900
+[8400, 22500]
+100.0
+(.venv) 
 ```
 
 ---
@@ -210,11 +300,29 @@ def add_item(item, items=[]):
 
 print(add_item('a'))
 print(add_item('b'))
+
+The issue is that we have a mutable default argument - an empty list.
+It will hold all of our entries instead of separating them
 ```
 
 **Q2:** What is the output?
 
+a, b
+
 **Q3:** How do you fix it?
+
+We can store the empty list inside of the functions
+
+def add_item(item, items=None):
+
+    if items is None:
+        items = []
+    items.append(item)
+    return items
+
+print(add_item('a'))
+print(add_item('b'))
+
 
 **Your answers:**
 ```

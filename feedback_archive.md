@@ -2658,3 +2658,59 @@ Day 4 will be lighter. Friday is exam prep day.
 
 ---
 
+## Week 5, Day 4 - 2026-02-05
+
+**Topic:** Review & Consolidation (Lighter Day)
+
+### Mentor Assessment
+
+**Score: 93% (A)**
+
+**Task Breakdown:**
+
+| Task | Score | Notes |
+|------|-------|-------|
+| 1. Decorator pattern | 100% | Correctly identified A, good explanation |
+| 2. @timer decorator | 100% | Working implementation |
+| 3. PCAP Quick Fire | 87.5% | Q3 wrong - strftime returns string |
+| 4. BacktestEngine fix | 100% | Return statement added |
+| 5. Test BacktestEngine | 100% | Correct PnL: $30,900 |
+| 6. Mutable default | 90% | Correct fix, output format slightly off |
+
+### Corrections
+
+**Task 3 Q3:**
+`strftime` ALWAYS returns a string, regardless of format:
+```python
+datetime.now().strftime("%Y")  # "2026" (string)
+type(...)  # <class 'str'>
+```
+
+**Task 6 Q2:**
+Output format is the full list each time:
+```
+['a']
+['a', 'b']
+```
+
+### Week 5 Progress
+
+| Day | Score | Topic |
+|-----|-------|-------|
+| 1 | 89% | datetime & File I/O Basics |
+| 2 | 78% | datetime Practice & Applications |
+| 3 | 91% | Decorator Mastery & File Modes |
+| 4 | 93% | Review & Consolidation |
+
+**Running Average: 87.75%**
+
+### Ready for Friday
+- BacktestEngine working and tested
+- Decorator patterns solid
+- File modes mastered
+- datetime fundamentals good
+
+Tomorrow: Final review + Weekend Mock Exams
+
+---
+

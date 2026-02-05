@@ -38,7 +38,7 @@ class Position:
         
     def __str__(self) -> str:
         '''A Python magic method used to return information about class instead of memory object'''
-        return f'{self.side} {self.quantity} @ {self.entry_price} [SL = {self.stop_loss}, TP = {self.take_profit}]'
+        return f'{self.side} {self.quantity} {self.ticker} @ {self.entry_price} [SL = {self.stop_loss}, TP = {self.take_profit}]'
     
     
     def __repr__(self) -> str:

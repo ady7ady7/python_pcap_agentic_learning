@@ -1,8 +1,8 @@
-# Daily Feedback - Week 5, Day 4
+# Daily Feedback - Week 5, Day 5 (Friday)
 
-**Date:** 2026-02-05
+**Date:** 2026-02-06
 
-**Topic:** Review & Consolidation (Lighter Day)
+**Topic:** Final Week Review & Weekend Exam Prep
 
 ---
 
@@ -18,19 +18,26 @@
 
 ## Reflection
 
-**What clicked today:**
+**What clicked this week:**
 
 
-**What's still confusing:**
+**Areas still needing work:**
 
 
-**Ready for Friday exam prep?** yes/no
+**Confidence level for exams (1-10):**
 
 
 ---
 
 ## Questions for Mentor
 
+
+---
+
+**Weekend Plan:**
+- [ ] Complete Exam A
+- [ ] Complete Exam B
+- [ ] Review weak areas
 
 ---
 
