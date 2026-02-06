@@ -2714,3 +2714,93 @@ Tomorrow: Final review + Weekend Mock Exams
 
 ---
 
+## Week 5, Day 5 - 2026-02-06
+
+**Topic:** Week Review & Exam Prep
+
+### Mentor Assessment
+
+**Score: 88% (B+)**
+
+**Task Breakdown:**
+
+| Task | Score | Notes |
+|------|-------|-------|
+| 1. PCAP warm-up | 100% | Shallow copy + nonlocal perfect |
+| 2. @retry decorator | 100%* | Code correct, needed AI assistance |
+| 3. filter_log_by_date | 85% | Boundary (`>` vs `>=`), missing strip() |
+| 4. PCAP simulation | 70% | Q5, Q6, Q7 wrong (7/10) |
+| 5. BacktestEngine __str__ | 100% | Clean implementation |
+| 7. Decorator stacking | 75% | Correct order, wrong content/tags |
+| 8. Exception + File I/O | 85% | `{text}` = set, should be `text` |
+
+### Key Corrections
+
+**Q5 (@wraps):** `@wraps` preserves `__name__`, `__doc__`, `__module__`, `__qualname__`, `__annotations__`. It does NOT copy `__code__`.
+
+**Q6 (Exception hierarchy):**
+```
+IOError (alias for OSError)
+  └── FileNotFoundError
+```
+`except IOError` catches FileNotFoundError because parent catches child. Put specific exceptions FIRST.
+
+**Q7 (strftime):** `%y` = 2-digit year (26), `%Y` = 4-digit year (2026).
+
+**Q10:** Mentor error — options B and C were identical.
+
+### Week 5 Final Summary
+
+| Day | Score | Topic |
+|-----|-------|-------|
+| 1 | 89% | datetime & File I/O Basics |
+| 2 | 78% | datetime Practice & Applications |
+| 3 | 91% | Decorator Mastery & File Modes |
+| 4 | 93% | Review & Consolidation |
+| 5 | 88% | Week Review & Exam Prep |
+
+**Week 5 Average: 87.8% (B+)**
+
+### Strengths Observed
+- File modes fully mastered ('w'/'a'/'r'/'x')
+- datetime fundamentals solid (strftime/strptime/timedelta)
+- Closures and nonlocal understood
+- Properties comfortable (5/5)
+- BacktestEngine integrated with existing codebase
+- Honest self-assessment and willingness to flag weak areas
+
+### Recurring Gaps
+- Decorators with complex logic (retry, rate_limiter) still challenging
+- Exception hierarchy order (parent catches child)
+- strftime format codes: `%y` vs `%Y`, return type always string
+- Small Python details: `{x}` = set, boundary conditions (inclusive)
+
+### Project Progress
+- BacktestEngine created and tested
+- __str__ method added
+- Position → Trade lifecycle working
+- PnL calculations verified ($30,900 test case)
+
+### Readiness for Next Week
+- Strong foundation for Week 6 (Generators & Iterators)
+- Decorators need continued scaffolded practice (1 task/day)
+- Exception hierarchy needs drilling
+- Student self-assessment aligns with mentor observations
+
+### Student Self-Assessment (Comfort 1-5)
+- Decorators (no args): 4
+- Decorators (with args): 3 (complex: 2)
+- File modes: 5
+- File read methods: 4
+- datetime: 4
+- timedelta: 5
+- Closures: 5
+- Properties: 5
+
+### Weekend Tasks
+- Week5_Exam_A.md (30 questions)
+- Week5_Exam_B.md (30 questions)
+- Focus: decorators, exception hierarchy, strftime codes
+
+---
+

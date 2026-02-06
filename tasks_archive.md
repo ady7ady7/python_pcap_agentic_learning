@@ -938,3 +938,39 @@ Task 8 expected values were wrong. Correct: 4 winners, $1050 total PnL.
 
 ---
 
+## Week 5, Day 5 - 2026-02-06 (Friday)
+
+**Topic:** Week Review & Exam Prep
+**Score:** 88% (B+)
+**Difficulty:** 5/10 (Task 2 retry: 7-8/10)
+**Time Spent:** 70 minutes
+
+**Tasks Completed:**
+1. PCAP warm-up - shallow copy + nonlocal (2/2)
+2. @retry decorator (correct code, needed AI help)
+3. filter_log_by_date (functional, boundary/strip issues)
+4. PCAP simulation 10 questions (7/10)
+5. BacktestEngine __str__ method (clean)
+6. Week 5 self-assessment (honest ratings)
+7. Decorator stacking (correct order, wrong details)
+8. Exception handling + File I/O (set instead of string bug)
+
+**Key Issues:**
+- Q5: @wraps does NOT preserve __code__
+- Q6: IOError catches FileNotFoundError (parent catches child)
+- Q7: %y = 2-digit year, %Y = 4-digit year
+- {text} creates set, not string
+
+**Student Feedback:**
+- Decorators still difficult, especially complex patterns
+- Wants scaffolded daily decorator practice with explanations
+- Doesn't want to rely on AI help
+- Other topics comfortable (4-5/5)
+
+**Weekend Tasks:**
+- PCAP Mock Exam A (30 questions)
+- PCAP Mock Exam B (30 questions)
+- Target: 70%+ (21/30) on each
+
+---
+

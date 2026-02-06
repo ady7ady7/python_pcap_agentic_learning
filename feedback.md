@@ -1,44 +1,39 @@
-# Daily Feedback - Week 5, Day 5 (Friday)
+# Daily Feedback - Week 5, Weekend Exams
 
-**Date:** 2026-02-06
-
-**Topic:** Final Week Review & Weekend Exam Prep
+**Date:** 2026-02-07/08
 
 ---
 
-## Self-Assessment
+## Exam A
 
-**Tasks Completed:** ___ / 6
+**Score:** ___ / 30
 
-**Time Spent:** ___ minutes
+**Time taken:** ___ minutes
 
-**Difficulty Rating (1-10):**
-
----
-
-## Reflection
-
-**What clicked this week:**
-
-
-**Areas still needing work:**
-
-
-**Confidence level for exams (1-10):**
+**Questions you were unsure about:**
 
 
 ---
 
-## Questions for Mentor
+## Exam B
+
+**Score:** ___ / 30
+
+**Time taken:** ___ minutes
+
+**Questions you were unsure about:**
 
 
 ---
 
-**Weekend Plan:**
-- [ ] Complete Exam A
-- [ ] Complete Exam B
-- [ ] Review weak areas
+## Overall Reflection
+
+**Most challenging topic across both exams:**
+
+
+**Anything that surprised you:**
+
 
 ---
 
-**When complete:** Submit for mentor review.
+**When complete:** Submit both exams for grading.
