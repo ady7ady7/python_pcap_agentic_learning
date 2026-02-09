@@ -9,6 +9,9 @@
 - Write your answer letter next to each question
 - No running code — predict outputs mentally
 
+
+#Start 9:30
+
 ---
 
 **Q1.** What is the output?
@@ -30,6 +33,7 @@ print(result())
 - D) None
 
 **Your answer:**
+B
 
 ---
 
@@ -48,8 +52,10 @@ print(repr(content))
 - C) ['line1\n', 'line2\n']
 - D) 'line1\nline2'
 
-**Your answer:**
 
+
+**Your answer:**
+A
 ---
 
 **Q3.** What is the output?
@@ -66,6 +72,7 @@ print(d2)
 - D) Error
 
 **Your answer:**
+A
 
 ---
 
@@ -93,6 +100,7 @@ print(D().greet())
 - D) None
 
 **Your answer:**
+B
 
 ---
 
@@ -117,6 +125,7 @@ print(name('Smith'))
 - D) Mr.
 
 **Your answer:**
+B
 
 ---
 
@@ -127,6 +136,7 @@ print(name('Smith'))
 - D) `open('existing.txt', 'r')`
 
 **Your answer:**
+C
 
 ---
 
@@ -143,6 +153,7 @@ print(dt.strftime('%I:%M %p'))
 - D) 15:30
 
 **Your answer:**
+B
 
 ---
 
@@ -163,6 +174,7 @@ finally:
 - D) C
 
 **Your answer:**
+A
 
 ---
 
@@ -183,6 +195,7 @@ print(double(5) + triple(5))
 - D) 10
 
 **Your answer:**
+A
 
 ---
 
@@ -197,6 +210,7 @@ print(text[7:12])
 - D) Worl
 
 **Your answer:**
+A
 
 ---
 
@@ -224,6 +238,8 @@ print(add.__name__, add.__doc__)
 
 **Your answer:**
 
+B
+
 ---
 
 **Q12.** What is the output?
@@ -238,6 +254,7 @@ print(n)
 - D) True
 
 **Your answer:**
+C
 
 ---
 
@@ -263,6 +280,8 @@ print(d.get_name())
 - D) None
 
 **Your answer:**
+A
+
 
 ---
 
@@ -280,6 +299,8 @@ print(d1 == d2)
 - D) None
 
 **Your answer:**
+A
+
 
 ---
 
@@ -295,6 +316,7 @@ print(result)
 - D) Error
 
 **Your answer:**
+B
 
 ---
 
@@ -323,6 +345,7 @@ print(greet())
 - D) `<i>hello</i>`
 
 **Your answer:**
+B
 
 ---
 
@@ -338,6 +361,7 @@ print(result)
 - D) [('a', 2), ('b', 4), ('c', 6)]
 
 **Your answer:**
+A
 
 ---
 
@@ -358,6 +382,8 @@ with open('file.txt', 'r') as f:
 - D) hello\n world
 
 **Your answer:**
+C
+
 
 ---
 
@@ -381,6 +407,7 @@ print(Base.x, Child.x, GrandChild.x)
 - D) Error
 
 **Your answer:**
+B
 
 ---
 
@@ -397,6 +424,7 @@ print(d.isoweekday(), d.weekday())
 - D) 4 5
 
 **Your answer:**
+A
 
 ---
 
@@ -420,6 +448,8 @@ print(say.__name__)
 
 **Your answer:**
 
+B
+
 ---
 
 **Q22.** What is the output?
@@ -438,6 +468,7 @@ print('C')
 - D) Error
 
 **Your answer:**
+A
 
 ---
 
@@ -452,6 +483,7 @@ print(s[1:5:2])
 - D) ace
 
 **Your answer:**
+A
 
 ---
 
@@ -468,6 +500,7 @@ print(result)
 - D) 4
 
 **Your answer:**
+B
 
 ---
 
@@ -494,6 +527,7 @@ print(Counter.get_count())
 - D) Error
 
 **Your answer:**
+B
 
 ---
 
@@ -511,6 +545,7 @@ print(dt2.strftime('%d %B'))
 - D) Error
 
 **Your answer:**
+B
 
 ---
 
@@ -529,6 +564,7 @@ print(total)
 - D) Error
 
 **Your answer:**
+B
 
 ---
 
@@ -550,6 +586,8 @@ print(result[0](), result[1](), result[2]())
 
 **Your answer:**
 
+B
+
 ---
 
 **Q29.** What exception does `open('nonexistent.txt', 'r')` raise?
@@ -559,6 +597,7 @@ print(result[0](), result[1](), result[2]())
 - D) All of the above are correct names for this exception
 
 **Your answer:**
+B
 
 ---
 
@@ -584,7 +623,10 @@ print(f'{c.area():.1f}')
 - D) 31.4
 
 **Your answer:**
+B
 
+
+End 9:45
 ---
 
 ## Answer Sheet

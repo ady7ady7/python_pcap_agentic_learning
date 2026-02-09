@@ -1470,3 +1470,138 @@ f(6)
 **Absolutely!** With 90% average across Week 4 including exams, the functional programming foundations are solid. The remaining gaps are nuanced edge cases, not fundamental concepts.
 
 **Week 5 Focus:** Polymorphism, Encapsulation, and BacktestEngine development.
+
+---
+
+## Week 5 Exam A - 2026-02-07
+
+**Time Taken:** 15 minutes (Start: 9:30, Finish: 9:45)
+**Score:** 29/30 (96.7%)
+**Result:** ✅ PASS
+**Grade:** A+
+
+### Question Analysis
+
+#### ❌ Wrong Answers (1/30)
+
+| Q | Topic | Your Answer | Correct | Explanation |
+|---|-------|------------|---------|-------------|
+| 30 | f-string format | B (78.50) | A (78.5) | `:.1f` = 1 decimal place, `:.2f` = 2 decimal places |
+
+#### ⚠️ Partially Correct (1/30)
+
+| Q | Topic | Your Answer | Best Answer | Note |
+|---|-------|------------|-------------|------|
+| 29 | Exception hierarchy | B (FileNotFoundError) | D (All correct) | FileNotFoundError IS also IOError and OSError |
+
+#### ✅ All Other Questions (28/30) — Perfect
+
+### Topic Performance
+
+| Topic | Questions | Score |
+|-------|-----------|-------|
+| Decorators | Q1, Q5, Q11, Q16, Q21 | 5/5 (100%) |
+| File I/O | Q2, Q6, Q12, Q18, Q27 | 5/5 (100%) |
+| datetime | Q3, Q7, Q14, Q20, Q26 | 5/5 (100%) |
+| OOP | Q4, Q13, Q19, Q25 | 4/4 (100%) |
+| Closures/Functional | Q9, Q15, Q17, Q24, Q28 | 5/5 (100%) |
+| Exception Handling | Q8, Q22, Q29 | 2/3 (67%) |
+| Formatting | Q10, Q23, Q30 | 2/3 (67%) |
+
+---
+
+## Week 5 Exam B - 2026-02-07
+
+**Time Taken:** 17 minutes (Start: 9:49, Finish: 10:06)
+**Score:** 25/30 (83.3%)
+**Result:** ✅ PASS
+**Grade:** B+
+
+### Question Analysis
+
+#### ❌ Wrong Answers (5/30)
+
+| Q | Topic | Your Answer | Correct | Explanation |
+|---|-------|------------|---------|-------------|
+| 2 | File reading | A (abc) | B (empty) | readline() consumed all of 'abc' (no newline), read() returns '' |
+| 8 | MRO + super() | A (DBA) | B (DBCA) | super() follows full MRO: D→B→C→A, not just direct parent |
+| 9 | File read sequence | B | A | f.read().strip() = 'line1\nline2', printed as two lines |
+| 23 | __new__ / Singleton | No answer | A (True) | __new__ controls object creation; both vars point to same instance |
+| 30 | Decorator stacking | D (wrapper) | B (wrapper/greet) | Without @wraps, outer prints 'wrapper called', inner prints 'greet called' |
+
+#### ✅ All Other Questions (25/30)
+
+### Topic Performance
+
+| Topic | Questions | Score |
+|-------|-----------|-------|
+| Decorators (simple) | Q1, Q10, Q16, Q21, Q25 | 5/5 (100%) |
+| Decorators (stacking) | Q30 | 0/1 (0%) |
+| File I/O | Q2, Q9, Q15, Q20, Q27 | 3/5 (60%) |
+| datetime | Q3, Q7, Q12, Q17, Q22, Q28 | 6/6 (100%) |
+| OOP | Q4, Q8, Q13, Q18, Q23 | 3/5 (60%) |
+| Closures/Functional | Q5, Q6, Q14, Q19, Q24 | 5/5 (100%) |
+| Misc | Q11, Q26, Q29 | 3/3 (100%) |
+
+### Student Feedback Addressed
+
+**Q7 complaint ("stupid question — day counting"):**
+Agreed. Future exams will avoid questions that test arithmetic rather than Python knowledge. I'll keep timedelta questions focused on code behavior, not manual day counting.
+
+**Q22 comment ("have to Google it"):**
+You actually got this right! 2024 IS a leap year. The question tests knowing that Feb 29 is valid in leap years — which you knew.
+
+**Q23 comment ("first time seeing __new__"):**
+Valid complaint. `__new__` is on the PCAP syllabus but I hadn't introduced it in lessons. Will add to Week 6 material before testing it again.
+
+---
+
+## Week 5 Exam Summary
+
+| Exam | Score | Percentage | Grade |
+|------|-------|------------|-------|
+| Exam A | 29/30 | 96.7% | A+ |
+| Exam B | 25/30 | 83.3% | B+ |
+| **Average** | **27/30** | **90.0%** | **A-** |
+
+### Week 5 Complete Progress
+
+| Day | Score | Topic |
+|-----|-------|-------|
+| 1 | 89% | datetime & File I/O Basics |
+| 2 | 78% | datetime Practice & Applications |
+| 3 | 91% | Decorator Mastery & File Modes |
+| 4 | 93% | Review & Consolidation |
+| 5 | 88% | Week Review & Exam Prep |
+| Exam A | 96.7% | Mock Exam |
+| Exam B | 83.3% | Mock Exam |
+
+**Week 5 Average: 88.4% (B+)**
+
+---
+
+### Key Takeaways from Week 5 Exams
+
+**Mastered:**
+- ✅ Decorators (simple and with arguments)
+- ✅ datetime fundamentals (strftime, strptime, timedelta)
+- ✅ File modes ('w', 'a', 'r', 'x')
+- ✅ Closures and functional programming
+- ✅ Properties and OOP basics
+- ✅ Late binding fix (lambda i=i)
+- ✅ Exception hierarchy awareness (IOError/FileNotFoundError)
+
+**Still needs practice:**
+- ⚠️ MRO with super() in diamond inheritance (DBCA not DBA)
+- ⚠️ Decorator stacking without @wraps (wrapper.__name__)
+- ⚠️ File cursor position after readline()
+- ⚠️ f-string format specifiers (:.1f vs :.2f)
+- ⚠️ __new__ method (not yet introduced in lessons)
+
+---
+
+### Ready for Week 6
+
+Strong performance. Decorator understanding has improved significantly from Week 4 (where stacking was 0%) to Week 5 (simple decorators at 100%). Complex stacking still needs work but the foundation is there.
+
+**Week 6 Focus:** Generators & Iterators, continued decorator scaffolding
