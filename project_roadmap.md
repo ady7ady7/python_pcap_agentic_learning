@@ -38,16 +38,20 @@
 - [x] Decorators with/without arguments
 - [x] Signal generator with functional patterns
 
-### Week 5: BacktestEngine & File I/O (CURRENT)
-- [ ] `BacktestEngine` class
-- [ ] File I/O: Load CSV data, save results
-- [ ] Private attribute `__pnl` (encapsulation)
-- [ ] Method: `run(data, strategy)` → simulates trades
-- [ ] Trade logging to file
+### Week 5: BacktestEngine & File I/O ✅ COMPLETE
+- [x] `BacktestEngine` class (orchestrates Position → Trade lifecycle)
+- [x] `open_position()` and `process_price()` methods
+- [x] Properties: `total_pnl`, `win_rate`
+- [x] `__str__` method for summary display
+- [x] datetime & File I/O practice (strftime, strptime, timedelta)
+- [x] Decorator fundamentals (simple, with args, stacking)
 
-### Week 6: Event-Driven Architecture
-- [ ] Convert DataFrame to generator (yield row as namedtuple)
-- [ ] Implement tick-by-tick simulation
+### Week 6: Event-Driven Architecture (CURRENT)
+- [ ] Convert DataFrame rows to generator (yield row as namedtuple)
+- [ ] `PriceTick` named tuple for tick data
+- [ ] `create_price_stream()` generator function
+- [ ] Implement tick-by-tick simulation via generator pipeline
+- [ ] Custom iterators with `__iter__`/`__next__`
 - [ ] Performance metrics calculation
 
 ---
@@ -74,5 +78,5 @@
 
 ---
 
-**Current Status:** Week 5, Day 1 - BacktestEngine & File I/O
-**Last Updated:** 2026-02-02
+**Current Status:** Week 6, Day 1 - Iterator Protocol & Advanced Generators
+**Last Updated:** 2026-02-09

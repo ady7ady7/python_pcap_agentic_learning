@@ -1,6 +1,7 @@
 '''Position management for trading strategies.'''
 
 from typing import Optional, Tuple
+import uuid
 
 class Position:
     '''
@@ -27,6 +28,7 @@ class Position:
         
         '''Initialize a new position'''
         
+        self.position_id = uuid.uuid4()
         self.ticker = ticker
         self.side = side.upper() #I decided to include side, as we will usually have this sorted out in this way
         self.entry_price = entry_price
@@ -38,12 +40,12 @@ class Position:
         
     def __str__(self) -> str:
         '''A Python magic method used to return information about class instead of memory object'''
-        return f'{self.side} {self.quantity} {self.ticker} @ {self.entry_price} [SL = {self.stop_loss}, TP = {self.take_profit}]'
+        return f'Position_id = {self.position_id} | {self.side} {self.quantity} {self.ticker} @ {self.entry_price} [SL = {self.stop_loss}, TP = {self.take_profit}]'
     
     
     def __repr__(self) -> str:
         '''A Python magic method used to provide devs with useful information to recreate the object '''
-        return f'Position(ticker = {self.ticker}, side = {self.side}, entry_price = {self.entry_price}, quantity = {self.quantity}, stop_loss = {self.stop_loss}, take_profit = {self.take_profit})'
+        return f'Position(position_id = {self.position_id}, ticker = {self.ticker}, side = {self.side}, entry_price = {self.entry_price}, quantity = {self.quantity}, stop_loss = {self.stop_loss}, take_profit = {self.take_profit})'
     
     def __hash__(self):
         '''A dunder method that allows us to hash a given position to later be used in a dictionary'''

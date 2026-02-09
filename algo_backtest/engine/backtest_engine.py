@@ -22,6 +22,16 @@ class BacktestEngine:
         self._win_rate = 0
         self._total_pnl = 0
         
+        
+    def __str__(self) -> str:
+        """
+        Return a summary like:
+        BacktestEngine: 2 open | 3 closed | PnL: $1500.00
+        """
+        
+        return f'{__name__}: {(self.position_manager.get_position_count())} open | {len(self.completed_trades)} closed | PnL: ${self.total_pnl}'
+        
+        
     def open_position(self, ticker, side, entry, quantity, stop_loss, take_profit) -> Position:
         """
         Open a new position and add to manager.
@@ -35,7 +45,7 @@ class BacktestEngine:
         return position
         
     
-    def process_price(self, current_price: float) -> List[Trade]:
+    def process_price(self, ticker: str, current_price: float) -> List[Trade]:
         
         """
         Check all positions against current price.
@@ -50,7 +60,8 @@ class BacktestEngine:
         Returns:
             List of newly closed trades (empty if none closed)
         """
-        closed_positions = self.position_manager.close_triggered_positions(current_price)
+        
+        closed_positions = self.position_manager.close_triggered_positions(ticker, current_price)
         newly_closed_trades = []
         for position in closed_positions:
             exit_reason = position.should_close(current_price)[1]
@@ -70,7 +81,7 @@ class BacktestEngine:
     @property
     def total_pnl(self) -> float:
         """Sum of PnL from all completed trades."""
-        self._total_pnl = sum([trade.pnl for trade in self.completed_trades])
+        self._total_pnl = round(sum([trade.pnl for trade in self.completed_trades]), 2)
         return self._total_pnl
 
     @property
@@ -84,17 +95,22 @@ class BacktestEngine:
 if __name__ == '__main__':
     engine = BacktestEngine()
 
-    # Open a BUY position: entry 1.0800, SL 1.0750, TP 1.0850
-    pos = engine.open_position('EURUSD', 'BUY', 1.0800, 10000,
-                               stop_loss=1.0750, take_profit=1.0850)
+    # Open positions on different tickers
+    engine.open_position('FDAX', 'BUY', 24500, 1, stop_loss=24450, take_profit=24600)
+    engine.open_position('EURUSD', 'BUY', 1.0800, 10000, stop_loss=1.0750, take_profit=1.0850)
 
-    print(f'Open positions: {engine.position_manager.get_position_count()}')  # 1
+    # FDAX price moves — should only affect FDAX position
+    closed = engine.process_price('FDAX', 24600)
+    print(f'FDAX trades closed: {len(closed)}')       # 1 (TP hit)
+    print(f'Open positions: {engine.position_manager.get_position_count()}')  # 1 (EURUSD still open)
 
-    # Price moves to 1.0820 - no trigger
-    closed = engine.process_price(1.0820)
-    print(f'Trades closed: {len(closed)}')  # 0
+    # EURUSD price moves — should only affect EURUSD position
+    closed = engine.process_price('EURUSD', 1.0850)
+    print(f'EURUSD trades closed: {len(closed)}')      # 1 (TP hit)
+    print(f'Open positions: {engine.position_manager.get_position_count()}')  # 0
 
-    # Price hits TP at 1.0850
-    closed = engine.process_price(1.0850)
-    print(f'Trades closed: {len(closed)}')  # 1
-    print(f'Total PnL: ${engine.total_pnl:.2f}')  # $500.00
+    # Verify unique IDs
+    engine2 = BacktestEngine()
+    p1 = engine2.open_position('FDAX', 'BUY', 24500, 1, stop_loss=24450, take_profit=24600)
+    p2 = engine2.open_position('FDAX', 'SELL', 24500, 1, stop_loss=24550, take_profit=24400)
+    print(p1.position_id != p2.position_id)  # True — different IDs

@@ -71,26 +71,56 @@ s.strip()       # "Python3.10"
 s.lstrip()      # "Python3.10  "
 s.rstrip()      # "  Python3.10"
 
+#Lstrip/rstrip can also be used to remove selected characters e.g.
+print("www.cisco.com".lstrip("w.")) # cisco.com
+print("pythoninstitute.org".lstrip(".org")) #pythoninstitute.org - No change here!
+
 # Case manipulation
 s.lower()       # "  python3.10  "
 s.upper()       # "  PYTHON3.10  "
 s.capitalize()  # "  python3.10  " (only first char)
 s.title()       # "  Python3.10  " (each word)
+s.swapcase() -  print("I know that I know nothing.".swapcase()) #i KNOW THAT i KNOW NOTHING.
+s.title() - print("I know that I know nothing.".title()) #I Know That I Know Nothing. Part 1.
+
 
 # Searching
 s.find('3')     # 8 (index of first occurrence, -1 if not found)
 s.index('3')    # 8 (raises ValueError if not found)
-s.count('o')    # 1
+s.count('o')    # 1 
 
 # Boolean checks
-s.isdigit()     # False
-s.isalpha()     # False
-s.isalnum()     # False (spaces!)
+s.isdigit()     # Checks for NUMBERS
+s.isalpha()     # Checks for LETTERS
+s.isalnum()     # Checks if given string is ALL numbers
 "123".isdigit() # True
 
-# Splitting/Joining
-"a,b,c".split(',')        # ['a', 'b', 'c']
+s.islower() # Checks for lowercase letters only
+s.isupper() # Checks for uppercase letters only
+s.isspace() #Checks for whitespaces only
+
+#SPLITTING - IT'S A REVERSED JOIN
+"a,b,c".split(',')       # ['a', 'b', 'c']
+print("phi       chi\npsi".split())   -> #['phi', 'chi', 'psi']
+
+s1 = 'Where are the snows of yesteryear?'
+s2 = s1.split() ['Where', 'are', 'the', 'snows', 'of', 'yesteryear']
+
+#JOINING - IT'S A REVERSED SPLIT
 ",".join(['a', 'b', 'c']) # "a,b,c"
+print(",".join(["omicron", "pi", "rho"])) #omicron,pi,rho
+
+the_list = ['Where', 'are', 'the', 'snows?']
+s = '*'.join(the_list) #Where*are*the*snows?
+
+#REPLACING
+# Demonstrating the replace() method:
+print("www.netacad.com".replace("netacad.com", "pythoninstitute.org")) #www.pythoninstitute.org
+print("This is it!".replace("is", "are")) #Thare are it!
+print("Apple juice".replace("juice", "")) #Apple
+
+print("This is it!".replace("is", "are", 1))  #Thare is it - the third argument makes it so that only the first occurence is replaced
+print("This is it!".replace("is", "are", 2)) #Thare are it - here two occurences are replaced, thanks to the thid argument
 ```
 
 **PCAP Trap:** `.find()` returns `-1` if not found, `.index()` raises `ValueError`.

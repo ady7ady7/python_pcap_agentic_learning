@@ -2804,3 +2804,48 @@ IOError (alias for OSError)
 
 ---
 
+## Week 6, Day 1 - 2026-02-09
+
+**Topic:** The Iterator Protocol & Advanced Generators
+**Time Spent:** 60 minutes
+**Difficulty:** 6-7/10
+
+### Mentor Assessment
+
+**Score: 81% (revised from 76% after student feedback)**
+
+| Task | Score | Notes |
+|------|-------|-------|
+| 1. PCAP Warm-up | 100% | Iterator/generator identity understood |
+| 2. Decorator Trace | 70% | Flow understood, output errors: param_name vs value, :.2f format |
+| 3. FibonacciIterator | 55% | Protocol correct, hardcoded list (lesson gap acknowledged), off-by-one |
+| 4. __new__ vs __init__ | 90% | Singleton gotcha nailed |
+| 5. yield from + Pipeline | 75% | Pipeline correct, flatten followed lesson pattern (task wording unclear) |
+| 6. MRO Trace | 100% | Both perfect — recurring gap officially CLOSED |
+| 7. Position IDs (Project) | 75% | UUID correct, critical bug in removal line |
+| 8. PCAP Simulation | 80% | 4/5, __init__ receives original args not __new__ transform |
+
+**Score revision:** Student correctly noted Task 2 trace graded too harshly (PCAP doesn't test step-by-step decomposition), Task 3 lesson didn't teach two-variable Fibonacci state pattern, Task 5 flatten approach matched lesson's chain example.
+
+### Key Issues
+- Hardcoded Fibonacci list instead of computing dynamically with state variables
+- PositionManager.close_triggered_positions removal line doesn't filter by ticker (removes all triggered positions regardless)
+- Decorator trace: confused param_name (closure variable "price") with actual argument (-50.0)
+- f-string :.2f = 2 decimal places (recurring issue since Week 5)
+- __init__ receives original arguments, __new__ transforms the object itself
+
+### Strengths
+- MRO with super() — 100% on both questions, gap closed after 3 weeks
+- __new__ / Singleton pattern understood (was untaught before, now grasped)
+- Iterator vs generator identity distinction clear
+- Project: uuid integration clean, ticker-aware architecture correct (minus the bug)
+- Good forward thinking: noted Trade needs position_id propagation
+
+### Project Progress
+- Position now has unique position_id (uuid4)
+- PositionManager and BacktestEngine are ticker-aware
+- Bug to fix: removal line in close_triggered_positions needs ticker filter
+- Next: Propagate position_id to Trade class
+
+---
+

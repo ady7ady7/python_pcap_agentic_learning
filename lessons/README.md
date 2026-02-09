@@ -135,7 +135,35 @@ This directory contains all theoretical lessons organized by week and topic.
 
 ---
 
-## Week 5-8: Advanced Topics (Planned)
+## Week 5: datetime, File I/O & Decorators
+
+### [Standard Library, datetime & File I/O](week3_5_stdlib_fileio.md)
+- datetime module: `strftime` (format), `strptime` (parse), `timedelta`
+- File modes: `'w'` (write), `'a'` (append), `'r'` (read), `'x'` (exclusive create)
+- File read methods: `read()`, `readline()`, `readlines()`
+- Context managers (`with` statement)
+- Decorators: simple, with arguments, stacking, `@wraps`
+- **PCAP Traps:** File cursor position, `%y` vs `%Y`, decorator stacking order
+
+---
+
+## Week 6: The Iterator Protocol & Advanced Generators
+
+### [The Iterator Protocol, Advanced Generators & `__new__`](week6_iterators_generators_advanced.md)
+- The iterator protocol (`__iter__`, `__next__`)
+- Building custom iterable classes
+- `iter()` two-argument form, `next()` with default
+- The `__new__` method: object creation vs initialization
+- Singleton pattern
+- `yield from` for generator delegation
+- Generator pipelines
+- Named tuples (`collections.namedtuple`)
+- Generator vs Iterator vs Iterable distinctions
+- **PCAP Traps:** `next()` on iterable vs iterator, `__new__` return type, generator exhaustion
+
+---
+
+## Week 7-8: Advanced Topics (Planned)
 
 *Topics will be added as we progress through the course*
 

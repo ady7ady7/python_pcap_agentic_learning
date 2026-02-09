@@ -974,3 +974,65 @@ Task 8 expected values were wrong. Correct: 4 winners, $1050 total PnL.
 
 ---
 
+## Week 5 Weekend Exams - 2026-02-07
+
+**Topic:** PCAP Mock Exams (Weeks 1-5 Comprehensive)
+
+**Exam A:** 29/30 (96.7%) - Grade: A+ | Time: 15 minutes
+**Exam B:** 25/30 (83.3%) - Grade: B+ | Time: 17 minutes
+**Average:** 27/30 (90.0%) - Grade: A-
+
+**Exam A Highlights:**
+- Only miss: Q30 (f-string :.1f vs :.2f)
+- 100% on Decorators, File I/O, datetime, OOP, Closures
+
+**Exam B Mistakes:**
+1. Q2: readline() consumed all of 'abc' (no newline), read() returns empty
+2. Q8: MRO with super() — DBCA not DBA (recurring gap)
+3. Q9: f.read().strip() preserves internal newlines
+4. Q23: __new__/Singleton — not yet taught (valid complaint)
+5. Q30: Decorator stacking without @wraps — wrapper.__name__ behavior
+
+**Student Feedback:**
+- Complaints about arithmetic-based questions (day counting, leap year)
+- Valid point about testing __new__ before teaching it
+- Decorators (simple) now solid, stacking still needs work
+- MRO with super() in diamond inheritance remains a gap
+
+**Week 5 Final Statistics:**
+- Daily Average: 87.8%
+- Exam Average: 90.0%
+- Overall: 88.4% (B+)
+
+---
+
+## Week 6, Day 1 - 2026-02-09
+
+**Topic:** The Iterator Protocol & Advanced Generators
+**Score:** 81% (revised) | **Time:** 60 minutes | **Difficulty:** 6-7/10
+
+**Tasks:**
+1. PCAP warm-up: iter/generator identity (100%)
+2. Decorator trace — scaffolded read-only (70%)
+3. FibonacciIterator class (55%)
+4. __new__ vs __init__ predictions (90%)
+5. yield from + generator pipeline (75%)
+6. MRO trace — diamond inheritance (100%)
+7. PROJECT: Position IDs + ticker-aware processing (75%)
+8. PCAP simulation 5 questions (80%)
+
+**Key Issues:**
+- Hardcoded Fibonacci list instead of computing with state
+- PositionManager removal line doesn't filter by ticker (critical bug)
+- Decorator param_name vs actual value confusion
+- :.2f format specifier still recurring
+- __init__ receives original args, not __new__-transformed values
+
+**Strengths:**
+- MRO gap officially closed (100% across 3 sessions)
+- __new__/Singleton understood
+- uuid integration in Position clean
+- Pipeline concept works
+
+---
+

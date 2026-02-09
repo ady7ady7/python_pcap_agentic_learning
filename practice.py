@@ -4241,3 +4241,1969 @@ from functools import wraps
 
 # print(greet.__name__)  # Now what?
 # print(greet.__doc__)   # Now what?
+
+#Edube notes/tests
+# t = "zeta"
+# print(t.endswith("a"))
+# print(t.endswith("A"))
+# print(t.endswith("et"))
+# print(t.endswith("eta"))
+
+
+# print(",".join(["omicron", "pi", "rho"]))
+
+# print("pythoninstitute.org".lstrip(".org"))
+
+# print("This is it!".replace("is", "are", 1)) 
+# print("This is it!".replace("is", "are", 2))
+
+
+# # Demonstrating the rfind() method:
+# print("tau tau tau".rfind("ta"))
+# print("tau tau tau".rfind("ta", 9))
+# print("tau tau tau".rfind("ta", 3, 9))
+
+
+# s1 = 'Where are the snows of yesteryear?'
+# s2 = s1.split()
+# print(s2)
+
+#W4 D5 T1
+# funcs = [(lambda x: x + i) for i in range(3)]
+# print(funcs[0](10), funcs[1](10), funcs[2](10)) #12, 12, 12 - LAMBDA LATE BINDING TRAP
+
+# funcs = [(lambda x, i=i: x + i) for i in range(3)]
+# print(funcs[0](10), funcs[1](10), funcs[2](10)) #10, 11, 12 (i = i rozwiązuje problem)
+
+# result = (lambda: (lambda x: x * 2)(5))()
+# print(result)
+
+#W4 D5 T2
+
+# def counter():
+#     count = 0
+#     def increment():
+#         nonlocal count
+#         count += 1
+#         return count
+#     def get():
+#         return count
+#     return increment, get
+
+# inc, get = counter()
+# print(inc(), inc(), get())
+
+# def make_multipliers():
+#     return [lambda x, i=i: x * i for i in range(4)]
+
+# mults = make_multipliers()
+# print(mults[2](10))
+
+
+# def factory(start):
+#     value = start
+#     def add(x):
+#         nonlocal value
+#         value += x
+#         return value
+#     return add
+
+# adder1 = factory(10)
+# adder2 = factory(100)
+# print(adder1(5), adder2(5), adder1(5))
+
+
+#W4 D5 T3
+
+# from functools import reduce
+
+# transactions = [
+#     {"id": 1, "type": "BUY", "amount": 1000, "fee": 10},
+#     {"id": 2, "type": "SELL", "amount": 500, "fee": 5},
+#     {"id": 3, "type": "BUY", "amount": 2000, "fee": 20},
+#     {"id": 4, "type": "SELL", "amount": 800, "fee": 8},
+#     {"id": 5, "type": "BUY", "amount": 300, "fee": 3},
+# ]
+
+# # Part A: Use map to add net_amount (amount - fee) to each transaction
+# # HINT: Create a function that returns a NEW dict with net_amount added
+# # Part B: Use filter to get only BUY transactions with net_amount > 500
+# # Part C: Use reduce to calculate total net_amount of filtered transactions
+
+
+# result = list(map(lambda t: {**t, 'net_amount': t['amount'] - t['fee']}, transactions))
+
+
+# new_trades = [] #Look, adding a new dict would be absolutely retarded, as we'd have to have a key for each trade, which doesn't make sense imo.
+# for transaction in result:
+#     new_trades.append(transaction)
+    
+# filtered_buys = [t for t in new_trades if t['type'] == 'BUY' and t['net_amount'] > 500] #started with this, much simpler approach, but then I read your instructions and used filter below
+# filtered_buys = list(filter(lambda t: t['type'] == 'BUY' and t['net_amount'] > 500, new_trades))
+# print(filtered_buys)
+
+# total_net_amount = reduce(lambda acc, t: acc + t['net_amount'], filtered_buys, 0)
+# print(total_net_amount)
+
+
+# trades_with_pnl = list(map(
+#     lambda t: {**t, "pnl": (t['exit'] - t['entry']) * t['qty']} if t['side'] == 'BUY' else
+#     {**t, "pnl": (t['entry'] - t['exit']) * t['qty']},
+#     trades
+# ))
+
+
+#W4 D5 T4
+# from functools import wraps
+
+# def repeat(times):
+#     """
+#     Decorator that runs a function multiple times.
+
+#     Example:
+#         @repeat(3)
+#         def say_hello():
+#             print("Hello!")
+
+#         say_hello()
+#         # Output:
+#         # Hello!
+#         # Hello!
+#         # Hello!
+#     """
+    
+#     def decorator(func):
+#         def wrapper(*args, **kwargs):
+#             for i in range(times):
+#                 result = func(*args, **kwargs)
+#             return result
+#         return wrapper
+#     return decorator
+
+        
+
+# @repeat(3)
+# def greet(name):
+#     print(f"Hi, {name}!")
+
+# greet("Alice")
+
+# @repeat(2)
+# def double(x):
+#     print(f"Doubling {x}")
+#     return x * 2
+
+# result = double(5)
+# print(f"Final result: {result}")
+
+
+#W4 D5 T5
+# def deco(f):
+#     def wrapper():
+#         return f() * 2
+#     return wrapper
+
+# @deco
+# @deco
+# def five():
+#     return 5
+
+# print(five())
+
+
+# x = 10
+# def outer():
+#     x = 20
+#     def inner():
+#         global x
+#         return x
+#     return inner()
+
+# print(outer())
+
+# from functools import reduce
+# words = ["a", "b", "c"]
+# result = reduce(lambda acc, w: acc + [w.upper()], words, [])
+# print(result)
+
+
+#W4 D5 T6
+
+# from functools import reduce
+# from typing import List, Dict, Callable
+
+
+
+# # Part A: Create a closure that generates crossover signals
+# def make_level_detector(level: float):
+#     """
+#     Returns a function that detects when price crosses a level.
+
+#     The returned function should:
+#     - Accept current_price and previous_price
+#     - Return "BUY" if price crosses UP through level
+#     - Return "SELL" if price crosses DOWN through level
+#     - Return "HOLD" otherwise
+
+#     Example:
+#         detect_105 = make_level_detector(105)
+#         detect_105(106, 104)  # Returns "BUY" (crossed up through 105)
+#         detect_105(104, 106)  # Returns "SELL" (crossed down through 105)
+#         detect_105(107, 106)  # Returns "HOLD" (didn't cross 105)
+#     """
+    
+#     def generate_signal(current_price: float, previous_price: float):
+#         '''Closure used to generate signals based on previous price, current price and the set price level'''
+#         if previous_price <= level and current_price >= level:
+#             return 'BUY'
+#         elif previous_price >= level and current_price <= level:
+#             return 'SELL'
+#         elif (previous_price >= level and current_price >= level) or (previous_price <= level and current_price <= level):
+#             return 'HOLD'
+              
+#     return generate_signal
+
+
+
+# detect_105 = make_level_detector(105)
+# print(detect_105(106, 104))  # Returns "BUY" (crossed up through 105)
+# print(detect_105(104, 106))  # Returns "SELL" (crossed down through 105)
+# print(detect_105(107, 106))  # Returns "HOLD" (didn't cross 105)
+
+
+# prices = [100, 102, 105, 103, 108, 106, 110, 112, 109, 115]
+
+# price_pairs = list(map(lambda i: (prices[i-1], prices[i]), range(1, len(prices))))
+# print(price_pairs)
+# signals = []
+# for price_pair in price_pairs:
+#     result = detect_105(price_pair[1], price_pair[0]) #current, previous
+#     signals.append(result)
+
+# print(signals)
+
+# action_signals = list(filter(lambda signal: signal == 'BUY' or signal == 'SELL', signals))
+# print(action_signals)
+# buy_signals = reduce(lambda acc, x: acc + 1 if x == 'BUY' else acc, action_signals, 0)
+# print(buy_signals)
+
+#W4 D5 T7
+
+# def bold(func):
+#     def wrapper(*args, **kwargs):
+#         return f"<b>{func(*args, **kwargs)}</b>"
+#     return wrapper
+
+# def italic(func):
+#     def wrapper(*args, **kwargs):
+#         return f"<i>{func(*args, **kwargs)}</i>"
+#     return wrapper
+
+# @bold
+# @italic
+# def greet(name):
+#     return f"Hello, {name}"
+
+# print(greet("World"))
+
+
+# funcs = [lambda x: x + i for i in range(3)]
+# print(funcs[0](10))
+
+
+# class Counter:
+#     count = 0
+#     def __init__(self):
+#         Counter.count += 1
+
+# a = Counter()
+# b = Counter()
+# c = Counter()
+# print(a.count, Counter.count)
+
+# nums = [1, 2, 3, 4, 5]
+# result = map(lambda x: x * 2, nums)
+# print(next(result), next(result))
+
+# from functools import reduce
+# result = reduce(lambda a, b: a + [b*2], [1, 2, 3], [])
+# print(result)
+
+
+#W5 D1 T1
+# import datetime
+
+# today = datetime.date.today()
+# print(today)
+# print(today.weekday())
+# print(today.isoweekday())
+
+# tomorrow = today + datetime.timedelta(days=1)
+# print(tomorrow)
+# print(tomorrow.weekday())
+
+# yesterday = today - datetime.timedelta(days=1)
+# print(yesterday.weekday())
+# print(yesterday.isoweekday())
+
+
+# dt = datetime.datetime(2026, 2, 14, 10, 30)
+# print(dt.strftime("%A, %B %d"))
+
+# from datetime import datetime, timedelta
+
+# now = datetime(2026, 2, 2, 12, 0)
+# future = now + timedelta(days=7, hours=12)
+# print(future.day, future.hour)
+
+# from datetime import datetime, date
+
+# dt = datetime.strptime("2026-02-14", "%Y-%m-%d")
+# print(type(dt).__name__, dt.month)
+
+# d1 = date(2026, 3, 1)
+# d2 = date(2026, 2, 1)
+# diff = d1 - d2
+# print(type(diff).__name__, diff.days)
+
+
+#W5 D1 T3
+
+# with open('week5_file.md', 'w') as f:
+#     f.write('Hello, World!\n')
+
+# with open('week5_file.md', 'a') as a:
+#     a.write('New line\n')
+
+# lines = ['one', 'two', 'three']
+# with open('week5_file.md', 'a') as append:
+#     for word in lines:
+#         append.write(f'{word}\n')
+        
+
+#W5 D1 T4
+# with open('week5_file.md', 'r') as f:
+#     x = f.read()
+# print(x)
+
+
+#W5 D1 T5 - Trade logger class
+
+# from datetime import datetime
+# from typing import List
+
+# class TradeLogger:
+#     """
+#     Logs trade information to a file.
+
+#     Requirements:
+#     1. __init__(self, filepath: str) - store filepath, create empty file
+#     2. log_trade(self, symbol: str, side: str, price: float, quantity: int)
+#        - Appends a line to the file in format:
+#          "2026-02-02 10:30:45 | BUY AAPL @ 150.50 x 100"
+#        - Use datetime.now() for timestamp
+#     3. get_trades(self) -> List[str]
+#        - Returns all logged trades as a list of strings
+#     4. clear_log(self)
+#        - Clears the file (hint: open with 'w' and close immediately)
+
+#     Example usage:
+#         logger = TradeLogger('trades.log')
+#         logger.log_trade('AAPL', 'BUY', 150.50, 100)
+#         logger.log_trade('GOOGL', 'SELL', 2800.00, 10)
+#         print(logger.get_trades())
+#         # ['2026-02-02 10:30:45 | BUY AAPL @ 150.50 x 100',
+#         #  '2026-02-02 10:30:46 | SELL GOOGL @ 2800.00 x 10']
+#     """
+    
+#     def __init__(self, filepath: str):
+#         self.filepath = filepath
+#         with open(self.filepath, 'w') as w:
+#             pass
+
+#     def log_trade(self, symbol: str, side: str, price: float, quantity: int):
+#         '''Method used to append a new trade to the existing list'''
+#         with open(self.filepath, 'a') as a:
+#             a.write(f'{datetime.now()} || {side} {symbol} @ {price} x {quantity}\n')
+    
+#     def get_trades(self) -> List[str]:
+#         '''Method used to get all trades currently in our file'''
+#         trade_list = []
+        
+#         with open(self.filepath, 'r') as r:
+#             for line in r:
+#                 trade_list.append(line)
+#         return trade_list
+    
+#     def clear_log(self):
+#         '''Method used to clear the file from all logged trades'''
+#         with open(self.filepath, 'w') as w:
+#             pass
+#         print('Log cleared.')
+
+
+
+# logger = TradeLogger('test_trades.log')
+# logger.log_trade('AAPL', 'BUY', 150.50, 100)
+# logger.log_trade('GOOGL', 'SELL', 2800.00, 10)
+# print(logger.get_trades())
+# logger.clear_log()
+# print(logger.get_trades())  # Should be empty list
+
+
+# with open('file.txt', 'a') as f:
+#     result = f.write('Hello')
+# print(result)
+
+
+# with open('data.txt', 'r') as f:
+#     f.read()
+
+# from datetime import date, datetime
+
+# dt1 = datetime(2026, 2, 2, 23, 59)
+# dt2 = datetime(2026, 2, 3, 0, 1)
+# diff = dt2 - dt1
+# print(diff.total_seconds())
+
+# dt = datetime.strptime("14:30", "%H:%M")
+# print(dt.year, dt.month, dt.day)
+
+
+#edube strings #1
+
+# from typing import List
+
+# def mysplit(string : str) -> List[str]:
+#     '''A method used to return a list of words from a string, divided by whitespaces'''
+    
+#     result = []
+#     if string == "" or string is None:
+#         return result
+#     else:
+#         cleaned_str = string.strip()
+#         return cleaned_str.split(' ')
+        
+# print(mysplit("To be or not to be, that is the question"))
+# print(mysplit("To be or not to be,that is the question"))
+# print(mysplit("   "))
+# print(mysplit(" abc "))
+# print(mysplit(""))
+
+#STRING COMPARISONS
+# print('alpha' < 'alphabet') #TRUE - #longer string -> GREATER
+# print('beta' > 'Beta') #TRUE - #lower-case -> GREATER
+# print('alpha' < 'beta') #True - farther letter -> GREATER
+
+# #ALSO STRING NUMERALS ARE COMPARED AS LETTERS, NOT STANDARD NUMERICALSS
+# print('10' == '010') #False
+# print('10' > '010') #True
+# print('10' > '8') #False
+# print('20' < '8') #True
+# print('20' < '80') #True
+
+
+#Seven-segment display 
+
+# x = input('Please enter an integer number above 0 (e.g. 123, 5642, 302): ')
+# def calculator_display(x = x):
+
+#     digits = {        
+#         '1': ['  #', '  #', '  #', '  #', '  #'],
+#         '2': ['###', '  #', '###', '#  ', '###'],
+#         '3': ['###', '  #', '###', '  #', '###'],
+#         '4': ['# #', '# #', '###', '  #', '  #'],
+#         '5': ['###', '#  ', '###', '  #', '###'],
+#         '6': ['###', '#  ', '###', '# #', '###'],
+#         '7': ['###', '  #', '  #', '  #', '  #'],
+#         '8': ['###', '# #', '###', '# #', '###'],
+#         '9': ['###', '# #', '###', '  #', '###'],
+#         '0': ['###', '# #', '# #', '# #', '###']
+#     }
+    
+#     for row in range(5):
+#         line = ''
+#         for char in x:
+#             line += digits[char][row] + '  '
+#         print(line)
+    
+# calculator_display()
+
+#Start 12:05
+#W5 D2 T1
+
+# from datetime import date
+
+# def days_until(target_year: int, target_month: int, target_day: int) -> int:
+#     '''Return number of days from today until target date, negative if past'''
+
+#     final_date = date(target_year, target_month, target_day)
+#     today = date.today()
+    
+#     days_diff = (final_date - today).days
+#     return days_diff
+    
+# print(days_until(2026, 12, 31))
+# print(days_until(2026, 1, 1))
+
+
+# from datetime import datetime
+
+# def format_trade_timestamp(dt: datetime) -> str:
+#     """Return timestamp as 'YYYY-MM-DD HH:MM:SS' string."""
+#     return dt.strftime("%Y-%m-%d %H:%M:%S")
+
+# print(format_trade_timestamp(datetime(2026, 2, 14, 10, 30, 45)))
+
+
+# from datetime import datetime
+
+# def parse_csv_date(date_str: str) -> datetime:
+#     """Parse date string in format 'DD/MM/YYYY' to datetime object."""
+#     return datetime.strptime(date_str, '%d/%m/%Y')
+
+# dt = parse_csv_date("14/02/2026")
+# print(dt.year, dt.month, dt.day)  # 2026 2 14
+
+
+#W5 D2 T2
+
+# def count_lines(filepath: str) -> int:
+#     """Return the number of lines in a file."""
+    
+#     counter = 0
+#     with open(filepath, 'r') as r:
+#         for line in r:
+#             counter += 1
+    
+#     return counter
+
+
+# with open('test_file.txt', 'a') as a:
+#     for i in range(100):
+#         a.write('XD\n')
+        
+# x = count_lines('test_file.txt')
+# print(x)
+
+# from datetime import datetime
+
+# def log_entry(filepath: str, message: str) -> None:
+#     """Append '[YYYY-MM-DD HH:MM:SS] message' to file."""
+    
+#     with open(filepath, 'a') as a:
+#         a.write(f'[{datetime.now()}] {message}\n')
+
+# log_entry("app.log", "Application started")
+# log_entry("app.log", "User logged in")
+    
+# with open('app.log', 'r') as r:
+#     counter = 0
+#     for line in r:
+#         counter += 1
+#         print(f'Line {counter}: {line}')
+    
+
+
+#W5 D2 T3
+
+# from datetime import datetime
+
+# def make_date_formatter(format_string: str):
+#     """
+#     Return a function that formats datetime objects using the given format.
+
+#     Example:
+#         us_format = make_date_formatter("%m/%d/%Y")
+#         eu_format = make_date_formatter("%d/%m/%Y")
+
+#         dt = datetime(2026, 2, 14)
+#         print(us_format(dt))  # "02/14/2026"
+#         print(eu_format(dt))  # "14/02/2026"
+#     """
+    
+#     def format_date(date_string):
+#         return datetime.strftime(date_string, format_string)
+    
+#     return format_date
+
+
+
+# us_format = make_date_formatter("%m/%d/%Y")
+# eu_format = make_date_formatter("%d/%m/%Y")
+
+# dt = datetime(2026, 2, 14)
+# print(us_format(dt))  # "02/14/2026"
+# print(eu_format(dt))  # "14/02/2026"
+
+
+# from datetime import datetime
+# from time import sleep
+
+# def make_time_tracker():
+#     """
+#     Return a function that returns seconds elapsed since tracker was created.
+
+#     Example:
+#         tracker = make_time_tracker()
+#         # ... do some work ...
+#         print(tracker())  # e.g., 2.5 (seconds elapsed)
+#     """
+    
+#     saved_time = datetime.now()
+    
+#     def check_time():
+#         return f'{(datetime.now() - saved_time).seconds} seconds has passed since this tracker was created!'
+#     return check_time
+
+
+
+# x = make_time_tracker()
+# sleep(3)
+# print(x())
+# sleep(4)
+# print(x())
+
+
+#W5 D3 T4
+
+
+# from datetime import datetime, timedelta
+# from typing import List, Optional
+
+# class TradeLogger:
+#     """
+#     Logs trade information to a file.
+
+#     Requirements:
+#     1. __init__(self, filepath: str) - store filepath, create empty file
+#     2. log_trade(self, symbol: str, side: str, price: float, quantity: int)
+#        - Appends a line to the file in format:
+#          "2026-02-02 10:30:45 | BUY AAPL @ 150.50 x 100"
+#        - Use datetime.now() for timestamp
+#     3. get_trades(self) -> List[str]
+#        - Returns all logged trades as a list of strings
+#     4. clear_log(self)
+#        - Clears the file (hint: open with 'w' and close immediately)
+
+#     Example usage:
+#         logger = TradeLogger('trades.log')
+#         logger.log_trade('AAPL', 'BUY', 150.50, 100)
+#         logger.log_trade('GOOGL', 'SELL', 2800.00, 10)
+#         print(logger.get_trades())
+#         # ['2026-02-02 10:30:45 | BUY AAPL @ 150.50 x 100',
+#         #  '2026-02-02 10:30:46 | SELL GOOGL @ 2800.00 x 10']
+#     """
+    
+#     def __init__(self, filepath: str):
+#         self.filepath = filepath
+#         with open(self.filepath, 'w') as w:
+#             pass
+
+#     def log_trade(self, symbol: str, side: str, price: float, quantity: int):
+#         '''Method used to append a new trade to the existing list'''
+#         with open(self.filepath, 'a') as a:
+#             a.write(f'{datetime.now()} || {side} {symbol} @ {price} x {quantity}\n')
+    
+#     def get_trades(self) -> List[str]:
+#         '''Method used to get all trades currently in our file'''
+#         trade_list = []
+        
+#         with open(self.filepath, 'r') as r:
+#             for line in r:
+#                 trade_list.append(line)
+#         return trade_list
+    
+#     def clear_log(self):
+#         '''Method used to clear the file from all logged trades'''
+#         with open(self.filepath, 'w') as w:
+#             pass
+#         print('Log cleared.')
+        
+    
+#     def get_trades_since(self, dt: datetime) -> List[str]:
+#         '''Returns only trades logged after the given datetime'''
+        
+#         matching_trades = []
+#         converted_dt = datetime.strptime(dt, '%Y-%m-%d')
+#         with open(self.filepath, 'r') as r:
+#             for line in r:
+#                 line_date = line.strip().split(' ')[0]
+#                 datetime_date = datetime.strptime(line_date, '%Y-%m-%d')
+#                 print(datetime_date)
+#                 print(type(datetime_date))
+#                 if datetime_date > converted_dt:
+#                     matching_trades.append(line)
+#         return matching_trades
+    
+    
+#     def get_trades_by_symbol(self, symbol: str) -> List[str]:
+#         '''Return trades for a specific symbol'''
+        
+#         filtered_trades = []
+#         trades = self.get_trades()
+#         for trade in trades:
+#             properties = trade.strip().split(' ')
+#             trade_symbol = properties[4]
+#             if trade_symbol == symbol:
+#                 filtered_trades.append(trade)
+            
+#         return filtered_trades
+    
+#     def get_trade_count(self) -> int:
+#         trades = self.get_trades()
+#         return len(trades)
+    
+
+# logger = TradeLogger('trades.log')
+# logger.log_trade('AAPL', 'BUY', 150.50, 100)
+# logger.log_trade('GOOGL', 'SELL', 2800.00, 10)
+# #print(logger.get_trades())
+# #print(logger.get_trades_since('2026-02-02'))
+# # ['2026-02-02 10:30:45 | BUY AAPL @ 150.50 x 100',
+# #  '2026-02-02 10:30:46 | SELL GOOGL @ 2800.00 x 10']
+# trades_by_symbol = logger.get_trades_by_symbol('AAPL')
+# print(trades_by_symbol)
+# print(logger.get_trade_count())
+
+
+#W5 D3 T5
+
+# from datetime import datetime, timedelta, date
+
+# dt = datetime(2026, 2, 28, 23, 30)
+# dt2 = dt + timedelta(hours=1)
+# print(dt2.day, dt2.month)
+
+
+# with open('test.txt', 'w') as f:
+#     f.write('abc')
+#     f.write('def')
+
+# with open('test.txt', 'r') as f:
+#     print(f.readline())
+    
+    
+# d = date.today()
+# print(type(d.year).__name__)
+    
+    
+# lines = []
+# with open('test.txt', 'w') as f:
+#     f.writelines(['a\n', 'b\n'])
+
+# with open('test.txt', 'r') as f:
+#     for line in f:
+#         lines.append(line.strip())
+# print(lines)
+
+# from datetime import datetime
+
+# dt1 = datetime(2026, 2, 1, 12, 0)
+# dt2 = datetime(2026, 2, 1, 14, 30)
+# diff = dt2 - dt1
+# print(type(diff).__name__)
+
+
+#W5 D3 T6
+
+# from datetime import datetime
+# from typing import Optional
+
+# class ConfigManager:
+#     """
+#     A configuration manager that persists settings to a file.
+
+#     Properties:
+#     - last_updated (read-only): datetime of last config change
+#     - debug_mode: bool, with getter and setter
+#     - max_trades: int, with validation (must be > 0)
+
+#     The config file format (config.txt):
+#     debug_mode=True
+#     max_trades=100
+#     last_updated=2026-02-03 10:30:45
+#     """
+
+#     def __init__(self, filepath: str):
+#         self.filepath = filepath
+#         self._debug_mode = False
+#         self._max_trades = 10
+#         self._last_updated: Optional[datetime] = None
+#         self._load_config()
+
+#     def _load_config(self):
+#         """Load config from file if exists."""
+#         try:
+#             with open(self.filepath, 'r') as r:
+#                 print(r.read())
+#         except FileNotFoundError:
+#             print('Cannot load config, as it does not exist - create it first!')
+
+#     def _save_config(self):
+#         """Save current config to file."""
+#         with open(self.filepath, 'w') as w:
+#             w.write(f'debug_mode={self.debug_mode}\nmax_trades={self.max_trades}\nlast_updated={self.last_updated}')
+
+#     @property
+#     def last_updated(self) -> Optional[datetime]:
+#         """Read-only: when config was last modified."""
+#         return self._last_updated
+
+#     @property
+#     def debug_mode(self) -> bool:
+#         # Your code:
+#         return self._debug_mode
+
+#     @debug_mode.setter
+#     def debug_mode(self, value: bool):
+#         # Your code (update _last_updated, save to file):
+#         self._debug_mode = value
+#         self._last_updated = datetime.now()
+#         with open(self.filepath, 'w') as w:
+#             w.write(f'debug_mode={value}\nmax_trades={self.max_trades}\nlast_updated={self.last_updated}')
+
+#     @property
+#     def max_trades(self) -> int:
+#         return self._max_trades
+
+#     @max_trades.setter
+#     def max_trades(self, value: int):
+#         if value < 0:
+#             print('Cannot update max_trades value with a value below 0!')
+#         else:
+#             self._max_trades = value
+
+# # Test:
+# config = ConfigManager('config.txt')
+# config.debug_mode = True
+# config.max_trades = 50
+# print(f"Debug: {config.debug_mode}, Max: {config.max_trades}")
+# print(f"Last updated: {config.last_updated}")
+
+
+#W5 D3 T7
+
+# from datetime import datetime
+# from functools import wraps
+
+# def log_to_file(filepath: str):
+#     """
+#     Decorator factory that logs function calls to a file.
+
+#     Log format: "YYYY-MM-DD HH:MM:SS | function_name(args) -> result"
+
+#     Example usage:
+#         @log_to_file("calls.log")
+#         def add(a, b):
+#             return a + b
+
+#         add(2, 3)  # Logs: "2026-02-03 10:30:45 | add(2, 3) -> 5"
+#     """
+#     def decorator(func):
+#         @wraps(func)
+#         def wrapper(*args, **kwargs):
+#             result = func(*args, **kwargs)
+#             with open(filepath, 'w') as a:
+#                 a.write(f'{datetime.now()} || {func.__name__} called with {func(*args, **kwargs)} and received {result}\n')
+#             return result
+#         return wrapper
+#     return decorator
+
+# # Test:
+# @log_to_file("function_calls.log")
+# def multiply(a, b):
+#     return a * b
+
+# @log_to_file("function_calls.log")
+# def greet(name):
+#     return f"Hello, {name}!"
+
+# multiply(3, 4)
+# multiply(5, 6)
+# greet("Alice")
+
+# # Read and print the log file
+# with open("function_calls.log", "r") as f:
+#     print(f.read())
+
+#W5 D3 T8
+
+# from datetime import date, timedelta
+
+# def mondays_in_month(year: int, month: int) -> list:
+#     """Return list of all Monday dates in the given month."""
+#     first_day = date(year, month, 1)
+#     last_day = date(year, month + 1, 1) - timedelta(1)
+    
+#     current_date = first_day
+#     mondays_list = []
+    
+#     while current_date <= last_day:
+#         if current_date.weekday() == 0:
+#             mondays_list.append(current_date)
+#         current_date += timedelta(1)
+    
+#     return mondays_list
+
+
+# from datetime import date, timedelta
+
+# def trading_days_between(start: date, end: date) -> int:
+#     """Return count of weekdays (Mon-Fri) between start and end (exclusive)."""
+#     days_list = []
+#     current_date = start
+#     print(current_date.weekday())
+#     while current_date < end:
+#         if current_date.weekday() == 5 or current_date.weekday() == 6:
+#             current_date += timedelta(1)
+#         elif current_date.weekday != 5 and current_date.weekday != 6:
+#             days_list.append(current_date)
+#             current_date += timedelta(1)
+#     return len(days_list)
+
+# # Test:
+# print(trading_days_between(date(2026, 2, 2), date(2026, 2, 9)))  # Mon to Mon = 5 trading days
+
+
+# from datetime import datetime, timedelta
+
+# start = datetime(2026, 1, 1)
+# deltas = [timedelta(days=30) for _ in range(3)]
+# current = start
+
+# for d in deltas:
+#     current += d
+#     print(current.strftime("%B"), end=" ")
+    
+#February
+
+#Finish 14:52
+
+#Edube
+
+# Numbers Processor.
+
+# line = input("Enter a line of numbers - separate them with spaces: ")
+# strings = line.split()
+# total = 0
+# try:
+#     for substr in strings:
+#         total += float(substr)
+#     print("The total is:", total)
+# except:
+#     print(substr, "is not a number.")
+
+#Start 10:25
+
+#W5 D3 T2
+
+# from functools import wraps
+
+# def log_calls(func):
+#     @wraps(func)
+#     def wrapper(*args, **kwargs):
+#         result = func(*args, **kwargs)
+#         with open('calls.log', 'a') as f:  # BUG HERE
+#             f.write(f'{func.__name__} called\n')
+#         return result
+#     return wrapper
+
+# @log_calls
+# def greet(name):
+#     return f'Hello, {name}'
+
+# greet('Alice')
+# greet('Bob')
+# greet('Charlie')
+
+
+# from functools import wraps
+
+# def debug(func):
+#     @wraps(func)
+#     def wrapper(*args, **kwargs):
+#         print(f'Calling {func.__name__} with {args}')
+#         result = func(*args, **kwargs)
+#         print(f'Result: {result}')
+#         return result
+#     return wrapper
+
+# @debug
+# def expensive_operation(n):
+#     print('Doing expensive work...')
+#     return n * 2
+
+# expensive_operation(5)
+
+
+#W5 D3 T3
+
+# from datetime import datetime
+# from functools import wraps
+
+# def log_to_file(filepath: str):
+#     """
+#     Decorator factory that logs function calls to a file.
+
+#     Requirements:
+#     1. APPEND to file (don't overwrite)
+#     2. Call wrapped function ONCE only
+#     3. Format: "TIMESTAMP | func_name(args) -> result"
+#     4. Preserve function metadata with @wraps
+#     """
+#     def decorator(func):
+#         @wraps(func)
+#         def wrapper(*args, **kwargs):
+#             result = func(*args, **kwargs)
+#             with open(filepath, 'a') as a:
+#                 a.write(f'{datetime.now()} | {func.__name__}{args} -> {result}\n')
+#                 return result #This is not mandatory here, as we already save the result in our file, but I implemented it nevertheless, as a standard approach
+#         return wrapper
+#     return decorator
+
+
+
+# # Test:
+# @log_to_file('operations.log')
+# def add(a, b):
+#     return a + b
+
+# @log_to_file('operations.log')
+# def multiply(a, b):
+#     return a * b
+
+# # Clear log first
+# open('operations.log', 'w').close()
+
+# add(2, 3)
+# add(10, 20)
+# multiply(4, 5)
+
+# # Print the log
+# with open('operations.log', 'r') as f:
+#     print(f.read())
+
+
+
+#W5 D3 T4
+
+# from datetime import datetime
+
+# def format_date(dt: datetime) -> str:
+#     """Format datetime as string."""
+#     parsed = datetime.strptime(dt, '%Y-%m-%d')  # ???
+#     return parsed.strftime('%B %d, %Y')
+
+# x = format_date('2025-2-12')
+# print(x)
+
+
+# def process_count(count: int) -> str:
+#     return f'Count is {count}'
+
+# x = process_count(23)
+# print(x)
+
+
+#W5 D3 T5 - BacktestEngine - algo_backtest/engine/backtest_engine.py
+
+
+# from typing import List
+# from datetime import datetime
+# from position import Position
+# from trade import Trade
+# from position_manager import PositionManager
+
+
+# class BacktestEngine:
+#     """
+#     Orchestrates backtesting using existing Position and Trade classes.
+
+#     Lifecycle: Position (open) -> Trade (closed)
+
+#     Attributes:
+#         position_manager: Manages open positions
+#         completed_trades: List of closed Trade objects
+#     """
+    
+#     def __init__(self):
+#         self.position_manager = PositionManager()
+#         self.completed_trades: List[Trade] = []
+#         self._win_rate = 0
+#         self._total_pnl = 0
+        
+#     def open_position(self, ticker, side, entry, quantity, stop_loss, take_profit) -> Position:
+#         """
+#         Open a new position and add to manager.
+
+#         Returns:
+#             The created Position object
+#         """
+        
+#         position = Position(ticker, side, entry, quantity, stop_loss, take_profit)
+#         self.position_manager.add_position(position)
+        
+    
+#     def process_price(self, current_price: float) -> List[Trade]:
+        
+#         """
+#         Check all positions against current price.
+#         Close any that hit SL/TP and convert to Trade objects.
+
+#         Steps:
+#         1. Use position_manager.close_triggered_positions(current_price)
+#         2. For each closed position, create a Trade object
+#         3. Add Trade to completed_trades
+#         4. Return list of newly created trades
+
+#         Returns:
+#             List of newly closed trades (empty if none closed)
+#         """
+#         closed_positions = self.position_manager.close_triggered_positions(current_price)
+#         newly_closed_trades = []
+#         for position in closed_positions:
+#             exit_reason = position.should_close(current_price)[1]
+#             trade = Trade(position.ticker, 
+#                           position.side, 
+#                           position.entry_price, 
+#                           current_price, 
+#                           position.quantity,
+#                           exit_reason = exit_reason)
+#             newly_closed_trades.append(trade)
+#             self.completed_trades.append(trade)
+            
+#         return newly_closed_trades
+            
+ 
+ 
+#     @property
+#     def total_pnl(self) -> float:
+#         """Sum of PnL from all completed trades."""
+#         self._total_pnl = sum([trade.pnl for trade in self.completed_trades])
+#         return self._total_pnl
+
+#     @property
+#     def win_rate(self) -> float:
+#         """Win rate using Trade.calculate_win_rate()."""
+#         self._win_rate = Trade.calculate_win_rate(self.completed_trades)
+#         return self._win_rate
+
+
+#W5 D3 T6
+
+# with open('xd.log', 'a') as a:
+#     a.write('File created.')
+
+# with open('xd.log', 'x') as x:
+#     print('Open')
+
+
+#W5 D3 T7
+
+# from typing import List
+
+# def read_non_empty_lines(filepath: str) -> List[str]:
+#     """
+#     Read a file and return only non-empty lines.
+
+#     Requirements:
+#     1. Strip whitespace from each line
+#     2. Skip lines that are empty after stripping
+#     3. Return as a list of strings (without newlines)
+
+#     Example:
+#         File contents:
+#         "hello\n"
+#         "\n"
+#         "  \n"
+#         "world\n"
+
+#         Returns: ['hello', 'world']
+#     """
+#     table_of_contents = []
+    
+#     with open(filepath, 'r') as r:
+#         for line in r:
+#             content = line.strip()
+#             print(content)
+#             if content is not None and content != '':
+#                 table_of_contents.append(content)
+#             else:
+#                 continue
+            
+#     return table_of_contents
+    
+
+# # Test:
+# # Create test file
+# with open('test_lines.txt', 'w') as f:
+#     f.write('hello\n\n   \nworld\n  python  \n')
+
+# result = read_non_empty_lines('test_lines.txt')
+# print(result)  # ['hello', 'world', 'python']
+
+
+#W5 D3 T8
+# from functools import wraps
+
+
+# def rate_limiter(max_calls: int):
+#     """
+#     Decorator factory that limits how many times a function can be called.
+
+#     After max_calls, the function returns None without executing.
+
+#     Example:
+#         @rate_limiter(3)
+#         def greet(name):
+#             return f'Hello, {name}'
+
+#         print(greet('A'))  # Hello, A
+#         print(greet('B'))  # Hello, B
+#         print(greet('C'))  # Hello, C
+#         print(greet('D'))  # None (limit reached)
+
+#     Hint: Use a list to track call count (closure trick from Week 4)
+#     """
+    
+#     def decorator(func):
+#         call_count = 0
+#         @wraps(func)
+#         def wrapper(*args, **kwargs):
+#             nonlocal call_count
+#             if call_count >= max_calls:
+#                 return None
+#             else:
+#                 result = func(*args, **kwargs)
+#                 call_count += 1
+#             return result
+#         return wrapper
+#     return decorator
+
+# # Test:
+# @rate_limiter(3)
+# def expensive_api_call(query):
+#     return f'Results for: {query}'
+
+# print(expensive_api_call('python'))  # Results for: python
+# print(expensive_api_call('java'))    # Results for: java
+# print(expensive_api_call('rust'))    # Results for: rust
+# print(expensive_api_call('go'))      # None
+# print(expensive_api_call('c++'))     # None
+
+#Edube - 1
+
+# def improved_caesar_cipher(str: str, shift_value: int) -> str:
+#     chars = []
+#     index = -1 #starting position
+
+#     if shift_value > 25 or shift_value < 1:
+#         print('Invalid number! We need a number from 1 to 25!')
+#         return None
+#     else:
+#         str.strip()
+#         for character in str:
+#             index += 1
+#             if not character.isalpha():
+#                 chars.append(character)
+#             else:
+#                 original_code = ord(character)
+#                 new_code = original_code + shift_value
+                
+#                 if character.isupper() and new_code > 90:
+#                     difference = new_code - 90 #if we go past Z, calculate how far from Z we go
+#                     new_code = 64 + difference #And now we go back to A(ord 65) + THE DIFFERENCE
+                    
+#                 elif character.islower() and new_code > 122: #same logic for lowercase, if we go past z
+#                     difference = new_code - 122
+#                     new_code = 96 + difference
+                    
+#                 chars.append(chr(new_code))
+
+#     return ''.join(chars)
+            
+# original_str = input('Please input a line of text e.g. (John hit a wall): ')
+# shift_value = int(input('Please input a number from 1 to 25: '))
+
+# cipher = improved_caesar_cipher(original_str, shift_value)
+# print(cipher)
+
+
+#Edube - 2 - Palindrome checker
+
+# def palindrome_check(string: str) -> str:
+#     '''A function used to check whether a given character is a palindrome, or not'''
+    
+#     list_of_chars = [character.lower() for character in string if character.isalpha()]
+#     print(list_of_chars)
+
+#     index = -1
+#     reverse_index = 0
+    
+#     for _ in list_of_chars:
+#         index += 1
+#         reverse_index -= 1
+#         if list_of_chars[index] != list_of_chars[reverse_index]:
+#             print(f'The string is not a palindrome, as char {list_of_chars[index]} from index {index} is different from char {list_of_chars[reverse_index]} from index {reverse_index}')
+#             return 'It is not a palindrome'
+    
+#     return 'It is a palindrome'
+
+
+# string = str(input('Please enter a string: '))
+# x = palindrome_check(string)
+# print(x)
+
+#Edube - 3 - Anagram checker
+
+# def anagram_checker(word1: str, word2: str) -> bool:
+#     '''Func used to check whether two given words are anagrams or not'''
+#     chars1 = [character.lower() for character in word1 if character.isalpha()]
+#     chars2 = [character.lower() for character in word2 if character.isalpha()]
+    
+#     word1_chars = sorted(chars1)
+#     word2_chars = sorted(chars2)
+#     print(word1_chars)
+#     print(word2_chars)
+#     if word1_chars == word2_chars:
+#         return 'Anagrams'
+#     else:
+#         return 'Not anagrams'
+
+# word1 = str(input('Please enter the first word: '))
+# word2 = str(input('Please enter the second word: '))
+
+# x = anagram_checker(word1, word2)
+# print(x)
+
+#W5 D4 T1
+
+
+# def decorator(arg):
+#     def inner(func):
+#         def wrapper(*args):
+#             return func(*args)
+#         return wrapper
+#     return inner
+
+# @decorator(5)
+# def add(a, b):
+#     return a + b
+
+# print(add(4, 15))
+
+
+#W5 D4 T2
+
+# from datetime import datetime
+# from functools import wraps
+
+# def timer(func):
+#     '''Decorator that prints execution time of a function.
+    
+    
+#        Example output: add took 0.001 seconds
+#     '''
+#     @wraps(func)
+#     def wrapper(*args, **kwargs):
+#         start = datetime.now()
+#         result = func(*args, **kwargs)
+#         end = datetime.now()
+#         print(f'{func.__name__} took {end - start}')
+#         return result
+#     return wrapper
+
+# @timer
+# def slow_function():
+#     total = 0
+#     for i in range(1000000):
+#         total += i
+#     return total
+
+# result = slow_function()
+# print(f'Result: {result}')
+# # Expected output:
+# # slow_function took X.XXX seconds
+# # Result: 499999500000
+# print(datetime.now().strftime("%Y"))
+
+
+#W5 D4 T3
+
+# def f(x=[]):
+#     x.append(1)
+#     return x
+
+# print(len(f()), len(f()))
+
+
+#W5 D4 T5
+
+# Write a simple test in `practice.py` that:
+# 1. Creates a BacktestEngine
+# 2. Opens 2 positions (one BUY, one SELL)
+# 3. Processes a price that triggers one of them
+# 4. Prints the results
+
+# from algo_backtest.engine.backtest_engine import BacktestEngine
+# engine = BacktestEngine()
+# print(engine)
+
+# engine.open_position('FDAX', 'BUY', 24410, 7, 24390, 25600)
+
+# engine.process_price(25610)
+# engine.open_position('BTCUSD', 'SELL', 70800, 5, 72100, 66400)
+# engine.process_price(66300)
+
+# print(engine.total_pnl)
+# print(engine.win_rate)
+
+
+#W5 D4 T6
+# def add_item(item, items=None):
+
+#     if items is None:
+#         items = []
+#     items.append(item)
+#     return items
+
+# print(add_item('a'))
+# print(add_item('b'))
+
+
+#Edube Labs - #1 today - Digit of life, instruction below
+
+
+# '''Some say that the Digit of Life is a digit evaluated using somebody's birthday. 
+# It's simple - you just need to sum all the digits of the date. 
+# If the result contains more than one digit, you have to repeat the addition until you get exactly one digit. 
+
+# For example:
+
+# 1 January 2017 = 2017 01 01
+# 2 + 0 + 1 + 7 + 0 + 1 + 0 + 1 = 12
+# 1 + 2 = 3
+# 3 is the digit we searched for and found.
+
+# Your task is to write a program which:
+
+# - asks the user her/his birthday 
+# (in the format YYYYMMDD, or YYYYDDMM, or MMDDYYYY - actually, the order of the digits doesn't matter)
+
+# - outputs the Digit of Life for the date.'''
+
+
+# def digit_of_life(birth_date: str) -> int:
+
+#     num_list = [int(num) for num in birth_date if num.isnumeric()]
+#     sum_nums = reduce(lambda acc, num: acc + num, num_list, 0)
+
+#     iteration_num = 0
+
+#     while sum_nums > 9:
+#         iteration_num += 1
+#         split_nums =[int(num) for num in str(sum_nums)]
+#         print(f'Iteration number {iteration_num}, the current number is {sum_nums}')
+#         sum_nums = reduce(lambda acc, num: acc + num, split_nums, 0)
+        
+#     return sum_nums
+
+# birth_date = input('Please share your birthday date e.g.(1993-12-1, 05022003 etc - the order does not matter): ')
+# digit = digit_of_life(birth_date)
+# print(digit)
+
+#Edube - 2 - comprising words
+
+'''Your task is to write a program which answers the following question: 
+are the characters comprising the first string hidden inside the second string?
+
+For example:
+
+if the second string is given as "vcxzxduybfdsobywuefgas", the answer is yes;
+
+if the second string is "vcxzxdcybfdstbywuefsas", 
+the answer is no (as there are neither the letters "d", "o", or "g", in this order)'''
+
+
+
+# def comprising_words(string1, string2) -> str:
+#     '''A function used to check whether the characters comprising the first string hidden in the second string'''
+    
+#     matching_list = []
+#     chars = [char for char in string1]
+#     for char in chars:
+#         position = string2.find(char)
+#         if position == -1:
+#             return 'No'
+#         else:
+#             matching_list.append(char)
+    
+#     if chars == matching_list:
+#         return 'Yes'
+            
+
+
+# string1 = input('Please input the first string: ').lower()
+# string2 = input('Please input the second string: ').lower()
+# x = comprising_words(string1, string2)
+# print(x)
+
+#Start 10:55
+#Week5 D5 T1
+
+# data = [1, 2, [3, 4]]
+# copy = data[:]
+# copy[2].append(5)
+# print(data)
+
+#Week5 D5 T2
+
+# from functools import wraps
+
+# def retry(max_attempts: int):
+#     """
+#     Decorator factory that retries a function if it raises an exception.
+
+#     After max_attempts failures, re-raise the last exception.
+
+#     Example:
+#         @retry(3)
+#         def flaky_api():
+#             # might fail sometimes
+#             ...
+#     """
+    
+    
+#     def decorator(func):
+#         @wraps(func)
+#         def wrapper(*args, **kwargs):
+#             last_exception = None
+#             for attempt in range(max_attempts):
+#                 try:
+#                     result = func(*args, **kwargs)
+#                     return result
+#                 except Exception as e:
+#                     last_exception = e
+#             raise last_exception
+#         return wrapper
+#     return decorator
+
+# # Test:
+# attempt_count = 0
+
+# @retry(3)
+# def unstable_function():
+#     global attempt_count
+#     attempt_count += 1
+#     if attempt_count < 3:
+#         raise ValueError(f'Attempt {attempt_count} failed')
+#     return 'Success!'
+
+# print(unstable_function())
+
+
+#W5 D5 T3
+
+# from datetime import datetime
+# from typing import List
+
+# def filter_log_by_date(filepath: str, start: datetime, end: datetime) -> List[str]:
+#     '''Read a log file and return only lines where timestamp falls between stard and end (inclusive
+    
+#       Log format per line "YYYY-MM-DD HH:MM:SS | message"
+#     )'''
+#     matching_logs = []
+#     with open(filepath, 'r') as r:
+#         for line in r:
+#             parts = line.split(' ')
+#             date = parts[0:2]
+#             date = str(' '.join(date))
+#             date = datetime.strptime(date, '%Y-%m-%d %H:%M:%S')
+            
+#             if date > start and date < end:
+#                 matching_logs.append(line)
+    
+#     return matching_logs
+            
+    
+# with open('test_filter.log', 'w') as f:
+#     f.write('2026-02-01 10:00:00 | Server started\n')
+#     f.write('2026-02-03 14:30:00 | Trade executed\n')
+#     f.write('2026-02-05 09:15:00 | Error occurred\n')
+#     f.write('2026-02-06 16:00:00 | Shutdown\n')
+
+# start = datetime(2026, 2, 2)
+# end = datetime(2026, 2, 5, 23, 59)
+# results = filter_log_by_date('test_filter.log', start, end)
+
+# for line in results:
+#     print(line)
+    
+#W5 D5 T4
+    
+# with open('x.txt', 'w') as f:
+#     f.write('abc\n')
+#     f.write('def\n')
+
+# with open('x.txt') as f:
+#     lines = f.readlines()
+# print(len(lines), lines[0].strip())
+
+#W5 D5 T5 - addded __str__ method to BacktestEngine (algo_backtest/engine/backtest_engine.py)
+        
+# def __str__(self) -> str:
+#     """
+#     Return a summary like:
+#     BacktestEngine: 2 open | 3 closed | PnL: $1500.00
+#     """
+    
+#     return f'BacktestEngine: {(self.position_manager.get_position_count())} open | {len(self.completed_trades)} closed | PnL: ${self.total_pnl}'
+
+
+# from algo_backtest.engine.backtest_engine import BacktestEngine
+
+# engine = BacktestEngine()
+
+# # Open a BUY position: entry 1.0800, SL 1.0750, TP 1.0850
+# pos = engine.open_position('EURUSD', 'BUY', 1.0800, 10000,
+#                             stop_loss=1.0750, take_profit=1.0850)
+
+# print(f'Open positions: {engine.position_manager.get_position_count()}')  # 1
+
+# # Price moves to 1.0820 - no trigger
+# closed = engine.process_price(1.0820)
+# print(f'Trades closed: {len(closed)}')  # 0
+
+# # Price hits TP at 1.0850
+# closed = engine.process_price(1.0850)
+# print(f'Trades closed: {len(closed)}')  # 1
+# print(f'Total PnL: ${engine.total_pnl:.2f}')  # $500.00
+
+# print(engine)
+
+
+#W5 D5 T7
+# def bold(func):
+#     def wrapper():
+#         return '<b>' + func() + '</b>'
+#     return wrapper
+
+# def italic(func):
+#     def wrapper():
+#         return '<i>' + func() + '</i>'
+#     return wrapper
+
+# @bold
+# @italic
+# def say_hello():
+#     return 'hello'
+
+# print(say_hello())
+
+
+# @italic
+# @bold
+# def say_hello():
+#     return 'hello'
+
+# print(say_hello())
+
+
+#W5 D5 T8
+
+# from typing import Dict
+
+# def read_multiple_files(filepaths: list) -> Dict[str, str]:
+#     """
+#     Attempt to read each file in the list.
+
+#     Returns:
+#         Dict mapping filepath -> contents (for successful reads)
+
+#     Files that don't exist or can't be read should be skipped
+#     (not crash the program). Print a warning for each skipped file.
+
+#     Example:
+#         result = read_multiple_files(['exists.txt', 'missing.txt', 'also_exists.txt'])
+#         # Prints: "Warning: could not read missing.txt"
+#         # Returns: {'exists.txt': 'contents...', 'also_exists.txt': 'contents...'}
+#     """
+    
+#     contents = {}
+#     for filepath in filepaths:
+#         try: 
+#             with open(filepath, 'r') as r:
+#                 text = r.read()
+#                 contents[filepath] = {text}
+                    
+#         except Exception as e:
+#             print(f'Warning, an exception {str(e)} occured within filepath {filepath}, continuing.')
+#             continue   
+    
+#     return contents
+
+# # Test:
+# # Create some test files
+# with open('file_a.txt', 'w') as f:
+#     f.write('content A')
+# with open('file_c.txt', 'w') as f:
+#     f.write('content C')
+
+# result = read_multiple_files(['file_a.txt', 'file_b.txt', 'file_c.txt'])
+# print(result)
+# Expected:
+# Warning: could not read file_b.txt
+# {'file_a.txt': 'content A', 'file_c.txt': 'content C'}
+
+
+#Edube - 1 - Sudoku Reader - DIFFICULT - I needed to use AI to assist me - this is not a pattern I feel confident it, I'd need more practice to solve similar tasks with ease
+# from typing import List
+# from collections import defaultdict
+
+# def sudoku_checker(sudoku_str: str, pattern: List[str] = None) -> str:
+    
+#     if pattern is None: #I've added this for practice, assuming that perhaps there's a custom sudoku out there with different set of characters, but it's probably not relevant
+#         pattern = ['1', '2', '3', '4' ,'5', '6', '7', '8', '9']
+        
+#     rows = sudoku_str.split()
+#     #basic validation
+#     for row in rows:
+#         if sorted(row) != pattern:
+#             return f'No, row {row} is not equal to the pattern'
+#     print('Basic rows are valid, time to check 3x3')
+    
+#     square_starts = [(0, 0), (0, 3), (0, 6),
+#                      (3, 0), (3, 3), (3, 6),
+#                      (6, 0), (6, 3), (6, 6)                     
+#                      ]
+    
+#     square_num = defaultdict[list]
+#     for square_num, (start_row, start_col) in enumerate(square_starts):
+#         square_values = []
+#         for r in range(start_row, start_row + 3):
+#             for c in range(start_col, start_col + 3):
+#                 square_values.append(rows[r][c])
+                
+#         if sorted(square_values) != pattern:
+#             return f'No, square {square_num} is invalid'
+                
+
+#     return 'All squares are valid, it is a valid sudoku!'
+
+# stringg = '''195743862
+# 431865927
+# 876192543
+# 387459216
+# 612387495
+# 549216738
+# 763524189
+# 928671354
+# 254938671'''
+
+# x = sudoku_checker(stringg)
+# print(x)
+
+
+# from datetime import datetime
+
+# dt = datetime(2026, 2, 14, 15, 30)
+# print(dt.strftime('%I:%M %p'))
+
+
+# with open('test.txt', 'w') as f:
+#     n = f.write('Python')
+# print(n)
+
+
+# class Animal:
+#     def __init__(self, name):
+#         self.__name = name
+
+#     def get_name(self):
+#         return self.__name
+
+# class Dog(Animal):
+#     def bark(self):
+#         return f'{self.__name} barks'
+
+# d = Dog('Rex')
+# print(d.get_name())
+
+
+# from datetime import datetime
+
+# d1 = datetime.strptime('2026-02-14', '%Y-%m-%d')
+# d2 = datetime.strptime('14/02/2026', '%d/%m/%Y')
+# print(d1 == d2)
+
+# data = {'a': 1, 'b': 2, 'c': 3}
+# result = list(map(lambda kv: kv[1] * 2, data.items()))
+# print(result)
+
+# class Counter:
+#     count = 0
+
+#     def __init__(self):
+#         Counter.count += 1
+
+#     @classmethod
+#     def get_count(cls):
+#         return cls.count
+
+# a = Counter()
+# b = Counter()
+# c = Counter()
+# print(Counter.get_count())
+
+#W6 D1 T1
+
+# numbers = [10, 20, 30]
+# it = iter(numbers)
+# print(next(it))
+# print(next(it))
+
+# it2 = iter(numbers)
+# print(next(it2))
+
+
+# gen = (x * 2 for x in range(4))
+# print(next(gen))
+# print(next(gen))
+
+# gen2 = iter(gen)
+# print(next(gen2))
+# print(gen is gen2)
+
+#W6 D1 T3
+
+# class FibonacciIterator:
+#     """
+#     Iterator that yields Fibonacci numbers up to max_value.
+
+#     Usage:
+#         for n in FibonacciIterator(100):
+#             print(n)
+#         # Output: 0, 1, 1, 2, 3, 5, 8, 13, 21, 34, 55, 89
+#     """
+
+#     def __init__(self, max_value: int):
+#         # Your code: store max_value and initialize Fibonacci state
+#         self.fibo_nums = iter([0, 1, 1, 2, 3, 5, 8, 13, 21, 34, 55, 89])
+#         self.current = 0
+#         self.max_value = max_value
+        
+
+#     def __iter__(self):
+#         return self
+
+#     def __next__(self) -> int:
+#         if self.current >= self.max_value:
+#             raise StopIteration
+#         self.current = next(self.fibo_nums)
+#         return self.current
+
+
+# # Test:
+# fib = FibonacciIterator(50)
+# print(list(fib))
+# # Expected: [0, 1, 1, 2, 3, 5, 8, 13, 21, 34]
+
+# # Test: Can be used in for loop
+# for n in FibonacciIterator(20):
+#     print(n, end=' ')
+# # Expected: 0 1 1 2 3 5 8 13
+
+#W6 D1 T4
+
+# class Logger:
+#     _instance = None
+
+#     def __new__(cls, name):
+#         if cls._instance is None:
+#             cls._instance = super().__new__(cls)
+#         return cls._instance
+
+#     def __init__(self, name):
+#         self.name = name
+
+# a = Logger("FileLogger")
+# b = Logger("DBLogger")
+# print(a.name)
+# print(a is b)
+
+
+# class AlwaysPositive(int):
+#     def __new__(cls, value):
+#         return super().__new__(cls, abs(value))
+
+# x = AlwaysPositive(-42)
+# print(x)
+# print(type(x))
+# print(isinstance(x, int))
+
+
+#W6 D1 T5
+
+#A 
+# ORIGINAL (nested for loops)
+
+#B
+# data = [[1, 2, 3], [4, 5], [6, 7, 8, 9]]
+
+# def flatten(*iterables):
+#     for iterable in iterables:
+#         yield from iterable
+
+# print(flatten(data))
+
+
+# def price_source(prices: list):
+#     """Yield each price from the list."""
+#     for price in prices:
+#         yield price
+        
+# # Stage 2: Filter out prices below a threshold
+# def filter_above(prices, threshold: float):
+#     """Yield only prices above the threshold."""
+#     for price in prices:
+#         if price > threshold:
+#                 yield price
+
+# # Stage 3: Apply a spread (add a fixed amount)
+# def apply_spread(prices, spread: float):
+#     """Yield each price with spread added."""
+#     for price in prices:
+#             yield price + spread
+
+# # Test the pipeline:
+# raw_prices = [100.5, 98.2, 105.3, 97.1, 110.0, 99.8]
+# pipeline = apply_spread(filter_above(price_source(raw_prices), 100.0), 0.5)
+# print(list(pipeline))
+
+#W6 D1 T7 - modified backtest_engine to become ticker aware and added unique id to positions in Position + modified str/repr in position to account for that id.
+#The id is not yet added to Trade and that will be perhaps the next planned change - we'll  see, but for now everythign works
+
+# from algo_backtest.engine.backtest_engine import BacktestEngine
+# engine = BacktestEngine()
+
+# # Open positions on different tickers
+# engine.open_position('FDAX', 'BUY', 24500, 1, stop_loss=24450, take_profit=24600)
+# engine.open_position('EURUSD', 'BUY', 1.0800, 10000, stop_loss=1.0750, take_profit=1.0850)
+
+# # FDAX price moves — should only affect FDAX position
+# closed = engine.process_price('FDAX', 24600)
+# print(f'FDAX trades closed: {len(closed)}')       # 1 (TP hit)
+# print(f'Open positions: {engine.position_manager.get_position_count()}')  # 1 (EURUSD still open)
+
+# # EURUSD price moves — should only affect EURUSD position
+# closed = engine.process_price('EURUSD', 1.0850)
+# print(f'EURUSD trades closed: {len(closed)}')      # 1 (TP hit)
+# print(f'Open positions: {engine.position_manager.get_position_count()}')  # 0
+
+# # Verify unique IDs
+# engine2 = BacktestEngine()
+# p1 = engine2.open_position('FDAX', 'BUY', 24500, 1, stop_loss=24450, take_profit=24600)
+# p2 = engine2.open_position('FDAX', 'SELL', 24500, 1, stop_loss=24550, take_profit=24400)
+# print(p1.position_id != p2.position_id)  # True — different IDs
+

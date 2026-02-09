@@ -48,7 +48,7 @@ class PositionManager:
         else:
             return 0.0
 
-    def close_triggered_positions(self, current_price: float) -> List[Position]:
+    def close_triggered_positions(self, ticker: str, current_price: float) -> List[Position]:
         """
         Check all positions for SL/TP triggers and remove them.
 
@@ -58,13 +58,17 @@ class PositionManager:
         Returns:
             List of positions that should be closed.
         """
-        closed_positions = [p for p in self.positions if p.should_close(current_price)]
+        closed_positions = [p for p in self.positions if p.ticker == ticker and p.should_close(current_price)]
         self.positions = [p for p in self.positions if not p.should_close(current_price)]
 
 
         return closed_positions
                 
-
+    def get_positions_by_ticker(self, ticker: str) -> List[Position]:
+        '''Returns all positions that match a given ticker'''
+        matching_positions = [p for p in self.positions if p.ticker == ticker]
+        return matching_positions
+    
     def get_position_count(self) -> int:
         """Return number of open positions."""
         return len(self.positions)

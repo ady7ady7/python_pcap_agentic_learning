@@ -1,39 +1,27 @@
-# Daily Feedback - Week 5, Weekend Exams
+# Daily Feedback - Week 6, Day 2
 
-**Date:** 2026-02-07/08
-
----
-
-## Exam A
-
-**Score:** ___ / 30
-
-**Time taken:** ___ minutes
-
-**Questions you were unsure about:**
-
+**Date:** 2026-02-10
 
 ---
 
-## Exam B
+## Task Completion
 
-**Score:** ___ / 30
+**Tasks completed:** ___ / 8
 
-**Time taken:** ___ minutes
+**Time spent:** ___ minutes
 
-**Questions you were unsure about:**
-
+**Difficulty (1-10):**
 
 ---
 
-## Overall Reflection
+## Self-Reflection
 
-**Most challenging topic across both exams:**
+**What clicked today:**
 
 
-**Anything that surprised you:**
+**What's still confusing:**
 
 
 ---
 
-**When complete:** Submit both exams for grading.
+**When complete:** Notify me for assessment.
