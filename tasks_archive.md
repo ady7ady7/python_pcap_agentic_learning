@@ -1036,3 +1036,29 @@ Task 8 expected values were wrong. Correct: 4 winners, $1050 total PnL.
 
 ---
 
+## Week 6, Day 2 - 2026-02-10
+
+**Topic:** Iterator Mastery, Bug Fixes & Trade ID Propagation
+**Score:** 95% (A) | **Time:** 60 minutes | **Difficulty:** 5-6/10
+
+**Tasks:**
+1. PCAP warm-up: iterator reset + partial consumption (92%)
+2. Decorator fill-in-the-blanks — 5/5 correct (100%)
+3. FibonacciIterator rewrite with dynamic state (100%)
+4. __new__ vs __init__ argument flow predictions (100%)
+5. PROJECT: Fix PositionManager ticker bug — ID-based removal (90%)
+6. PROJECT: Propagate position_id to Trade class (100%)
+7. CountdownIterator class (100%)
+8. PCAP simulation 5 questions — 4/5 (80%)
+
+**Key Wins:**
+- Day 1 gaps all closed (Fibonacci, __init__ args, ticker bug)
+- Decorator scaffolding Day 2 complete (all blanks correct)
+- Self-caught PositionManager bug in first attempt
+- Project: full Position→Trade ID chain working
+
+**Remaining Gap:**
+- Iterable vs Iterator pattern (yield in __iter__ = new generator per call)
+
+---
+

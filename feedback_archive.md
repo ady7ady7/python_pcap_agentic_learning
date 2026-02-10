@@ -2849,3 +2849,46 @@ IOError (alias for OSError)
 
 ---
 
+## Week 6, Day 2 - 2026-02-10
+
+**Topic:** Iterator Mastery, Bug Fixes & Trade ID Propagation
+**Score:** 95% (A) | **Time:** 60 minutes | **Difficulty:** 5-6/10
+
+### Task Breakdown
+
+| Task | Score | Details |
+|------|-------|---------|
+| 1: PCAP warm-up | 92% | Both correct; Q1 reset mechanism understanding shaky |
+| 2: Decorator fill-in-blanks | 100% | All 5 blanks correct, output verified |
+| 3: FibonacciIterator rewrite | 100% | Perfect dynamic state implementation |
+| 4: __new__/__init__ args | 100% | Both predictions correct — Day 1 gap closed |
+| 5: PositionManager bug fix | 90% | Correct ID-based fix; self-caught first attempt bug |
+| 6: Trade position_id | 100% | Clean implementation, good design choices |
+| 7: CountdownIterator | 100% | All tests pass |
+| 8: PCAP simulation | 80% | 4/5 — Q2 iterable vs iterator confusion |
+
+### Gaps Closed from Day 1
+- Fibonacci hardcoding → proper `a, b = b, a+b` state pattern
+- `__init__` receives original args, not __new__-transformed values
+- PositionManager ticker bug fixed using position_id filtering
+
+### Remaining Gaps
+- **Iterable vs Iterator pattern:** When `__iter__` uses `yield`, each `iter()` call creates a new independent generator (iterable pattern). When `__iter__` returns `self`, same object (iterator pattern).
+- **`__iter__` reset mechanism:** Understands output but not the WHY behind resettable iterators
+- `__dict__` attribute not yet taught — student correctly flagged this
+
+### Strengths
+- Decorator understanding now solid (Day 1 trace → Day 2 blanks → all correct)
+- Strong debugging instinct (self-caught PositionManager bug before confirmation)
+- Good engineering judgment (required vs optional position_id, str conversion at source)
+- Day-over-day improvement: 81% → 95%
+
+### Project Progress
+- PositionManager ticker bug FIXED (ID-based removal)
+- Trade class now carries position_id (read-only property)
+- Position stores str(uuid4) directly
+- BacktestEngine passes position_id in Trade creation
+- __repr__ and __str__ updated across Position and Trade
+
+---
+

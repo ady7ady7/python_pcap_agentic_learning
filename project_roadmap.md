@@ -46,13 +46,15 @@
 - [x] datetime & File I/O practice (strftime, strptime, timedelta)
 - [x] Decorator fundamentals (simple, with args, stacking)
 
-### Week 6: Event-Driven Architecture (CURRENT)
+### Week 6: Position Identity & Iterator Patterns (CURRENT)
+- [x] Unique `position_id` (uuid4) on every Position
+- [x] Ticker-aware price processing (PositionManager + BacktestEngine)
+- [x] Position ID propagation: Position → Trade (full lifecycle chain)
+- [x] Fixed PositionManager removal bug (ID-based filtering)
+- [x] Custom iterators with `__iter__`/`__next__` (FibonacciIterator, CountdownIterator)
 - [ ] Convert DataFrame rows to generator (yield row as namedtuple)
-- [ ] `PriceTick` named tuple for tick data
 - [ ] `create_price_stream()` generator function
 - [ ] Implement tick-by-tick simulation via generator pipeline
-- [ ] Custom iterators with `__iter__`/`__next__`
-- [ ] Performance metrics calculation
 
 ---
 
@@ -78,5 +80,5 @@
 
 ---
 
-**Current Status:** Week 6, Day 1 - Iterator Protocol & Advanced Generators
-**Last Updated:** 2026-02-09
+**Current Status:** Week 6, Day 2 - Iterator Mastery & Trade ID Propagation
+**Last Updated:** 2026-02-10

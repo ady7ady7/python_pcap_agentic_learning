@@ -18,6 +18,7 @@ class Trade:
     '''
     
     def __init__(self,
+                 position_id: str,
                  ticker: str,
                  side: str,
                  entry_price: float,
@@ -32,6 +33,7 @@ class Trade:
         
         """Initialize a completed trade and calculate P&L."""
         
+        self._position_id = position_id
         self._ticker = ticker
         self._side = side.upper()
         self._entry_price = entry_price
@@ -66,18 +68,22 @@ class Trade:
         else:
             result = '[LOSS]'
         
-        return (f'''{result} {self._side} {self._quantity} {self._ticker}: 
+        return (f'''Trade {self._position_id}: {result} {self._side} {self._quantity} {self._ticker}: 
                 {self._entry_price} -> {self._exit_price} {self._exit_reason}
                 | P&L: ${self.pnl:.2f}''')
     
     def __repr__(self):
         
         
-        return (f'Trade(ticker = {self._ticker!r}, side = {self._side!r},'
-                f'entry_price = {self._entry_price}, exit_price = {self._exit_price}'
+        return (f'Trade {self._position_id}: (ticker = {self._ticker!r}, side = {self._side!r}, '
+                f'entry_price = {self._entry_price}, exit_price = {self._exit_price}, '
                 f'quantity = {self._quantity}, pnl = {self.pnl:.2f}, exit_reason = {self._exit_reason!r}'
         )
     
+    @property
+    def position_id(self) -> str:
+        '''Read-only property of position id - generated in Position'''
+        return self._position_id
     
     @property
     def pnl(self) -> float:

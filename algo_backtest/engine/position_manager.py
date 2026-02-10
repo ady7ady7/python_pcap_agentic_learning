@@ -59,8 +59,10 @@ class PositionManager:
             List of positions that should be closed.
         """
         closed_positions = [p for p in self.positions if p.ticker == ticker and p.should_close(current_price)]
-        self.positions = [p for p in self.positions if not p.should_close(current_price)]
-
+        
+        closed_ids = [p.position_id for p in closed_positions]
+        self.positions = [p for p in self.positions if p.position_id not in closed_ids]
+        
 
         return closed_positions
                 

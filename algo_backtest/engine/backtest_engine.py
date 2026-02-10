@@ -65,7 +65,9 @@ class BacktestEngine:
         newly_closed_trades = []
         for position in closed_positions:
             exit_reason = position.should_close(current_price)[1]
-            trade = Trade(position.ticker, 
+            trade = Trade(
+                          position.position_id,
+                          position.ticker, 
                           position.side, 
                           position.entry_price, 
                           current_price, 

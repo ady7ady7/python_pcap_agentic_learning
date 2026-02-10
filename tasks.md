@@ -1,13 +1,13 @@
-# Week 6, Day 1 - Monday
-## Topic: The Iterator Protocol & Advanced Generators
+# Week 6, Day 2 - Tuesday
+## Topic: Iterator Mastery, Bug Fixes & Trade ID Propagation
 
-**Date:** 2026-02-09
+**Date:** 2026-02-10
 
-**Target Difficulty:** 6/10
+**Target Difficulty:** 5-6/10
 
-**Focus:** Iterator protocol (`__iter__`/`__next__`), `__new__` method, `yield from`, named tuples
+**Focus:** Fix Day 1 gaps (Fibonacci state, `__init__` args), fix critical project bug, propagate `position_id` to Trade
 
-**Lesson:** Read `lessons/week6_iterators_generators_advanced.md` before starting.
+**Lesson:** Review `lessons/week6_iterators_generators_advanced.md` sections on iterators & `__new__`.
 
 **Remember:** Work in `practice.py`, paste FINAL answers here for review.
 
@@ -17,207 +17,243 @@
 
 **Q1:** What is the output?
 ```python
-numbers = [10, 20, 30]
-it = iter(numbers)
-print(next(it))
-print(next(it))
+class Repeater:
+    def __init__(self, value, times):
+        self.value = value
+        self.times = times
+        self.count = 0
 
-it2 = iter(numbers)
-print(next(it2))
+    def __iter__(self):
+        self.count = 0   # reset on every iter() call
+        return self
+
+    def __next__(self):
+        if self.count >= self.times:
+            raise StopIteration
+        self.count += 1
+        return self.value
+
+r = Repeater("hi", 3)
+print(list(r))
+print(list(r))
+
+['hi', 'hi', 'hi']
+['hi', 'hi', 'hi']
+
+I don't exactly understand why it works like that, it's a bit weird.
 ```
 
 **Q2:** What is the output?
 ```python
-gen = (x * 2 for x in range(4))
-print(next(gen))
-print(next(gen))
+data = [10, 20, 30, 40]
+it = iter(data)
+next(it)
+next(it)
 
-gen2 = iter(gen)
-print(next(gen2))
-print(gen is gen2)
+for x in it:
+    print(x, end=' ')
 ```
+
+30, 40
 
 **Your answers:**
 ```
-Q1: 10, 20; 10 (separate entities)
-Q2: 0, 2, 4, True (two entities referencing the same object)
+Q1:
+
+Q2:
+
 ```
 
 ---
 
-## Task 2: Decorator Trace (Scaffolded — Day 1: READ ONLY)
+## Task 2: Decorator Scaffolded — Day 2: FILL IN THE BLANKS
 
-**Goal:** Understand how a decorator with arguments works by tracing execution step-by-step. Do NOT write code — just trace on paper/mentally.
+**Goal:** Complete the missing parts of a decorator that validates argument types. The structure is given — you fill the gaps.
 
-**Instructions:** For the code below, write out **what happens at each step** when Python runs it. Number each step.
+**Instructions:** Replace each `___BLANK___` with the correct code. There are 5 blanks total.
 
 ```python
 from functools import wraps
 
-def require_positive(param_name):
-    def decorator(func):
-        @wraps(func)
+def enforce_types(*expected_types):
+    """
+    Decorator that checks if positional arguments match expected types.
+    Usage: @enforce_types(str, float)
+    """
+    def decorator(___BLANK_1___):          # What goes here?
+        @wraps(___BLANK_2___)              # What goes here?
         def wrapper(*args, **kwargs):
-            for arg in args:
-                if isinstance(arg, (int, float)) and arg < 0:
-                    return f"Error: {param_name} must be positive"
-            return func(*args, **kwargs)
-        return wrapper
+            for arg, expected in zip(args, expected_types):
+                if not isinstance(arg, ___BLANK_3___):   # What goes here?
+                    return f"TypeError: expected {expected.__name__}, got {type(arg).__name__}"
+            return ___BLANK_4___           # What goes here? (call the original function)
+        return ___BLANK_5___               # What goes here?
     return decorator
 
-@require_positive("price")
-def process_trade(price):
-    return f"Trade at ${price:.2f}"
+# Test:
+@enforce_types(str, float, int)
+def create_order(ticker, price, quantity):
+    return f"Order: {ticker} @ {price} x {quantity}"
 
-result1 = process_trade(150.0)
-result2 = process_trade(-50.0)
-print(result1)
-print(result2)
+print(create_order("FDAX", 24500.0, 1))
+print(create_order("FDAX", "bad_price", 1))
+print(create_order.__name__)
 ```
 
-**Your trace:**
+**Expected output:**
 ```
-Step 1: Python defines require_positive function
-Step 2: Python runs the decorator with passed process_trade function
-Step 3: Python runs the wrapper part with passed args/kwargs, it checks whether the passed arg (price) value is an int/float and is over 0
-Step 4: Depending on the check, it returns an error or the actual result of the function (e.g. trade at ${price})
-(continue until you reach the print outputs)
-
-Final output:
-result1 = Trade at $150.0
-result2 = Error: -50.0 must be positive
+Order: FDAX @ 24500.0 x 1
+TypeError: expected float, got str
+create_order
 ```
 
-**Hint:** Remember the 3-layer structure: `require_positive("price")` returns `decorator`, which is applied to `process_trade`, replacing it with `wrapper`.
+**Your code (fill in the blanks):**
+```python
+from functools import wraps
+
+def enforce_types(*expected_types):
+    """
+    Decorator that checks if positional arguments match expected types.
+    Usage: @enforce_types(str, float)
+    """
+    def decorator(func):          # What goes here?
+        @wraps(func)              # What goes here?
+        def wrapper(*args, **kwargs):
+            for arg, expected in zip(args, expected_types):
+                if not isinstance(arg, expected):   # What goes here?
+                    return f"TypeError: expected {expected.__name__}, got {type(arg).__name__}"
+            return func(*args, **kwargs)         # What goes here? (call the original function)
+        return wrapper            # What goes here?
+    return decorator
+
+# Test:
+@enforce_types(str, float, int)
+def create_order(ticker, price, quantity):
+    return f"Order: {ticker} @ {price} x {quantity}"
+
+print(create_order("FDAX", 24500.0, 1))
+print(create_order("FDAX", "bad_price", 1))
+print(create_order.__name__)
+
+#$ python practice.py
+# Order: FDAX @ 24500.0 x 1
+# TypeError: expected float, got str
+# create_order
 
 ---
 
-## Task 3: Iterator Protocol — Build a Custom Iterator
+## Task 3: FibonacciIterator — Fix & Learn the State Pattern
 
-**Instructions:** Implement a `FibonacciIterator` class that yields Fibonacci numbers up to a maximum value.
+Yesterday you hardcoded a list of Fibonacci numbers — that only works up to the numbers you typed in. The correct approach uses **two state variables** that compute the next value dynamically.
+
+**The pattern you need:**
+```python
+# This is how you compute Fibonacci with dynamic state:
+self.a, self.b = self.b, self.a + self.b
+# Before: a=0, b=1
+# After:  a=1, b=1
+# Next:   a=1, b=2
+# Next:   a=2, b=3
+# This works for ANY max_value — no hardcoding needed.
+```
+
+**Your job:** Rewrite `FibonacciIterator` using this pattern. Key rules:
+- `__init__`: store `max_value`, set `self.a = 0` and `self.b = 1`
+- `__iter__`: return `self`
+- `__next__`: check if `self.a` exceeds `max_value` BEFORE returning, then advance state
 
 ```python
 class FibonacciIterator:
-    """
-    Iterator that yields Fibonacci numbers up to max_value.
-
-    Usage:
-        for n in FibonacciIterator(100):
-            print(n)
-        # Output: 0, 1, 1, 2, 3, 5, 8, 13, 21, 34, 55, 89
-    """
+    """Iterator that yields Fibonacci numbers up to max_value."""
 
     def __init__(self, max_value: int):
-        # Your code: store max_value and initialize Fibonacci state
-        pass
+        # Your code
 
     def __iter__(self):
-        # Your code: return the iterator object
-        pass
+        # Your code
 
     def __next__(self) -> int:
-        # Your code: return next Fibonacci number or raise StopIteration
-        pass
+        # Your code — use self.a, self.b = self.b, self.a + self.b
 
 # Test:
-fib = FibonacciIterator(50)
-print(list(fib))
+print(list(FibonacciIterator(50)))
 # Expected: [0, 1, 1, 2, 3, 5, 8, 13, 21, 34]
 
-# Test: Can be used in for loop
-for n in FibonacciIterator(20):
-    print(n, end=' ')
-# Expected: 0 1 1 2 3 5 8 13
+print(list(FibonacciIterator(1000)))
+# Expected: [0, 1, 1, 2, 3, 5, 8, 13, 21, 34, 55, 89, 144, 233, 377, 610, 987]
 ```
 
 **Your code:**
 ```python
 
 class FibonacciIterator:
-    """
-    Iterator that yields Fibonacci numbers up to max_value.
-
-    Usage:
-        for n in FibonacciIterator(100):
-            print(n)
-        # Output: 0, 1, 1, 2, 3, 5, 8, 13, 21, 34, 55, 89
-    """
+    """Iterator that yields Fibonacci numbers up to max_value."""
 
     def __init__(self, max_value: int):
-        # Your code: store max_value and initialize Fibonacci state
-        self.fibo_nums = iter([0, 1, 1, 2, 3, 5, 8, 13, 21, 34, 55, 89])
-        self.current = 0
         self.max_value = max_value
-        
+        self.a = 0
+        self.b = 1
 
     def __iter__(self):
         return self
 
     def __next__(self) -> int:
-        if self.current >= self.max_value:
+        if self.a > self.max_value:
             raise StopIteration
-        self.current = next(self.fibo_nums)
-        return self.current
-
-
-# Test:
-fib = FibonacciIterator(50)
-print(list(fib))
-# Expected: [0, 1, 1, 2, 3, 5, 8, 13, 21, 34]
-
-# Test: Can be used in for loop
-for n in FibonacciIterator(20):
-    print(n, end=' ')
-# Expected: 0 1 1 2 3 5 8 13
-
-Results:
-
-[0, 1, 1, 2, 3, 5, 8, 13, 21, 34, 55]
-0 1 1 2 3 5 8 13 21 (.venv) 
+        result = self.a
+        self.a, self.b = self.b, self.a + self.b
+        return result
 
 
 ```
 
 ---
 
-## Task 4: `__new__` vs `__init__` — Predict the Output
+## Task 4: `__init__` Receives Original Arguments — Predict Output
 
-**Instructions:** Predict the output of each snippet. No running code!
+Yesterday's Task 8 Q4 tripped you up. The key rule:
 
-**Q1:**
+> **`__new__` transforms the object. `__init__` still receives the ORIGINAL arguments that were passed in the constructor call.**
+
+**Q1:** Predict the output:
 ```python
-class Logger:
-    _instance = None
+class UpperStr(str):
+    def __new__(cls, value):
+        instance = super().__new__(cls, value.upper())
+        return instance
 
-    def __new__(cls, name):
-        if cls._instance is None:
-            cls._instance = super().__new__(cls)
-        return cls._instance
+    def __init__(self, value):
+        self.original = value
 
-    def __init__(self, name):
-        self.name = name
+s = UpperStr("hello")
+print(s)
+print(s.original)
+print(type(s).__name__)
 
-a = Logger("FileLogger")
-b = Logger("DBLogger")
-print(a.name)
-print(a is b)
+Answer: HELLO hello UpperStr
 
-Answer: DBLogger, True 
 ```
 
-**Q2:**
+**Q2:** Predict the output:
 ```python
-class AlwaysPositive(int):
+class ClampedInt(int):
+    """Integer that clamps to range [0, 100]."""
     def __new__(cls, value):
-        return super().__new__(cls, abs(value))
+        clamped = max(0, min(100, value))
+        return super().__new__(cls, clamped)
 
-x = AlwaysPositive(-42)
+    def __init__(self, value):
+        self.raw_value = value
+
+x = ClampedInt(250)
 print(x)
-print(type(x))
-print(isinstance(x, int))
+print(x.raw_value)
+print(x + 10)
 
-Answer: 42,  class, True
-
+Answer:
+100
+250
+110
 ```
 
 **Your answers:**
@@ -232,286 +268,36 @@ Q2 output:
 
 ---
 
-## Task 5: `yield from` and Generator Pipelines
+## Task 5: PROJECT — Fix the PositionManager Ticker Bug (CRITICAL)
 
-**Instructions:** Refactor the following code to use `yield from`, then build a pipeline.
+**The bug:** Open `algo_backtest/engine/position_manager.py`, line 62. Look at `close_triggered_positions`:
 
-**Part A:** Rewrite using `yield from`:
 ```python
-# ORIGINAL (nested for loops)
-def flatten(nested_list):
-    for sublist in nested_list:
-        for item in sublist:
-            yield item
-
-data = [[1, 2, 3], [4, 5], [6, 7, 8, 9]]
-print(list(flatten(data)))
-# Expected: [1, 2, 3, 4, 5, 6, 7, 8, 9]
+closed_positions = [p for p in self.positions if p.ticker == ticker and p.should_close(current_price)]
+self.positions = [p for p in self.positions if not p.should_close(current_price)]
 ```
 
-**Part B:** Build a 3-stage generator pipeline:
+Line 1 correctly filters by ticker. But line 2 (the removal line) does NOT filter by ticker — it removes ALL positions that trigger at `current_price`, even if they belong to a different ticker.
+
+**Example of the bug:**
 ```python
-# Stage 1: Read prices from a list
-def price_source(prices: list):
-    """Yield each price from the list."""
-    # Your code (1 line with yield from)
-
-# Stage 2: Filter out prices below a threshold
-def filter_above(prices, threshold: float):
-    """Yield only prices above the threshold."""
-    # Your code
-
-# Stage 3: Apply a spread (add a fixed amount)
-def apply_spread(prices, spread: float):
-    """Yield each price with spread added."""
-    # Your code
-
-# Test the pipeline:
-raw_prices = [100.5, 98.2, 105.3, 97.1, 110.0, 99.8]
-pipeline = apply_spread(filter_above(price_source(raw_prices), 100.0), 0.5)
-print(list(pipeline))
-# Expected: [101.0, 105.8, 110.5]
+# You hold FDAX BUY @ 24500 (SL=24450, TP=24600)
+# You hold EURUSD BUY @ 1.0800 (SL=1.0750, TP=1.0850)
+# You call: process_price('FDAX', 24600)
+#
+# Line 1: closed_positions = [FDAX position]  ✅ correct — only FDAX matched
+# Line 2: self.positions = [p for p if NOT p.should_close(24600)]
+#   → EURUSD.should_close(24600) returns (False, None) → keeps it? NO!
+#   → Actually it depends on EURUSD's SL/TP values vs 24600
+#   → If 24600 triggers EURUSD's take_profit... it gets silently removed!
 ```
 
-**Your code:**
+**Your fix:** Modify line 62 so that only positions matching the ticker are evaluated for removal. Non-matching tickers must stay untouched.
+
+**Paste only the fixed method:**
 ```python
 
-def flatten(*iterables):
-    for iterable in iterables:
-        yield from iterable
-
-print(flatten(data))
-
-
-
-def price_source(prices: list):
-    """Yield each price from the list."""
-    for price in prices:
-        yield price
-        
-# Stage 2: Filter out prices below a threshold
-def filter_above(prices, threshold: float):
-    """Yield only prices above the threshold."""
-    for price in prices:
-        if price > threshold:
-                yield price
-
-# Stage 3: Apply a spread (add a fixed amount)
-def apply_spread(prices, spread: float):
-    """Yield each price with spread added."""
-    for price in prices:
-            yield price + spread
-
-
-Log:
-
-$ python practice.py
-<generator object flatten at 0x0000019E5EA6A5A0>
-[101.0, 105.8, 110.5]
-(.venv) 
-```
-
----
-
-## Task 6: MRO with super() — Trace the Chain
-
-**Instructions:** Trace the MRO manually for each snippet. Write the MRO order AND the output.
-
-**Q1:**
-```python
-class Base:
-    def identify(self):
-        return "Base"
-
-class Left(Base):
-    def identify(self):
-        return "Left->" + super().identify()
-
-class Right(Base):
-    def identify(self):
-        return "Right->" + super().identify()
-
-class Child(Left, Right):
-    def identify(self):
-        return "Child->" + super().identify()
-
-print(Child().identify())
-
-
-Child -> Left -> Right -> Base
-```
-
-**Q2:**
-```python
-class A:
-    def __init__(self):
-        print("A", end=" ")
-
-class B(A):
-    def __init__(self):
-        print("B", end=" ")
-        super().__init__()
-
-class C(A):
-    def __init__(self):
-        print("C", end=" ")
-        super().__init__()
-
-class D(B, C):
-    def __init__(self):
-        print("D", end=" ")
-        super().__init__()
-
-D()
-
-D -> B -> C -> A
-```
-
-**Your answers:**
-```
-Q1:
-MRO: Child -> Left -> Right -> Base -> object
-Output: Child->Left->Right->Base
-
-Q2:
-MRO: D -> B -> C -> A -> object
-Output: D B C A
-```
-
-**Remember:** `super()` means "next in MRO", NOT "direct parent class".
-
----
-
-## Task 7: PROJECT — Position IDs & Ticker-Aware Price Processing
-
-**The Problem:** Right now, `BacktestEngine.process_price(current_price)` checks ALL positions against one price. If you hold FDAX at 24500 and EURUSD at 1.0800, calling `process_price(24500)` would incorrectly evaluate EURUSD against 24500. Each position also has no unique identifier.
-
-**Your job — 3 changes to existing files:**
-
-**Step 1: Add unique `position_id` to `Position` class** (`algo_backtest/engine/position.py`)
-- Use `uuid.uuid4()` from the standard library to generate a unique ID on creation
-- Store it as `self.position_id`
-- Include it in `__str__` and `__repr__`
-
-**Step 2: Make `PositionManager` ticker-aware** (`algo_backtest/engine/position_manager.py`)
-- Modify `close_triggered_positions(current_price)` → `close_triggered_positions(ticker: str, current_price: float)`
-- It should only check positions that **match the given ticker**
-- Leave non-matching positions untouched
-- Add a method: `get_positions_by_ticker(ticker: str) -> List[Position]`
-
-**Step 3: Make `BacktestEngine` ticker-aware** (`algo_backtest/engine/backtest_engine.py`)
-- Modify `process_price(current_price)` → `process_price(ticker: str, current_price: float)`
-- Only processes positions matching that ticker
-
-**Test your changes:**
-```python
-engine = BacktestEngine()
-
-# Open positions on different tickers
-engine.open_position('FDAX', 'BUY', 24500, 1, stop_loss=24450, take_profit=24600)
-engine.open_position('EURUSD', 'BUY', 1.0800, 10000, stop_loss=1.0750, take_profit=1.0850)
-
-# FDAX price moves — should only affect FDAX position
-closed = engine.process_price('FDAX', 24600)
-print(f'FDAX trades closed: {len(closed)}')       # 1 (TP hit)
-print(f'Open positions: {engine.position_manager.get_position_count()}')  # 1 (EURUSD still open)
-
-# EURUSD price moves — should only affect EURUSD position
-closed = engine.process_price('EURUSD', 1.0850)
-print(f'EURUSD trades closed: {len(closed)}')      # 1 (TP hit)
-print(f'Open positions: {engine.position_manager.get_position_count()}')  # 0
-
-# Verify unique IDs
-engine2 = BacktestEngine()
-p1 = engine2.open_position('FDAX', 'BUY', 24500, 1, stop_loss=24450, take_profit=24600)
-p2 = engine2.open_position('FDAX', 'SELL', 24500, 1, stop_loss=24550, take_profit=24400)
-print(p1.position_id != p2.position_id)  # True — different IDs
-```
-
-**Your code (paste the modified methods/sections only — not entire files):**
-```python
-
-```
-<!-- def process_price(self, ticker: str, current_price: float) -> List[Trade]:
-        
-        """
-        Check all positions against current price.
-        Close any that hit SL/TP and convert to Trade objects.
-
-        Steps:
-        1. Use position_manager.close_triggered_positions(current_price)
-        2. For each closed position, create a Trade object
-        3. Add Trade to completed_trades
-        4. Return list of newly created trades
-
-        Returns:
-            List of newly closed trades (empty if none closed)
-        """
-        
-        closed_positions = self.position_manager.close_triggered_positions(ticker, current_price)
-        newly_closed_trades = []
-        for position in closed_positions:
-            exit_reason = position.should_close(current_price)[1]
-            trade = Trade(position.ticker, 
-                          position.side, 
-                          position.entry_price, 
-                          current_price, 
-                          position.quantity,
-                          exit_reason = exit_reason)
-            newly_closed_trades.append(trade)
-            self.completed_trades.append(trade)
-            
-        return newly_closed_trades
-
-
-
-class Position:
-    '''
-    Represents a single trading position
-    
-    Attributes:
-    ticker: e.g. EURUSD, FDAX,
-    entry_price: float e.g. 24500.25
-    quantity: Number of units
-    stop_loss: stop loss price - float e.g. 24470.5 (optional)
-    take_profit: take profit price - float e.g. 24530.0 (optional)
-    
-    '''
-    
-    def __init__(
-        self,
-        ticker: str,
-        side: str,
-        entry_price: float, 
-        quantity: float, 
-        stop_loss: Optional[float] = None,
-        take_profit: Optional[float] = None
-    ) -> None:
-        
-        '''Initialize a new position'''
-        
-        self.position_id = uuid.uuid4()
-        self.ticker = ticker
-        self.side = side.upper() #I decided to include side, as we will usually have this sorted out in this way
-        self.entry_price = entry_price
-        self.quantity = quantity
-        self.stop_loss = stop_loss
-        self.take_profit = take_profit
-    
-        #Therefore is_long or is_short is really redundant + it's also weird.
-        
-    def __str__(self) -> str:
-        '''A Python magic method used to return information about class instead of memory object'''
-        return f'Position_id = {self.position_id} | {self.side} {self.quantity} {self.ticker} @ {self.entry_price} [SL = {self.stop_loss}, TP = {self.take_profit}]'
-    
-    
-    def __repr__(self) -> str:
-        '''A Python magic method used to provide devs with useful information to recreate the object '''
-        return f'Position(position_id = {self.position_id}, ticker = {self.ticker}, side = {self.side}, entry_price = {self.entry_price}, quantity = {self.quantity}, stop_loss = {self.stop_loss}, take_profit = {self.take_profit})'
-
-
-    
-        def close_triggered_positions(self, ticker: str, current_price: float) -> List[Position]:
+    def close_triggered_positions(self, ticker: str, current_price: float) -> List[Position]:
         """
         Check all positions for SL/TP triggers and remove them.
 
@@ -522,35 +308,176 @@ class Position:
             List of positions that should be closed.
         """
         closed_positions = [p for p in self.positions if p.ticker == ticker and p.should_close(current_price)]
-        self.positions = [p for p in self.positions if not p.should_close(current_price)]
-
+        
+        closed_ids = [p.position_id for p in closed_positions]
+        self.positions = [p for p in self.positions if p.position_id not in closed_ids]
+        
 
         return closed_positions
-                
-    def get_positions_by_ticker(self, ticker: str) -> List[Position]:
-        '''Returns all positions that match a given ticker'''
-        matching_positions = [p for p in self.positions if p.ticker == ticker]
-        return matching_positions
+
+#It was not possible to only modify that one line - I had to invent a 2-line modification for this, but it should work just fine
+
+#I tested the code outside after that, and also slightly modified Trade's repr for better formatting, as I've noticed little issue there:
 
 
+from algo_backtest.engine.backtest_engine import BacktestEngine
+engine = BacktestEngine()
+engine.open_position('FDAX', 'BUY', 24500, 1, 24450, 24600)
+# (self, ticker, side, entry, quantity, stop_loss, take_profit)
+engine.open_position('EURUSD', 'BUY', 1.0800, 100000, 1.0750, 1.0850)
+
+x = engine.process_price('FDAX', 24600)
+print(x)
+print(engine)
+
+#Output:
+
+# $ python practice.py
+# Position Position_id = b3e05dec-5f5e-4947-b329-90db875eb400 | BUY 1 FDAX @ 24500 [SL = 24450, TP = 24600] added successfully
+# Position Position_id = 81476ae1-2860-49f1-830a-df6bb3d65e0b | BUY 100000 EURUSD @ 1.08 [SL = 1.075, TP = 1.085] added successfully
+# [Trade(ticker = 'FDAX', side = 'BUY', entry_price = 24500, exit_price = 24600, quantity = 1, pnl = 100.00, exit_reason = 'BUY TP HIT']
+# algo_backtest.engine.backtest_engine: 1 open | 1 closed | PnL: $100
+# (.venv) 
+
+
+```
+
+**Test after fixing** — run the `if __name__ == '__main__'` block in backtest_engine.py and verify:
+- FDAX trades closed: 1
+- Open positions after FDAX: 1 (EURUSD still there)
+- EURUSD trades closed: 1
+- Open positions after EURUSD: 0
+
+---
+
+## Task 6: PROJECT — Propagate `position_id` to Trade
+
+Right now, when a Position gets closed and converted to a Trade, the `position_id` is lost. You mentioned wanting to fix this yesterday.
+
+**Your job — 2 changes:**
+
+**Step 1:** Modify `Trade.__init__` to accept an optional `position_id` parameter:
+- Add `position_id: Optional[str] = None` to the signature
+- Store it as `self._position_id = position_id`
+- Add a `@property` for it (read-only, like the other Trade attributes)
+
+#Done
+
+**Step 2:** Modify `BacktestEngine.process_price` to pass the position's ID when creating a Trade:
+- In the `Trade(...)` constructor call, add `position_id=str(position.position_id)`
+
+#done
+Slightly diffrerent approach though, I've changed the position_id type in Position directly, so it's instantly converted to a string there - it's way easier, more convenient and I won't have to remember to change that later 
+
+self.position_id = str(uuid.uuid4())
+
+**Test:**
+```python
+engine = BacktestEngine()
+p = engine.open_position('FDAX', 'BUY', 24500, 1, stop_loss=24450, take_profit=24600)
+print(f"Position ID: {p.position_id}")
+
+closed = engine.process_price('FDAX', 24600)
+if closed:
+    trade = closed[0]
+    print(f"Trade position_id: {trade.position_id}")
+    print(f"IDs match: {str(p.position_id) == trade.position_id}")
+# Expected: True — the Trade carries forward the Position's ID
+```
+
+**Paste only the modified sections:**
+```python
+
+I won't be doing that, as I've changed some little bits here and there, but I'm 100% sure it works.
+Simply check the test log below and you'll have a confirmation:
 
 
 $ python practice.py
-Position Position_id = b3313b0f-cb44-4cb2-a74d-2738283f69e3 | BUY 1 FDAX @ 24500 [SL = 24450, TP = 24600] added successfully
-Position Position_id = b44460ec-eb26-4d0d-a98a-08e504c2020c | BUY 10000 EURUSD @ 1.08 [SL = 1.075, TP = 1.085] added successfully
-FDAX trades closed: 1
-Open positions: 0
-EURUSD trades closed: 0
-Open positions: 0
-Position Position_id = 765e9d09-b194-4184-8ea5-c8b9b5ed9229 | BUY 1 FDAX @ 24500 [SL = 24450, TP = 24600] added successfully
-Position Position_id = d3987987-068b-4cb6-a5f9-329e46a3b1a8 | SELL 1 FDAX @ 24500 [SL = 24550, TP = 24400] added successfully
-True
+Position Position_id = a3b01ed0-5128-4353-b3e6-17a7f6435599 | BUY 1 FDAX @ 24500 [SL = 24450, TP = 24600] added successfully
+Position ID: a3b01ed0-5128-4353-b3e6-17a7f6435599
+Trade position_id: a3b01ed0-5128-4353-b3e6-17a7f6435599
+IDs match: True
 (.venv) 
+```
 
+---
 
-I reckon that we will also ahve to modify Trade a bit to handle these ids - we might do it tomorrow or wherever. I'd advise you check the current project infrastructure to plan for necessary changes. -->
+## Task 7: Custom Iterator — CountdownIterator
 
+Build a `CountdownIterator` that counts down from `start` to `1` (inclusive).
 
+```python
+class CountdownIterator:
+    """
+    Iterator counting down from start to 1.
+
+    Usage:
+        for n in CountdownIterator(5):
+            print(n)
+        # Output: 5, 4, 3, 2, 1
+    """
+
+    def __init__(self, start: int):
+        # Your code
+
+    def __iter__(self):
+        # Your code
+
+    def __next__(self) -> int:
+        # Your code
+
+# Test 1:
+print(list(CountdownIterator(5)))
+# Expected: [5, 4, 3, 2, 1]
+
+# Test 2:
+print(list(CountdownIterator(1)))
+# Expected: [1]
+
+# Test 3 — exhaustion:
+c = CountdownIterator(3)
+print(next(c))  # 3
+print(next(c))  # 2
+print(list(c))  # [1] — remaining items
+print(list(c))  # [] — exhausted
+```
+
+**Your code:**
+```python
+
+class CountdownIterator:
+    """
+    Iterator counting down from start to 1.
+
+    Usage:
+        for n in CountdownIterator(5):
+            print(n)
+        # Output: 5, 4, 3, 2, 1
+    """
+
+    def __init__(self, start: int):
+        self.current = start + 1
+        
+    def __iter__(self):
+        return self
+
+    def __next__(self) -> int:
+        if self.current <= 1:
+            raise StopIteration
+        self.current -= 1
+        return self.current
+
+```
+#Result:
+
+<!-- $ python practice.py
+[5, 4, 3, 2, 1]
+[1]
+3
+2
+[1]
+[]
+(.venv)  -->
 
 ---
 
@@ -558,106 +485,94 @@ I reckon that we will also ahve to modify Trade a bit to handle these ids - we m
 
 **Q1:** What is the output?
 ```python
-class Counter:
-    def __init__(self, limit):
-        self.limit = limit
-        self.current = 0
+def gen():
+    yield from range(3)
+    yield from range(3, 6)
 
-    def __iter__(self):
-        return self
-
-    def __next__(self):
-        if self.current >= self.limit:
-            raise StopIteration
-        self.current += 1
-        return self.current
-
-c = Counter(3)
-print(list(c))
-print(list(c))
+print(list(gen()))
 ```
-- A) [1, 2, 3] [1, 2, 3]
-- B) [1, 2, 3] []
-- C) [0, 1, 2] [0, 1, 2]
+- A) [0, 1, 2, 3, 4, 5]
+- B) [[0, 1, 2], [3, 4, 5]]
+- C) [range(3), range(3, 6)]
 - D) Error
 
-Answer: B
+Answer: A
 
 **Q2:** What is the output?
 ```python
-def gen():
-    yield 1
-    yield 2
-    return "end"
+class TwoItems:
+    def __iter__(self):
+        yield 10
+        yield 20
 
-g = gen()
-print(next(g))
-print(next(g))
-
-try:
-    next(g)
-except StopIteration as e:
-    print(e.value)
+obj = TwoItems()
+it1 = iter(obj)
+it2 = iter(obj)
+print(next(it1))
+print(next(it2))
+print(it1 is it2)
 ```
-- A) 1 / 2 / end
-- B) 1 / 2 / StopIteration
-- C) 1 / 2 / None
-- D) Error
+- A) 10 / 10 / True
+- B) 10 / 10 / False
+- C) 10 / 20 / True
+- D) 10 / 20 / False
 
-Answer: A
+Answer: C - not sure about that, it might be B as well
 
 **Q3:** What is the output?
 ```python
-from collections import namedtuple
-
-Point = namedtuple('Point', ['x', 'y'])
-p = Point(3, 4)
-print(p[0], p.x)
-print(isinstance(p, tuple))
+data = [1, 2, 3]
+it = iter(data)
+print(next(it, 'X'))
+print(next(it, 'X'))
+print(next(it, 'X'))
+print(next(it, 'X'))
+print(next(it, 'X'))
 ```
-- A) 3 3 / True
-- B) 3 3 / False
-- C) (3,) (3,) / True
+- A) 1 / 2 / 3 / X / X
+- B) 1 / 2 / 3 / StopIteration
+- C) 1 / 2 / 3 / X / StopIteration
 - D) Error
 
 Answer: A
 
+
+
 **Q4:** What is the output?
 ```python
-class Immutable(str):
-    def __new__(cls, value):
-        instance = super().__new__(cls, value.upper())
-        return instance
+class OnlyNew:
+    def __new__(cls, val):
+        obj = super().__new__(cls)
+        obj.x = val * 2
+        return obj
 
-    def __init__(self, value):
-        self.original = value
-
-s = Immutable("hello")
-print(s)
-print(s.original)
+o = OnlyNew(5)
+print(o.x)
+print(hasattr(o, '__dict__'))
 ```
-- A) HELLO / hello
-- B) hello / hello
-- C) HELLO / HELLO
-- D) Error
+- A) 10 / True
+- B) 5 / True
+- C) 10 / False
+- D) Error — __init__ is required
 
-Answer: C
+Answer: A, BUT WE DIDN'T HAVE the __dict__ dunder method - it should be added to week3_dunder_methods.md and explained!
 
 **Q5:** What is the output?
 ```python
-numbers = [1, 2, 3]
-it = iter(numbers)
-print(next(it))
-print(next(it, 'default'))
-print(next(it, 'default'))
-print(next(it, 'default'))
+def pipeline():
+    data = range(10)
+    evens = (x for x in data if x % 2 == 0)
+    doubled = (x * 2 for x in evens)
+    return list(doubled)
+
+print(pipeline())
 ```
-- A) 1 / 2 / 3 / StopIteration
-- B) 1 / 2 / 3 / default
-- C) 1 / 2 / default / default
+- A) [0, 4, 8, 12, 16]
+- B) [0, 2, 4, 6, 8, 10, 12, 14, 16, 18]
+- C) [0, 2, 4, 6, 8]
 - D) Error
 
-Answer: B
+Answer: A
 
 **Your answers:**
 ```
@@ -673,12 +588,12 @@ Q5:
 ## Solutions Checklist
 
 - [ ] Task 1: PCAP warm-up (2 questions)
-- [ ] Task 2: Decorator trace (step-by-step)
-- [ ] Task 3: FibonacciIterator class
-- [ ] Task 4: __new__ vs __init__ prediction
-- [ ] Task 5: yield from + pipeline
-- [ ] Task 6: MRO trace
-- [ ] Task 7: Position IDs + ticker-aware processing
+- [ ] Task 2: Decorator fill-in-the-blanks (5 blanks)
+- [ ] Task 3: FibonacciIterator rewrite (dynamic state)
+- [ ] Task 4: __new__ vs __init__ argument flow (2 predictions)
+- [ ] Task 5: Fix PositionManager ticker bug (CRITICAL)
+- [ ] Task 6: Propagate position_id to Trade
+- [ ] Task 7: CountdownIterator class
 - [ ] Task 8: PCAP simulation (5 questions)
 
 ---

@@ -28,7 +28,7 @@ class Position:
         
         '''Initialize a new position'''
         
-        self.position_id = uuid.uuid4()
+        self.position_id = str(uuid.uuid4())
         self.ticker = ticker
         self.side = side.upper() #I decided to include side, as we will usually have this sorted out in this way
         self.entry_price = entry_price

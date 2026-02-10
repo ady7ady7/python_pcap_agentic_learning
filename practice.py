@@ -6207,3 +6207,233 @@ the answer is no (as there are neither the letters "d", "o", or "g", in this ord
 # p2 = engine2.open_position('FDAX', 'SELL', 24500, 1, stop_loss=24550, take_profit=24400)
 # print(p1.position_id != p2.position_id)  # True — different IDs
 
+
+#W6 D2 T1
+
+# class Repeater:
+#     def __init__(self, value, times):
+#         self.value = value
+#         self.times = times
+#         self.count = 0
+
+#     def __iter__(self):
+#         self.count = 0   # reset on every iter() call
+#         return self
+
+#     def __next__(self):
+#         if self.count >= self.times:
+#             raise StopIteration
+#         self.count += 1
+#         return self.value
+
+# r = Repeater("hi", 3)
+# print(list(r))
+# print(list(r))
+
+
+# data = [10, 20, 30, 40]
+# it = iter(data)
+# next(it)
+# next(it)
+
+# for x in it:
+#     print(x, end=' ')
+
+#W6 D2 T2
+
+# from functools import wraps
+
+# def enforce_types(*expected_types):
+#     """
+#     Decorator that checks if positional arguments match expected types.
+#     Usage: @enforce_types(str, float)
+#     """
+#     def decorator(func):          # What goes here?
+#         @wraps(func)              # What goes here?
+#         def wrapper(*args, **kwargs):
+#             for arg, expected in zip(args, expected_types):
+#                 if not isinstance(arg, expected):   # What goes here?
+#                     return f"TypeError: expected {expected.__name__}, got {type(arg).__name__}"
+#             return func(*args, **kwargs)         # What goes here? (call the original function)
+#         return wrapper            # What goes here?
+#     return decorator
+
+# # Test:
+# @enforce_types(str, float, int)
+# def create_order(ticker, price, quantity):
+#     return f"Order: {ticker} @ {price} x {quantity}"
+
+# print(create_order("FDAX", 24500.0, 1))
+# print(create_order("FDAX", "bad_price", 1))
+# print(create_order.__name__)
+
+# #$ python practice.py
+# # Order: FDAX @ 24500.0 x 1
+# # TypeError: expected float, got str
+# # create_order
+
+#W6 D2 T3
+
+# class FibonacciIterator:
+#     """Iterator that yields Fibonacci numbers up to max_value."""
+
+#     def __init__(self, max_value: int):
+#         self.max_value = max_value
+#         self.a = 0
+#         self.b = 1
+
+#     def __iter__(self):
+#         return self
+
+#     def __next__(self) -> int:
+#         if self.a > self.max_value:
+#             raise StopIteration
+#         result = self.a
+#         self.a, self.b = self.b, self.a + self.b
+#         return result
+      
+# # Test:
+# print(list(FibonacciIterator(50)))
+# # Expected: [0, 1, 1, 2, 3, 5, 8, 13, 21, 34]
+
+# print(list(FibonacciIterator(1000)))
+# Expected: [0, 1, 1, 2, 3, 5, 8, 13, 21, 34, 55, 89, 144, 233, 377, 610, 987]
+
+
+
+#W6 D2 T4
+# class UpperStr(str):
+#     def __new__(cls, value):
+#         instance = super().__new__(cls, value.upper())
+#         return instance
+
+#     def __init__(self, value):
+#         self.original = value
+
+# s = UpperStr("hello")
+# print(s)
+# print(s.original)
+# print(type(s).__name__)
+
+# class ClampedInt(int):
+#     """Integer that clamps to range [0, 100]."""
+#     def __new__(cls, value):
+#         clamped = max(0, min(100, value))
+#         return super().__new__(cls, clamped)
+
+#     def __init__(self, value):
+#         self.raw_value = value
+
+# x = ClampedInt(250)
+# print(x)
+# print(x.raw_value)
+# print(x + 10)
+
+
+
+#W6 D2 T5 - modified the logic of position_manager to check for ticker in checking close positions, but also to retain other positions correctly!
+
+    # def close_triggered_positions(self, ticker: str, current_price: float) -> List[Position]:
+    #     """
+    #     Check all positions for SL/TP triggers and remove them.
+
+    #     Args:
+    #         current_price: Current market price.
+
+    #     Returns:
+    #         List of positions that should be closed.
+    #     """
+    #     closed_positions = [p for p in self.positions if p.ticker == ticker and p.should_close(current_price)]
+        
+    #     closed_ids = [p.position_id for p in closed_positions]
+    #     self.positions = [p for p in self.positions if p.position_id not in closed_ids]
+        
+
+    #     return closed_positions
+    
+
+# from algo_backtest.engine.backtest_engine import BacktestEngine
+# engine = BacktestEngine()
+# engine.open_position('FDAX', 'BUY', 24500, 1, 24450, 24600)
+# # (self, ticker, side, entry, quantity, stop_loss, take_profit)
+# engine.open_position('EURUSD', 'BUY', 1.0800, 100000, 1.0750, 1.0850)
+
+# x = engine.process_price('FDAX', 24600)
+# print(x)
+# print(engine)
+
+#W6 D2 T6
+
+# from algo_backtest.engine.backtest_engine import BacktestEngine
+
+# engine = BacktestEngine()
+# p = engine.open_position('FDAX', 'BUY', 24500, 1, stop_loss=24450, take_profit=24600)
+# print(f"Position ID: {p.position_id}")
+
+# closed = engine.process_price('FDAX', 24600)
+# if closed:
+#     trade = closed[0]
+#     print(f"Trade position_id: {trade.position_id}")
+#     print(f"IDs match: {str(p.position_id) == trade.position_id}")
+
+
+#W6 D2 T7
+
+# class CountdownIterator:
+#     """
+#     Iterator counting down from start to 1.
+
+#     Usage:
+#         for n in CountdownIterator(5):
+#             print(n)
+#         # Output: 5, 4, 3, 2, 1
+#     """
+
+#     def __init__(self, start: int):
+#         self.current = start + 1
+        
+#     def __iter__(self):
+#         return self
+
+#     def __next__(self) -> int:
+#         if self.current <= 1:
+#             raise StopIteration
+#         self.current -= 1
+#         return self.current
+        
+        
+        
+# # Test 1:
+# print(list(CountdownIterator(5)))
+# # Expected: [5, 4, 3, 2, 1]
+
+# # Test 2:
+# print(list(CountdownIterator(1)))
+# # Expected: [1]
+
+# # Test 3 — exhaustion:
+# c = CountdownIterator(3)
+# print(next(c))  # 3
+# print(next(c))  # 2
+# print(list(c))  # [1] — remaining items
+# print(list(c))  # [] — exhausted
+
+#W6 D2 T8
+
+# def gen():
+#     yield from range(3)
+#     yield from range(3, 6)
+
+# print(list(gen()))
+
+
+# class OnlyNew:
+#     def __new__(cls, val):
+#         obj = super().__new__(cls)
+#         obj.x = val * 2
+#         return obj
+
+# o = OnlyNew(5)
+# print(o.x)
+# print(hasattr(o, '__dict__'))
+
