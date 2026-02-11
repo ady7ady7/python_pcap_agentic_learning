@@ -1,483 +1,486 @@
-# Week 6, Day 2 - Tuesday
-## Topic: Iterator Mastery, Bug Fixes & Trade ID Propagation
+# Week 6, Day 3 - Wednesday
+## Topic: Iterable vs Iterator, Decorator Writing & Price Stream Generator
 
-**Date:** 2026-02-10
+**Date:** 2026-02-11
 
 **Target Difficulty:** 5-6/10
 
-**Focus:** Fix Day 1 gaps (Fibonacci state, `__init__` args), fix critical project bug, propagate `position_id` to Trade
+**Focus:** Iterable vs Iterator distinction (Day 2 Q2 gap), write a decorator from scratch, build `create_price_stream()` generator for the project
 
-**Lesson:** Review `lessons/week6_iterators_generators_advanced.md` sections on iterators & `__new__`.
+**Lesson:** Review `lessons/week6_iterators_generators_advanced.md` — especially "Generator vs Iterator vs Iterable" section.
 
 **Remember:** Work in `practice.py`, paste FINAL answers here for review.
 
+#Start 11:10 
 ---
 
-## Task 1: PCAP Warm-up (Pure Python)
+## Task 1: PCAP Warm-up — Iterable vs Iterator
+
+Yesterday's Q2 exposed a gap. Here's the rule:
+
+> **Iterator:** Has `__iter__` returning `self` + `__next__`. One-shot (unless you reset state). `iter(obj) is obj` → True.
+>
+> **Iterable:** Has `__iter__` that creates and returns a **new iterator** each time. Reusable. `iter(obj) is iter(obj)` → False.
+>
+> **When `__iter__` uses `yield`:** It becomes a generator function. Each call creates a new generator object → **iterable pattern**.
 
 **Q1:** What is the output?
 ```python
-class Repeater:
-    def __init__(self, value, times):
-        self.value = value
-        self.times = times
-        self.count = 0
+class IteratorStyle:
+    def __init__(self):
+        self.items = [1, 2, 3]
+        self.index = 0
 
     def __iter__(self):
-        self.count = 0   # reset on every iter() call
         return self
 
     def __next__(self):
-        if self.count >= self.times:
+        if self.index >= len(self.items):
             raise StopIteration
-        self.count += 1
-        return self.value
+        val = self.items[self.index]
+        self.index += 1
+        return val
 
-r = Repeater("hi", 3)
-print(list(r))
-print(list(r))
+obj = IteratorStyle()
+print(iter(obj) is obj)
+print(list(obj))
+print(list(obj))
 
-['hi', 'hi', 'hi']
-['hi', 'hi', 'hi']
 
-I don't exactly understand why it works like that, it's a bit weird.
+Answer:  True, [1, 2, 3], []
 ```
 
 **Q2:** What is the output?
 ```python
-data = [10, 20, 30, 40]
-it = iter(data)
-next(it)
-next(it)
+class IterableStyle:
+    def __init__(self):
+        self.items = [1, 2, 3]
 
-for x in it:
-    print(x, end=' ')
+    def __iter__(self):
+        for item in self.items:
+            yield item
+
+obj = IterableStyle()
+it1 = iter(obj)
+it2 = iter(obj)
+print(it1 is it2)
+print(list(obj))
+print(list(obj))
 ```
 
-30, 40
+Answer: False, [1, 2, 3], [1, 2, 3]
+
+This is a bit misleading, as here we create two separate iterators from that one object, and in q1 we did not do that, so we're not showing the real difference.
+
+
+**Your answers:**
+```
+Q1: 
+
+
+Q2:
+
+
+```
+
+---
+
+## Task 2: Decorator Day 3 — WRITE FROM SCRATCH
+
+Day 1: trace. Day 2: fill blanks. **Day 3: write it yourself.**
+
+**Instructions:** Write a decorator called `@log_call` that:
+1. Prints `"Calling {function_name} with args={args}, kwargs={kwargs}"` BEFORE the function runs
+2. Calls the function and stores the result
+3. Prints `"Returned: {result}"` AFTER the function runs
+4. Returns the result
+5. Uses `@wraps` to preserve metadata
+
+**Template:**
+```python
+from functools import wraps
+
+def log_call(func):
+    # Your code — write the entire decorator
+
+# Test:
+@log_call
+def add(a, b):
+    return a + b
+
+@log_call
+def greet(name, greeting="Hello"):
+    return f"{greeting}, {name}!"
+
+print(add(3, 5))
+print(greet("Alice", greeting="Hi"))
+print(add.__name__)
+```
+
+**Expected output:**
+```
+Calling add with args=(3, 5), kwargs={}
+Returned: 8
+8
+Calling greet with args=('Alice',), kwargs={'greeting': 'Hi'}
+Returned: Hi, Alice!
+Hi, Alice!
+add
+```
+
+**Your code:**
+```python
+
+from functools import wraps
+
+def log_call(func):
+    @wraps(func)
+    def wrapper(*args, **kwargs):
+        print(f'Calling {func.__name__} with args={args}, kwargs={kwargs}')
+        result = func(*args, **kwargs)
+        print(f'Returned: {result}')
+        return result
+    return wrapper
+
+
+
+
+```
+
+---
+
+## Task 3: Build an Iterable — Confirm the Pattern
+
+Build a `NumberRange` class that acts as an **iterable** (not an iterator). It should support being iterated multiple times independently.
+
+**Requirements:**
+- `__init__(self, start, end)` — stores the range boundaries
+- `__iter__` — uses `yield` to produce values from `start` to `end` (inclusive)
+- NO `__next__` method (the generator handles that)
+
+```python
+class NumberRange:
+    """Iterable that yields numbers from start to end (inclusive)."""
+
+    def __init__(self, start: int, end: int):
+        # Your code
+
+    def __iter__(self):
+        # Your code (use yield)
+
+# Test 1 — reusable:
+r = NumberRange(1, 5)
+print(list(r))   # [1, 2, 3, 4, 5]
+print(list(r))   # [1, 2, 3, 4, 5] — works again!
+
+# Test 2 — independent iterators:
+it1 = iter(r)
+it2 = iter(r)
+print(next(it1))  # 1
+print(next(it1))  # 2
+print(next(it2))  # 1 — independent! Not 3!
+
+# Test 3 — identity check:
+print(iter(r) is r)         # False — it's an iterable, not an iterator
+print(iter(r) is iter(r))   # False — each call makes a new generator
+```
+
+**Your code:**
+```python
+
+class NumberRange:
+    '''Iterable that yields numbers from stard to end (inclusive).'''
+    
+    def __init__(self, start: int, end: int):
+        self.start = start
+        self.end = end
+    
+    def __iter__(self):
+        for num in range(self.start, self.end + 1):
+            yield num
+            
+
+#Tests went well, as expected
+```
+
+---
+
+## Task 4: Predict Output — Generator Edge Cases
+
+**Q1:** What is the output?
+```python
+def gen():
+    yield 1
+    yield 2
+    return "done"
+
+g = gen()
+print(next(g))
+print(next(g))
+
+try:
+    next(g)
+except StopIteration as e:
+    print(e.value)
+
+Answer: 1 2 done
+```
+
+**Q2:** What is the output?
+```python
+def outer():
+    yield from [10, 20]
+    yield from (x * 3 for x in range(3))
+
+print(list(outer()))
+
+Answer: [10 20 0 3 6]
+```
+
+**Q3:** What is the output?
+```python
+def count_up(n):
+    for i in range(n):
+        yield i
+
+gen = count_up(4)
+print(next(gen))
+print(next(gen))
+
+for x in gen:
+    print(x, end=' ')
+
+Answer: 
+0 
+1 
+2 3
+```
 
 **Your answers:**
 ```
 Q1:
 
+
 Q2:
 
+
+Q3:
+
+
 ```
 
 ---
 
-## Task 2: Decorator Scaffolded — Day 2: FILL IN THE BLANKS
+## Task 5: PROJECT — PriceTick & create_price_stream()
 
-**Goal:** Complete the missing parts of a decorator that validates argument types. The structure is given — you fill the gaps.
+**Goal:** Build a generator that streams price data from a CSV file as named tuples. This is the foundation for tick-by-tick backtesting.
 
-**Instructions:** Replace each `___BLANK___` with the correct code. There are 5 blanks total.
-
+**Step 1:** Define a `PriceTick` named tuple:
 ```python
-from functools import wraps
+from collections import namedtuple
 
-def enforce_types(*expected_types):
-    """
-    Decorator that checks if positional arguments match expected types.
-    Usage: @enforce_types(str, float)
-    """
-    def decorator(___BLANK_1___):          # What goes here?
-        @wraps(___BLANK_2___)              # What goes here?
-        def wrapper(*args, **kwargs):
-            for arg, expected in zip(args, expected_types):
-                if not isinstance(arg, ___BLANK_3___):   # What goes here?
-                    return f"TypeError: expected {expected.__name__}, got {type(arg).__name__}"
-            return ___BLANK_4___           # What goes here? (call the original function)
-        return ___BLANK_5___               # What goes here?
-    return decorator
-
-# Test:
-@enforce_types(str, float, int)
-def create_order(ticker, price, quantity):
-    return f"Order: {ticker} @ {price} x {quantity}"
-
-print(create_order("FDAX", 24500.0, 1))
-print(create_order("FDAX", "bad_price", 1))
-print(create_order.__name__)
+PriceTick = namedtuple('PriceTick', ['timestamp', 'ticker', 'open', 'high', 'low', 'close', 'volume'])
 ```
 
-**Expected output:**
-```
-Order: FDAX @ 24500.0 x 1
-TypeError: expected float, got str
-create_order
-```
+**Step 2:** Write `create_price_stream()` that:
+- Takes a `file_path: str` and optional `ticker: str = None`
+- Uses your existing `DataLoader` to load the CSV
+- Yields one `PriceTick` per row
+- If `ticker` is provided, only yields rows matching that ticker
+- Uses `yield` (generator function) — NOT `return list`
 
-**Your code (fill in the blanks):**
 ```python
-from functools import wraps
+from algo_backtest.data.data_loader import DataLoader
 
-def enforce_types(*expected_types):
+def create_price_stream(file_path: str, ticker: str = None):
     """
-    Decorator that checks if positional arguments match expected types.
-    Usage: @enforce_types(str, float)
+    Generator that streams price data as PriceTick namedtuples.
+
+    Args:
+        file_path: Path to CSV file.
+        ticker: Optional ticker filter. If None, yields all rows.
+
+    Yields:
+        PriceTick namedtuple for each row.
     """
-    def decorator(func):          # What goes here?
-        @wraps(func)              # What goes here?
-        def wrapper(*args, **kwargs):
-            for arg, expected in zip(args, expected_types):
-                if not isinstance(arg, expected):   # What goes here?
-                    return f"TypeError: expected {expected.__name__}, got {type(arg).__name__}"
-            return func(*args, **kwargs)         # What goes here? (call the original function)
-        return wrapper            # What goes here?
-    return decorator
+    # Your code — use DataLoader, iterate rows, yield PriceTick
 
-# Test:
-@enforce_types(str, float, int)
-def create_order(ticker, price, quantity):
-    return f"Order: {ticker} @ {price} x {quantity}"
+# Test with your ohlc_mock_data.csv:
+stream = create_price_stream('ohlc_mock_data.csv')
 
-print(create_order("FDAX", 24500.0, 1))
-print(create_order("FDAX", "bad_price", 1))
-print(create_order.__name__)
+# Get first 3 ticks:
+for i, tick in enumerate(stream):
+    if i >= 3:
+        break
+    print(f"{tick.timestamp} | {tick.ticker} | Close: {tick.close}")
 
-#$ python practice.py
-# Order: FDAX @ 24500.0 x 1
-# TypeError: expected float, got str
-# create_order
-
----
-
-## Task 3: FibonacciIterator — Fix & Learn the State Pattern
-
-Yesterday you hardcoded a list of Fibonacci numbers — that only works up to the numbers you typed in. The correct approach uses **two state variables** that compute the next value dynamically.
-
-**The pattern you need:**
-```python
-# This is how you compute Fibonacci with dynamic state:
-self.a, self.b = self.b, self.a + self.b
-# Before: a=0, b=1
-# After:  a=1, b=1
-# Next:   a=1, b=2
-# Next:   a=2, b=3
-# This works for ANY max_value — no hardcoding needed.
-```
-
-**Your job:** Rewrite `FibonacciIterator` using this pattern. Key rules:
-- `__init__`: store `max_value`, set `self.a = 0` and `self.b = 1`
-- `__iter__`: return `self`
-- `__next__`: check if `self.a` exceeds `max_value` BEFORE returning, then advance state
-
-```python
-class FibonacciIterator:
-    """Iterator that yields Fibonacci numbers up to max_value."""
-
-    def __init__(self, max_value: int):
-        # Your code
-
-    def __iter__(self):
-        # Your code
-
-    def __next__(self) -> int:
-        # Your code — use self.a, self.b = self.b, self.a + self.b
-
-# Test:
-print(list(FibonacciIterator(50)))
-# Expected: [0, 1, 1, 2, 3, 5, 8, 13, 21, 34]
-
-print(list(FibonacciIterator(1000)))
-# Expected: [0, 1, 1, 2, 3, 5, 8, 13, 21, 34, 55, 89, 144, 233, 377, 610, 987]
+# Expected (something like):
+# 2024-01-01 09:00:00 | EURUSD | Close: 100.8
+# 2024-01-01 09:01:00 | EURUSD | Close: 101.3
+# 2024-01-01 09:02:00 | EURUSD | Close: 101.5
 ```
 
 **Your code:**
 ```python
 
-class FibonacciIterator:
-    """Iterator that yields Fibonacci numbers up to max_value."""
 
-    def __init__(self, max_value: int):
-        self.max_value = max_value
-        self.a = 0
-        self.b = 1
+from collections import namedtuple
+from algo_backtest.data.data_loader import DataLoader
 
-    def __iter__(self):
-        return self
+PriceTick = namedtuple('PriceTick', ['timestamp', 'ticker', 'open', 'high', 'low', 'close', 'volume'])
 
-    def __next__(self) -> int:
-        if self.a > self.max_value:
-            raise StopIteration
-        result = self.a
-        self.a, self.b = self.b, self.a + self.b
-        return result
+def create_price_stream(filepath: str, ticker: str = None):
+    '''A method used to stream price data from a csv file as named tuples'''
+    
+    loader = DataLoader(filepath)
+    data = loader.load_data()
+    
+    for idx, row in data.iterrows():
+        if ticker is None or row.ticker == ticker:
+            yield PriceTick(row.timestamp, row.ticker, row.open, row.high, row.low, row.close, row.volume)
+ 
+    
+
+$ python practice.py
+DataLoader initialized.
+Data loading succeeded
+Data loading operation ended.
+2024-01-01 09:00:00 | EURUSD | Close: 100.8
+2024-01-01 09:01:00 | EURUSD | Close: 101.3
+2024-01-01 09:02:00 | EURUSD | Close: 101.5
 
 
+I didn't implement it anywhere within my project though, as I'm not sure we need this at this point, but perhaps that will change - we will see about that.
 ```
 
 ---
 
-## Task 4: `__init__` Receives Original Arguments — Predict Output
+## Task 6: PROJECT — Tick-by-Tick Backtest with Generator
 
-Yesterday's Task 8 Q4 tripped you up. The key rule:
+**Goal:** Use `create_price_stream()` from Task 5 to run a simple tick-by-tick backtest.
 
-> **`__new__` transforms the object. `__init__` still receives the ORIGINAL arguments that were passed in the constructor call.**
-
-**Q1:** Predict the output:
-```python
-class UpperStr(str):
-    def __new__(cls, value):
-        instance = super().__new__(cls, value.upper())
-        return instance
-
-    def __init__(self, value):
-        self.original = value
-
-s = UpperStr("hello")
-print(s)
-print(s.original)
-print(type(s).__name__)
-
-Answer: HELLO hello UpperStr
-
-```
-
-**Q2:** Predict the output:
-```python
-class ClampedInt(int):
-    """Integer that clamps to range [0, 100]."""
-    def __new__(cls, value):
-        clamped = max(0, min(100, value))
-        return super().__new__(cls, clamped)
-
-    def __init__(self, value):
-        self.raw_value = value
-
-x = ClampedInt(250)
-print(x)
-print(x.raw_value)
-print(x + 10)
-
-Answer:
-100
-250
-110
-```
-
-**Your answers:**
-```
-Q1 output:
-
-
-Q2 output:
-
-
-```
-
----
-
-## Task 5: PROJECT — Fix the PositionManager Ticker Bug (CRITICAL)
-
-**The bug:** Open `algo_backtest/engine/position_manager.py`, line 62. Look at `close_triggered_positions`:
+**Instructions:**
+1. Create a `BacktestEngine`
+2. Open a position (e.g., EURUSD BUY @ 101.0, SL=100.0, TP=103.0)
+3. Loop through the price stream
+4. For each tick, call `engine.process_price(tick.ticker, tick.close)`
+5. If any trades close, print them
+6. After the stream ends, print the engine summary
 
 ```python
-closed_positions = [p for p in self.positions if p.ticker == ticker and p.should_close(current_price)]
-self.positions = [p for p in self.positions if not p.should_close(current_price)]
+from algo_backtest.engine.backtest_engine import BacktestEngine
+
+engine = BacktestEngine()
+engine.open_position('EURUSD', 'BUY', 101.0, 1000, stop_loss=100.0, take_profit=103.0)
+
+stream = create_price_stream('ohlc_mock_data.csv', ticker='EURUSD')
+
+for tick in stream:
+    closed = engine.process_price(tick.ticker, tick.close)
+    if closed:
+        for trade in closed:
+            print(f"CLOSED: {trade}")
+
+print(f"\nFinal: {engine}")
+print(f"Total trades: {len(engine.completed_trades)}")
+print(f"Open positions: {engine.position_manager.get_position_count()}")
 ```
 
-Line 1 correctly filters by ticker. But line 2 (the removal line) does NOT filter by ticker — it removes ALL positions that trigger at `current_price`, even if they belong to a different ticker.
-
-**Example of the bug:**
-```python
-# You hold FDAX BUY @ 24500 (SL=24450, TP=24600)
-# You hold EURUSD BUY @ 1.0800 (SL=1.0750, TP=1.0850)
-# You call: process_price('FDAX', 24600)
-#
-# Line 1: closed_positions = [FDAX position]  ✅ correct — only FDAX matched
-# Line 2: self.positions = [p for p if NOT p.should_close(24600)]
-#   → EURUSD.should_close(24600) returns (False, None) → keeps it? NO!
-#   → Actually it depends on EURUSD's SL/TP values vs 24600
-#   → If 24600 triggers EURUSD's take_profit... it gets silently removed!
-```
-
-**Your fix:** Modify line 62 so that only positions matching the ticker are evaluated for removal. Non-matching tickers must stay untouched.
-
-**Paste only the fixed method:**
+**Your code + output:**
 ```python
 
-    def close_triggered_positions(self, ticker: str, current_price: float) -> List[Position]:
-        """
-        Check all positions for SL/TP triggers and remove them.
-
-        Args:
-            current_price: Current market price.
-
-        Returns:
-            List of positions that should be closed.
-        """
-        closed_positions = [p for p in self.positions if p.ticker == ticker and p.should_close(current_price)]
-        
-        closed_ids = [p.position_id for p in closed_positions]
-        self.positions = [p for p in self.positions if p.position_id not in closed_ids]
-        
-
-        return closed_positions
-
-#It was not possible to only modify that one line - I had to invent a 2-line modification for this, but it should work just fine
-
-#I tested the code outside after that, and also slightly modified Trade's repr for better formatting, as I've noticed little issue there:
-
+stream = create_price_stream('ohlc_mock_data.csv', ticker = 'EURUSD')
 
 from algo_backtest.engine.backtest_engine import BacktestEngine
-engine = BacktestEngine()
-engine.open_position('FDAX', 'BUY', 24500, 1, 24450, 24600)
-# (self, ticker, side, entry, quantity, stop_loss, take_profit)
-engine.open_position('EURUSD', 'BUY', 1.0800, 100000, 1.0750, 1.0850)
 
-x = engine.process_price('FDAX', 24600)
-print(x)
+stream = create_price_stream('ohlc_mock_data.csv', ticker = 'EURUSD')
+
+engine = BacktestEngine()
+engine.open_position('EURUSD', 'BUY', 101.1, 10000, 100.0, 103.0)
+
+for i, tick in enumerate(stream):
+    closed = engine.process_price(tick.ticker, tick.close)
+    if closed != []:
+        print(f'Closed trade: {closed}')
+        
 print(engine)
-
-#Output:
-
-# $ python practice.py
-# Position Position_id = b3e05dec-5f5e-4947-b329-90db875eb400 | BUY 1 FDAX @ 24500 [SL = 24450, TP = 24600] added successfully
-# Position Position_id = 81476ae1-2860-49f1-830a-df6bb3d65e0b | BUY 100000 EURUSD @ 1.08 [SL = 1.075, TP = 1.085] added successfully
-# [Trade(ticker = 'FDAX', side = 'BUY', entry_price = 24500, exit_price = 24600, quantity = 1, pnl = 100.00, exit_reason = 'BUY TP HIT']
-# algo_backtest.engine.backtest_engine: 1 open | 1 closed | PnL: $100
-# (.venv) 
-
-
-```
-
-**Test after fixing** — run the `if __name__ == '__main__'` block in backtest_engine.py and verify:
-- FDAX trades closed: 1
-- Open positions after FDAX: 1 (EURUSD still there)
-- EURUSD trades closed: 1
-- Open positions after EURUSD: 0
-
----
-
-## Task 6: PROJECT — Propagate `position_id` to Trade
-
-Right now, when a Position gets closed and converted to a Trade, the `position_id` is lost. You mentioned wanting to fix this yesterday.
-
-**Your job — 2 changes:**
-
-**Step 1:** Modify `Trade.__init__` to accept an optional `position_id` parameter:
-- Add `position_id: Optional[str] = None` to the signature
-- Store it as `self._position_id = position_id`
-- Add a `@property` for it (read-only, like the other Trade attributes)
-
-#Done
-
-**Step 2:** Modify `BacktestEngine.process_price` to pass the position's ID when creating a Trade:
-- In the `Trade(...)` constructor call, add `position_id=str(position.position_id)`
-
-#done
-Slightly diffrerent approach though, I've changed the position_id type in Position directly, so it's instantly converted to a string there - it's way easier, more convenient and I won't have to remember to change that later 
-
-self.position_id = str(uuid.uuid4())
-
-**Test:**
-```python
-engine = BacktestEngine()
-p = engine.open_position('FDAX', 'BUY', 24500, 1, stop_loss=24450, take_profit=24600)
-print(f"Position ID: {p.position_id}")
-
-closed = engine.process_price('FDAX', 24600)
-if closed:
-    trade = closed[0]
-    print(f"Trade position_id: {trade.position_id}")
-    print(f"IDs match: {str(p.position_id) == trade.position_id}")
-# Expected: True — the Trade carries forward the Position's ID
-```
-
-**Paste only the modified sections:**
-```python
-
-I won't be doing that, as I've changed some little bits here and there, but I'm 100% sure it works.
-Simply check the test log below and you'll have a confirmation:
+print(engine.total_pnl, engine.win_rate)
+print(engine.position_manager.get_position_count())
 
 
 $ python practice.py
-Position Position_id = a3b01ed0-5128-4353-b3e6-17a7f6435599 | BUY 1 FDAX @ 24500 [SL = 24450, TP = 24600] added successfully
-Position ID: a3b01ed0-5128-4353-b3e6-17a7f6435599
-Trade position_id: a3b01ed0-5128-4353-b3e6-17a7f6435599
-IDs match: True
+Position Position_id = 7b84a997-fc7b-4131-bcd6-eeedb164ef5e | BUY 10000 EURUSD @ 101.1 [SL = 100.0, TP = 103.0] added successfully
+DataLoader initialized.
+Data loading succeeded
+Data loading operation ended.
+Closed trade: [Trade 7b84a997-fc7b-4131-bcd6-eeedb164ef5e: (ticker = 'EURUSD', side = 'BUY', entry_price = 101.1, exit_price = 103.2, quantity = 10000, pnl = 21000.00, exit_reason = 'BUY TP HIT']
+algo_backtest.engine.backtest_engine: 0 open | 1 closed | PnL: $21000.0
+[21000.000000000084]
+21000.0 100.0
+0
 (.venv) 
+
+
 ```
 
 ---
 
-## Task 7: Custom Iterator — CountdownIterator
+## Task 7: Generator Expressions — Lazy Evaluation
 
-Build a `CountdownIterator` that counts down from `start` to `1` (inclusive).
-
+**Q1:** What is the difference? Predict the output:
 ```python
-class CountdownIterator:
-    """
-    Iterator counting down from start to 1.
+list_comp = [x ** 2 for x in range(5)]
+gen_exp = (x ** 2 for x in range(5))
 
-    Usage:
-        for n in CountdownIterator(5):
-            print(n)
-        # Output: 5, 4, 3, 2, 1
-    """
+print(type(list_comp))
+print(type(gen_exp))
+print(list_comp)
+print(list(gen_exp))
+print(list(gen_exp))
 
-    def __init__(self, start: int):
-        # Your code
-
-    def __iter__(self):
-        # Your code
-
-    def __next__(self) -> int:
-        # Your code
-
-# Test 1:
-print(list(CountdownIterator(5)))
-# Expected: [5, 4, 3, 2, 1]
-
-# Test 2:
-print(list(CountdownIterator(1)))
-# Expected: [1]
-
-# Test 3 — exhaustion:
-c = CountdownIterator(3)
-print(next(c))  # 3
-print(next(c))  # 2
-print(list(c))  # [1] — remaining items
-print(list(c))  # [] — exhausted
-```
-
-**Your code:**
-```python
-
-class CountdownIterator:
-    """
-    Iterator counting down from start to 1.
-
-    Usage:
-        for n in CountdownIterator(5):
-            print(n)
-        # Output: 5, 4, 3, 2, 1
-    """
-
-    def __init__(self, start: int):
-        self.current = start + 1
-        
-    def __iter__(self):
-        return self
-
-    def __next__(self) -> int:
-        if self.current <= 1:
-            raise StopIteration
-        self.current -= 1
-        return self.current
-
-```
-#Result:
-
-<!-- $ python practice.py
-[5, 4, 3, 2, 1]
-[1]
-3
-2
-[1]
+Answer:
+list
+generator
+[0, 1, 4, 9, 16]
+[0, 1, 4, 9, 16]
 []
-(.venv)  -->
+
+```
+
+**Q2:** What is the output?
+```python
+nums = [1, 2, 3, 4, 5]
+squares = (n ** 2 for n in nums)
+
+nums.append(6)
+print(list(squares))
+
+Answer: [1, 4, 9, 16, 25, 36]
+```
+
+**Q3:** True or False — explain briefly:
+- "A generator expression can be iterated multiple times."
+- "A list comprehension uses more memory than a generator expression for the same data."
+- "Generator expressions are always faster than list comprehensions."
+
+- False - unless we include a generator in a class, as an iterable, and then create multiple class objects, but I guess it's not the point of the question. I assume you mean a standard generator expression as in Q2, it will only yield the results ONCE.
+
+- True. Yes, they create an object for every element in the list, but that usually becomes relevant when we deal with very big files (GBs of data). For such files, we'd rather use generators.
+
+- True. If we assume they use less memory, that logically implicates this should also be faster. This is however only relevant for bigger files with lots of data, and in most cases, with smaller files we'd probably just stick to list comprehensions, as they're more intuitive, reusable and the memory/speed issue is negligible IN SUCH A CONTEXT.
+
+
+**Your answers:**
+```
+Q1: 
+
+Q2: 
+
+
+Q3:
+
+
+```
 
 ---
 
@@ -485,94 +488,92 @@ class CountdownIterator:
 
 **Q1:** What is the output?
 ```python
-def gen():
-    yield from range(3)
-    yield from range(3, 6)
+class Squares:
+    def __init__(self, n):
+        self.n = n
 
-print(list(gen()))
+    def __iter__(self):
+        for i in range(self.n):
+            yield i ** 2
+
+s = Squares(4)
+print(list(s))
+print(list(s))
 ```
-- A) [0, 1, 2, 3, 4, 5]
-- B) [[0, 1, 2], [3, 4, 5]]
-- C) [range(3), range(3, 6)]
+- A) [0, 1, 4, 9] [0, 1, 4, 9]
+- B) [0, 1, 4, 9] []
+- C) [1, 4, 9, 16] [1, 4, 9, 16]
 - D) Error
 
-Answer: A
+Answer: B
 
 **Q2:** What is the output?
 ```python
-class TwoItems:
-    def __iter__(self):
-        yield 10
-        yield 20
+def gen(n):
+    for i in range(n):
+        yield i
 
-obj = TwoItems()
-it1 = iter(obj)
-it2 = iter(obj)
-print(next(it1))
-print(next(it2))
-print(it1 is it2)
+g = gen(3)
+print(sum(g))
+print(sum(g))
 ```
-- A) 10 / 10 / True
-- B) 10 / 10 / False
-- C) 10 / 20 / True
-- D) 10 / 20 / False
+- A) 3 / 3
+- B) 3 / 0
+- C) 6 / 6
+- D) 6 / 0
 
-Answer: C - not sure about that, it might be B as well
+Answer: B
 
 **Q3:** What is the output?
 ```python
-data = [1, 2, 3]
-it = iter(data)
-print(next(it, 'X'))
-print(next(it, 'X'))
-print(next(it, 'X'))
-print(next(it, 'X'))
-print(next(it, 'X'))
+from functools import wraps
+
+def double_result(func):
+    @wraps(func)
+    def wrapper(*args, **kwargs):
+        return func(*args, **kwargs) * 2
+    return wrapper
+
+@double_result
+def add(a, b):
+    return a + b
+
+print(add(3, 4))
+print(add.__name__)
 ```
-- A) 1 / 2 / 3 / X / X
-- B) 1 / 2 / 3 / StopIteration
-- C) 1 / 2 / 3 / X / StopIteration
-- D) Error
+- A) 14 / add
+- B) 14 / wrapper
+- C) 7 / add
+- D) 7 / wrapper
 
 Answer: A
-
-
 
 **Q4:** What is the output?
 ```python
-class OnlyNew:
-    def __new__(cls, val):
-        obj = super().__new__(cls)
-        obj.x = val * 2
-        return obj
+it = iter(range(3))
+print(next(it))
+print(next(it))
 
-o = OnlyNew(5)
-print(o.x)
-print(hasattr(o, '__dict__'))
+it2 = iter(it)
+print(next(it2))
+print(it is it2)
 ```
-- A) 10 / True
-- B) 5 / True
-- C) 10 / False
-- D) Error — __init__ is required
-
-Answer: A, BUT WE DIDN'T HAVE the __dict__ dunder method - it should be added to week3_dunder_methods.md and explained!
-
-**Q5:** What is the output?
-```python
-def pipeline():
-    data = range(10)
-    evens = (x for x in data if x % 2 == 0)
-    doubled = (x * 2 for x in evens)
-    return list(doubled)
-
-print(pipeline())
-```
-- A) [0, 4, 8, 12, 16]
-- B) [0, 2, 4, 6, 8, 10, 12, 14, 16, 18]
-- C) [0, 2, 4, 6, 8]
+- A) 0 / 1 / 2 / True
+- B) 0 / 1 / 0 / False
+- C) 0 / 1 / 2 / False
 - D) Error
 
 Answer: A
+
+**Q5:** Which of the following is NOT a valid way to create a generator?
+- A) `(x for x in range(5))`
+- B) `def f(): yield 1`
+- C) `[x for x in range(5)]`
+- D) `def f(): yield from [1, 2, 3]`
+
+Answer: C
+
+#End 12:30
 
 **Your answers:**
 ```
@@ -587,13 +588,13 @@ Q5:
 
 ## Solutions Checklist
 
-- [ ] Task 1: PCAP warm-up (2 questions)
-- [ ] Task 2: Decorator fill-in-the-blanks (5 blanks)
-- [ ] Task 3: FibonacciIterator rewrite (dynamic state)
-- [ ] Task 4: __new__ vs __init__ argument flow (2 predictions)
-- [ ] Task 5: Fix PositionManager ticker bug (CRITICAL)
-- [ ] Task 6: Propagate position_id to Trade
-- [ ] Task 7: CountdownIterator class
+- [ ] Task 1: PCAP warm-up — iterable vs iterator (2 questions)
+- [ ] Task 2: Write @log_call decorator from scratch
+- [ ] Task 3: NumberRange iterable class
+- [ ] Task 4: Generator edge cases (3 predictions)
+- [ ] Task 5: PriceTick + create_price_stream() generator
+- [ ] Task 6: Tick-by-tick backtest using generator
+- [ ] Task 7: Generator expressions (3 questions)
 - [ ] Task 8: PCAP simulation (5 questions)
 
 ---

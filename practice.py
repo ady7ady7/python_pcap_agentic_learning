@@ -6437,3 +6437,235 @@ the answer is no (as there are neither the letters "d", "o", or "g", in this ord
 # print(o.x)
 # print(hasattr(o, '__dict__'))
 
+
+#Edube - Exceptions Labs - 1
+
+# def read_int(prompt: str, min: int, max: int) -> int:
+#     '''
+#     A function that checks whether the input integer value is in the specified range
+    
+#     '''
+#     while True: #We can do it here as we will break out of the loop as soon as we get a correct number
+#         try:
+#             value = int(input(prompt))
+#             if min <= value <= max:
+#                 return value
+#             else:
+#                 print(f'Error: the value is not within permitted range ({min}..{max})')
+#         except ValueError:
+#             print('Error: wrong input!')
+
+
+
+# v = read_int("Enter a number from -10 to 10: ", -10, 10)
+
+# print("The number is:", v)
+
+
+#Edube - Exceptions Labs - 2
+
+
+# try:
+#     x = 1/0
+# except ZeroDivisionError:
+#     print('XD')
+# except ZeroDivisionError:
+#     print('PP')
+
+#W6 D3 T1
+# class IteratorStyle:
+#     def __init__(self):
+#         self.items = [1, 2, 3]
+#         self.index = 0
+
+#     def __iter__(self):
+#         return self
+
+#     def __next__(self):
+#         if self.index >= len(self.items):
+#             raise StopIteration
+#         val = self.items[self.index]
+#         self.index += 1
+#         return val
+
+# obj = IteratorStyle()
+# print(iter(obj) is obj) #True
+# print(list(obj))
+# print(list(obj))
+
+
+
+# class IterableStyle:
+#     def __init__(self):
+#         self.items = [1, 2, 3]
+
+#     def __iter__(self):
+#         for item in self.items:
+#             yield item
+
+# obj = IterableStyle()
+# it1 = iter(obj)
+# it2 = iter(obj)
+# print(it1 is it2) #False, separate entities
+# print(list(obj)) #[1, 2, 3]
+# print(list(obj)) #[1, 2, 3]
+
+
+#W6 D3 T2
+
+# from functools import wraps
+
+# def log_call(func):
+#     @wraps(func)
+#     def wrapper(*args, **kwargs):
+#         print(f'Calling {func.__name__} with args={args}, kwargs={kwargs}')
+#         result = func(*args, **kwargs)
+#         print(f'Returned: {result}')
+#         return result
+#     return wrapper
+
+
+# # Test:
+# @log_call
+# def add(a, b):
+#     return a + b
+
+# @log_call
+# def greet(name, greeting="Hello"):
+#     return f"{greeting}, {name}!"
+
+# print(add(3, 5))
+# print(greet("Alice", greeting="Hi"))
+# print(add.__name__)
+
+
+#W6 D3 T3
+
+# class NumberRange:
+#     '''Iterable that yields numbers from stard to end (inclusive).'''
+    
+#     def __init__(self, start: int, end: int):
+#         self.start = start
+#         self.end = end
+    
+#     def __iter__(self):
+#         for num in range(self.start, self.end + 1):
+#             yield num
+            
+            
+# r = NumberRange(1, 5)
+# # print(list(r))   # [1, 2, 3, 4, 5]
+# # print(list(r))   # [1, 2, 3, 4, 5] — works again!
+
+
+# it1 = iter(r)
+# it2 = iter(r)
+# print(next(it1))  # 1
+# print(next(it1))  # 2
+# print(next(it2))  # 1 — independent! Not 3!
+
+# print(iter(r) is r)         # False — it's an iterable, not an iterator
+# print(iter(r) is iter(r))   # False — each call makes a new generator
+
+#W6 D3 T4
+
+# def gen():
+#     yield 1
+#     yield 2
+#     return "done"
+
+# g = gen()
+# print(next(g))
+# print(next(g))
+
+# try:
+#     next(g)
+# except StopIteration as e:
+#     print(e.value)
+    
+    
+# # 1 2 done
+
+
+# def outer():
+#     yield from [10, 20]
+#     yield from (x * 3 for x in range(3))
+
+# print(list(outer()))
+
+# def count_up(n):
+#     for i in range(n):
+#         yield i
+
+# gen = count_up(4)
+# print(next(gen))
+# print(next(gen))
+
+# for x in gen:
+#     print(x, end=' ')
+
+
+#W6 D3 T5 - generator that streams price data from a csv file as named tuples
+
+from collections import namedtuple
+from algo_backtest.data.data_loader import DataLoader
+
+PriceTick = namedtuple('PriceTick', ['timestamp', 'ticker', 'open', 'high', 'low', 'close', 'volume'])
+
+def create_price_stream(filepath: str, ticker: str = None):
+    '''A method used to stream price data from a csv file as named tuples'''
+    
+    loader = DataLoader(filepath)
+    data = loader.load_data()
+    
+    for idx, row in data.iterrows():
+        if ticker is None or row.ticker == ticker:
+            yield PriceTick(row.timestamp, row.ticker, row.open, row.high, row.low, row.close, row.volume)
+ 
+    
+
+# Test with your ohlc_mock_data.csv:
+#stream = create_price_stream('ohlc_mock_data.csv')
+
+#Get first 3 ticks:
+# for i, tick in enumerate(stream):
+#     if i >= 3:
+#         break
+#     print(f"{tick.timestamp} | {tick.ticker} | Close: {tick.close}")
+
+#W6 D3 T6 - implementing a tick-by-tick test with generator from T5
+
+# stream = create_price_stream('ohlc_mock_data.csv', ticker = 'EURUSD')
+
+# from algo_backtest.engine.backtest_engine import BacktestEngine
+
+# stream = create_price_stream('ohlc_mock_data.csv', ticker = 'EURUSD')
+
+# engine = BacktestEngine()
+# engine.open_position('EURUSD', 'BUY', 101.1, 10000, 100.0, 103.0)
+
+# for i, tick in enumerate(stream):
+#     closed = engine.process_price(tick.ticker, tick.close)
+#     if closed != []:
+#         print(f'Closed trade: {closed}')
+        
+# print(engine)
+# print(engine.total_pnl, engine.win_rate)
+# print(engine.position_manager.get_position_count())
+
+#W6 D3 T7
+# list_comp = [x ** 2 for x in range(5)]
+# gen_exp = (x ** 2 for x in range(5))
+
+# print(type(list_comp))
+# print(type(gen_exp))
+# print(list_comp)
+# print(list(gen_exp))
+# print(list(gen_exp))
+
+
+# nums = [1, 2, 3, 4, 5]
+# squares = (n ** 2 for n in nums)
+
+# nums.append(6)
+# print(list(squares))

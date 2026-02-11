@@ -2892,3 +2892,39 @@ IOError (alias for OSError)
 
 ---
 
+## Week 6, Day 3 - 2026-02-11
+
+**Topic:** Iterable vs Iterator, Decorator Writing & Price Stream Generator
+**Score:** 93% (A) | **Time:** 80 minutes | **Difficulty:** 6/10
+
+### Task Breakdown
+
+| Task | Score | Details |
+|------|-------|---------|
+| 1: Iterable vs Iterator warm-up | 95% | Both correct; understanding improved |
+| 2: Decorator from scratch | 100% | Perfect — scaffolding Day 3 complete |
+| 3: NumberRange iterable | 100% | Clean yield-in-__iter__ pattern |
+| 4: Generator edge cases | 95% | All 3 correct (return value, yield from, partial) |
+| 5: PriceTick + create_price_stream | 95% | Working generator with ticker filter |
+| 6: Tick-by-tick backtest | 90% | First generator-powered backtest; minor style |
+| 7: Generator expressions | 88% | 2/3 T/F — "always faster" misconception |
+| 8: PCAP simulation | 80% | 4/5 — Q1 iterable pattern in exam context |
+
+### Remaining Gaps
+- **Iterable recognition in exam context:** Knows the rule when prompted (Tasks 1-3 correct), reverts to one-shot thinking in multiple choice (Task 8 Q1). Recognition issue, not knowledge issue.
+- **"Generators always faster" misconception:** Less memory ≠ faster. List comprehensions can outperform generators on small data due to cache friendliness and no suspend/resume overhead.
+
+### Strengths
+- Decorator scaffolding COMPLETE: trace → blanks → write from scratch in 3 days
+- Generator lazy evaluation understood (Q2 with mutated source list — tricky, nailed it)
+- First generator-powered backtest working end-to-end
+- Consistent A-range: 81% → 95% → 93%
+
+### Project Progress
+- PriceTick namedtuple defined
+- create_price_stream() generator working (loads CSV via DataLoader, yields PriceTick per row, optional ticker filter)
+- Tick-by-tick backtest demonstrated (position opened → stream consumed → TP hit → trade closed)
+- Code in practice.py — not yet integrated into project package
+
+---
+

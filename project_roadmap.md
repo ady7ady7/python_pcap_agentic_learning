@@ -52,9 +52,9 @@
 - [x] Position ID propagation: Position → Trade (full lifecycle chain)
 - [x] Fixed PositionManager removal bug (ID-based filtering)
 - [x] Custom iterators with `__iter__`/`__next__` (FibonacciIterator, CountdownIterator)
-- [ ] Convert DataFrame rows to generator (yield row as namedtuple)
-- [ ] `create_price_stream()` generator function
-- [ ] Implement tick-by-tick simulation via generator pipeline
+- [x] Convert DataFrame rows to generator (yield row as namedtuple)
+- [x] `create_price_stream()` generator function
+- [x] Implement tick-by-tick simulation via generator pipeline
 
 ---
 
@@ -80,5 +80,5 @@
 
 ---
 
-**Current Status:** Week 6, Day 2 - Iterator Mastery & Trade ID Propagation
-**Last Updated:** 2026-02-10
+**Current Status:** Week 6, Day 3 - Iterable vs Iterator & Price Stream Generator
+**Last Updated:** 2026-02-11

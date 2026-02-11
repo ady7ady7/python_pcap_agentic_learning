@@ -1062,3 +1062,29 @@ Task 8 expected values were wrong. Correct: 4 winners, $1050 total PnL.
 
 ---
 
+## Week 6, Day 3 - 2026-02-11
+
+**Topic:** Iterable vs Iterator, Decorator Writing & Price Stream Generator
+**Score:** 93% (A) | **Time:** 80 minutes | **Difficulty:** 6/10
+
+**Tasks:**
+1. PCAP warm-up: iterable vs iterator side-by-side (95%)
+2. Decorator written from scratch — @log_call perfect (100%)
+3. NumberRange iterable class with yield (100%)
+4. Generator edge cases: return value, yield from, partial (95%)
+5. PROJECT: PriceTick namedtuple + create_price_stream() (95%)
+6. PROJECT: Tick-by-tick backtest with generator (90%)
+7. Generator expressions: lazy eval + T/F questions (88%)
+8. PCAP simulation 5 questions — 4/5 (80%)
+
+**Key Wins:**
+- Decorator scaffolding complete (trace → blanks → write from scratch)
+- First generator-powered backtest working
+- Generator lazy evaluation understood (mutated source list trick)
+
+**Remaining Gaps:**
+- Iterable recognition in exam context (Q8 Q1 — same pattern as Tasks 1-3 but missed)
+- "Generators always faster" misconception
+
+---
+
