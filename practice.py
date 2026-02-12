@@ -6607,20 +6607,20 @@ the answer is no (as there are neither the letters "d", "o", or "g", in this ord
 
 #W6 D3 T5 - generator that streams price data from a csv file as named tuples
 
-from collections import namedtuple
-from algo_backtest.data.data_loader import DataLoader
+# from collections import namedtuple
+# from algo_backtest.data.data_loader import DataLoader
 
-PriceTick = namedtuple('PriceTick', ['timestamp', 'ticker', 'open', 'high', 'low', 'close', 'volume'])
+# PriceTick = namedtuple('PriceTick', ['timestamp', 'ticker', 'open', 'high', 'low', 'close', 'volume'])
 
-def create_price_stream(filepath: str, ticker: str = None):
-    '''A method used to stream price data from a csv file as named tuples'''
+# def create_price_stream(filepath: str, ticker: str = None):
+#     '''A method used to stream price data from a csv file as named tuples'''
     
-    loader = DataLoader(filepath)
-    data = loader.load_data()
+#     loader = DataLoader(filepath)
+#     data = loader.load_data()
     
-    for idx, row in data.iterrows():
-        if ticker is None or row.ticker == ticker:
-            yield PriceTick(row.timestamp, row.ticker, row.open, row.high, row.low, row.close, row.volume)
+#     for idx, row in data.iterrows():
+#         if ticker is None or row.ticker == ticker:
+#             yield PriceTick(row.timestamp, row.ticker, row.open, row.high, row.low, row.close, row.volume)
  
     
 
@@ -6669,3 +6669,365 @@ def create_price_stream(filepath: str, ticker: str = None):
 
 # nums.append(6)
 # print(list(squares))
+
+
+#Edube - OOP - Labs1
+
+# class Stack:
+#     def __init__(self):
+#         self.__stk = []
+
+#     def push(self, val):
+#         self.__stk.append(val)
+
+#     def pop(self):
+#         val = self.__stk[-1]
+#         del self.__stk[-1]
+#         return val
+
+
+# class CountingStack(Stack):
+#     def __init__(self):
+#         Stack.__init__(self)
+#         self.__counter = 0
+
+#     def get_counter(self):
+#         return self.__counter
+
+#     def pop(self):
+#         val = Stack.pop(self)
+#         self.__counter += 1
+#         return val
+	
+
+# stk = CountingStack()
+# for i in range(100):
+#     stk.push(i)
+#     stk.pop()
+# print(stk.get_counter())
+
+#Edube - OOP - Labs2
+
+
+# class QueueError(IndexError):
+#     def __init__(self, message):
+#         self.message = message
+#         super().__init__(self.message)
+    
+#     def __str__(self):
+#         return f'{self.message}'
+
+
+# class Queue:
+#     def __init__(self):
+#         self.__queue_participants = []
+
+#     def put(self, elem):
+#         self.__queue_participants.append(elem)
+
+#     def get(self):
+#         if self.__queue_participants:
+#             first_elem = self.__queue_participants.pop(-1)
+#             return first_elem
+#         else:
+#             raise QueueError
+
+
+# que = Queue()
+# que.put(1)
+# que.put("dog")
+# que.put(False)
+# try:
+#     for i in range(4):
+#         print(que.get())
+# except:
+#     raise QueueError('Queue Error')
+
+
+#Edube - OOP - Labs3
+
+# class QueueError(IndexError):
+#     def __init__(self, message):
+#         super().__init__(self)
+#         self.message = message
+        
+#     def __str__(self):
+#         return f'Error: {self.message}'
+
+
+
+# class Queue:
+#     def __init__(self):
+#         self.queue_participants = []
+
+#     def put(self, elem):
+#         self.queue_participants.append(elem)
+
+#     def get(self):
+#         if self.queue_participants:
+#             first_elem = self.queue_participants.pop(-1)
+#             return first_elem
+#         else:
+#             raise QueueError
+
+
+
+
+# class SuperQueue(Queue):
+#     def __init__(self):
+#         super().__init__()
+    
+#     def isempty(self):
+#         if self.queue_participants:
+#             return False
+#         else:
+#             return True
+
+
+# que = SuperQueue()
+# que.put(1)
+# que.put("dog")
+# que.put(False)
+# for i in range(4):
+#     if not que.isempty():
+#         print(que.get())
+#     else:
+#         print("Queue empty")
+
+#W6 D4 T1
+
+# class Mystery1:
+#     def __init__(self):
+#         self.data = [10, 20, 30]
+#         self.i = 0
+
+#     def __iter__(self):
+#         return self
+
+#     def __next__(self):
+#         if self.i >= len(self.data):
+#             raise StopIteration
+#         val = self.data[self.i]
+#         self.i += 1
+#         return val
+
+# m = Mystery1()
+# print(list(m))  # What?
+# print(list(m))  # What?
+
+#StoPiteration#
+
+# class Mystery2:
+#     def __init__(self):
+#         self.data = [10, 20, 30]
+
+#     def __iter__(self):
+#         return iter(self.data)
+
+# m = Mystery2()
+# print(list(m))  # What?
+# print(list(m))  # What?
+
+
+# class Mystery3:
+#     def __init__(self):
+#         self.data = [10, 20, 30]
+
+#     def __iter__(self):
+#         for item in self.data:
+#             yield item
+
+# m = Mystery3()
+# print(list(m))  # What?
+# print(list(m))  # What?
+
+#W6 D4 T2
+
+# from functools import wraps
+
+# def repeat(n):
+#     """Decorator factory that repeats function execution n times."""
+    
+#     def decorator(func):
+#         @wraps(func)
+#         def wrapper(*args, **kwargs):
+#             result_list = []
+#             for _ in range(n):
+#                 result = func(*args, **kwargs)
+#                 result_list.append(result)
+#             return result_list
+#         return wrapper
+#     return decorator
+
+
+# # Test 1 — simple function:
+# @repeat(3)
+# def roll_dice():
+#     import random
+#     return random.randint(1, 6)
+
+# print(roll_dice())  # Should return list of 3 random numbers
+
+
+# # Test 2 — function with arguments:
+# @repeat(4)
+# def greet(name):
+#     return f"Hello, {name}!"
+
+# print(greet("Alice"))  # ['Hello, Alice!', 'Hello, Alice!', 'Hello, Alice!', 'Hello, Alice!']
+
+
+# # Test 3 — metadata preserved:
+# print(greet.__name__)  # greet
+
+
+
+#W6 D4 T3
+
+
+# Scenario A: Multiple passes needed
+# def scenario_b_gen():
+#     data = (x ** 2 for x in range(10000000))
+#     max_val = max(data)
+#     sum_val = sum(data)
+#     return max_val, sum_val
+
+
+# max_val, sum_val = scenario_b_gen() #Doesn't work, we'd get 0 as sum_val as the generator is exhausted after the first run.
+# print(max_val, sum_val)
+
+# def gen_with_return():
+#     yield 1
+#     yield 2
+#     return "DONE"
+
+# g = gen_with_return()
+# print(list(g))
+
+
+# def counter():
+#     total = 0
+#     while True:
+#         x = yield total
+#         if x is not None:
+#             total += x
+
+# c = counter()
+# next(c)  # Prime the generator
+# c.send(5)
+# c.send(10)
+# print(c.send(3))
+
+#W6 D4 T5
+
+
+# from collections import namedtuple
+# from algo_backtest.data.data_loader import DataLoader
+
+# PriceTick = namedtuple('PriceTick', ['timestamp', 'ticker', 'open', 'high', 'low', 'close', 'volume'])
+
+# def create_price_stream(filepath: str, ticker: str = None, filter_func: callable = None):
+#     '''A method used to stream price data from a csv file as named tuples'''
+    
+#     loader = DataLoader(filepath)
+#     data = loader.load_data()
+    
+#     for idx, row in data.iterrows():
+#         if ticker is None or row.ticker == ticker:
+#             result = PriceTick(row.timestamp, row.ticker, row.open, row.high, row.low, row.close, row.volume)
+            
+#             if filter_func is None or filter_func(result):
+#                 yield result
+
+
+# # Test 1 — filter by ticker AND high price:
+# def high_volatility(tick):
+#     return tick.high - tick.low > 2.0
+
+# stream = create_price_stream('ohlc_mock_data.csv', 
+#                               ticker='EURUSD', 
+#                               filter_func=high_volatility)
+
+# for i, tick in enumerate(stream):
+#     if i >= 3:
+#         break
+#     print(f"{tick.timestamp} | Range: {tick.high - tick.low:.2f}")
+
+
+# # Test 2 — filter by volume threshold:
+# stream2 = create_price_stream('ohlc_mock_data.csv',
+#                                filter_func=lambda t: t.volume > 15000)
+
+# print(f"\nHigh volume ticks: {sum(1 for _ in stream2)}")
+
+
+#W6 D4 T6
+
+# from collections import namedtuple
+# from algo_backtest.data.data_loader import DataLoader
+
+# PriceTick = namedtuple('PriceTick', ['timestamp', 'ticker', 'open', 'high', 'low', 'close', 'volume'])
+
+# def create_price_stream(filepath: str, ticker: str = None, filter_func: callable = None):
+#     '''A method used to stream price data from a csv file as named tuples'''
+    
+#     loader = DataLoader(filepath)
+#     data = loader.load_data()
+    
+#     for idx, row in data.iterrows():
+#         if ticker is None or row.ticker == ticker:
+#             result = PriceTick(row.timestamp, row.ticker, row.open, row.high, row.low, row.close, row.volume)
+            
+#             if filter_func is None or filter_func(result):
+#                 yield result
+
+
+
+# from collections import deque
+
+# def sma_indicator(price_stream, window=5):
+#     """
+#     Generator that calculates Simple Moving Average over price stream.
+
+#     Args:
+#         price_stream: Generator yielding PriceTick objects.
+#         window: Number of periods for SMA calculation.
+
+#     Yields:
+#         Tuple of (PriceTick, sma_value) for each tick after window fills.
+#     """
+    
+#     price_list = []
+#     sma_value = 0
+    
+#     for i, tick in enumerate(price_stream):
+#         price_list.append(tick.close)
+#         if len(price_list) >= window:
+#             sma_value = float(sum(price_list) / window)
+#             price_list.pop()
+#         yield tick, sma_value
+            
+
+# # Test:
+# stream = create_price_stream('ohlc_mock_data.csv', ticker='EURUSD')
+# sma_stream = sma_indicator(stream, window=3)
+
+# for i, (tick, sma) in enumerate(sma_stream):
+#     if i >= 5:
+#         break
+#     print(f"{tick.timestamp} | Close: {tick.close} | SMA(3): {sma:.2f}")
+
+#W6 D4 T8
+
+# gen = (x for x in range(3))
+# print(0 in gen) #True
+# print(1 in gen) #True
+
+def make_multiplier(n):
+    def multiplier(x):
+        return x * n
+    return multiplier
+
+times_three = make_multiplier(3)
+print(times_three(5))
+print(times_three.__name__)

@@ -19,7 +19,7 @@ This directory contains all theoretical lessons organized by week and topic.
 - File I/O with context managers
 - **PCAP Traps:** Slicing edge cases, exception order, file handle leaks
 
-### [OOP Fundamentals - Classes & Objects](week1_oop_fundamentals.md)
+### [OOP Fundamentals - Classes & Objects](week1_6_oop_fundamentals.md)
 - What are classes and why use them
 - The `__init__` constructor method
 - Understanding `self` (the object reference)

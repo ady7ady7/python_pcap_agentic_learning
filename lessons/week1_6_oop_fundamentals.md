@@ -9,6 +9,84 @@
 
 ---
 
+## Procedural vs Object-Oriented Approach (PCAP Theory)
+
+### The Procedural World
+
+In procedural programming, there are **two separate worlds**:
+
+| World | Contains | Example |
+|-------|----------|---------|
+| **Data** | Variables of different kinds | `balance = 1000`, `owner = "Alice"` |
+| **Code** | Functions grouped into modules | `def deposit(account_id, amount)` |
+
+**Key limitation:** Functions can use (and abuse) data, but data cannot use functions. There's nothing stopping `math.sin(bank_balance)` — the function has no idea what the data represents.
+
+```python
+# Procedural: data and code live separately
+balance = 1000
+owner = "Alice"
+
+def deposit(amount):
+    global balance
+    balance += amount     # function manipulates disconnected data
+
+deposit(500)              # works, but who does this belong to?
+```
+
+### The Object-Oriented World
+
+OOP **merges data and code** into a single unit: the **class**.
+
+```python
+# OOP: data and code live together inside the object
+class BankAccount:
+    def __init__(self, owner, balance):
+        self.owner = owner        # data
+        self.balance = balance    # data
+
+    def deposit(self, amount):    # code that BELONGS to the data
+        self.balance += amount
+
+account = BankAccount("Alice", 1000)
+account.deposit(500)              # the object controls its own data
+```
+
+### Core OOP Vocabulary
+
+| Term | Meaning | Example |
+|------|---------|---------|
+| **Class** | A recipe/blueprint for creating objects | `class BankAccount:` |
+| **Object** | An incarnation of a class (like a cheesecake from a recipe) | `account = BankAccount(...)` |
+| **Attribute/Property** | A trait the object has (data) | `self.balance`, `self.owner` |
+| **Method** | An activity the object can perform (code) | `def deposit(self, amount)` |
+| **Inheritance** | New classes built from existing ones, inheriting + extending | `class SavingsAccount(BankAccount)` |
+| **Encapsulation** | Object protects its data from unauthorized modification | `self.__balance` (private) |
+
+### Naming Conventions & Quick Distinctions
+
+**What's what:**
+- **Attribute** = data stored on an object (`self.balance = 1000`) — accessed without `()`
+- **Parameter** = variable in a function/method definition (`def deposit(self, amount)`) — `amount` is the parameter
+- **Method** = function that belongs to a class (`def deposit(self, amount)`) — called with `()`, has `self`
+
+**Naming rules:**
+- **Classes:** `PascalCase` — `BankAccount`, `PositionManager`
+- **Objects, attributes, methods:** `snake_case` — `my_account`, `self.entry_price`, `def calculate_pnl()`
+- **Constants:** `UPPER_CASE` — `MAX_POSITIONS = 10`
+- **Private:** `_protected`, `__private` — `self._ticker`, `self.__pnl`
+
+### Why This Matters
+
+1. **Data protection:** Objects control access to their own data — no random function can corrupt it
+2. **No border between data and code:** They live as one inside objects
+3. **Inheritance:** Recipes (classes) can be modified to create more specific versions without rewriting everything
+4. **Real-world modeling:** OOP reflects real relationships — a `Position` HAS a `ticker`, CAN `calculate_pnl()`
+
+> **PCAP Exam Note:** The exam tests understanding of WHY OOP exists, not just syntax. Know the difference: procedural = data and code are separate; OOP = data and code are enclosed together in classes.
+
+---
+
 ## Why Object-Oriented Programming?
 
 **The Problem with Functions Alone:**
