@@ -55,6 +55,9 @@
 - [x] Convert DataFrame rows to generator (yield row as namedtuple)
 - [x] `create_price_stream()` generator function
 - [x] Implement tick-by-tick simulation via generator pipeline
+- [x] Parameterized decorator `@repeat(n)` (decorator factory pattern)
+- [x] `sma_indicator()` generator consuming price stream (generator chaining)
+- [x] Filtered price stream with `filter_func` predicate parameter
 
 ---
 
@@ -80,5 +83,5 @@
 
 ---
 
-**Current Status:** Week 6, Day 3 - Iterable vs Iterator & Price Stream Generator
-**Last Updated:** 2026-02-11
+**Current Status:** Week 6, Day 5 - Friday Review & Weekend Exams
+**Last Updated:** 2026-02-13

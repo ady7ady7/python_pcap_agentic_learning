@@ -2928,3 +2928,120 @@ IOError (alias for OSError)
 
 ---
 
+## Week 6, Day 4 - 2026-02-12
+
+**Topic:** Advanced Generators, Parameterized Decorators & Context Recognition
+**Score:** 85% (B+) | **Time:** N/A (completed with external AI) | **Difficulty:** 6-7/10
+
+### Task Breakdown
+
+| Task | Score | Details |
+|------|-------|---------|
+| 1: Iterator vs Iterable Recognition Drill | 95% | All 3 correct; Q3 understanding gap on WHY yield-in-__iter__ isn't exhausted |
+| 2: Parameterized @repeat(n) decorator | 100% | Perfect — decorator factory with three nested functions |
+| 3: Generator Performance (when lists win) | 95% | Correct analysis of both scenarios; bug identified |
+| 4: Generator Return/send()/yield from | 60% | Q1 correct (B); Q2-Q3 unanswered (send() not taught) |
+| 5: Filtered Price Stream | 0% | Skipped |
+| 6: SMA Indicator | 85% | Working implementation; yields SMA=0.00 before window fills; uses list.pop(0) instead of deque |
+| 7: Tricky Iterator Questions | 55% | Q1 WRONG (C not A — missed reset + increment-before-return), Q2 correct, Q3 WRONG (C not A — confused independent generators) |
+| 8: PCAP Simulation (5 Qs) | 40% | Q1 WRONG (@wraps stacking), Q2 WRONG (iter identity), Q3 WRONG (in on generators), Q4 WRONG (closure __name__), Q5 correct |
+
+### Critical Gaps Exposed (Day 4 Tasks 7-8)
+1. **Resettable iterators:** Didn't see that `__iter__` resets `self.current = 0` AND that increment-before-return yields 1,2,3 not 0,1,2
+2. **Independent generators:** `g1 = gen(); g2 = gen()` creates two separate objects — answered as if they shared state
+3. **@wraps on stacked decorators:** Both layers print the original name, not "wrapper" then "foo"
+4. **iter(obj) is obj:** When `__iter__` returns `iter(self.items)`, the result is NOT the object itself → False
+5. **`in` on generators:** Consumes elements sequentially; `0 in gen` is True (not False)
+6. **Closure `__name__`:** Returns inner function's def name ("multiplier"), not the outer function name
+
+### Strengths
+- Parameterized decorator mastered (Day 4 of decorator scaffolding complete)
+- Generator performance trade-offs understood
+- Iterator vs Iterable recognition improving in isolation (Task 1 all correct)
+
+### Project Progress
+- SMA indicator working (needs deque refactor and window-fill guard)
+- Filtered price stream task skipped
+
+---
+
+## Week 6 — End of Week Summary
+
+### Score Progression
+| Day | Score | Topic |
+|-----|-------|-------|
+| Day 1 | 81% (B) | Iterator Protocol & Advanced Generators |
+| Day 2 | 95% (A) | Iterator Mastery & Trade ID Propagation |
+| Day 3 | 93% (A) | Iterable vs Iterator & Price Stream Generator |
+| Day 4 | 85% (B+) | Advanced Generators & Parameterized Decorators |
+| Day 5 | 95% (A) | Exam Gap Closure |
+| **Average** | **89.8%** | |
+
+### Strengths This Week
+- **Decorator scaffolding complete:** trace → blanks → from scratch → parameterized in 4 days
+- **Project momentum:** Position ID chain, PositionManager bug fix, PriceTick generator, SMA indicator — all working
+- **Self-correction instinct:** Caught PositionManager filter bug before confirmation (Day 2)
+- **Generator fundamentals solid:** yield, yield from, exhaustion, lazy evaluation all understood
+- **Strong Day 2-3 performance:** 95% and 93% show deep concept mastery in guided practice
+
+### Recurring Weaknesses
+- **PCAP multiple choice under pressure:** Concepts understood in isolation but misapplied in timed exam context (Day 4 Tasks 7-8 were 55% and 40%)
+- **Iterator identity patterns:** `iter(obj) is obj`, resettable iterators, independent generator instances — all tripped up when presented as exam questions
+- **`in` operator on generators:** Didn't recognize sequential consumption behavior
+- **`__name__` confusion:** Conflates variable name, outer function name, and inner function name
+- **@wraps stacking:** Doesn't yet see that @wraps propagates __name__ through multiple decorator layers
+
+### Project Progress Assessment
+- Phase 2 (The Engine) nearly complete
+- All Week 6 roadmap items checked off
+- SMA indicator needs refactoring (deque, window guard) — assigned as Day 5 Task 6
+- Generator pipeline pattern demonstrated but not yet integrated into project package
+
+### Readiness for Week 7
+- **PCAP Theory:** 7/10 — concepts are there, exam application needs drilling
+- **Project:** 8/10 — strong foundation, ready for logging/polish phase
+- **Recommendation:** Day 5 focuses entirely on the 6 exam gaps from Day 4. Weekend exams will test retention.
+
+---
+
+## Week 6, Day 5 - 2026-02-13
+
+**Topic:** Exam Gap Closure — Iterator Identity, `in` on Generators, @wraps Stacking, Closure Names
+**Score:** 95% (A) | **Time:** 40 minutes | **Difficulty:** 7/10
+
+### Task Breakdown
+
+| Task | Score | Details |
+|------|-------|---------|
+| 1: `in` operator on generators | 100% | All 3 correct — gap closed |
+| 2: iter(obj) is obj identity | 100% | All 6 sub-answers correct — Day 4 Q8 Q2 gap closed |
+| 3: Resettable iterators | 100% | [1,2,3] twice + [1,2,3]/[] both correct — Day 4 Q7 Q1 gap closed |
+| 4: `__name__` and @wraps stacking | 100% | B, greeter, add, "Called foo twice" — Day 4 Q8 Q1/Q4 gaps closed |
+| 5: Independent generators | 78% | Q1/Q3 correct; Q2: `iter(generator)` twice is SAME object (True, not False) |
+| 6: PCAP simulation (6 Qs timed) | 100% | A A B B A A — all correct. Massive improvement from Day 4's 40-55% |
+| 7: Concept map (10 blanks) | 90% | 9/10 — Item 2: swapped __iter__ and __next__ for iterable definition |
+
+### Corrections
+1. **Task 5 Q2:** Wrote the rule correctly ("iter(generator) twice → same object") then answered False. `iter(g)` on a generator returns `g` itself → `x is y` is True; `next(y)` is 20 not 10.
+2. **Task 7 Item 2:** Backwards — iterable has `__iter__` NOT `__next__`. (Said "iterable has next but not iter".)
+
+### Strengths
+- Day 4's 6 PCAP exam gaps: 5 out of 6 fully closed in one session
+- Timed simulation (Task 6): 6/6 — complete reversal of Day 4 performance
+- `in` on generators: immediately understood and applied correctly
+- @wraps stacking and closure __name__: both now solid
+
+### Week 6 Final Average
+| Day | Score |
+|-----|-------|
+| Day 1 | 81% |
+| Day 2 | 95% |
+| Day 3 | 93% |
+| Day 4 | 85% |
+| Day 5 | 95% |
+| **Average** | **89.8%** |
+
+**Readiness for Week 7:** Strong. PCAP application under pressure has gone from 40% to 100% in one day. The remaining microscopic gaps (iter-on-generator identity, iterable vs iterator exact wording) are noted for weekend exam consolidation.
+
+---
+

@@ -1,25 +1,31 @@
-# Daily Feedback - Week 6, Day 4
+# Weekend Feedback - Week 6 Exams
 
-**Date:** 2026-02-12
+**Date:** 2026-02-14 / 2026-02-15
 
 ---
 
-## Task Completion
+## Exam A
 
-**Tasks completed:** ___ / 8
+**Score:** ___ / 30
 
 **Time spent:** ___ minutes
 
-**Difficulty (1-10):**
+---
+
+## Exam B
+
+**Score:** ___ / 30
+
+**Time spent:** ___ minutes
 
 ---
 
 ## Self-Reflection
 
-**What clicked today:**
+**What clicked this weekend:**
 
 
-**What's still confusing:**
+**What's still unclear:**
 
 
 ---
