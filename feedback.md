@@ -1,20 +1,12 @@
-# Weekend Feedback - Week 6 Exams
+# Daily Feedback - Week 7, Day 2
 
-**Date:** 2026-02-14 / 2026-02-15
+**Date:** 2026-02-17
 
----
-
-## Exam A
-
-**Score:** ___ / 30
-
-**Time spent:** ___ minutes
+**Topic:** `logging` — Observe, Predict, Build (Scaffolded)
 
 ---
 
-## Exam B
-
-**Score:** ___ / 30
+**Score:** ___ / tasks
 
 **Time spent:** ___ minutes
 
@@ -22,7 +14,7 @@
 
 ## Self-Reflection
 
-**What clicked this weekend:**
+**What clicked today:**
 
 
 **What's still unclear:**

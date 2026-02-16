@@ -1088,3 +1088,145 @@ Task 8 expected values were wrong. Correct: 4 winners, $1050 total PnL.
 
 ---
 
+## Week 6, Day 4 - 2026-02-12
+
+**Topic:** Advanced Generators & Parameterized Decorators
+**Score:** 85% (B+) | **Difficulty:** 7/10 | (External session)
+
+**Tasks:**
+1. Generator expressions deep dive
+2. yield from chaining
+3. namedtuple operations (_replace, _fields, _asdict)
+4. __new__ and __init__ interaction
+5. PROJECT: @repeat(n) decorator factory
+6. PROJECT: sma_indicator() generator pipeline
+7. PROJECT: filtered price stream with filter_func predicate
+8. PCAP simulation — 55% (exposed 6 key gaps)
+
+**Key Wins:**
+- Parameterized decorator (@repeat(n)) implemented correctly
+- Generator pipeline (sma_indicator consuming price_stream) working
+- namedtuple _replace() and _asdict() demonstrated
+
+**Gaps Identified (targeted in Day 5):**
+- `in` on generators: sequential consumption not grasped
+- `iter(generator) is generator` → True (first occurrence)
+- Resettable iterator reset pattern missed
+- @wraps stacking `__name__` propagation
+- Closure `__name__` reflects def-statement name, not variable
+- Independent generator instances
+
+---
+
+## Week 6, Day 5 - 2026-02-13
+
+**Topic:** Exam Gap Closure — Iterator Identity, `in` on Generators, @wraps Stacking, Closure Names
+**Score:** 95% (A) | **Time:** 40 minutes | **Difficulty:** 7/10
+
+**Tasks:**
+1. `in` operator on generators — sequential consumption (100%)
+2. `iter(obj) is obj` identity — iterator vs iterable (100%)
+3. Resettable iterators — `__iter__` reset pattern (100%)
+4. `__name__` and @wraps stacking (100%)
+5. Independent generator instances (80% — Q2 wrong: iter(generator) True not False)
+6. PCAP simulation — 6/6 (100%)
+7. Concept map — fill-in-the-blanks (95% — Item 2 swapped __iter__/__next__)
+
+**Key Wins:**
+- All 6 Day 4 gaps addressed and closed
+- Simulation score jumped: Day 4 40-55% → Day 5 100%
+- @wraps stacking propagation mastered
+
+**Persistent Gap:**
+- `iter(generator) is generator` still wrong in Task 5 Q2 (3rd occurrence across Days 4-5 + exam)
+
+---
+
+## Week 6 Weekend Exams - 2026-02-14/15
+
+**Exam A:** 25/30 (83%) — Time: 18 minutes
+**Exam B:** 24/30 (80%) — Time: reported
+**Average:** 49/60 (81.7%)
+
+**Exam A Misses (5):**
+- Q7: type() after __new__ returning non-instance → reflects actual returned type (int not Weird)
+- Q24: Iterator vs iterable direction — every iterator IS an iterable (B), not every iterable is iterator (A)
+- Q25: %y vs %Y — 2-digit vs 4-digit year PCAP trap
+- Q27: iter(generator) is generator → True not False (4th occurrence of this gap!)
+- Q28: del var removes binding only; sys.modules retains cache → B (True, True)
+
+**Exam B Misses (6):**
+- Q2: yield from on string IS valid (C was wrong — answer is A)
+- Q5: Singleton via __new__ is NOT an error (D was wrong — answer is A)
+- Q7: namedtuple _replace() returns new object, not error (D was wrong — answer is B)
+- Q9: Resettable iterator after break — second loop resets via __iter__ → B (0 1 2)
+- Q23: gen1 is gen2 → False; iter(gen3) is gen3 → True (answered B, correct is A)
+- Q30: next() on map object IS valid — map returns an iterator (answered D, correct is A)
+
+**Summary:** "Error" false-positives recur (Q5, Q7, Q30). Critical gap: `iter(generator) is generator` still failing.
+
+---
+
+## Week 6 Summary
+
+| Day | Score | Topic |
+|-----|-------|-------|
+| 1 | 81% | Iterator Protocol & Advanced Generators |
+| 2 | 95% | Iterator Mastery & Trade ID Propagation |
+| 3 | 93% | Iterable vs Iterator & Price Stream Generator |
+| 4 | 85% | Advanced Generators & Parameterized Decorators |
+| 5 | 95% | Exam Gap Closure |
+| Exam A | 83% | PCAP Mock (Weeks 1-6) |
+| Exam B | 80% | PCAP Mock (Weeks 1-6) |
+
+**Week 6 Daily Average: 89.8% (B+)**
+
+**Strengths:**
+- Iterator protocol mastered (custom __iter__/__next__ classes)
+- Generator pipelines working (price_stream → sma_indicator)
+- Project: full Position→Trade→ID chain, PositionManager ticker bug fixed
+- @wraps stacking now solid
+
+**Persistent Gaps entering Week 7:**
+- `iter(generator) is generator` → True (failed 4 times across week)
+- "Error" false-positives under exam pressure (Singleton, _replace, map iterator)
+- %y vs %Y (PCAP trap — failed twice)
+
+**Project Progress:**
+- BacktestEngine tick-by-tick simulation via generator pipeline ✅
+- @repeat(n) decorator factory ✅
+- sma_indicator() generator chaining ✅
+- Filtered price stream with predicate ✅
+
+---
+
+## Week 7, Day 1 - 2026-02-16
+
+**Topic:** The `logging` Module — Fundamentals to Project Integration
+**Score:** 62% on answered tasks (Tasks 6/7 excused) | **Time:** 60 minutes | **Difficulty:** Felt harder than 5/10
+
+**Tasks:**
+1. PCAP warm-up — level threshold predictions (2/3)
+2. Theory — named logger vs root logger (2/3)
+3. Two-stage filtering prediction (1/3)
+4. setup_logger() implementation (8/10 — missing duplicate-handler guard)
+5. logging vs warnings distinction (2.5/3)
+6. PROJECT: Add logging to BacktestEngine — excused
+7. PROJECT: setup_logging() in main.py — excused
+8. PCAP simulation 5 questions (2/5)
+
+**Key Wins:**
+- basicConfig() one-shot rule understood
+- logging.warning() vs warnings.warn() distinction correct
+- setup_logger() function structure correct
+
+**Gaps to Close:**
+- Two-stage filtering (Logger gate then Handler gate — failed Tasks 3 and 8 Q3)
+- Logger singleton by name (same name = same object — failed Task 2 Q3 and 8 Q5)
+- logging.exception() vs logging.error() (Task 8 Q4)
+- Default output format: WARNING:root:message not bare text
+
+**Action:** Lesson rewritten with scaffolded WHAT/WHY/HOW structure. Day 2 follows observe → predict → build → test approach.
+
+---
+

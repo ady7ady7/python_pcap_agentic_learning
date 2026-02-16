@@ -1,577 +1,307 @@
-# Week 6, Day 5 - Friday
-## Topic: Exam Gap Closure — Iterator Identity, `in` on Generators, @wraps Stacking, Closure Names
+# Week 7, Day 2 - Tuesday
+## Topic: `logging` — Observe, Predict, Build
 
-**Date:** 2026-02-13
+**Date:** 2026-02-17
 
-**Target Difficulty:** 7/10
+**Target Difficulty:** 4/10
 
-**Focus:** Day 4 Tasks 7-8 exposed 6 specific PCAP gaps. Today targets each one surgically. You know the concepts — the issue is applying them under exam pressure.
+**Lesson Reference:** `lessons/week3_5_7_stdlib_fileio.md` → Week 7 section (PART 1–7)
 
-**Remember:** Work in `practice.py`, paste FINAL answers here for review.
+**Today's approach:** Run first, understand what you see. Then predict. Then build from scratch.
 
----
-
-#Start 14:05
-
-## Task 1: PCAP Warm-up — The `in` Operator on Generators
-
-**Context:** Day 4 Task 8 Q3 — you answered C (False, False). The correct answer was A (True, True). The `in` operator on a generator **consumes elements sequentially** until it finds a match or exhausts.
-
-**Q1:** Predict the output — trace element-by-element:
-```python
-gen = (x for x in range(5))
-print(2 in gen)
-print(3 in gen)
-print(1 in gen)
-
-True True False
-```
-
-**Hint:** `in` on a generator works like calling `next()` repeatedly until it finds the value or hits StopIteration. Once consumed, those elements are gone.
-
-**Q2:** Predict the output:
-```python
-gen = (x for x in range(5))
-print(0 in gen)   # Line A
-print(0 in gen)   # Line B
-print(4 in gen)   # Line C
-
-True False False
-```
-
-**Q3:** What about lists — same behavior?
-```python
-nums = [0, 1, 2, 3, 4]
-print(2 in nums)
-print(2 in nums)
-
-True True
-```
-
-**Your answers:**
-```
-Q1:
-
-
-Q2:
-
-
-Q3:
-
-
-```
+**Remember:** Work in `practice.py`. Paste FINAL answers here for review.
 
 ---
 
-## Task 2: Identity Check — `iter(obj) is obj`
+## Task 1: Observe — Run These, Read the Output
 
-**Context:** Day 4 Task 8 Q2 — you answered D (`True`, `[1,2,3]`, `[1,2,3]`). The correct answer was A (`False`, `[1,2,3]`, `[1,2,3]`).
+No predictions yet. Just run each snippet in `practice.py` and write what you actually see printed.
 
-**Key rule:** When `__iter__` returns `self` → `iter(obj) is obj` is **True** (it's an iterator).
-When `__iter__` returns something else (like `iter(self.items)`) → `iter(obj) is obj` is **False** (it's an iterable, not an iterator).
-
-**Q1:** Predict `True` or `False`:
+**Snippet A:**
 ```python
-class Alpha:
-    def __init__(self):
-        self.data = [1, 2, 3]
-        self.i = 0
-    def __iter__(self):
-        return self
-    def __next__(self):
-        if self.i >= len(self.data): raise StopIteration
-        self.i += 1
-        return self.data[self.i - 1]
-
-a = Alpha()
-print(iter(a) is a)  # ?
-
-True
+import logging
+logging.warning("hello")
+```
+What did you see?
+```
+A:
 ```
 
-**Q2:** Predict `True` or `False`:
+**Snippet B:**
 ```python
-class Beta:
-    def __init__(self):
-        self.data = [1, 2, 3]
-    def __iter__(self):
-        return iter(self.data)
-
-b = Beta()
-print(iter(b) is b)  # ?
-
-False
+import logging
+logging.debug("hello")
+logging.info("hello")
+logging.warning("hello")
+```
+What did you see?
+```
+B:
 ```
 
-**Q3:** Predict `True` or `False`:
+**Snippet C:**
 ```python
-nums = [1, 2, 3]
-it = iter(nums)
-print(iter(it) is it)  # ?
-
-True
+import logging
+logging.basicConfig(level=logging.DEBUG)
+logging.debug("hello")
+logging.info("hello")
+logging.warning("hello")
+```
+What did you see?
+```
+C:
 ```
 
-**Q4:** Now the full Day 4 question — predict ALL THREE lines:
+**Snippet D — run this, read carefully:**
 ```python
-class Data:
-    def __init__(self):
-        self.items = [1, 2, 3]
-    def __iter__(self):
-        return iter(self.items)
-
-d = Data()
-it = iter(d)
-print(it is d)      # Line 1
-print(list(d))      # Line 2
-print(list(it))     # Line 3
-
-False
-[1, 2, 3]
-[1, 2, 3]
-
+import logging
+logging.basicConfig(level=logging.DEBUG)
+logging.basicConfig(level=logging.WARNING)  # second call
+logging.debug("hello")
+```
+What did you see?
+```
+D:
 ```
 
-**Your answers:**
+After running all four — answer these:
+1. What is the default output FORMAT (exactly what gets printed before your message)?
+2. What changed between B and C?
+3. What happened in D on the second `basicConfig()` call?
+
 ```
 Q1:
 Q2:
 Q3:
-Q4 Line 1:
-Q4 Line 2:
-Q4 Line 3:
 ```
 
 ---
 
-## Task 3: Resettable Iterators — `__iter__` Reset Pattern
+## Task 2: Observe — The Two Gates
 
-**Context:** Day 4 Task 7 Q1 — you answered C (`[0,1,2]` then `[]`). The correct answer was A (`[1,2,3]` then `[1,2,3]`). Two mistakes in one:
-1. Missed that `__next__` increments BEFORE returning (`current += 1; return current` yields 1, not 0)
-2. Missed that `__iter__` resets `self.current = 0`, making it reusable
+Run this in `practice.py` and record exactly what appears:
 
-**Q1:** Trace this carefully. What does `__next__` return on the FIRST call?
 ```python
-class Counter:
-    def __init__(self, max_val):
-        self.max_val = max_val
+import logging
+import sys
 
-    def __iter__(self):
-        self.current = 0
-        return self
+logger = logging.getLogger('gate_test')
+logger.setLevel(logging.DEBUG)          # Gate 1: Logger
 
-    def __next__(self):
-        if self.current >= self.max_val:
-            raise StopIteration
-        self.current += 1
-        return self.current
-```
-- When `list()` is called, Python calls `__iter__` first → `self.current = 0`
-- Then `__next__`: `current` is 0, check `0 >= 3`? No. Increment to 1. Return 1.
-- Then `__next__`: `current` is 1, check `1 >= 3`? No. Increment to 2. Return 2.
-- Continue tracing...
+handler = logging.StreamHandler(sys.stdout)
+handler.setLevel(logging.WARNING)       # Gate 2: Handler
+logger.addHandler(handler)
 
-What is `list(Counter(3))`?
-
-**Q2:** What happens on the SECOND `list()` call? Think about what `__iter__` does.
-```python
-c = Counter(3)
-print(list(c))  # ? [1, 2, 3]
-print(list(c))  # ? [1, 2, 3]
+logger.debug("debug")
+logger.info("info")
+logger.warning("warning")
+logger.error("error")
 ```
 
-**Q3:** Now compare — what if `__iter__` did NOT reset?
-```python
-class CounterNoReset:
-    def __init__(self, max_val):
-        self.max_val = max_val
-        self.current = 0
-
-    def __iter__(self):
-        return self  # NO reset!
-
-    def __next__(self):
-        if self.current >= self.max_val:
-            raise StopIteration
-        self.current += 1
-        return self.current
-
-c = CounterNoReset(3)
-print(list(c))  # ? [1, 2, 3]
-print(list(c))  # ? []
+What appeared?
+```
+Output:
 ```
 
-**Your answers:**
-```
-Q1: list(Counter(3)) = ?
+Now answer:
+**Q1:** `debug` and `info` passed Gate 1 (logger is DEBUG). Why didn't they appear?
+**Q2:** Change ONE line so that `info` also appears. Which line, and what to?
 
-Q2: First list() = ?  Second list() = ?
-
-Q3: First list() = ?  Second list() = ?
 ```
+Q1:
+Q2: Change line ___ from ___ to ___
+```
+
+Now run your change and confirm.
 
 ---
 
-## Task 4: `__name__` — Functions vs Variables vs @wraps
+## Task 3: Observe — The Singleton
 
-**Context:** Day 4 Task 8 Q4 — you answered C (`make_multiplier`). Correct was B (`multiplier`). Also Task 8 Q1 — you answered C (`Called wrapper`, `Called foo`). Correct was B (`Called foo` twice).
+Run this and record the output:
 
-**Rule:** `func.__name__` is the name from the `def` statement, NOT the variable it's assigned to. `@wraps` copies `__name__` from the original function to the wrapper.
-
-**Q1:** What is printed?
 ```python
-def outer():
-    def inner():
-        pass
-    return inner
+import logging
 
-f = outer()
-print(f.__name__)
-```
-- A) `outer`
-- B) `inner`
-- C) `f`
-- D) Error
+a = logging.getLogger('my_logger')
+b = logging.getLogger('my_logger')
+c = logging.getLogger('other_logger')
 
-B
-
-**Q2:** What is printed?
-```python
-def make_greeter(greeting):
-    def greeter(name):
-        return f"{greeting}, {name}!"
-    return greeter
-
-hello = make_greeter("Hello")
-print(hello.__name__)
-
-greeter
+print(a is b)
+print(a is c)
+print(id(a) == id(b))
 ```
 
-**Q3:** Now with `@wraps` — what is printed?
-```python
-from functools import wraps
-
-def decorator(func):
-    @wraps(func)
-    def wrapper(*args):
-        return func(*args)
-    return wrapper
-
-@decorator
-def add(a, b):
-    return a + b
-
-print(add.__name__)
-
-add
+Output:
+```
+a is b:
+a is c:
+id(a) == id(b):
 ```
 
-**Q4:** Stacked decorators with `@wraps` — the Day 4 question revisited:
-```python
-from functools import wraps
+**Q1:** In your own words: what does `getLogger('same_name')` do if that logger was already created?
 
-def trace(func):
-    @wraps(func)
-    def wrapper(*args):
-        print(f"Called {func.__name__}")
-        return func(*args)
-    return wrapper
+**Q2:** Why is this useful in a project with 10 modules all using `getLogger('engine')`?
 
-@trace
-@trace
-def foo(x):
-    return x * 2
-
-foo(5)
-
-
-Called foo, called foo
-```
-
-Trace the decoration process step by step:
-1. Inner `@trace` wraps `foo` → creates `wrapper` but `@wraps(func)` copies `foo.__name__` onto it → this wrapper's `__name__` = ?
-2. Outer `@trace` wraps that wrapper → `func` is now the inner wrapper → `func.__name__` = ? (thanks to @wraps)
-3. So what gets printed?
-
-**Your answers:**
 ```
 Q1:
 Q2:
-Q3:
-Q4 Step-by-step:
-  Inner wrapper __name__ = ?
-  Outer func.__name__ = ?
-  Output = ?
 ```
 
 ---
 
-## Task 5: Independent Generator Instances
+## Task 4: Predict, Then Verify
 
-**Context:** Day 4 Task 7 Q3 — you answered C (`1, 2, 1`). Correct was A (`1, 1, 2`). Each call to a generator FUNCTION creates a completely independent generator OBJECT.
+Now that you've observed the patterns — predict WITHOUT running first, then run to check.
 
-**Q1:** Predict the output:
+**Q1:** What appears?
 ```python
-def count():
-    yield 10
-    yield 20
-    yield 30
-
-a = count()
-b = count()
-print(next(a))
-print(next(b))
-print(next(a))
-
-
-10 10 20
+import logging
+logging.basicConfig(level=logging.INFO)
+logging.debug("a")
+logging.info("b")
+logging.warning("c")
+```
+Prediction:
+```
+Q1 prediction:
+```
+Run it. Were you right?
+```
+Q1 actual:
 ```
 
-**Q2:** Now compare with `iter()` on the same generator:
+**Q2:** What appears?
 ```python
-def count():
-    yield 10
-    yield 20
-    yield 30
+import logging
+import sys
 
-g = count()
-x = iter(g)
-y = iter(g)
-print(x is y)     # ?
-print(next(x))    # ?
-print(next(y))    # ?
+logger = logging.getLogger('predict')
+logger.setLevel(logging.ERROR)
 
-False
-10
-10
+handler = logging.StreamHandler(sys.stdout)
+handler.setLevel(logging.DEBUG)
+logger.addHandler(handler)
+
+logger.debug("1")
+logger.info("2")
+logger.warning("3")
+logger.error("4")
+logger.critical("5")
+```
+Prediction (which messages appear):
+```
+Q2 prediction:
+```
+Run it. Were you right?
+```
+Q2 actual:
 ```
 
-**Q3:** And with a list:
+**Q3:** What appears?
 ```python
-nums = [10, 20, 30]
-x = iter(nums)
-y = iter(nums)
-print(x is y)     # ?
-print(next(x))    # ?
-print(next(y))    # ?
+import logging
+import sys
 
-False
-10
-10
+logger = logging.getLogger('predict2')
+logger.setLevel(logging.DEBUG)
+
+handler = logging.StreamHandler(sys.stdout)
+handler.setLevel(logging.ERROR)
+logger.addHandler(handler)
+
+logger.debug("1")
+logger.warning("3")
+logger.error("4")
+```
+Prediction:
+```
+Q3 prediction:
+```
+Actual:
+```
+Q3 actual:
 ```
 
-**Quick rule recap:**
-- Calling `gen_func()` twice → two **independent** generators
-- Calling `iter(generator)` twice → **same** object (generators return self)
-- Calling `iter(list)` twice → two **independent** iterators
+---
 
-**Your answers:**
+## Task 5: Build From Scratch — Step by Step
+
+**Do each step separately. Run after each step to see the change.**
+
+**Step 1:** Create a logger named `'backtest'`. Set its level to `DEBUG`. Do NOT add any handlers yet. Call `logger.warning("test")`. What happens?
+```python
+# Step 1 code:
+
+# What happened:
 ```
-Q1:
 
-Q2:
+**Step 2:** Add a `StreamHandler` (stdout). Set its level to `DEBUG`. Add a basic `Formatter` with format `'[%(levelname)s] %(message)s'`. Attach it to the logger. Call `logger.warning("test")` again.
+```python
+# Step 2 code:
 
-Q3:
+# What changed:
+```
+
+**Step 3:** Add a `FileHandler` writing to `'test.log'`. Set it to `DEBUG`. Use the same formatter. Call `logger.debug("debug line")` and `logger.warning("warning line")`. Then open `test.log` and read it.
+```python
+# Step 3 code:
+
+# What appeared in console:
+# What appeared in test.log:
+```
+
+**Step 4:** Add the duplicate-handler guard from the lesson. Wrap everything in a function called `build_logger(name: str) -> logging.Logger`. Call it twice with the same name — confirm each call returns the same logger without adding duplicate handlers.
+```python
+# Step 4 — full build_logger() function:
 
 ```
 
 ---
 
-## Task 6: PCAP Simulation — Exam Pressure Round (6 Questions, 8 Minutes)
+## Task 6: PCAP Drill — The Four Gaps from Day 1
 
-**Instructions:** Time yourself. 8 minutes max. No running code. Trust your tracing.
+These are the exact concepts you got wrong yesterday. No running code.
 
-**Q1:** What is the output?
-```python
-class Seq:
-    def __init__(self, n):
-        self.n = n
-    def __iter__(self):
-        self.i = 0
-        return self
-    def __next__(self):
-        if self.i >= self.n:
-            raise StopIteration
-        self.i += 1
-        return self.i * 10
+**Q1:** What is the default output format when you call `logging.warning("price spike")` with no configuration?
+- A) `price spike`
+- B) `WARNING: price spike`
+- C) `WARNING:root:price spike`
+- D) `[WARNING] price spike`
 
-s = Seq(3)
-print(list(s))
-print(list(s))
-```
-- A) `[10, 20, 30]` then `[10, 20, 30]`
-- B) `[10, 20, 30]` then `[]`
-- C) `[0, 10, 20]` then `[0, 10, 20]`
-- D) `[0, 10, 20]` then `[]`
+**Q2:** Logger level = `DEBUG`. Handler level = `ERROR`. Which messages appear in the output?
+- A) All messages (DEBUG and above)
+- B) Only ERROR and CRITICAL
+- C) Nothing — conflicting levels cancel out
+- D) Only DEBUG
 
-A
+**Q3:** `logging.getLogger('engine')` is called in module A, then in module B. Which is true?
+- A) Two separate logger objects, each independently configured
+- B) The same logger object both times — loggers are singletons by name
+- C) Module B gets a copy of module A's logger
+- D) An error is raised on the second call
 
+**Q4:** What does `logging.exception("msg")` do that `logging.error("msg")` does NOT?
+- A) Raises an exception to stop execution
+- B) Logs at CRITICAL level instead of ERROR
+- C) Appends the current traceback to the log record
+- D) Nothing — they are identical
 
-**Q2:** What is the output?
-```python
-gen = (x * 2 for x in range(4))
-print(4 in gen)
-print(6 in gen)
-```
-- A) `True` `True`
-- B) `True` `False`
-- C) `False` `True`
-- D) `False` `False`
+**Q5:** What is the numeric value of `logging.WARNING`?
+- A) 20
+- B) 25
+- C) 30
+- D) 40
 
-A
-
-**Q3:** What is the output?
-```python
-def make_adder(x):
-    def adder(y):
-        return x + y
-    return adder
-
-add5 = make_adder(5)
-print(add5(3))
-print(add5.__name__)
-```
-- A) `8` `add5`
-- B) `8` `adder`
-- C) `8` `make_adder`
-- D) Error
-
-B
-
-**Q4:** What is the output?
-```python
-def gen():
-    yield 'a'
-    yield 'b'
-    yield 'c'
-
-g1 = gen()
-g2 = gen()
-print(next(g1))
-print(next(g1))
-print(next(g2))
-```
-- A) `a` `b` `c`
-- B) `a` `b` `a`
-- C) `a` `a` `a`
-- D) Error
-
-B
-
-**Q5:** What is the output?
-```python
-class Box:
-    def __init__(self, items):
-        self.items = items
-    def __iter__(self):
-        return iter(self.items)
-
-b = Box([10, 20, 30])
-it = iter(b)
-print(it is b)
-next(it)
-print(list(b))
-print(list(it))
-```
-- A) `False` `[10, 20, 30]` `[20, 30]`
-- B) `False` `[10, 20, 30]` `[10, 20, 30]`
-- C) `True` `[10, 20, 30]` `[20, 30]`
-- D) `True` `[20, 30]` `[20, 30]`
-
-A
-
-**Q6:** What is the output?
-```python
-from functools import wraps
-
-def log(func):
-    @wraps(func)
-    def wrapper(*args):
-        print(f"Running {func.__name__}")
-        return func(*args)
-    return wrapper
-
-@log
-@log
-def double(x):
-    return x * 2
-
-result = double(5)
-print(result)
-```
-- A) `Running double` `Running double` `10`
-- B) `Running wrapper` `Running double` `10`
-- C) `Running double` `10`
-- D) `Running double` `Running double` `20`
-
-A
-
-**Your answers:**
 ```
 Q1:
 Q2:
 Q3:
 Q4:
 Q5:
-Q6:
 ```
 
 ---
 
-## Task 7: Week 6 Cumulative — Concept Map
-
-**Fill in the blanks** (no code, just understanding):
-
-1. An **iterator** has both `next` and `iter` methods.
-
-2. An **iterable** has `next` but NOT necessarily `iter`.
-
-3. When `__iter__` returns `self`, the object is a `one-shot` (one-shot/reusable?).
-
-4. When `__iter__` uses `yield`, each call creates `an iterator`, making the object `reusable` (one-shot/reusable?).
-
-5. `iter(generator) is generator` evaluates to `True` because generators are `one-shot`.
-
-6. `iter(list) is list` evaluates to `False` because lists are `independent` not `dependent`.
-
-7. The `in` operator on a generator `yields` elements until it finds a match. Those consumed elements are `lost for later checks`.
-
-8. `func.__name__` reflects the name from the `def` statement, not the `outer function/wrapper or whatever` it's assigned to.
-
-9. `@wraps(func)` copies `function name` (and other metadata) from `func` to the wrapper.
-
-10. Calling a generator function 3 times creates `3` independent generator objects.
-
-**Your answers:**
-```
-1:
-2:
-3:
-4:
-5:
-6:
-7:
-8:
-9:
-10:
-```
-
----
-
-**Key Focus Areas for Today:**
-1. `in` on generators — sequential consumption (Task 1)
-2. `iter(obj) is obj` — identity tells you iterator vs iterable (Task 2)
-3. Resettable iterators — `__iter__` reset pattern (Task 3)
-4. `__name__` and `@wraps` stacking (Task 4)
-5. Independent generator instances (Task 5)
-6. Timed PCAP simulation (Task 6)
-7. Concept consolidation (Task 7)
-
-**Day 4 gaps targeted:**
-- Task 7 Q1 wrong (resettable iterator + increment-before-return) → Tasks 3, 6 Q1
-- Task 7 Q3 wrong (independent generators) → Task 5, 6 Q4
-- Task 8 Q1 wrong (@wraps stacking) → Task 4 Q4, 6 Q6
-- Task 8 Q2 wrong (iter identity) → Task 2, 6 Q5
-- Task 8 Q3 wrong (`in` on generators) → Task 1, 6 Q2
-- Task 8 Q4 wrong (closure `__name__`) → Task 4 Q1-Q2, 6 Q3
+**Today's Goal:**
+By the end of Task 5, you should be able to build a working logger from nothing — without looking at the lesson. If you can do that, Tasks 6 and the project integration tomorrow will make complete sense.

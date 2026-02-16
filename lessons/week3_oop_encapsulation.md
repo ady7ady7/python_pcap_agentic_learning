@@ -87,9 +87,20 @@ class Position:
 pos = Position()
 # print(pos.__secret_pnl)  # AttributeError! Name doesn't exist as-is
 print(pos._Position__secret_pnl)  # Works - but you're really trying hard to break it
+
+#IMPORTANT!!!!
+If you'd create an instance variable for a given class instance e.g.
+
+pos = Position()
+pos.__random_variable = 3 #THIS IS FULLY PERMISSIBLE AND POSSIBLE BTW!
+
+This __random_variable WOULDN'T BE NAME MANGLED.
+You could do print(pos.__random_variable) and get its value!
 ```
 
 **Name Mangling:** Python transforms `__name` to `_ClassName__name` to prevent accidental access/override in subclasses.
+
+
 
 ---
 

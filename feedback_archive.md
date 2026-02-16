@@ -3045,3 +3045,52 @@ IOError (alias for OSError)
 
 ---
 
+
+## Week 7, Day 1 — 2026-02-16
+
+**Topic:** The `logging` Module — Fundamentals to Project Integration
+**Score:** 62% on answered tasks (Tasks 6 & 7 fully excused) | **Time:** 60 minutes
+
+---
+
+### Assessment
+
+| Task | Score | Notes |
+|------|-------|-------|
+| 1 — Level predictions | 2/3 | Swapped ERROR(40)/CRITICAL(50); missed default format includes `WARNING:root:` prefix |
+| 2 — Theory | 2/3 | Correct on source identification; missed logger singleton (same name = same object) |
+| 3 — Two-stage filtering | 1/3 | Mental model not yet formed — guessed rather than traced |
+| 4 — setup_logger() | 8/10 | Correct structure; missing duplicate-handler guard (`if logger.handlers: return logger`) |
+| 5 — logging vs warnings | 2.5/3 | Q1/Q2 correct; Q3 ambiguous answer |
+| 6 — PROJECT | excused | Premature — project integration before mental model formed |
+| 7 — PROJECT | excused | Same reason |
+| 8 — PCAP simulation | 2/5 | Two-stage filtering (Q3), exception() misconception (Q4), singleton (Q5) |
+
+**Raw score on answered tasks: ~62%**
+
+---
+
+### Key Corrections
+
+- **ERROR=40, CRITICAL=50** — not swapped. Full table: DEBUG=10, INFO=20, WARNING=30, ERROR=40, CRITICAL=50
+- **Default output format** without basicConfig: `WARNING:root:message` — not bare text
+- **Logger singleton** — `getLogger('same_name')` returns the same global object every time
+- **Two-gate rule** — message must pass BOTH logger level AND handler level. Stricter gate always wins
+- **`logging.exception()`** — does NOT raise. Logs at ERROR AND appends traceback. Use only inside except blocks
+
+---
+
+### Student Feedback & Action Taken
+
+Tasks 6/7 correctly refused as premature. Student requested scaffolded approach with WHAT/WHY/HOW structure and testable examples. Lesson rewritten accordingly (PART 1–7 structure). Day 2 tasks follow the stepped approach: observe → predict → build → test.
+
+---
+
+### Gaps for Day 2
+
+1. Two-stage filtering (Tasks 3 and 8 Q3)
+2. Logger singleton/registry (Task 2 Q3 and Task 8 Q5)
+3. `logging.exception()` vs `logging.error()` (Task 8 Q4)
+4. Default output format with `WARNING:root:` prefix (Task 1 Q1)
+
+---

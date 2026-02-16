@@ -922,3 +922,460 @@ line = line.strip()  # 'hello' (use strip() to remove)
 8. **`f.read()`** reads entire file, **`f.readline()`** reads ONE line
 9. **`f.writelines()`** does NOT add newlines automatically
 10. **`'w'` mode TRUNCATES** existing files - use `'a'` to append
+
+---
+
+---
+
+# Week 7: The `logging` Module
+
+---
+
+## PART 1 — WHY does `logging` exist?
+
+You already know `print()`. So why learn another tool?
+
+Run this in `practice.py` and look at the output:
+
+```python
+print("Trade opened")
+print("SL hit")
+print("Trade opened")
+print("Prices: 100, 101, 99, 98, 97, 96...")  # 500 of these
+```
+
+**The problem:** After two weeks of running backtests, you have 5000 `print()` lines filling your terminal. Now you want to find only the SL hits. You can't filter. You don't know when they happened. You can't turn off the price noise without deleting code. You can't write it to a file without rewriting everything.
+
+**`logging` solves all of this** by separating three concerns:
+1. **What** to record (the message + severity level)
+2. **Where** to send it (console, file, both, neither)
+3. **How** to format it (with or without timestamps, names, etc.)
+
+Each concern is handled by a separate object. That's why the API feels unfamiliar at first — it has moving parts by design.
+
+---
+
+## PART 2 — The Three Objects You Need to Know
+
+Before any code: understand these three things conceptually.
+
+### The Logger
+**WHAT it is:** The object your code talks to. You call `logger.info("msg")` or `logger.warning("msg")`. The Logger decides: is this message important enough to forward? (based on its level threshold). If yes, it passes the message to its Handlers.
+
+**Analogy:** The Logger is your receptionist. You give it a message. It checks if the message is urgent enough to bother anyone. If yes, it passes it on.
+
+### The Handler
+**WHAT it is:** The object that actually *delivers* the message somewhere. A `StreamHandler` prints to the console. A `FileHandler` writes to a file. One Logger can have multiple Handlers — so the same message can go to both console AND file simultaneously.
+
+**Analogy:** The Handler is the delivery person. The receptionist (Logger) hands them the message, and they deliver it to the destination (console, file, etc.). You can have multiple delivery people for the same message.
+
+### The Formatter
+**WHAT it is:** The object that controls what the final text looks like. Without a Formatter, you get bare text. With one, you get timestamps, severity labels, file names, etc.
+
+**Analogy:** The Formatter is the envelope template. It decides whether the message arrives as `"SL hit"` or `"2026-02-16 14:23:01 [WARNING ] engine: SL hit"`.
+
+### The Flow — All Together
+
+```
+Your code calls:  logger.warning("SL hit")
+                        │
+                   Logger checks:
+                   Is WARNING >= my level threshold?
+                        │
+                   YES → passes to Handler(s)
+                        │
+                   Handler checks:
+                   Is WARNING >= MY level threshold?
+                        │
+                   YES → applies Formatter → sends to destination
+```
+
+**This two-gate system is the most important concept in this lesson.**
+
+---
+
+## PART 3 — Start Minimal, Build Up
+
+### Step 0: The zero-config case
+
+Run this and observe:
+
+```python
+import logging
+
+logging.debug("debug message")
+logging.info("info message")
+logging.warning("warning message")
+logging.error("error message")
+```
+
+**Expected output:**
+```
+WARNING:root:warning message
+ERROR:root:error message
+```
+
+**Why only two lines?** Python has a default threshold of WARNING. `debug` and `info` are silenced. The format `WARNING:root:warning message` is Python's built-in last-resort format: `LEVEL:logger_name:message`. The logger name is `root` because we used the global `logging` module directly.
+
+**Key insight:** You did NOT need to configure anything. Logging works out of the box for WARNING and above. This is intentional — a library you import shouldn't flood your console with debug noise unless you ask for it.
+
+---
+
+### Step 1: Change the threshold with `basicConfig()`
+
+```python
+import logging
+
+logging.basicConfig(level=logging.DEBUG)
+
+logging.debug("debug message")
+logging.info("info message")
+logging.warning("warning message")
+```
+
+**Expected output:**
+```
+DEBUG:root:debug message
+INFO:root:info message
+WARNING:root:warning message
+```
+
+`basicConfig()` configures the **root logger** (the global one). Now all five levels are visible.
+
+**The one-shot rule:** `basicConfig()` only works if the root logger has NO handlers yet. Call it once, at the start of your script. Any subsequent call is silently ignored.
+
+```python
+logging.basicConfig(level=logging.DEBUG)   # ← this one takes effect
+logging.basicConfig(level=logging.WARNING) # ← this is silently ignored
+logging.debug("hello")  # still appears — first call won
+```
+
+---
+
+### Step 2: Add a timestamp with `basicConfig()`
+
+```python
+import logging
+
+logging.basicConfig(
+    level=logging.DEBUG,
+    format='%(asctime)s [%(levelname)s] %(message)s',
+    datefmt='%H:%M:%S',
+)
+
+logging.info("Price stream started")
+logging.warning("SL hit for AAPL")
+```
+
+**Expected output:**
+```
+14:23:01 [INFO] Price stream started
+14:23:01 [WARNING] SL hit for AAPL
+```
+
+You control the format with placeholders. The useful ones:
+
+| Placeholder | Produces |
+|-------------|----------|
+| `%(asctime)s` | Timestamp |
+| `%(levelname)s` | `DEBUG`, `INFO`, `WARNING`, etc. |
+| `%(message)s` | Your actual message |
+| `%(name)s` | The logger's name |
+| `%(filename)s` | The source .py file |
+| `%(lineno)d` | Line number |
+
+---
+
+### Step 3: Named loggers — why not just use `logging.warning()` everywhere?
+
+`logging.warning("msg")` uses the root logger. That's fine for a single script. In a project with 10 files, you lose track of where messages come from.
+
+```python
+import logging
+
+# In engine/backtest.py:
+logger = logging.getLogger('engine.backtest')
+logger.warning("SL hit")
+
+# Output (with basicConfig):
+# WARNING:engine.backtest:SL hit
+```
+
+Now you know the message came from `engine.backtest`, not `strategies.moving_average`.
+
+**The standard pattern:**
+```python
+logger = logging.getLogger(__name__)
+```
+
+`__name__` is automatically the full module path (`algo_backtest.engine.backtest`). This is the professional standard — use it in every module.
+
+**The singleton rule:** `logging.getLogger('same_name')` always returns the **exact same object**. Loggers are stored in a global registry. This means:
+- Call `getLogger('engine')` in module A and module B → same logger
+- Configure it once (in `main.py`) → affects all code using that logger name
+- No need to pass logger objects around as parameters
+
+---
+
+### Step 4: Handlers — multiple destinations
+
+Here is where the Logger/Handler split pays off.
+
+**Scenario:** You want WARNING and above on the console (so you notice problems), but DEBUG and above in a log file (for detailed post-run analysis).
+
+```python
+import logging
+import sys
+
+logger = logging.getLogger('trading')
+logger.setLevel(logging.DEBUG)       # Logger gate: pass everything
+
+# Console handler — only WARNING and above
+console = logging.StreamHandler(sys.stdout)
+console.setLevel(logging.WARNING)
+
+# File handler — everything from DEBUG up
+file_h = logging.FileHandler('backtest.log', mode='a')
+file_h.setLevel(logging.DEBUG)
+
+# Formatter
+fmt = logging.Formatter('%(asctime)s [%(levelname)-8s] %(name)s: %(message)s')
+console.setFormatter(fmt)
+file_h.setFormatter(fmt)
+
+# Attach handlers to the logger
+logger.addHandler(console)
+logger.addHandler(file_h)
+
+# Now use it:
+logger.debug("tick: AAPL 150.23")    # → file only
+logger.info("position opened")        # → file only
+logger.warning("SL approaching")      # → console AND file
+logger.error("position close failed") # → console AND file
+```
+
+**The two-gate rule visualised:**
+
+```
+logger.debug("tick: AAPL 150.23")
+    │
+    Logger gate: DEBUG(10) >= DEBUG(10)? YES → passes on
+    │
+    ├── Console gate: DEBUG(10) >= WARNING(30)? NO → blocked
+    └── File gate:    DEBUG(10) >= DEBUG(10)? YES → written to file
+
+logger.warning("SL approaching")
+    │
+    Logger gate: WARNING(30) >= DEBUG(10)? YES → passes on
+    │
+    ├── Console gate: WARNING(30) >= WARNING(30)? YES → printed
+    └── File gate:    WARNING(30) >= DEBUG(10)? YES → written to file
+```
+
+**Critical insight:** If the Logger's level is stricter than any Handler's level, the Handler's permissiveness doesn't matter — the message never reaches it. The Logger is always the first gate.
+
+---
+
+### Step 5: How to test your logger
+
+This is what was missing from Day 1. Run this directly in `practice.py`:
+
+```python
+import logging
+import sys
+
+# --- Build a logger from scratch ---
+logger = logging.getLogger('test_logger')
+logger.setLevel(logging.DEBUG)
+
+handler = logging.StreamHandler(sys.stdout)
+handler.setLevel(logging.DEBUG)
+handler.setFormatter(logging.Formatter('[%(levelname)s] %(name)s: %(message)s'))
+logger.addHandler(handler)
+
+# --- Test every level ---
+logger.debug("This is DEBUG")
+logger.info("This is INFO")
+logger.warning("This is WARNING")
+logger.error("This is ERROR")
+logger.critical("This is CRITICAL")
+```
+
+**Expected output:**
+```
+[DEBUG   ] test_logger: This is DEBUG
+[INFO    ] test_logger: This is INFO
+[WARNING ] test_logger: This is WARNING
+[ERROR   ] test_logger: This is ERROR
+[CRITICAL] test_logger: This is CRITICAL
+```
+
+If you see all five lines: your logger + handler + formatter are working.
+
+**Test the two-gate filter:**
+```python
+# Change handler level to WARNING — DEBUG and INFO should disappear
+handler.setLevel(logging.WARNING)
+
+logger.debug("should NOT appear")
+logger.info("should NOT appear")
+logger.warning("SHOULD appear")
+```
+
+**Test the singleton:**
+```python
+a = logging.getLogger('test_logger')
+b = logging.getLogger('test_logger')
+print(a is b)  # True — same object
+```
+
+---
+
+## PART 4 — The Five Levels
+
+Every log call has a severity. You choose which one based on what the message means:
+
+| Level | Numeric | Use when... |
+|-------|---------|-------------|
+| `DEBUG` | 10 | Detailed trace: "tick received: AAPL 150.23" |
+| `INFO` | 20 | Normal event: "position opened", "backtest complete" |
+| `WARNING` | 30 | Unexpected but recoverable: "SL not set", "price data gap" |
+| `ERROR` | 40 | Operation failed: "can't close position", "file not found" |
+| `CRITICAL` | 50 | System can't continue: "database unreachable", "config missing" |
+
+The numeric values matter for PCAP: **10, 20, 30, 40, 50**.
+
+---
+
+## PART 5 — `logging` vs `warnings` (PCAP Trap)
+
+These are two completely separate Python modules that happen to have overlapping names:
+
+```python
+import logging
+import warnings
+
+# logging.warning() — part of the logging system
+# → Produces a log record at WARNING level
+# → Goes through Logger → Handler → output destination
+# → Does NOT raise anything
+logging.warning("SL not set on position")
+
+# warnings.warn() — Python's built-in deprecation/advisory system
+# → Triggers a Python Warning (like a lightweight exception)
+# → By default prints to stderr once
+# → Can be filtered, turned into errors, or silenced
+# → Used by library authors to say "this usage is deprecated"
+warnings.warn("This method will be removed in v2", DeprecationWarning)
+```
+
+**When to use which:**
+- In your running application (trade opened, SL hit, price spike) → `logging.warning()`
+- In a library, to tell developers their usage is outdated → `warnings.warn()`
+
+**PCAP pattern:** If the question says `logging.warning()` → it logs a record, nothing more. No exceptions raised.
+
+---
+
+## PART 6 — `basicConfig()` vs Manual Setup
+
+Two valid approaches depending on context:
+
+### Approach 1: `basicConfig()` — for simple scripts
+
+```python
+import logging
+
+logging.basicConfig(
+    level=logging.DEBUG,
+    format='%(asctime)s [%(levelname)s] %(message)s',
+)
+logging.info("Script started")
+```
+
+**When to use:** Quick scripts, notebooks, throwaway code. One call, done.
+
+**Limitation:** Can't have different levels for console vs file. Once called, can't be changed.
+
+### Approach 2: Manual setup — for projects
+
+```python
+import logging
+import sys
+
+def setup_logging(level: int = logging.INFO) -> None:
+    root = logging.getLogger()
+    root.setLevel(level)
+
+    fmt = logging.Formatter('%(asctime)s [%(levelname)-8s] %(name)s: %(message)s')
+
+    console = logging.StreamHandler(sys.stdout)
+    console.setFormatter(fmt)
+    root.addHandler(console)
+
+# Call once in main.py before anything else
+setup_logging(level=logging.DEBUG)
+```
+
+Then in every module:
+```python
+# algo_backtest/engine/backtest.py
+import logging
+
+logger = logging.getLogger(__name__)   # No configuration here — just get the logger
+
+class BacktestEngine:
+    def open_position(self, ...):
+        ...
+        logger.info("Position opened: %s %s @ %.2f", side, ticker, price)
+```
+
+**Why `%s` not f-strings?** Lazy evaluation. With `%s`, the string is only formatted if the message actually gets emitted. With f-strings, the string is always built — even if DEBUG is filtered out and nobody ever sees it.
+
+---
+
+## PART 7 — PCAP Traps Summary
+
+1. **Default level is WARNING** — `debug()` and `info()` produce no output without configuration
+2. **Default output format** is `LEVEL:logger_name:message` — not bare text
+3. **`basicConfig()` is one-shot** — second call is silently ignored (no error)
+4. **Level numbers: DEBUG=10, INFO=20, WARNING=30, ERROR=40, CRITICAL=50**
+5. **Two-gate rule** — logger level AND handler level must both pass. Stricter one always wins
+6. **`getLogger('same_name')` → same object** — loggers are global singletons by name
+7. **`logging.warning()` ≠ `warnings.warn()`** — different modules, different mechanisms
+8. **`logging.exception()`** — logs at ERROR level AND appends current traceback automatically. Use only inside `except` blocks
+9. **`FileHandler` default mode is `'a'`** (append)
+10. **`%s` preferred over f-strings** in log calls for lazy evaluation
+
+---
+
+## Quick Reference
+
+```python
+import logging
+import sys
+
+# ── Minimal (scripts) ──────────────────────────────────────────
+logging.basicConfig(level=logging.DEBUG, format='%(levelname)s: %(message)s')
+logging.warning("something unexpected")
+
+# ── Manual (projects) ──────────────────────────────────────────
+logger = logging.getLogger(__name__)          # get/create named logger
+logger.setLevel(logging.DEBUG)
+
+handler = logging.StreamHandler(sys.stdout)   # where output goes
+handler.setLevel(logging.DEBUG)               # handler's own filter
+handler.setFormatter(
+    logging.Formatter('%(asctime)s [%(levelname)s] %(name)s: %(message)s')
+)
+logger.addHandler(handler)
+
+# ── Log calls ──────────────────────────────────────────────────
+logger.debug("detailed trace")
+logger.info("normal event")
+logger.warning("unexpected but ok")
+logger.error("operation failed")
+logger.critical("system down")
+logger.exception("error with traceback")   # inside except only
+```
+

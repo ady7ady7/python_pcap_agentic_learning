@@ -137,13 +137,14 @@ This directory contains all theoretical lessons organized by week and topic.
 
 ## Week 5: datetime, File I/O & Decorators
 
-### [Standard Library, datetime & File I/O](week3_5_stdlib_fileio.md)
+### [Standard Library, datetime, File I/O & Logging](week3_5_7_stdlib_fileio.md)
 - datetime module: `strftime` (format), `strptime` (parse), `timedelta`
 - File modes: `'w'` (write), `'a'` (append), `'r'` (read), `'x'` (exclusive create)
 - File read methods: `read()`, `readline()`, `readlines()`
 - Context managers (`with` statement)
 - Decorators: simple, with arguments, stacking, `@wraps`
-- **PCAP Traps:** File cursor position, `%y` vs `%Y`, decorator stacking order
+- **Week 7 — `logging` module:** levels (DEBUG/INFO/WARNING/ERROR/CRITICAL), `basicConfig()`, named loggers, handlers, formatters, hierarchy, propagation
+- **PCAP Traps:** File cursor position, `%y` vs `%Y`, decorator stacking order, `basicConfig()` one-shot, default WARNING level, `logging` vs `warnings`
 
 ---
 
@@ -163,7 +164,21 @@ This directory contains all theoretical lessons organized by week and topic.
 
 ---
 
-## Week 7-8: Advanced Topics (Planned)
+## Week 7: Standard Library & Logging
+
+### [Standard Library, datetime, File I/O & Logging](week3_5_7_stdlib_fileio.md) *(see Week 5 entry above — extended)*
+- `logging` module fundamentals
+- Five log levels: DEBUG(10), INFO(20), WARNING(30), ERROR(40), CRITICAL(50)
+- `basicConfig()`, named loggers, `StreamHandler`, `FileHandler`
+- Formatters and format string placeholders
+- Logger hierarchy and propagation
+- `logging.warning()` vs `warnings.warn()`
+- Project integration: adding logging to BacktestEngine
+- **PCAP Traps:** default WARNING level, basicConfig one-shot, numeric level values, lazy `%s` formatting
+
+---
+
+## Week 8: Exam Crunch & Documentation (Planned)
 
 *Topics will be added as we progress through the course*
 
