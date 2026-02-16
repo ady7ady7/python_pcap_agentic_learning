@@ -1605,3 +1605,130 @@ Valid complaint. `__new__` is on the PCAP syllabus but I hadn't introduced it in
 Strong performance. Decorator understanding has improved significantly from Week 4 (where stacking was 0%) to Week 5 (simple decorators at 100%). Complex stacking still needs work but the foundation is there.
 
 **Week 6 Focus:** Generators & Iterators, continued decorator scaffolding
+
+---
+
+## Week 6 Exam A - 2026-02-15
+
+**Time Taken:** 18 minutes (Start: 9:16, Finish: 9:34)
+**Score:** 25/30 (83%)
+**Result:** ✅ PASS (70% required)
+**Grade:** B+
+
+### Question Analysis
+
+| Q | Answer | Correct | Topic |
+|---|--------|---------|-------|
+| 1 | B | ✅ | Resettable iterator (decrement before return) |
+| 2 | A | ✅ | `in` on generator — consumes elements |
+| 3 | B | ✅ | yield-in-__iter__ → reusable iterable |
+| 4 | C | ✅ | Named tuple immutability (AttributeError) |
+| 5 | B | ✅ | Closure __name__ |
+| 6 | A | ✅ | iter(iterator) is iterator → True |
+| 7 | A | ❌ | **__new__ wrong type**: type(obj) reflects actual returned object → `<class 'int'>` not `<class 'Weird'>` |
+| 8 | B | ✅ | Generator return value → StopIteration.value, not in list |
+| 9 | A | ✅ | MRO / super() chaining |
+| 10 | A | ✅ | yield from |
+| 11 | D | ✅ | `in` on generator — True/False/False |
+| 12 | A | ✅ | Stacked @wraps decorators |
+| 13 | A | ✅ | try/except/finally order |
+| 14 | A | ✅ | iter(iterable) is not iterable → False |
+| 15 | C | ✅ | String slicing (exam design flaw — A and C were identical) |
+| 16 | C | ✅ | Independent generators |
+| 17 | A | ✅ | Named tuple index + name access + isinstance |
+| 18 | B | ✅ | filter() even numbers |
+| 19 | A | ✅ | Resettable Stepper iterator |
+| 20 | B | ✅ | ABC + unimplemented abstract method → TypeError |
+| 21 | B | ✅ | List iterator sees appended elements |
+| 22 | B | ✅ | Class variable shared across instances |
+| 23 | B | ✅ | nonlocal accumulation |
+| 24 | A | ❌ | **Iterable vs Iterator**: "every iterable is an iterator" is False. Every ITERATOR is an iterable (B). |
+| 25 | A | ❌ | **%y vs %Y**: `%y` = 2-digit (26), `%Y` = 4-digit (2026). Answer was B. |
+| 26 | B | ✅ | Property without setter → AttributeError |
+| 27 | B | ❌ | **iter(generator) is same object**: both `it1` and `it2` are `gen` → True, next(it2) = 1 not 0 |
+| 28 | A | ❌ | **del name vs sys.modules**: `del math` removes local binding, NOT from sys.modules. Both True. |
+| 29 | B | ✅ | Generator exhaustion + StopIteration caught |
+| 30 | D | ✅ | Generator expressions use () not [] |
+
+### Gaps Identified
+- `type(obj)` after `__new__` returns different type — reflects actual returned object's type
+- Iterable vs Iterator direction (still)
+- `%y` (2-digit) vs `%Y` (4-digit) — pure memorization
+- `iter(generator) is generator` — **3rd occurrence across sessions**
+- `del name` does not remove from sys.modules
+
+---
+
+## Week 6 Exam B - 2026-02-15
+
+**Time Taken:** N/A
+**Score:** 24/30 (80%)
+**Result:** ✅ PASS (70% required)
+**Grade:** B
+
+### Question Analysis
+
+| Q | Answer | Correct | Topic |
+|---|--------|---------|-------|
+| 1 | B | ✅ | iter(iterable) is not iterable → False |
+| 2 | C | ❌ | **yield from string**: strings are iterable, yield from 'abc' yields 'a','b','c'. Not an error. |
+| 3 | C | ✅ | next() on list → TypeError |
+| 4 | A | ✅ | Stacked @wraps + prefix accumulation |
+| 5 | D | ❌ | **Singleton with __new__**: super().__new__(cls) is valid. No error. a is b → True. |
+| 6 | B | ✅ | `in` on generator — True/False/False |
+| 7 | D | ❌ | **_replace() on namedtuple**: creates NEW tuple, doesn't mutate original. Not an error. |
+| 8 | B | ✅ | Late binding trap (all print 2) |
+| 9 | D | ❌ | **Resettable iterator after break**: __iter__ resets on second for loop → prints 0 1 2, not empty |
+| 10 | A | ✅ | Polymorphism with map |
+| 11 | A | ✅ | next(it, default) on exhausted iterator |
+| 12 | B | ✅ | isinstance + issubclass |
+| 13 | A | ✅ | Independent generators (different functions) |
+| 14 | A | ✅ | String slicing reverse + range |
+| 15 | A | ✅ | _fields (tuple) + _asdict() |
+| 16 | A | ✅ | __new__ sets attribute, __init__ also runs (returns Doubler instance) |
+| 17 | B | ✅ | Decorator without @wraps → wrapper.__name__ = 'wrapper' |
+| 18 | A | ✅ | filter + map chaining |
+| 19 | B | ✅ | __iter__ returns self, no reset → exhausted after first list() |
+| 20 | C | ✅ | File append mode |
+| 21 | B | ✅ | nonlocal accumulation |
+| 22 | A | ✅ | __getitem__ enables `in` operator |
+| 23 | B | ❌ | **Two separate generators are NOT the same object**: gen1 is gen2 → False. iter(gen3) is gen3 → True. Answer A. |
+| 24 | B | ✅ | datetime + timedelta crossing midnight |
+| 25 | B | ✅ | __str__ vs __repr__ inheritance |
+| 26 | B | ✅ | next(g, default) on exhausted generator |
+| 27 | B | ✅ | reduce with initial value: 10+1+2+3+4 = 20 |
+| 28 | C | ✅ | False statement: __init__ does NOT run if __new__ returns wrong type |
+| 29 | A | ✅ | yield-in-__iter__ → independent iterators per call |
+| 30 | D | ❌ | **map() is an iterator**: next() works on map objects. type = 'map', next = 'ALICE', remaining = ['BOB','CHARLIE'] |
+
+### Gaps Identified
+- `yield from` on strings (valid — strings are iterable)
+- `__new__` / Singleton pattern — mistakenly flagged as error
+- `_replace()` on namedtuple — mistakenly flagged as error (it creates a copy)
+- Resettable iterator under exam pressure — knew it in Task 3, missed it here
+- Two separate generators are not the same object (gen1 is gen2 → False)
+- `map()` is an iterator — next() is valid on it
+
+---
+
+## Week 6 Weekend — Combined Summary
+
+| Exam | Score | Time |
+|------|-------|------|
+| Exam A | 25/30 (83%) | 18 min |
+| Exam B | 24/30 (80%) | N/A |
+| **Combined** | **49/60 (81.7%)** | |
+
+### Critical Recurring Gap
+**`iter(generator) is generator`** has been wrong in Day 5 Task 5, Exam A Q27, and Exam B Q23 — three separate occasions. Rule: generators return `self` from `__iter__`, so `iter(gen) is gen` is always True. Two calls to `iter(gen)` give the same object with a shared position counter.
+
+### New Items to Learn for Week 7
+- `%y` = 2-digit year, `%Y` = 4-digit year
+- `del name` removes binding; `del sys.modules['name']` removes from cache
+- `yield from iterable` works on strings, tuples, sets, ranges — anything iterable
+- `map()` and `filter()` return iterators — `next()` is valid on them
+- `_replace()` on namedtuple creates a new object (immutable ≠ no-copy-modification)
+
+### Readiness Assessment
+Both exams passed comfortably above 70%. Core Week 6 content (iterators, generators, yield from, namedtuples, __new__) is solid in isolation. Remaining issue is one persistent identity-check gap. Ready for Week 7.
+

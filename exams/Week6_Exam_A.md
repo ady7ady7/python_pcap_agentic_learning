@@ -10,7 +10,7 @@
 - No running code — predict outputs mentally
 
 
-#Start
+#Start 9:16
 
 ---
 
@@ -37,6 +37,7 @@ print(list(c))
 - D) `[2, 1]`
 
 **Your answer:**
+B
 
 ---
 
@@ -52,6 +53,7 @@ print(16 in gen)
 - D) `False` `False`
 
 **Your answer:**
+A
 
 ---
 
@@ -75,6 +77,7 @@ print(list(r))
 - D) Error
 
 **Your answer:**
+B
 
 ---
 
@@ -93,6 +96,7 @@ print(p)
 - D) `(10, 4)`
 
 **Your answer:**
+C
 
 ---
 
@@ -113,6 +117,7 @@ print(log.__name__)
 - D) Error
 
 **Your answer:**
+B
 
 ---
 
@@ -128,6 +133,7 @@ print(iter(it) is it)
 - D) `None`
 
 **Your answer:**
+A
 
 ---
 
@@ -150,6 +156,7 @@ print(type(obj))
 - D) Error
 
 **Your answer:**
+A
 
 ---
 
@@ -169,6 +176,7 @@ print(list(g))
 - D) Error
 
 **Your answer:**
+B
 
 ---
 
@@ -195,6 +203,7 @@ print(c.x, c.y)
 - D) Error — `super()` doesn't chain
 
 **Your answer:**
+A
 
 ---
 
@@ -214,6 +223,7 @@ print(len(result))
 - D) Error
 
 **Your answer:**
+A
 
 ---
 
@@ -230,6 +240,7 @@ print(3 in gen)
 - D) `True` `False` `False`
 
 **Your answer:**
+D
 
 ---
 
@@ -257,6 +268,7 @@ print(value.__name__)
 - D) `6` `wrapper`
 
 **Your answer:**
+A
 
 ---
 
@@ -277,6 +289,7 @@ finally:
 - D) `caught` `general` `done`
 
 **Your answer:**
+A
 
 ---
 
@@ -301,6 +314,7 @@ print(list(it))
 - D) `True` `[20, 30]` `[20, 30]`
 
 **Your answer:**
+A
 
 ---
 
@@ -316,6 +330,8 @@ print(text[-6:-1])
 - D) `World!` `World`
 
 **Your answer:**
+C
+
 
 ---
 
@@ -338,6 +354,7 @@ print(next(g2))
 - D) Error
 
 **Your answer:**
+C
 
 ---
 
@@ -357,6 +374,7 @@ print(isinstance(t, tuple))
 - D) Error
 
 **Your answer:**
+A
 
 ---
 
@@ -372,6 +390,7 @@ print(result)
 - D) `[1, 2, 3, 4, 5]`
 
 **Your answer:**
+B
 
 ---
 
@@ -404,6 +423,7 @@ print(list(s))
 - D) `[0, 3, 6, 9]` then Error
 
 **Your answer:**
+A
 
 ---
 
@@ -429,6 +449,7 @@ print(c.r)
 - D) `None`
 
 **Your answer:**
+B
 
 ---
 
@@ -445,6 +466,7 @@ print(list(it))
 - D) Error
 
 **Your answer:**
+B
 
 ---
 
@@ -466,6 +488,7 @@ print(a1.count, A.count)
 - D) `0 3`
 
 **Your answer:**
+B
 
 ---
 
@@ -489,6 +512,7 @@ print(f())
 - D) Error
 
 **Your answer:**
+B
 
 ---
 
@@ -499,6 +523,7 @@ print(f())
 - D) Generators are iterables but not iterators
 
 **Your answer:**
+A
 
 ---
 
@@ -515,6 +540,7 @@ print(dt.strftime('%y-%m-%d'))
 - D) Error
 
 **Your answer:**
+A
 
 ---
 
@@ -538,6 +564,7 @@ obj.value = 100
 - D) `42` then `None`
 
 **Your answer:**
+B
 
 ---
 
@@ -556,6 +583,7 @@ print(next(it2))
 - D) `False` `0` `1`
 
 **Your answer:**
+B
 
 ---
 
@@ -577,6 +605,7 @@ print(check())
 - D) `False` `False`
 
 **Your answer:**
+A
 
 ---
 
@@ -601,6 +630,7 @@ except StopIteration:
 - D) `1` `2` `3`
 
 **Your answer:**
+B
 
 ---
 
@@ -611,6 +641,9 @@ except StopIteration:
 - D) Generator expressions must use square brackets `[]`
 
 **Your answer:**
+D
+
+#End 9;34
 
 ---
 

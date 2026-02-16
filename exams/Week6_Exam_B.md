@@ -10,7 +10,7 @@
 - No running code — predict outputs mentally
 
 
-#Start
+#Start 11:03
 
 ---
 
@@ -33,6 +33,7 @@ print(next(it))
 - D) `False` Error
 
 **Your answer:**
+B
 
 ---
 
@@ -50,7 +51,8 @@ print(list(pipeline())[:5])
 - C) Error — can't yield from string
 - D) `['a', 'b', 'c', 1, 2]` (set order may vary, but first 5 are deterministic)
 
-**Your answer:**
+**Your answer:** 
+C
 
 ---
 
@@ -65,6 +67,7 @@ print(next(nums))
 - D) `None`
 
 **Your answer:**
+C
 
 ---
 
@@ -92,6 +95,7 @@ print(greet.__name__)
 - D) `>> Hello, Bob` `wrapper`
 
 **Your answer:**
+A
 
 ---
 
@@ -116,6 +120,7 @@ print(type(a))
 - D) Error
 
 **Your answer:**
+D
 
 ---
 
@@ -132,6 +137,7 @@ print(4 in gen)
 - D) `True` `False` `False`
 
 **Your answer:**
+B
 
 ---
 
@@ -152,6 +158,7 @@ print(c is c2)
 - D) Error — namedtuples are immutable
 
 **Your answer:**
+D
 
 ---
 
@@ -171,6 +178,7 @@ print(funcs[2]())
 - D) Error
 
 **Your answer:**
+B
 
 ---
 
@@ -202,6 +210,7 @@ for x in c:
 - D) Nothing (empty)
 
 **Your answer:**
+D
 
 ---
 
@@ -229,6 +238,7 @@ print(result)
 - D) `['Woof', 'Meow', None]`
 
 **Your answer:**
+A
 
 ---
 
@@ -248,6 +258,7 @@ print(next(it, 'default'))
 - D) `0` `1` `5`
 
 **Your answer:**
+A
 
 ---
 
@@ -272,6 +283,7 @@ print(issubclass(B, C))
 - D) `False` `False`
 
 **Your answer:**
+B
 
 ---
 
@@ -298,6 +310,7 @@ print(next(b))
 - D) Error
 
 **Your answer:**
+A
 
 ---
 
@@ -313,6 +326,7 @@ print(s[1:4])
 - D) `Python` `yth`
 
 **Your answer:**
+A
 
 ---
 
@@ -331,6 +345,7 @@ print(dict(p._asdict()))
 - D) Error — `_fields` is private
 
 **Your answer:**
+A
 
 ---
 
@@ -355,6 +370,7 @@ print(d.original)
 - D) Error
 
 **Your answer:**
+A
 
 ---
 
@@ -377,6 +393,7 @@ print(hello.__name__)
 - D) Error
 
 **Your answer:**
+B
 
 ---
 
@@ -392,6 +409,7 @@ print(result)
 - D) `[True, True, True]`
 
 **Your answer:**
+A
 
 ---
 
@@ -422,6 +440,7 @@ print(list(obj))
 - D) Error
 
 **Your answer:**
+B
 
 ---
 
@@ -442,6 +461,7 @@ with open('test.txt', 'r') as f:
 - D) Error
 
 **Your answer:**
+C
 
 ---
 
@@ -466,6 +486,7 @@ print(counter(2))
 - D) Error — can't modify enclosing variable
 
 **Your answer:**
+B
 
 ---
 
@@ -492,6 +513,8 @@ print(20 in ml)
 - D) `3` `20` `False`
 
 **Your answer:**
+A
+
 
 ---
 
@@ -511,6 +534,7 @@ print(gen3 is it)
 - D) `True` `False`
 
 **Your answer:**
+B
 
 ---
 
@@ -528,6 +552,7 @@ print(dt2.strftime('%Y-%m-%d %H:%M'))
 - D) Error
 
 **Your answer:**
+B
 
 ---
 
@@ -553,6 +578,7 @@ print(repr(c))
 - D) `Child` Error
 
 **Your answer:**
+B
 
 ---
 
@@ -573,6 +599,7 @@ print(next(g, 'z'))
 - D) Error — generators don't support default
 
 **Your answer:**
+B
 
 ---
 
@@ -590,6 +617,7 @@ print(result)
 - D) Error — lambda defined before import
 
 **Your answer:**
+B
 
 ---
 
@@ -600,6 +628,7 @@ print(result)
 - D) `__new__` is responsible for creating the instance
 
 **Your answer:**
+C
 
 ---
 
@@ -625,6 +654,7 @@ print(next(it1))
 - D) `1` `1` `2`
 
 **Your answer:**
+A
 
 ---
 
@@ -644,6 +674,7 @@ print(remaining)
 - D) Error — can't call `next()` on map
 
 **Your answer:**
+D
 
 ---
 
