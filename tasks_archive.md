@@ -1230,3 +1230,26 @@ Task 8 expected values were wrong. Correct: 4 winners, $1050 total PnL.
 
 ---
 
+## Week 7, Day 2 - 2026-02-17
+
+**Topic:** `logging` — Observe, Predict, Build (Scaffolded)
+**Score:** 88% (B+) | **Time:** 50 minutes | **Difficulty:** 5/10
+
+**Tasks:**
+1. Observe 4 snippets — default format, basicConfig threshold, one-shot rule (3/3)
+2. Two-gate filtering — observe and fix (2.5/3)
+3. Singleton confirmed empirically with `is` and `id()` (3/3)
+4. Predict then verify — all three two-gate scenarios correct (3/3)
+5. Build from scratch step by step — Steps 1-3 correct; Step 4 had 3 bugs, self-corrected (8/10)
+6. PCAP drill on Day 1 gaps — 4/5 (logging.exception() still wrong)
+
+**Key Wins:**
+- Two-gate mental model formed and applied correctly under prediction pressure
+- Built working logger (StreamHandler + FileHandler + Formatter) without lesson reference
+- Three Day 1 gaps closed: default format, two-gate rule, logger singleton
+
+**Remaining Gap:**
+- `logging.exception()` — does NOT raise; logs at ERROR + appends traceback (2nd occurrence)
+
+---
+

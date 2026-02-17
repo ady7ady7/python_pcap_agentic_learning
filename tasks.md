@@ -1,297 +1,107 @@
-# Week 7, Day 2 - Tuesday
-## Topic: `logging` — Observe, Predict, Build
+# Week 7, Day 3 - Wednesday
+## Topic: `logging` — Closing Gaps + Project Integration
 
-**Date:** 2026-02-17
+**Date:** 2026-02-18
 
-**Target Difficulty:** 4/10
+**Target Difficulty:** 5/10
 
-**Lesson Reference:** `lessons/week3_5_7_stdlib_fileio.md` → Week 7 section (PART 1–7)
-
-**Today's approach:** Run first, understand what you see. Then predict. Then build from scratch.
+**Lesson Reference:** `lessons/week3_5_7_stdlib_fileio.md` → Week 7 section
 
 **Remember:** Work in `practice.py`. Paste FINAL answers here for review.
 
 ---
 
-## Task 1: Observe — Run These, Read the Output
+## Task 1: Close the Gap — `logging.exception()`
 
-No predictions yet. Just run each snippet in `practice.py` and write what you actually see printed.
+This is the one concept that has been wrong twice. Fix it today.
 
-**Snippet A:**
-```python
-import logging
-logging.warning("hello")
-```
-What did you see?
-```
-A:
-```
-
-**Snippet B:**
-```python
-import logging
-logging.debug("hello")
-logging.info("hello")
-logging.warning("hello")
-```
-What did you see?
-```
-B:
-```
-
-**Snippet C:**
-```python
-import logging
-logging.basicConfig(level=logging.DEBUG)
-logging.debug("hello")
-logging.info("hello")
-logging.warning("hello")
-```
-What did you see?
-```
-C:
-```
-
-**Snippet D — run this, read carefully:**
-```python
-import logging
-logging.basicConfig(level=logging.DEBUG)
-logging.basicConfig(level=logging.WARNING)  # second call
-logging.debug("hello")
-```
-What did you see?
-```
-D:
-```
-
-After running all four — answer these:
-1. What is the default output FORMAT (exactly what gets printed before your message)?
-2. What changed between B and C?
-3. What happened in D on the second `basicConfig()` call?
-
-```
-Q1:
-Q2:
-Q3:
-```
-
----
-
-## Task 2: Observe — The Two Gates
-
-Run this in `practice.py` and record exactly what appears:
+**Run this in `practice.py` and read the output carefully:**
 
 ```python
 import logging
 import sys
 
-logger = logging.getLogger('gate_test')
-logger.setLevel(logging.DEBUG)          # Gate 1: Logger
-
-handler = logging.StreamHandler(sys.stdout)
-handler.setLevel(logging.WARNING)       # Gate 2: Handler
-logger.addHandler(handler)
-
-logger.debug("debug")
-logger.info("info")
-logger.warning("warning")
-logger.error("error")
-```
-
-What appeared?
-```
-Output:
-```
-
-Now answer:
-**Q1:** `debug` and `info` passed Gate 1 (logger is DEBUG). Why didn't they appear?
-**Q2:** Change ONE line so that `info` also appears. Which line, and what to?
-
-```
-Q1:
-Q2: Change line ___ from ___ to ___
-```
-
-Now run your change and confirm.
-
----
-
-## Task 3: Observe — The Singleton
-
-Run this and record the output:
-
-```python
-import logging
-
-a = logging.getLogger('my_logger')
-b = logging.getLogger('my_logger')
-c = logging.getLogger('other_logger')
-
-print(a is b)
-print(a is c)
-print(id(a) == id(b))
-```
-
-Output:
-```
-a is b:
-a is c:
-id(a) == id(b):
-```
-
-**Q1:** In your own words: what does `getLogger('same_name')` do if that logger was already created?
-
-**Q2:** Why is this useful in a project with 10 modules all using `getLogger('engine')`?
-
-```
-Q1:
-Q2:
-```
-
----
-
-## Task 4: Predict, Then Verify
-
-Now that you've observed the patterns — predict WITHOUT running first, then run to check.
-
-**Q1:** What appears?
-```python
-import logging
-logging.basicConfig(level=logging.INFO)
-logging.debug("a")
-logging.info("b")
-logging.warning("c")
-```
-Prediction:
-```
-Q1 prediction:
-```
-Run it. Were you right?
-```
-Q1 actual:
-```
-
-**Q2:** What appears?
-```python
-import logging
-import sys
-
-logger = logging.getLogger('predict')
-logger.setLevel(logging.ERROR)
-
+logger = logging.getLogger('exc_test')
+logger.setLevel(logging.DEBUG)
 handler = logging.StreamHandler(sys.stdout)
 handler.setLevel(logging.DEBUG)
 logger.addHandler(handler)
 
-logger.debug("1")
-logger.info("2")
-logger.warning("3")
-logger.error("4")
-logger.critical("5")
-```
-Prediction (which messages appear):
-```
-Q2 prediction:
-```
-Run it. Were you right?
-```
-Q2 actual:
+try:
+    result = 1 / 0
+except ZeroDivisionError:
+    logger.error("error() call")
+    logger.exception("exception() call")
 ```
 
-**Q3:** What appears?
+**Q1:** Write down exactly what appeared for `logger.error()` vs `logger.exception()`. What is the difference in output?
+
+**Q2:** Does `logger.exception()` raise anything or stop execution?
+
+**Q3:** At what log level does `logger.exception()` emit its record — DEBUG, INFO, WARNING, ERROR, or CRITICAL?
+
+**Q4 (PCAP-style, no code):** When is `logger.exception()` appropriate to use?
+- A) Anywhere you want to log at ERROR level
+- B) Only inside `except` blocks, where a traceback exists to capture
+- C) Only for CRITICAL errors that stop the program
+- D) As a replacement for `raise`
+
+```
+Q1 — difference in output:
+
+Q2:
+
+Q3:
+
+Q4:
+```
+
+---
+
+## Task 2: PCAP Simulation — logging (Full Set)
+
+No running code. 5 minutes max.
+
+**Q1:** What is printed?
 ```python
 import logging
-import sys
-
-logger = logging.getLogger('predict2')
-logger.setLevel(logging.DEBUG)
-
-handler = logging.StreamHandler(sys.stdout)
-handler.setLevel(logging.ERROR)
-logger.addHandler(handler)
-
-logger.debug("1")
-logger.warning("3")
-logger.error("4")
+logging.error("problem")
 ```
-Prediction:
-```
-Q3 prediction:
-```
-Actual:
-```
-Q3 actual:
-```
+- A) Nothing — no handler configured
+- B) `ERROR:root:problem`
+- C) `problem`
+- D) Raises an error
 
----
+**Q2:** Logger level = `WARNING`. Handler level = `DEBUG`. A `logger.info("msg")` call is made. What happens?
+- A) Message appears — handler is DEBUG so it passes
+- B) Message is blocked — logger gate is WARNING, info(20) < warning(30)
+- C) Message appears but with a warning prefix
+- D) RuntimeError is raised
 
-## Task 5: Build From Scratch — Step by Step
+**Q3:** What is the numeric value of `logging.CRITICAL`?
+- A) 40
+- B) 45
+- C) 50
+- D) 60
 
-**Do each step separately. Run after each step to see the change.**
+**Q4:** Which statement is true about `logging.basicConfig()`?
+- A) Can be called multiple times to update configuration
+- B) Only the first call takes effect; subsequent calls are silently ignored
+- C) Raises a RuntimeError if called twice
+- D) The last call always wins
 
-**Step 1:** Create a logger named `'backtest'`. Set its level to `DEBUG`. Do NOT add any handlers yet. Call `logger.warning("test")`. What happens?
+**Q5:** What does this produce?
 ```python
-# Step 1 code:
-
-# What happened:
+import logging
+logging.basicConfig(level=logging.WARNING)
+logging.info("a")
+logging.warning("b")
+logging.error("c")
 ```
-
-**Step 2:** Add a `StreamHandler` (stdout). Set its level to `DEBUG`. Add a basic `Formatter` with format `'[%(levelname)s] %(message)s'`. Attach it to the logger. Call `logger.warning("test")` again.
-```python
-# Step 2 code:
-
-# What changed:
-```
-
-**Step 3:** Add a `FileHandler` writing to `'test.log'`. Set it to `DEBUG`. Use the same formatter. Call `logger.debug("debug line")` and `logger.warning("warning line")`. Then open `test.log` and read it.
-```python
-# Step 3 code:
-
-# What appeared in console:
-# What appeared in test.log:
-```
-
-**Step 4:** Add the duplicate-handler guard from the lesson. Wrap everything in a function called `build_logger(name: str) -> logging.Logger`. Call it twice with the same name — confirm each call returns the same logger without adding duplicate handlers.
-```python
-# Step 4 — full build_logger() function:
-
-```
-
----
-
-## Task 6: PCAP Drill — The Four Gaps from Day 1
-
-These are the exact concepts you got wrong yesterday. No running code.
-
-**Q1:** What is the default output format when you call `logging.warning("price spike")` with no configuration?
-- A) `price spike`
-- B) `WARNING: price spike`
-- C) `WARNING:root:price spike`
-- D) `[WARNING] price spike`
-
-**Q2:** Logger level = `DEBUG`. Handler level = `ERROR`. Which messages appear in the output?
-- A) All messages (DEBUG and above)
-- B) Only ERROR and CRITICAL
-- C) Nothing — conflicting levels cancel out
-- D) Only DEBUG
-
-**Q3:** `logging.getLogger('engine')` is called in module A, then in module B. Which is true?
-- A) Two separate logger objects, each independently configured
-- B) The same logger object both times — loggers are singletons by name
-- C) Module B gets a copy of module A's logger
-- D) An error is raised on the second call
-
-**Q4:** What does `logging.exception("msg")` do that `logging.error("msg")` does NOT?
-- A) Raises an exception to stop execution
-- B) Logs at CRITICAL level instead of ERROR
-- C) Appends the current traceback to the log record
-- D) Nothing — they are identical
-
-**Q5:** What is the numeric value of `logging.WARNING`?
-- A) 20
-- B) 25
-- C) 30
-- D) 40
+- A) `b` and `c` only (bare text)
+- B) `INFO:root:a`, `WARNING:root:b`, `ERROR:root:c`
+- C) `WARNING:root:b` and `ERROR:root:c`
+- D) Nothing — basicConfig requires a format string
 
 ```
 Q1:
@@ -303,5 +113,105 @@ Q5:
 
 ---
 
-**Today's Goal:**
-By the end of Task 5, you should be able to build a working logger from nothing — without looking at the lesson. If you can do that, Tasks 6 and the project integration tomorrow will make complete sense.
+## Task 3: PROJECT — Read `BacktestEngine` First
+
+Before writing anything, read the existing code.
+
+Open `algo_backtest/engine/backtest.py`. Answer these questions about what's already there:
+
+**Q1:** What methods does `BacktestEngine` currently have? List them.
+
+**Q2:** What does `open_position()` do step by step?
+
+**Q3:** Where does a `Trade` get created? (Which method, at what point?)
+
+```
+Q1 — methods:
+
+Q2 — open_position() steps:
+
+Q3 — Trade creation:
+```
+
+---
+
+## Task 4: PROJECT — Add Logging to `BacktestEngine`
+
+Now that you've read the code and understand it, add logging.
+
+**Rules:**
+1. Add `import logging` at the top of the file
+2. Add `logger = logging.getLogger(__name__)` at module level (outside the class)
+3. Use `%s` / `%.2f` style — NOT f-strings
+4. Do NOT add `basicConfig()` inside the file
+5. Type hints must stay intact
+
+**What to log:**
+- `open_position()`: log at INFO when a position is opened — include side, ticker, entry price, position_id
+- `process_price()`: log at DEBUG each time it's called — include ticker and price
+- In `process_price()`, when a Trade closes: log at INFO — include ticker, pnl, exit reason
+
+**Paste the full modified file here** (not just the methods — the whole file so I can review it in context):
+
+```python
+# Task 4 — algo_backtest/engine/backtest.py with logging added
+
+```
+
+---
+
+## Task 5: PROJECT — Wire Up Logging in `main.py`
+
+Now configure logging at the application entry point.
+
+**Read `main.py` first.** Then add a `setup_logging()` function at the top that:
+1. Gets the root logger
+2. Sets level to `logging.DEBUG`
+3. Adds a `StreamHandler` to stdout with format: `%(asctime)s [%(levelname)-8s] %(name)s: %(message)s`
+4. Is called once before any backtest logic runs
+
+**Paste only the `setup_logging()` function and the call site:**
+
+```python
+# Task 5 — setup_logging() function and where it's called in main.py
+
+```
+
+**Then run `main.py` and paste 3-5 lines of actual log output you see:**
+
+```
+Actual output:
+
+```
+
+---
+
+## Task 6: PCAP Warm-up — `logging` vs `warnings` + Levels
+
+**Q1:** Which correctly logs a WARNING-level record?
+- A) `warnings.warn("msg", logging.WARNING)`
+- B) `logging.warn("msg")`  ← note: `warn` not `warning`
+- C) `logging.warning("msg")`
+- D) `log.warning("msg")`
+
+**Q2:** `logging.warn()` exists in Python but is deprecated. What does it do?
+- A) Nothing — it raises DeprecationWarning
+- B) Same as `logging.warning()` but prints a deprecation notice
+- C) Logs at INFO level
+- D) Raises AttributeError
+
+**Q3:** A module calls `logging.getLogger(__name__)`. The module is `algo_backtest.engine.backtest`. Which logger name is created?
+- A) `backtest`
+- B) `engine.backtest`
+- C) `algo_backtest.engine.backtest`
+- D) `__name__`
+
+```
+Q1:
+Q2:
+Q3:
+```
+
+---
+
+**Today's goal:** One remaining gap closed (Task 1). Two-gate and singleton solid from yesterday. Project integration done on your own terms — you understand the tool now, so adding it to real code should feel natural.

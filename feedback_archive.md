@@ -3094,3 +3094,42 @@ Tasks 6/7 correctly refused as premature. Student requested scaffolded approach 
 4. Default output format with `WARNING:root:` prefix (Task 1 Q1)
 
 ---
+
+## Week 7, Day 2 — 2026-02-17
+
+**Topic:** `logging` — Observe, Predict, Build (Scaffolded)
+**Score:** 88% (B+) | **Time:** 50 minutes | **Difficulty:** 5/10 (appropriate)
+
+---
+
+### Assessment
+
+| Task | Score | Notes |
+|------|-------|-------|
+| 1 — Observe (4 snippets) | 3/3 | All outputs correct; explanations solid |
+| 2 — Two gates | 2.5/3 | Output + fix correct; Q1 explanation slightly passive ("logger just receives") — both gates are active filters |
+| 3 — Singleton | 3/3 | True/False/True correct; explanations on-point |
+| 4 — Predict then verify | 3/3 | All three predictions correct; Q2/Q3 explanations show two-gate understanding |
+| 5 — Build from scratch | 8/10 | Steps 1-3 correct; Step 4 had 3 bugs (logging.info vs logging.INFO, guard always-True, addHandler takes 1 arg) — all self-corrected after feedback |
+| 6 — PCAP drill | 4/5 | Q1-Q3 Q5 correct (Day 1 gaps closed); Q4 still wrong: logging.exception() appends traceback, does NOT raise |
+
+**Total: ~88%**
+
+---
+
+### Key Wins
+
+- Two-gate filtering now understood and applied correctly under prediction pressure
+- Logger singleton confirmed by running `a is b` — concept is now empirical, not abstract
+- Built a full logger (StreamHandler + FileHandler + Formatter) from scratch without looking at lesson
+- Three Day 1 gaps fully closed: default format, two-gate rule, singleton
+
+### Remaining Gap
+
+**`logging.exception()`** — wrong for second session. Answer is C (appends traceback), not A (raises). Use only inside `except` blocks. It logs at ERROR level AND adds the traceback below automatically.
+
+### Student Feedback
+
+"Way better and smoother experience than yesterday — 5/10 difficulty, appropriately scaffolded." Concepts of Logger vs Handler vs Formatter now understood functionally. Verified self-corrections on Task 5 bugs after assessment.
+
+---
