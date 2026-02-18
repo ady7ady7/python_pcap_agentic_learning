@@ -166,6 +166,15 @@ This directory contains all theoretical lessons organized by week and topic.
 
 ## Week 7: Standard Library & Logging
 
+### [Introspection & Reflection](week7_introspection_reflection.md)
+- Introspection vs Reflection — examine vs manipulate at runtime
+- `__dict__` — instance attribute registry (instance vs class `__dict__`)
+- `getattr()`, `setattr()`, `hasattr()`, `delattr()` — dynamic attribute access
+- `isinstance()` vs `type()` — subclass-aware vs exact type check
+- `dir()` — full name discovery (vs `__dict__`)
+- Practical patterns: safe access, dynamic config, attribute filtering
+- **PCAP Traps:** `__dict__` instance-only, `getattr` default, `isinstance` includes subclasses, `dir` vs `__dict__`
+
 ### [Standard Library, datetime, File I/O & Logging](week3_5_7_stdlib_fileio.md) *(see Week 5 entry above — extended)*
 - `logging` module fundamentals
 - Five log levels: DEBUG(10), INFO(20), WARNING(30), ERROR(40), CRITICAL(50)

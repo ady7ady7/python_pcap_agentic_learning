@@ -1,8 +1,8 @@
-# Daily Feedback - Week 7, Day 3
+# Daily Feedback - Week 7, Day 4
 
-**Date:** 2026-02-18
+**Date:** 2026-02-19
 
-**Topic:** `logging` — Closing Gaps + Project Integration
+**Topic:** PCAP Crunch — Exceptions, Strings, Closures + logging.exception() Final Fix
 
 ---
 

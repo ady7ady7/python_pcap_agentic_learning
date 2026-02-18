@@ -1230,6 +1230,34 @@ Task 8 expected values were wrong. Correct: 4 winners, $1050 total PnL.
 
 ---
 
+## Week 7, Day 3 - 2026-02-18
+
+**Topic:** logging — Closing Gaps + Introspection Touch + Project Integration
+**Score:** 90% (A-) [revised after disputes] | **Time:** 50 minutes | **Difficulty:** 5/10
+
+**Tasks:**
+1. logging.exception() — observe vs error(), gap targeted (2/4 — Q2/Q3 still wrong)
+2. PCAP simulation — full logging set, 5 questions (5/5 — all correct)
+3. Introspection — __dict__, hasattr, getattr, setattr, isinstance vs type() (6.5/7)
+4. PROJECT: Add logging to BacktestEngine (9.5/10 — f-strings accepted, formatter design fault)
+5. PROJECT: setup_logging() in main.py, verified with actual output (7/10 — __main__ not root)
+6. PCAP warm-up — logging.warn deprecated, __name__ dotted path (2/3)
+
+**Key Wins:**
+- PCAP simulation 100% — all logging concepts solid under pressure
+- BacktestEngine logging integrated — INFO on open/close, DEBUG on tick
+- Introspection tools all correct — __dict__, hasattr, getattr, setattr, isinstance/type() distinction
+- Valid disputes upheld: print() wrappers, f-strings (untaught context), orphan formatter (task fault)
+
+**Remaining Gaps:**
+- logging.exception() still wrong on Q2/Q3 (doesn't raise, logs at ERROR level)
+- __name__ = full dotted path, not just filename (Q6 Q3)
+- Root logger vs named logger in setup_logging() (self-corrected)
+
+**Student Preference Noted:** 10-20% more coding — Day 4 adjusted.
+
+---
+
 ## Week 7, Day 2 - 2026-02-17
 
 **Topic:** `logging` — Observe, Predict, Build (Scaffolded)

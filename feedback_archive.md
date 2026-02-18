@@ -3133,3 +3133,44 @@ Tasks 6/7 correctly refused as premature. Student requested scaffolded approach 
 "Way better and smoother experience than yesterday — 5/10 difficulty, appropriately scaffolded." Concepts of Logger vs Handler vs Formatter now understood functionally. Verified self-corrections on Task 5 bugs after assessment.
 
 ---
+
+## Week 7, Day 3 — 2026-02-18
+
+**Topic:** logging — Closing Gaps + Introspection Touch + Project Integration
+**Score:** 90% (A-) [revised after valid disputes] | **Time:** 50 minutes | **Difficulty:** 5/10
+
+---
+
+### Assessment
+
+| Task | Score | Notes |
+|------|-------|-------|
+| 1 — logging.exception() | 2/4 | Q1 observed correctly; Q2 wrong (doesn't raise/stop); Q3 wrong (logs at ERROR not separate sphere); Q4 correct |
+| 2 — PCAP simulation | 5/5 | All correct — two-gate, levels, basicConfig one-shot all solid |
+| 3 — Introspection | 6.5/7 | All correct; print() wrappers accepted (valid verification); Q4 minor: default should be 0.0 not string |
+| 4 — BacktestEngine logging | 9.5/10 | Structure correct; f-strings in message bodies accepted (not taught with object attrs); orphan formatter was task design fault |
+| 5 — setup_logging() | 7/10 | Works; __main__ logger used instead of root — BacktestEngine messages won't propagate. Self-corrected after feedback. |
+| 6 — PCAP warm-up | 2/3 | Q1/Q2 correct; Q3 wrong: __name__ = full dotted path, not just filename |
+
+**Total: ~90% (A-)**
+
+---
+
+### Key Corrections
+
+- **logging.exception()**: logs at ERROR (40), does NOT raise, does NOT stop. Appends traceback only. Must be locked in for exam.
+- **Root logger**: `logging.getLogger()` (no args) = root. Configure root in setup_logging() so all child loggers inherit via propagation.
+- **__name__ in modules**: full dotted import path — `algo_backtest.engine.backtest`, not `backtest`.
+- **%s vs f-strings in log calls**: covered properly in Day 4 with practice.
+
+### Disputes Upheld
+
+- Task 3 prints: valid verification technique during learning
+- Task 4 f-strings: not taught with object attributes — teaching point not a deduction
+- Task 4 orphan formatter: task instruction was contradictory — student correctly flagged it
+
+### Student Preference
+
+Wants ~10-20% more coding. Day 4 adjusted with one extra coding task.
+
+---
