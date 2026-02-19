@@ -1190,7 +1190,7 @@ logger.setLevel(logging.DEBUG)
 
 handler = logging.StreamHandler(sys.stdout)
 handler.setLevel(logging.DEBUG)
-handler.setFormatter(logging.Formatter('[%(levelname)s] %(name)s: %(message)s'))
+handler.setFormatter(logging.Formatter('[%(levelname)s] %(name)s: %(message)s')) #Inaczej level błędu - INFO/DEBUG ITD. / PLIK / MSG
 logger.addHandler(handler)
 
 # --- Test every level ---
@@ -1378,4 +1378,55 @@ logger.error("operation failed")
 logger.critical("system down")
 logger.exception("error with traceback")   # inside except only
 ```
+
+---
+
+## PART 8 — `%s` in Log Calls vs `%(name)s` in Formatters
+
+These look similar but are **completely different mechanisms**. This trips everyone up.
+
+### Formatter placeholders — `%(name)s` with parentheses
+
+Used only when defining a `Formatter`. These pull metadata about the log record:
+
+```python
+logging.Formatter('%(asctime)s [%(levelname)s] %(name)s: %(message)s')
+#                  ^^^^^^^^^^^  ^^^^^^^^^^^^^  ^^^^^^^^  ^^^^^^^^^^^
+#                  timestamp    level string   logger    your message
+```
+
+You cannot use these in your actual log call — they are only for the Formatter template.
+
+### Log call placeholders — `%s`, `%d`, `%.2f`
+
+Used in the **message string** passed to `logger.info()`, `logger.warning()` etc. They work exactly like old-style Python string formatting (`'hello %s' % value`):
+
+```python
+# Syntax: logger.level("template with %s", value1, value2, ...)
+logger.info("Position opened: %s %s @ %.2f", side, ticker, price)
+logger.warning("Bad value: %s (expected int)", bad_input)
+logger.error("Division failed: %s / %s", a, b)
+logger.debug("Processing %d ticks for %s", count, ticker)
+```
+
+**Why this syntax and not f-strings?**
+
+With f-strings, the string is *always* built — even if the message level is filtered out and nobody ever sees it:
+```python
+# Always builds the string, even if DEBUG is silenced:
+logger.debug(f"Tick {price:.2f} for {ticker}")
+
+# Lazy — string only built if the message passes both gates:
+logger.debug("Tick %.2f for %s", price, ticker)
+```
+
+For high-frequency log calls (like per-tick DEBUG messages), lazy evaluation is a real performance win.
+
+**In practice — both work.** f-strings are readable and fine for most project code. The `%s` style is the logging module's native convention and appears in PCAP questions. Know both.
+
+| Style | Syntax | Notes |
+|-------|--------|-------|
+| f-string | `logger.info(f"result={x}")` | Readable, always evaluated |
+| `%s` | `logger.info("result=%s", x)` | Lazy, logging convention |
+| Formatter | `'%(levelname)s: %(message)s'` | Metadata only, not for log calls |
 

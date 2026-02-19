@@ -1230,6 +1230,35 @@ Task 8 expected values were wrong. Correct: 4 winners, $1050 total PnL.
 
 ---
 
+## Week 7, Day 4 - 2026-02-19
+
+**Topic:** PCAP Crunch — Exceptions, Strings, Closures + logging.exception() Final Fix
+**Score:** 95% (A) [revised after disputes] | **Time:** 70 minutes | **Difficulty:** 6/10
+
+**Tasks:**
+1. logging.exception() observe + answer — gap finally closed (3/3 revised)
+2. safe_divide() with logging — ValueError not caught in caller; f-strings accepted (9/10)
+3. Exception order predictions — all 3 correct after review (3/3 revised)
+4. parse_trade_log() string processing — perfect implementation (10/10)
+5. Closure/nonlocal predictions — all 4 correct including late-binding lambda (4/4)
+6. @log_calls decorator — working; missing `raise` after exception(); f-strings accepted (9/10)
+7. PCAP simulation 8 questions — 6/8; wrong on raise "error" (TypeError not SyntaxError) and reading closure vars (B not D)
+
+**Key Wins:**
+- logging.exception() gap closed: logs at ERROR + appends traceback, does NOT raise/stop
+- parse_trade_log() clean and professional
+- All closure/late-binding predictions correct
+- Teaching gap acknowledged: %s in log calls never taught explicitly — lesson updated
+
+**Remaining PCAP gaps:**
+- `raise "string"` → TypeError at runtime, not SyntaxError (T7 Q2)
+- Reading outer vars in closures doesn't need nonlocal (T7 Q5) — knows in practice, missed in theory
+- Missing `raise` after `logger.exception()` in decorator (T6)
+
+**Lesson Updated:** `%s` in log calls vs `%(name)s` in Formatters — new PART 8 added to lesson file.
+
+---
+
 ## Week 7, Day 3 - 2026-02-18
 
 **Topic:** logging — Closing Gaps + Introspection Touch + Project Integration

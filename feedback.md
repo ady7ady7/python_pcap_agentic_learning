@@ -1,8 +1,8 @@
-# Daily Feedback - Week 7, Day 4
+# Daily Feedback - Week 7, Day 5
 
-**Date:** 2026-02-19
+**Date:** 2026-02-20
 
-**Topic:** PCAP Crunch — Exceptions, Strings, Closures + logging.exception() Final Fix
+**Topic:** Week 7 Review + PCAP Crunch — Full Simulation
 
 ---
 
@@ -14,10 +14,10 @@
 
 ## Self-Reflection
 
-**What clicked today:**
+**What clicked this week:**
 
 
-**What's still unclear:**
+**What's still shaky:**
 
 
 ---
