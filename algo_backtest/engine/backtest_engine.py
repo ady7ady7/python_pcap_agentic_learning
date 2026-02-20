@@ -1,8 +1,13 @@
 from typing import List
 from datetime import datetime
+import logging
 from algo_backtest.engine.position import Position
 from algo_backtest.engine.trade import Trade
 from algo_backtest.engine.position_manager import PositionManager
+
+
+logger = logging.getLogger(__name__)
+fmt = logging.Formatter('[%(asctime)s] [%(levelname)s]: %(message)s')
 
 
 class BacktestEngine:
@@ -42,6 +47,7 @@ class BacktestEngine:
         
         position = Position(ticker, side, entry, quantity, stop_loss, take_profit)
         self.position_manager.add_position(position)
+        logger.info(f'Position {self.position_manager.position.position_id}: {position.side} {position.ticker} @ {position.entry}')
         return position
         
     
@@ -62,6 +68,7 @@ class BacktestEngine:
         """
         
         closed_positions = self.position_manager.close_triggered_positions(ticker, current_price)
+        logger.debug(f'Processing price for {ticker} at ${current_price}')
         newly_closed_trades = []
         for position in closed_positions:
             exit_reason = position.should_close(current_price)[1]
@@ -73,6 +80,7 @@ class BacktestEngine:
                           current_price, 
                           position.quantity,
                           exit_reason = exit_reason)
+            logger.info(f'Position {trade.position_id} @ {trade.ticker} closed with {trade.pnl} as a {exit_reason}')
             newly_closed_trades.append(trade)
             self.completed_trades.append(trade)
             

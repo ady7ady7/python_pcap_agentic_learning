@@ -1310,3 +1310,24 @@ Task 8 expected values were wrong. Correct: 4 winners, $1050 total PnL.
 
 ---
 
+
+## Week 7, Day 5 - 2026-02-20
+
+**Topic:** Week 7 Review + PCAP Full Simulation
+**Score:** 83% (B) | **Time:** 45 minutes | **Difficulty:** 6/10
+
+**Tasks Completed:**
+1. Quick-fire gap closers (no code) — 2/4 (raise "string" and nonlocal-for-reading still wrong)
+2. safe_divide() corrected — both bugs fixed, all three call paths demonstrated
+3. audit_object() introspection utility — correct logic, but printed instead of returning dict
+4. Predict + Fix two PCAP traps — exception order correct; decorator bug misdiagnosed
+5. make_validator() closure factory — 10/10, clean implementation
+6. PCAP Full Simulation (10 questions) — 7/10 (Q2 iter(generator), Q9 __name__ wrong)
+
+**Persistent Gaps Entering Weekend:**
+- iter(generator) is generator → True (5th+ occurrence)
+- __name__ = full dotted path when imported (3rd occurrence)
+- raise "string" → TypeError at runtime (2nd occurrence)
+- Reading outer variable in closure needs no nonlocal (3rd+ occurrence)
+
+---

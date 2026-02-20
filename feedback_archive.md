@@ -3174,3 +3174,152 @@ Tasks 6/7 correctly refused as premature. Student requested scaffolded approach 
 Wants ~10-20% more coding. Day 4 adjusted with one extra coding task.
 
 ---
+
+## Week 7, Day 4 — 2026-02-19
+
+**Topic:** logging Gaps + PCAP Crunch (60/40 coding/theory)
+**Score:** 95% (A) after disputes | **Time:** 70 minutes | **Difficulty:** 6/10
+
+### Student Self-Assessment
+- Fruitful and satisfying session
+- Found "%s only" instruction misleading in decorator contexts where the pattern was not taught
+- Needed extra support for logging inside decorator wrappers
+
+### Mentor Assessment
+
+| Task | Score | Notes |
+|------|-------|-------|
+| 1 — Quick-fire gaps | 2/4 | Q1 correct (TypeError); Q2 WRONG — reading outer vars works without nonlocal; Q3 correct; Q4 correct |
+| 2 — Gap-closer warm-up | 5/5 | All predict-and-fix correct with %s style |
+| 3 — safe_divide() | 9/10 | ValueError not caught at call site (inside function, not caller); f-strings accepted (pattern not taught) |
+| 4 — Decorator + logging | 9/10 | Missing raise after logger.exception(); orphan formatter correctly flagged — task design fault |
+| 5 — BacktestEngine logging | 9.5/10 | Correct structure; f-strings accepted after dispute |
+| 6 — setup_logging() | 9/10 | Self-corrected root vs named logger after guidance |
+| 7 — PCAP simulation | 7/8 | Q2 wrong (raise "string" is TypeError at runtime); Q5 wrong (reading outer vars needs no nonlocal) |
+
+**Total: 95% (A) after disputes**
+
+### Key Corrections
+- **raise "string"**: TypeError at RUNTIME — strings are not valid exception types
+- **nonlocal for reading**: NOT required; LEGB lookup finds outer variables automatically; nonlocal only needed for assignment/rebinding
+- **logging.exception()**: GAP CLOSED — confirmed via observe task that execution continues after the call
+- **Root logger**: `logging.getLogger()` (no args) = root; child loggers propagate to it
+
+### Disputes Upheld
+- f-strings in log call bodies: the %s-with-object-attributes pattern was never explicitly taught
+- Orphan formatter in backtest.py: task placed a formatter with no attached handler — dead code was a task design fault
+
+---
+
+## Week 7, Day 5 — 2026-02-20
+
+**Topic:** Week 7 Review + PCAP Full Simulation
+**Score:** 83% (B) | **Time:** 45 minutes | **Difficulty:** 6/10
+
+### Student Self-Assessment
+- Relaxing yet useful session — reinforced concepts well
+- Noted PCAP should be the main focus going forward
+
+### Mentor Assessment
+
+| Task | Score | Notes |
+|------|-------|-------|
+| 1 — Quick-fire gaps (no code) | 2/4 | Q1 WRONG (raise "error" is TypeError, not silent); Q2 WRONG (reading outer var works fine, no nonlocal); Q3 correct; Q4 correct |
+| 2 — safe_divide() corrected | 9/10 | Both bugs fixed (ValueError caught at call site, %s style used); clean logger factory; all three paths demonstrated |
+| 3 — audit_object() | 7/10 | Correct introspection logic but used print() throughout instead of returning a dict — function returns None |
+| 4 — Predict + Fix (two traps) | 7/10 | Q1 correct (exception order A then C); Q2 wrong — bug is silent swallow returning None, not doubled output |
+| 5 — make_validator() closure | 10/10 | Clean factory; correct closure capture (no nonlocal needed for reading); all 6 test values correct |
+| 6 — PCAP Full Simulation | 7/10 | Q1 C correct; Q2 WRONG (iter(generator) returns same object); Q3 B correct; Q4 A correct; Q5 B correct; Q6 B correct; Q7 B correct; Q8 C correct; Q9 WRONG (__name__ = full dotted path); Q10 B correct |
+
+**Total: 83% (B)**
+
+### Key Corrections
+
+- **Task 1 Q1 — raise "string"**: B is correct — TypeError at RUNTIME. Strings are not valid exception types. This is the 2nd occurrence of this gap.
+- **Task 1 Q2 — reading outer vars**: B is correct — LEGB lookup finds the variable automatically. No nonlocal needed for reading. This is the 3rd+ occurrence.
+- **Task 3 — audit_object()**: Must return the dict. Prints are fine for debugging but the function signature says `-> dict`. The function returned None.
+- **Task 4 Q2 — decorator bug**: The bug is NOT doubled output. The wrapper catches the exception and swallows it — `result` is None because the wrapper returns nothing on error. The fix: add `raise` after `logging.exception(...)`.
+- **Task 6 Q2 — iter(generator)**: Answer B is correct — `iter(obj)` on a generator returns the SAME generator object (generators implement both `__iter__` and `__next__`). This is the 5th+ occurrence of this gap.
+- **Task 6 Q9 — __name__**: Answer C is correct — `__name__` equals the FULL dotted module path when imported: `algo_backtest.engine.backtest`. Only equals `"__main__"` when run directly. This is the 3rd occurrence.
+
+### Persistent Gaps Entering Exams
+1. `iter(generator) is generator` → True (5+ occurrences — must lock in for weekend)
+2. `__name__` = full dotted path when imported (3rd occurrence)
+3. `raise "string"` → TypeError at runtime (2nd occurrence)
+4. reading outer variable in closure → works fine, no nonlocal (3rd+ occurrence)
+
+---
+
+---
+
+## Week 7 — End of Week Summary
+
+**Dates:** 2026-02-16 to 2026-02-20
+**Topic:** Standard Library, Logging & Introspection
+**Average Score:** (62% + 88% + 90% + 95% + 83%) / 5 = **83.6% (B)**
+
+---
+
+### Daily Scores
+
+| Day | Topic | Score | Notes |
+|-----|-------|-------|-------|
+| 1 | logging Introduction | 62% | Tasks 6/7 excused — premature project integration |
+| 2 | Scaffolded logging (Observe → Build) | 88% | Two-gate model clicked; singleton confirmed |
+| 3 | logging + Introspection intro | 90% | Disputes upheld; print wrappers and f-strings accepted |
+| 4 | logging Gaps + PCAP Crunch | 95% | logging.exception() gap finally closed |
+| 5 | Week 7 Review + Full Simulation | 83% | iter/generator and __name__ still wrong |
+
+---
+
+### Strengths Observed
+
+- **Two-gate filtering**: Locked in by Day 2, applied correctly under prediction pressure
+- **Logger singleton**: Confirmed empirically with `is`/`id()` — understood conceptually
+- **safe_divide()**: Correctly structured logging at caller site with %s style by Day 5
+- **make_validator() closure**: Clean factory function, correct capture semantics, no nonlocal confusion for reading
+- **Exception order trap**: Caught correctly (more general before specific = first match wins)
+- **finally return**: Correctly predicted that `finally` return overrides `try` return (Day 5 Q3)
+- **Late-binding lambda trap**: Correctly predicted `2 2 2` (Day 5 Q7)
+- **Project integration**: BacktestEngine and setup_logging() built correctly after self-correction on root logger
+
+---
+
+### Recurring Gaps — Priority Targets for Weekend Exams
+
+1. **`iter(generator) is generator` → True** (5+ occurrences)
+   - Generators implement both `__iter__` and `__next__`; `iter()` just calls `__iter__` which returns `self`
+   - Appeared in Weeks 6 and 7 multiple times — must be locked in before exam
+
+2. **`__name__` = full dotted path when imported** (3rd occurrence)
+   - `algo_backtest.engine.trade` when imported, `__main__` only when run directly
+   - Confused with just the filename stem every time
+
+3. **`raise "string"` → TypeError at runtime** (2nd occurrence)
+   - Not a SyntaxError (parsed fine), not silent — TypeError when the raise statement executes
+   - Both exams contain a question on this
+
+4. **Reading outer variables needs no `nonlocal`** (3+ occurrences)
+   - LEGB lookup works automatically for reads; nonlocal only required for assignment/rebinding
+
+5. **`audit_object()` returned None instead of dict** (Day 5)
+   - Using print() is fine for debugging but always honour the declared return type
+
+---
+
+### Project Progress (Week 7)
+
+- `algo_backtest/engine/backtest.py`: logging added — `logger = logging.getLogger(__name__)`, INFO on open/close, DEBUG on tick
+- `main.py`: `setup_logging()` added — configures root logger (self-corrected from named logger)
+- Architecture is clean: module-level logger with propagation to root; no hardcoded `StreamHandler` in engine code
+
+---
+
+### Readiness for Week 8
+
+- **Strong:** Two-gate filtering, logger singleton, basicConfig one-shot, propagation hierarchy, introspection basics
+- **Must fix before exam:** iter(generator), __name__ when imported, raise "string"
+- **Week 8 focus:** Exam crunch + documentation (docstrings, final charts)
+- **Recommended weekend drill:** Both exams back-to-back; flag every question involving generators, __name__, and closures
+
+---

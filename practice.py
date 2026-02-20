@@ -1,7 +1,3 @@
-import pandas as pd #added on W1 D4, and I will be definitely using both pd/np
-import numpy as np
-from functools import reduce #Added on W4 D3
-
 
 #This file will be used for me to test the code and complete the tasks - but it will not be checked by the agent,
 #it's just for me
@@ -7023,11 +7019,828 @@ the answer is no (as there are neither the letters "d", "o", or "g", in this ord
 # print(0 in gen) #True
 # print(1 in gen) #True
 
-def make_multiplier(n):
-    def multiplier(x):
-        return x * n
-    return multiplier
+# def make_multiplier(n):
+#     def multiplier(x):
+#         return x * n
+#     return multiplier
 
-times_three = make_multiplier(3)
-print(times_three(5))
-print(times_three.__name__)
+# times_three = make_multiplier(3)
+# print(times_three(5))
+# print(times_three.__name__)
+
+#W6 D5 T1
+# gen = (x for x in range(5))
+# print(0 in gen)   # Line A
+# print(0 in gen)   # Line B
+# print(4 in gen)   # Line C
+
+
+#W6 D5 T2
+
+# class Data:
+#     def __init__(self):
+#         self.items = [1, 2, 3]
+#     def __iter__(self):
+#         return iter(self.items)
+
+# d = Data()
+# it = iter(d)
+# print(it is d)      # Line 1
+# print(list(d))      # Line 2
+# print(list(it))     # Line 3
+
+#W6 D5 T5
+
+# def count():
+#     yield 10
+#     yield 20
+#     yield 30
+
+# a = count()
+# b = count()
+# print(next(a))
+# print(next(b))
+# print(next(a))
+
+
+# def count():
+#     yield 10
+#     yield 20
+#     yield 30
+
+# g = count()
+# x = iter(g)
+# y = iter(g)
+# print(x is y)     # ?
+# print(next(x))    # ?
+# print(next(y))    # ?
+
+
+# nums = [10, 20, 30]
+# x = iter(nums)
+# y = iter(nums)
+# print(x is y)     # ?
+# print(next(x))    # ?
+# print(next(y))    # ?
+
+#Edube - OOP - Classes
+
+# class ExampleClass:
+#     __counter = 0
+#     def __init__(self, val = 1):
+#         self.__first = val
+#         ExampleClass.__counter += 1
+
+
+# example_object_1 = ExampleClass()
+# example_object_2 = ExampleClass(2)
+# example_object_3 = ExampleClass(4)
+
+# print(example_object_1.__dict__, example_object_1._ExampleClass__counter) #{'_ExampleClass__first': 1} 3
+# print(example_object_2.__dict__, example_object_2._ExampleClass__counter) #{'_ExampleClass__first': 2} 3
+# print(example_object_3._ExampleClass__counter) #3
+
+
+
+# class ExampleClass:
+#     varia = 1
+#     def __init__(self, val):
+#         ExampleClass.varia = val
+
+
+# print(ExampleClass.__dict__) #varia = 1
+# example_object = ExampleClass(2)
+
+# print(ExampleClass.__dict__) #varia's value changed to 2
+# print(example_object.__dict__) #Empty
+
+
+
+# class ExampleClass:
+#     a = 1
+#     def __init__(self):
+#         self.b = 2
+
+
+# example_object = ExampleClass()
+
+# print(hasattr(example_object, 'b'))
+# print(hasattr(example_object, 'a'))
+# print(hasattr(ExampleClass, 'b'))
+# print(hasattr(ExampleClass, 'a'))
+
+
+# from collections import namedtuple
+
+# Trade = namedtuple('Trade', 'ticker price quantity')
+# t = Trade('AAPL', 150.0, 100)
+# print(t[1])
+# print(t.ticker)
+# print(isinstance(t, tuple))
+
+# from abc import ABC, abstractmethod
+# class Shape(ABC):
+#     @abstractmethod
+#     def area(self):
+#         pass
+
+# class Circle(Shape):
+#     def __init__(self, r):
+#         self.r = r
+
+# c = Circle(5)
+# print(c.r)
+# 
+
+
+#W7 D1 T4
+# import logging
+# import sys
+
+# def setup_logger(name: str, level: int = logging.INFO) -> logging.Logger:
+#     '''A funciton that creates a named logger and adds a StreamHandler that writes to stdout'''
+
+#     logger = logging.getLogger(name)
+#     logger.setLevel(level)
+#     format = logging.Formatter('%(asctime)s [%(levelname)-8s] %(name)s: %(message)s')
+#     handler = logging.StreamHandler(sys.stdout)
+#     handler.setFormatter(format)
+#     logger.addHandler(handler)
+    
+#     return logger
+
+
+# logging.warning("Deprecated usage detected")
+# import warnings
+# warnings.warn("Deprecated usage detected", DeprecationWarning)
+# print('Test print')
+
+
+# import logging
+
+
+# logging.basicConfig(level=logging.DEBUG)
+# logging.debug("debug message")
+# logging.info("info message")
+# logging.warning("warning message")
+
+#W7 D2 #T1
+# 
+# import logging
+# logging.basicConfig(level=logging.DEBUG)
+# logging.basicConfig(level=logging.WARNING)  # second call
+# logging.debug("hello")
+
+#W7 D2 #T2
+# import logging
+# import sys
+
+# logger = logging.getLogger('gate_test')
+# logger.setLevel(logging.DEBUG)          # Gate 1: Logger
+
+# handler = logging.StreamHandler(sys.stdout)
+# handler.setLevel(logging.INFO)       # Gate 2: Handler
+# logger.addHandler(handler)
+
+# logger.debug("debug")
+# logger.info("info")
+# logger.warning("warning")
+# logger.error("error")
+
+#W7 D2 #T3
+
+# import logging
+
+# a = logging.getLogger('my_logger')
+# b = logging.getLogger('my_logger')
+# c = logging.getLogger('other_logger')
+
+# print(a is b) #True
+# print(a is c) #False
+# print(id(a) == id(b)) #True
+
+#W7 D2 #T4
+# import logging
+# logging.basicConfig(level=logging.INFO)
+# logging.debug("a") 
+# logging.info("b")
+# logging.warning("c")
+
+
+# import logging
+# import sys
+
+# logger = logging.getLogger('predict')
+# logger.setLevel(logging.ERROR)
+
+# handler = logging.StreamHandler(sys.stdout)
+# handler.setLevel(logging.DEBUG)
+# logger.addHandler(handler)
+
+# logger.debug("1")
+# logger.info("2")
+# logger.warning("3")
+# logger.error("4")
+# logger.critical("5")
+
+# import logging
+# import sys
+
+# logger = logging.getLogger('predict2')
+# logger.setLevel(logging.DEBUG)
+
+# handler = logging.StreamHandler(sys.stdout)
+# handler.setLevel(logging.ERROR)
+# logger.addHandler(handler)
+
+# logger.debug("1")
+# logger.warning("3")
+# logger.error("4")
+
+# import logging
+# import sys
+
+# logger = logging.getLogger('backtest')
+# logger.setLevel(logging.DEBUG)
+
+# logger.warning('test')
+
+# handler = logging.StreamHandler(sys.stdout)
+# handler.setLevel(logging.DEBUG)
+# format = logging.Formatter('[%(levelname)s]: %(message)s')
+# handler.setFormatter(format) #lazy formatting with %s - does not actually format a string unless it actually gets printed - superior to f-string in this matter
+# logger.addHandler(handler)
+
+# logger.warning('test')
+
+# f_handler = logging.FileHandler('test.log')
+# f_handler.setLevel(logging.DEBUG)
+# f_handler.setFormatter(format)
+
+# logger.addHandler(f_handler)
+
+# logger.debug('Debug line')
+# logger.warning('Warning line')
+
+
+#W7 D2 #T5
+
+# import logging
+# import sys
+
+# import logging
+# import sys
+
+# def build_logger(name: str, filepath: str, level: int = logging.INFO) -> logging.Logger:
+    
+#     if logging.getLogger(name).handlers:
+#         return logging.getLogger(name)
+    
+#     else:
+#         root = logging.getLogger(name)
+#         root.setLevel(level)
+    
+#         fmt = logging.Formatter('[%(levelname)s]: %(message)s')
+        
+#         console = logging.StreamHandler(sys.stdout)
+#         console.setFormatter(fmt)
+        
+#         file_handler = logging.FileHandler(filepath)
+#         file_handler.setFormatter(fmt)
+        
+#         root.addHandler(console)
+#         root.addHandler(file_handler)
+#         return logging.getLogger(name)
+
+
+
+# x = build_logger('test-loggy', 'super_log.log')
+# y = build_logger('test-loggy', 'super_log.log')
+# print(x)
+# print(y)
+
+#Edube - Classes labs - 1
+
+# class Timer:
+#         '''A class '''
+#         def __init__(self, hours: int = 0, minutes: int = 0, seconds: int = 0):
+#             self.__hours = hours
+#             self.__minutes = minutes
+#             self.__seconds = seconds
+
+#         def __str__(self):
+#             return f'{self.__hours}:{self.__minutes}:{self.__seconds}'
+        
+#         def next_second(self):
+#             self.__seconds += 1
+#             if self.__seconds == 60:
+#                 self.__seconds = 0
+#                 self.__minutes += 1
+#                 if self.__minutes == 60:
+#                     self.__minutes = 0
+#                     self.__hours += 1
+#                     if self.__hours == 24:
+#                         self.__hours = 0
+            
+#         def prev_second(self):
+#             self.__seconds -= 1
+#             if self.__seconds == -1:
+#                 self.__seconds = 59
+#                 self.__minutes -= 1
+#                 if self.__minutes == -1:
+#                     self.__minutes = 59
+#                     self.__hours -= 1
+#                     if self.__hours == -1:
+#                         self.__hours = 23
+
+
+# timer = Timer(23, 59, 59)
+# print(timer)
+# timer.next_second()
+# print(timer)
+
+# time_str = str(timer)
+# print(time_str)
+
+# def time_string_format(time_string: str) -> str:
+#     '''Formats the time string to a required format'''
+#     values = time_string.split(':')
+#     final_value_list = []
+#     print(values)
+#     for value in values:
+#         if len(value) == 1:
+#             value = f'0{value}'
+#             final_value_list.append(value)
+#         else:
+#             final_value_list.append(value)
+    
+#     final_output = ':'.join(final_value_list)
+#     return final_output
+        
+# format_str = time_string_format(time_str)
+# print(format_str)
+
+#Edube - Classes labs - 2
+
+# class WeekDayError(Exception):
+#     pass
+	
+
+# class Weeker:
+#     '''A class used to manipulate dates of the week
+    
+#     Accepts the following values:
+#     'Mon Tue Wed Thu Fri Sat Sun'
+    
+#     Allows to add or subtract days with add_days and subtract_days methods and returns the final day of the week as a result.
+#     '''
+
+#     def __init__(self, day):
+#         self.weekdays = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun']
+#         if day in self.weekdays:
+#             self.current_day = day
+#         else:
+#             raise WeekDayError
+        
+#     def __str__(self):
+#         return f'{self.current_day}'
+
+#     def add_days(self, n):
+#         current_index = self.weekdays.index(self.current_day)
+#         shift_number = n % 7
+#         final_index = current_index + shift_number
+#         self.current_day = self.weekdays[final_index]
+#         return self.current_day
+
+#     def subtract_days(self, n):
+#         current_index = self.weekdays.index(self.current_day)
+#         shift_number = n % 7
+#         final_index = current_index - shift_number
+#         if final_index < 0:
+#             final_index = 7 - (abs(final_index))
+#         self.current_day = self.weekdays[final_index]
+#         return self.current_day
+# try:
+#     weekday = Weeker('Mon')
+#     print(weekday)
+#     weekday.add_days(15)
+#     print(weekday)
+#     weekday.subtract_days(23)
+#     print(weekday)
+#     weekday = Weeker('Monday')
+# except WeekDayError:
+#     print("Sorry, I can't serve your request.")
+
+
+#Edube - Classes labs - 3
+
+
+# import math
+
+# ###I obviously had to Google these things as Edube site hinted, but I've managed to do it - pretty satisfying :))
+
+# class Point:
+#     '''A class which stores a point with (x, y) coordinates and allows to use the following methods:
+    
+#     - getx() - returns the value of x coordinate
+#     - gety() - returns the value of y coordinate
+#     - distance_from_xy - calculates the distance from a given point, given the coordinates
+#     - distance from point - calculates the distance from a given point, given the point
+     
+#     '''
+#     def __init__(self, x: float = 0.0, y: float = 0.0):
+#         self.__x = x
+#         self.__y = y
+
+#     def getx(self):
+#         '''Returns the value of x coordinate'''
+#         return self.__x
+
+#     def gety(self):
+#         '''Returns the value of y coordinate'''
+#         return self.__y
+
+#     def distance_from_xy(self, x, y) -> float:
+#         '''calculates the distance from a given point, given the coordinates
+        
+#         args:
+#         x, y - float values
+        
+#         returns:
+#         float value
+#         '''
+#         distance = math.hypot(self.__x, self.__y)
+#         return distance
+        
+#     def distance_from_point(self, point) -> float:
+#         x = point.getx()
+#         y = point.gety()
+#         distance = math.hypot(x, y)
+
+#         return distance
+
+
+
+# class Triangle:
+#     def __init__(self, vertice1, vertice2, vertice3):
+#         self.point1 = vertice1
+#         self.point2 = vertice2
+#         self.point3 = vertice3
+
+#     def perimeter(self):
+        
+#         '''Calculates the perimeter with the use of vertices (x1y1, x2y2, x3y3)'''
+        
+#         x1 = self.point1.getx()
+#         x2 = self.point2.getx()
+#         x3 = self.point3.getx()
+#         y1 = self.point1.gety()
+#         y2 = self.point2.gety()
+#         y3 = self.point3.gety()
+#         ab = math.sqrt((x1 - x2)**2 + (y1 - y2) ** 2)
+#         bc = math.sqrt((x3 - x2)**2 + (y3 - y2) ** 2)
+#         ca = math.sqrt((x1 - x3)**2 + (y3 - y1) ** 2)
+        
+#         perimeter = ab + bc + ca
+#         return perimeter
+
+
+# triangle = Triangle(Point(0, 0), Point(1, 0), Point(0, 1))
+# print(triangle.perimeter())
+
+
+#W7 D3 T1
+
+# import logging
+# import sys
+
+# logger = logging.getLogger('exc_test')
+# logger.setLevel(logging.DEBUG)
+# handler = logging.StreamHandler(sys.stdout)
+# handler.setLevel(logging.DEBUG)
+# logger.addHandler(handler)
+
+# try:
+#     result = 1 / 0
+# except ZeroDivisionError:
+#     logger.error("error() call")
+#     logger.exception("exception() call")
+
+
+#W7 D3 T3
+
+# class BankAccount:
+#     _interest_rate = 0.05
+
+#     def __init__(self, owner: str, balance: float) -> None:
+#         self.owner = owner
+#         self.balance = balance
+
+#     def deposit(self, amount: float) -> None:
+#         self.balance += amount
+
+#     def __repr__(self) -> str:
+#         return f"BankAccount(owner={self.owner!r}, balance={self.balance})"
+
+
+# acc = BankAccount("Alice", 1000.0)
+# acc.nickname = "main account"   # attribute added from outside the class
+# acc._internal_note = "VIP"      # protected attribute added from outside
+
+# print(acc.__dict__)
+# print(BankAccount.__dict__)
+
+# print(hasattr(acc, 'nickname'))
+# print(getattr(acc, 'credit_limit', 'No credit limit attribute!'))
+# print(setattr(acc, 'balance', 1500.0))
+# print(getattr(acc, 'balance'))
+
+# print(acc.__dict__)
+# attribute_names = [attribute for attribute in acc.__dict__ if attribute.startswith('_')]
+# print(attribute_names)
+
+#Crappy Data Python W2 D4
+# students = "anna kowalska; piotr nowak; KATARZYNA zielinska; marek WÓJCIK; ola kaczmarek; tomasz lewandowski; JULIA król; pawel adamski; agnieszka dabrowska; michal zielinski; john smith; Piotr Konrad"
+# students = students.split(';')
+# students = [student.strip().title() for student in students]
+# print(students)
+
+#W7 D4 T1
+
+# import logging
+# import sys
+
+# logger = logging.getLogger('final_fix')
+# logger.setLevel(logging.DEBUG)
+# h = logging.StreamHandler(sys.stdout)
+# h.setLevel(logging.DEBUG)
+# h.setFormatter(logging.Formatter('[%(levelname)s] %(message)s'))
+# logger.addHandler(h)
+
+# print("--- before try ---")
+# try:
+#     x = int("not_a_number")
+# except ValueError:
+#     logger.error("error() was called")
+#     logger.exception("exception() was called")
+# print("--- after try ---")
+
+
+#W7 D4 T2
+# import logging
+# import sys
+
+# def build_logger(name: str, filepath: str, level: int = logging.INFO) -> logging.Logger:
+    
+#     if logging.getLogger(name).handlers:
+#         return logging.getLogger(name)
+    
+#     else:
+#         root = logging.getLogger(name)
+#         root.setLevel(level)
+    
+#         fmt = logging.Formatter('[%(levelname)s]: %(message)s')
+        
+#         console = logging.StreamHandler(sys.stdout)
+#         console.setFormatter(fmt)
+        
+#         file_handler = logging.FileHandler(filepath)
+#         file_handler.setFormatter(fmt)
+        
+#         root.addHandler(console)
+#         root.addHandler(file_handler)
+#         return logging.getLogger(name)
+
+
+# logger = build_logger('logger_test', 'test.log')
+
+
+# def safe_divide(a: float, b: float) -> float:
+#     '''Function created to safely divide numbers and handle errors'''
+#     try:
+#         if not isinstance(a, (int, float)) or not isinstance(b, (int, float)):
+#             logger.warning(f'Value error: one of your values is not a number!')
+#             raise ValueError('One of your values is not a number')
+#         result = a / b
+
+#     except ZeroDivisionError as e:
+#         logger.error(f'Zero Division error: {str(e)}')
+    
+#     else:
+#         logger.info('The division was successful')
+#         return result
+        
+
+# x = safe_divide(5, 0)
+# print(x)
+# x = safe_divide('X', 5)
+# print(x)
+# x = safe_divide(10, 2)
+# print(x)
+
+#W7 D4 T3
+# try:
+#     raise ValueError("bad value")
+# except Exception as e: #we will see this
+#     print("Exception:", e)
+# except ValueError as e:
+#     print("ValueError:", e)
+
+
+# try:
+#     x = int("abc")
+# except (ValueError, TypeError) as e:
+#     print(type(e).__name__, "caught")
+
+
+
+#W7 D4 T4
+# def parse_trade_log(line: str) -> dict:
+#     '''Function used to parse a trade log from a raw line format
+#         e.g. "2026-02-18,AAPL,BUY,150.25,100"
+        
+#         to a nice dict as in:
+#         {"date": "2026-02-18", "ticker": "AAPL", "side": "BUY", "price": 150.25, "qty": 100}
+#     '''
+    
+#     values = line.split(',')
+#     stripped_values = [value.strip() for value in values]
+    
+#     if not len(stripped_values) == 5:
+#         raise ValueError('Line must have exactly 5 fields!')
+    
+#     final_dict = {
+#         'date': stripped_values[0],
+#         'ticker': stripped_values[1],
+#         'side': stripped_values[2],
+#         'price': float(stripped_values[3]),
+#         'qty': int(stripped_values[4])
+#     }
+    
+#     return final_dict
+
+# x = parse_trade_log("2026-02-18,AAPL,BUY,150.25,100")
+# print(x)
+
+# x = parse_trade_log("2026-02-18,   AAPL  ,XD , 444.44,  100")
+# print(x)
+
+
+#W7 D4 T6
+
+# from functools import wraps
+# import logging
+
+# def log_calls(func):
+#     '''A decorator that logs every function before and after the call'''
+#     @wraps(func)
+#     def wrapper(*args):
+#         logger = logging.getLogger(__name__)
+#         logger.setLevel(logging.DEBUG)
+#         logging.basicConfig(level = logging.DEBUG, format = '[%(levelname)s]: %(message)s')
+#         logger.debug(f'Function {func.__name__} called with args {args}')
+#         try:
+#             if not all(isinstance(arg, int) for arg in args):
+#                 raise ValueError
+#             result = func(*args)
+#             logger.info(f'{func.__name__} returned {result}')
+#             return result
+#         except ValueError as e:
+#             logger.exception(f'ValueError in {func.__name__}: expected numbers and got {args}')
+#     return wrapper
+
+
+# @log_calls
+# def func_multiply(a: int, b: int) -> int:
+#     result = a * b
+#     return result
+
+
+# x = func_multiply(5, 3)
+# y = func_multiply('x', 3)
+
+# class Ex(Exception):
+#     def __init__(self, msg):
+#         Exception.__init__(self, msg + msg)
+#         self.args = (msg,)
+
+
+# try:
+#     raise Ex('ex')
+# except Ex as e:
+#     print(e)
+# except Exception as e:
+#     print(e)
+
+
+# print(True or False)
+
+
+#W7 D5 T2
+
+# import logging
+# import sys
+
+# def build_logger(name: str, filepath: str, level: int = logging.INFO) -> logging.Logger:
+    
+#     if logging.getLogger(name).handlers:
+#         return logging.getLogger(name)
+    
+#     else:
+#         root = logging.getLogger(name)
+#         root.setLevel(level)
+    
+#         fmt = logging.Formatter('[%(levelname)s]: %(message)s')
+        
+#         console = logging.StreamHandler(sys.stdout)
+#         console.setFormatter(fmt)
+        
+#         file_handler = logging.FileHandler(filepath)
+#         file_handler.setFormatter(fmt)
+        
+#         root.addHandler(console)
+#         root.addHandler(file_handler)
+#         return logging.getLogger(name)
+
+
+# logger = build_logger('logger_test', 'test.log')
+
+
+# def safe_divide(a: float, b: float) -> float:
+#     '''Function created to safely divide numbers and handle errors'''
+#     try:
+#         if not isinstance(a, (int, float)) or not isinstance(b, (int, float)):
+#             raise ValueError
+#         result = a / b
+        
+#     except ValueError as e:
+#         logger.warning('Invalid input %s', e)
+#     except ZeroDivisionError as e:
+#         logger.error('Division by zero: %s / %s', a, b)
+    
+#     else:
+#         logger.info('The division was successful')
+#         return result
+    
+    
+# x = safe_divide(5, 0)
+# print(x)
+# x = safe_divide(5, 'XD')
+# print(x)
+# x = safe_divide(5, 2)
+# print(x)
+
+#W7 D5 T3
+
+# from algo_backtest.engine.position import Position
+# position = Position('DAX', 'BUY', 24600, 5)
+
+
+
+
+# def audit_object(obj: object) -> dict:
+    
+#     object_name = type(obj).__name__
+#     instance_attributes = obj.__dict__
+#     others = type(obj).__dict__
+#     print(f'The class name of the object is {object_name}')
+#     print(f'The instance attributes of this class instance are: {instance_attributes}')
+#     print(f'The private attributes are: {[attribute for attribute in instance_attributes if str(attribute).startswith('_')]}')
+#     has_repr = True if '__repr__' in others else False
+#     print(f'The object has a __repr__ method: {has_repr}')
+
+
+# x = audit_object(position)
+    
+    
+# try:
+#     raise ValueError("oops")
+# except Exception:
+#     print("A")
+# except ValueError:
+#     print("B")
+# finally:
+#     print("C")
+
+
+#W7 D5 T5
+
+# def make_validator(min_val: float, max_val: float):
+#     '''A fuctory function that creates validators with min and max value to check any number'''
+#     def validate(value: float):
+#         result = (value >= min_val) and (value <= max_val)
+#         return result
+#     return validate
+
+
+# x = make_validator(10, 20)
+# print(x(15))
+# print(x(1))
+# print(x(555))
+
+# is_valid_price = make_validator(0.01, 10000.0)
+# print(is_valid_price(4343434))
+# print(is_valid_price(43))
+# print(is_valid_price(-1))
+
+# print(isinstance(True, int))

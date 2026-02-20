@@ -1,23 +1,39 @@
-# Daily Feedback - Week 7, Day 5
+# Weekend Exam Feedback — Week 7
 
-**Date:** 2026-02-20
+**Date:** 2026-02-22 (weekend)
 
-**Topic:** Week 7 Review + PCAP Crunch — Full Simulation
+**Exams:** Week7_Exam_A.md and Week7_Exam_B.md
 
 ---
 
-**Score:** ___ / tasks
+## Exam A
+
+**Score:** ___ / 30
 
 **Time spent:** ___ minutes
+
+**Questions wrong (list numbers):**
+
+
+---
+
+## Exam B
+
+**Score:** ___ / 30
+
+**Time spent:** ___ minutes
+
+**Questions wrong (list numbers):**
+
 
 ---
 
 ## Self-Reflection
 
-**What clicked this week:**
+**What felt solid:**
 
 
-**What's still shaky:**
+**What still trips you up:**
 
 
 ---

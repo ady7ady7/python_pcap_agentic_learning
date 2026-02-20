@@ -7,13 +7,25 @@ I'm working on this project as a part of my daily Python PCAP practice routine, 
 
 '''
 
-
+import logging
 import sys
 from __init__ import __version__
 import check_dependencies
 
 from engine.trade import Trade
 from data.data_loader import DataLoader
+
+def setup_logging():
+    logger = logging.getLogger() #root logger, not __main__
+    logger.setLevel(logging.DEBUG)
+    
+    stream_handler = logging.StreamHandler(sys.stdout)
+    fmt = logging.Formatter('%(asctime)s [%(levelname)-8s] %(name)s: %(message)s')
+    stream_handler.setFormatter(fmt)
+    
+    logger.addHandler(stream_handler)
+    
+    logger.debug('Logging in main initialized.')    
 
 
 def run_simple_backtest() -> None:
@@ -95,6 +107,7 @@ def run_simple_backtest() -> None:
 
 
 if __name__ == '__main__':
+    setup_logging()
     check_dependencies.check_deps()
     print(f'Current version: {__version__}')
     print('AlgoBacktest Core - Ready')
