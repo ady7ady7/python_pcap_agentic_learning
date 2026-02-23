@@ -1732,3 +1732,53 @@ Strong performance. Decorator understanding has improved significantly from Week
 ### Readiness Assessment
 Both exams passed comfortably above 70%. Core Week 6 content (iterators, generators, yield from, namedtuples, __new__) is solid in isolation. Remaining issue is one persistent identity-check gap. Ready for Week 7.
 
+
+---
+
+## Week 7 Weekend Exams — 2026-02-23
+
+### Exam A: 25/30 = 83% | Time: 14 min
+### Exam B: 24/30 = 80% | Time: 9 min
+### Combined: 49/60 = **82%**
+
+---
+
+#### Exam A — Wrong Questions
+
+| Q | Given | Correct | Topic |
+|---|-------|---------|-------|
+| Q2 | A (6) | C (UnboundLocalError) | assignment marks var as local → read-before-write |
+| Q5 | D | B (TypeError at runtime) | raise "string" — 3rd occurrence |
+| Q17 | C (WARNING) | D (NOTSET) | named logger default level |
+| Q18 | A (None) | C (RecursionError) | @property calling itself |
+| Q29 | B | D | basicConfig no-op after last-resort handler fires |
+
+#### Exam B — Wrong Questions
+
+| Q | Given | Correct | Topic |
+|---|-------|---------|-------|
+| Q17 | A (AttributeError) | C ("woof") | del instance attr reveals class attr |
+| Q19 | A (True) | B (False) | float: 0.1+0.2 != 0.3 |
+| Q20 | C | D | super() — both explicit and implicit forms valid |
+| Q21 | A ([4,5,6]) | B ([1,2,3]) | rebind vs mutate |
+| Q28 | A (AttributeError) | B (10 20 30) | __getitem__ enables legacy iteration |
+
+---
+
+#### Key Corrections
+
+- **raise "string"**: TypeError at RUNTIME — 3rd occurrence, must be locked in
+- **Named logger default level**: NOTSET (0), not WARNING. Root logger is WARNING. NOTSET means "defer to parent".
+- **@property RecursionError**: `return self.val` inside the `val` property calls the property getter again → infinite recursion
+- **basicConfig after last-resort**: when a named logger emits with no handlers, Python's last-resort stderr handler fires AND adds a handler to root → subsequent basicConfig call sees existing handler and silently does nothing
+- **del instance attr**: removes the instance's shadow; class attribute becomes visible again via MRO
+- **0.1 + 0.2 == 0.3**: False — IEEE 754 floating point imprecision, classic PCAP trap
+- **a = [4,5,6]**: REBINDING, not mutation — b still refers to the old list
+- **__getitem__ iteration**: Python's legacy sequence protocol — __getitem__(0), (1), ... until IndexError; no __iter__ required
+
+#### Closed Gaps (correctly answered in both exams)
+- iter(generator) is generator → True (both Q3s correct)
+- __name__ = full dotted path when imported (both Q4s correct)
+- nonlocal only for assignment, not reading (B-Q1/Q2 correct)
+
+---
