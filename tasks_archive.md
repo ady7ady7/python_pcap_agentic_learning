@@ -1331,3 +1331,25 @@ Task 8 expected values were wrong. Correct: 4 winners, $1050 total PnL.
 - Reading outer variable in closure needs no nonlocal (3rd+ occurrence)
 
 ---
+
+## Week 7 Weekend Exams - 2026-02-22/23
+
+**Exam A:** 25/30 = 83% | Time: 14 min
+**Exam B:** 24/30 = 80% | Time: 9 min
+**Combined:** 49/60 = **82%**
+
+**Closed gaps (correct in both exams):**
+- iter(generator) is same object — CLOSED
+- __name__ = full dotted path when imported — CLOSED
+- nonlocal only for assignment not reading — CLOSED
+
+**New gaps identified:**
+- Named logger default level = NOTSET (not WARNING) — root is WARNING
+- del instance attr reveals class attr (no AttributeError)
+- @property calling self.val inside val getter → RecursionError
+- basicConfig no-op after last-resort handler fires
+- 0.1 + 0.2 == 0.3 → False (IEEE 754)
+- a = new_list is rebinding not mutation
+- __getitem__ enables for loop via legacy sequence protocol
+
+---

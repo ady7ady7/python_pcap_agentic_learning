@@ -187,9 +187,16 @@ This directory contains all theoretical lessons organized by week and topic.
 
 ---
 
-## Week 8: Exam Crunch & Documentation (Planned)
+## Week 8: Exam Crunch & Documentation
 
-*Topics will be added as we progress through the course*
+### [Exam Crunch & Documentation](week8_exam_crunch.md)
+- PCAP-31-03 exam section map and weights
+- Master trap list: scope, raise, exceptions, generators, __name__, OOP, logging, floats, mutability, slicing
+- Full dunder method protocol reference
+- isinstance vs type — exact vs subclass-aware
+- Google-style docstring reference for project finalisation
+- PCAP exam technique (time management, elimination strategy)
+- **Quick-Reference Card:** all recurring traps in one place
 
 ---
 

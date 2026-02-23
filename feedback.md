@@ -1,30 +1,16 @@
-# Weekend Exam Feedback — Week 7
+# Daily Feedback — Week 8, Day 1
 
-**Date:** 2026-02-22 (weekend)
+**Date:** 2026-02-23
 
-**Exams:** Week7_Exam_A.md and Week7_Exam_B.md
-
----
-
-## Exam A
-
-**Score:** ___ / 30
-
-**Time spent:** ___ minutes
-
-**Questions wrong (list numbers):**
-
+**Topic:** Exam Crunch & Documentation
 
 ---
 
-## Exam B
-
-**Score:** ___ / 30
+**Tasks completed:** ___ / 7
 
 **Time spent:** ___ minutes
 
-**Questions wrong (list numbers):**
-
+**Difficulty:** ___ / 10
 
 ---
 
@@ -33,7 +19,7 @@
 **What felt solid:**
 
 
-**What still trips you up:**
+**What tripped you up:**
 
 
 ---

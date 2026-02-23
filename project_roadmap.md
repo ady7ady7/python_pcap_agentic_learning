@@ -63,16 +63,16 @@
 
 ## Phase 3: Polish & Documentation (Weeks 7-8)
 
-### Week 7: Logging & Standard Library
-- [ ] Add Python `logging` module
-- [ ] Log: Trade opened, SL hit, TP hit, Trade closed
-- [ ] datetime for trade timestamps
-- [ ] Error handling for edge cases
+### Week 7: Logging & Standard Library ✅ COMPLETE
+- [x] Add Python `logging` module
+- [x] Log: Trade opened, SL hit, TP hit, Trade closed
+- [x] setup_logging() in main.py — configures root logger
+- [x] module-level logger = logging.getLogger(__name__) in BacktestEngine
 
-### Week 8: Finalization
-- [ ] Add docstrings to all classes/methods
-- [ ] Complete backtest with real strategy
-- [ ] Final project demo script
+### Week 8: Finalization (CURRENT)
+- [ ] Add Google-style docstrings to all public classes/methods
+- [ ] Run complete end-to-end backtest with real strategy
+- [ ] Final project demo script in main.py
 
 ---
 
@@ -83,5 +83,5 @@
 
 ---
 
-**Current Status:** Week 7, Day 1 - Monday
-**Last Updated:** 2026-02-16
+**Current Status:** Week 8, Day 1 - Monday
+**Last Updated:** 2026-02-23
