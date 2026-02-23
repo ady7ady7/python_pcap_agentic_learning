@@ -3323,3 +3323,43 @@ Wants ~10-20% more coding. Day 4 adjusted with one extra coding task.
 - **Recommended weekend drill:** Both exams back-to-back; flag every question involving generators, __name__, and closures
 
 ---
+
+## Week 8, Day 1 — 2026-02-23
+
+**Topic:** Exam Crunch & Documentation
+**Score:** ~82% (B) after disputes | **Time:** 2 hours | **Difficulty:** 5/10
+
+### Student Notes
+- Long and tiring session but completed all tasks
+- Found two sim questions on untaught topics (__slots__, context managers)
+- Correctly challenged both — __slots__ not PCAP, context managers not taught
+
+### Mentor Assessment
+
+| Task | Score | Notes |
+|------|-------|-------|
+| 1 — Gauntlet | 6/8 | Q1: print(x) fires once → [1,2]; Q3: result is 10+i not i |
+| 2 — Scope drills | 3/3 | All correct |
+| 3 — Exceptions | 5.5/7 | Hierarchy correct; __str__ hardcoded 99.0; catch should use `print(e)` |
+| 4 — Docstrings | 7/10 | Dead code removed; prose style accepted; steps still in process_price |
+| 5 — PCAP sim | 6/8 scored | 2 excused; Q6 *args is tuple; Q7 __repr__ default ≠ __str__ fallback |
+| 6 — Decorator debug | 8/10 | Missed wrapper(*args, **kwargs) — only *args |
+| 7 — Full backtest | 10/10 | Clean run, 4 positions, correct PnL and win_rate |
+
+**Total: ~82% (B)**
+
+### Key Corrections
+
+- **Task 1 Q1**: `print(x)` fires ONCE at the end. `x` and `lst` are the same object (mutable default). After `f(1)` and `f(2)`, the list is `[1, 2]`. Only one print.
+- **Task 1 Q3**: Default capture `i=i` works. But `x=10` is also passed. `fns[0](10)` = `10+0=10`, not `0`. Output: `10 11 12`.
+- **Task 3 Q3 __str__**: Should use `self.price` dynamically, not hardcoded `99.0`.
+- **Task 5 Q6**: `*args` is always `tuple`, never list.
+- **Task 5 Q7**: `__repr__` default returns `<ClassName object at 0x...>`. `__str__` falls back to `__repr__`, not the other way around.
+- **Task 6**: Third bug = `wrapper(*args)` missing `**kwargs`. Decorator doesn't forward keyword arguments.
+
+### Disputes Upheld
+- __slots__ excused (not in PCAP-31-03 syllabus)
+- Context managers excused (not previously taught — added to lesson now)
+- Validation in BacktestEngine: SRP argument accepted — validation belongs in Position
+
+---

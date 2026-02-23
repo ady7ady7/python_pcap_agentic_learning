@@ -1,8 +1,8 @@
-# Daily Feedback — Week 8, Day 1
+# Daily Feedback — Week 8, Day 2
 
-**Date:** 2026-02-23
+**Date:** 2026-02-24
 
-**Topic:** Exam Crunch & Documentation
+**Topic:** Exam Crunch
 
 ---
 

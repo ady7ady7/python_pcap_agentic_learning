@@ -1,25 +1,40 @@
 from typing import List
 from datetime import datetime
 import logging
-from algo_backtest.engine.position import Position
-from algo_backtest.engine.trade import Trade
-from algo_backtest.engine.position_manager import PositionManager
+from engine.position import Position
+from engine.trade import Trade
+from engine.position_manager import PositionManager
 
 
 logger = logging.getLogger(__name__)
-fmt = logging.Formatter('[%(asctime)s] [%(levelname)s]: %(message)s')
 
 
 class BacktestEngine:
-    """
-    Orchestrates backtesting using existing Position and Trade classes.
+    '''
+    This module is used as the main orchestrator for integrating other modules and handling our strategy backtesting in one place.
+    As of now it's connected with few other modules:
 
-    Lifecycle: Position (open) -> Trade (closed)
+    - Position - simulates 'open' positions, assigns unique position_id and potentially triggers closing positions
+    - PositionManager - similar as above, yet it manages multiple positions and logs them, the rest is the same
+    - Trade - manages CLOSED positions, after a given position is triggered as closed, a Trade object is created based on the relevant attributes
 
-    Attributes:
-        position_manager: Manages open positions
-        completed_trades: List of closed Trade objects
-    """
+    The current structure of the flow is quite clear, and in the end it should allow me to test multiple strategies and their performance if they were launched simultaneously.
+    This is and always was the MAIN goal of creating this project, and we're not far from that.
+
+    The current methods of the BacktestEngine:
+
+    - open_position(self, ticker, side, entry, quantity, stop_loss, take_profit) -> returns a Position object + appends it to the position manager
+    - process_price(self, ticker: str, current_price: float) -> returns a list of closed trades for a given ticker,
+    based on the processed price, automatically creates trade objects for every closed trade and appends them to self.completed_trades list.
+
+    Read-only properties:
+    win_rate 
+    total_pnl
+
+    These are self-explanatory.
+
+    Updated on 23.02.2026 (added this module-level docstring)
+    '''
     
     def __init__(self):
         self.position_manager = PositionManager()
@@ -40,6 +55,15 @@ class BacktestEngine:
     def open_position(self, ticker, side, entry, quantity, stop_loss, take_profit) -> Position:
         """
         Open a new position and add to manager.
+        
+        Args:
+        ticker: str,
+        side: str,
+        entry_price: float, 
+        quantity: float, 
+        stop_loss: Optional[float] = None,
+        take_profit: Optional[float] = None
+        
 
         Returns:
             The created Position object
@@ -47,15 +71,19 @@ class BacktestEngine:
         
         position = Position(ticker, side, entry, quantity, stop_loss, take_profit)
         self.position_manager.add_position(position)
-        logger.info(f'Position {self.position_manager.position.position_id}: {position.side} {position.ticker} @ {position.entry}')
+        logger.info(f'Position {position.position_id}: {position.side} {position.ticker} @ {entry}')
         return position
         
     
     def process_price(self, ticker: str, current_price: float) -> List[Trade]:
         
         """
-        Check all positions against current price.
+        Check all positions for a given ticker and given price.
         Close any that hit SL/TP and convert to Trade objects.
+        
+        Args:
+        - ticker: str
+        - current_price: float
 
         Steps:
         1. Use position_manager.close_triggered_positions(current_price)
@@ -65,6 +93,8 @@ class BacktestEngine:
 
         Returns:
             List of newly closed trades (empty if none closed)
+        
+        Appends self.completed_trades with all the newly closed trades.
         """
         
         closed_positions = self.position_manager.close_triggered_positions(ticker, current_price)
@@ -80,7 +110,7 @@ class BacktestEngine:
                           current_price, 
                           position.quantity,
                           exit_reason = exit_reason)
-            logger.info(f'Position {trade.position_id} @ {trade.ticker} closed with {trade.pnl} as a {exit_reason}')
+            logger.info(f'Position {trade.position_id} @ {position.ticker} closed with {trade.pnl} as a {exit_reason}')
             newly_closed_trades.append(trade)
             self.completed_trades.append(trade)
             

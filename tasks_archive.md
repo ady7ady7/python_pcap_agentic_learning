@@ -1353,3 +1353,27 @@ Task 8 expected values were wrong. Correct: 4 winners, $1050 total PnL.
 - __getitem__ enables for loop via legacy sequence protocol
 
 ---
+
+## Week 8, Day 1 - 2026-02-23
+
+**Topic:** Exam Crunch + Documentation
+**Score:** ~82% (B) | **Time:** 2 hours | **Difficulty:** 5/10
+
+**Tasks:**
+1. PCAP Trap Gauntlet — 6/8 (Q1 wrong: print(x) prints once [1,2] not twice; Q3 wrong: 10+i not [i])
+2. Scope drills — 3/3 (nonlocal, closure read, LEGB all correct)
+3. Exception hierarchy — 5.5/7 (hierarchy + KeyboardInterrupt correct; __str__ hardcoded 99.0; catch printed manually instead of using e)
+4. Docstrings — 7/10 (dead fmt removed; prose style accepted; steps still in process_price; no Raises added — architectural pushback upheld)
+5. PCAP sim — 6/8 scored (Q1 __slots__ excused — not PCAP; Q3 context managers excused — not taught; Q6 *args is tuple not list; Q7 __repr__ default is <Class...> not __str__ fallback)
+6. Decorator debug — 8/10 (return/return func fixed; wrapper(*args) missing **kwargs missed)
+7. Full backtest — 10/10 (4 positions, 2 tickers, logging working, __str__ correct, PnL 60260, win_rate 75%)
+
+**Disputes upheld:**
+- __slots__ excused — not on PCAP syllabus
+- Context managers excused — not taught
+- Validation in BacktestEngine — architectural SRP argument accepted
+
+**New content added:**
+- Context managers section added to week8_exam_crunch.md (one PCAP question possible)
+
+---

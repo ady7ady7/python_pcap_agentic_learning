@@ -200,7 +200,32 @@ C().method()   # "ABC" — MRO: C → B → A
 
 ---
 
-### 2.7 — Logging
+### 2.7 — Context Managers (light PCAP topic)
+
+The `with` statement requires `__enter__` and `__exit__` to be defined on the class.
+
+```python
+class ManagedFile:
+    def __init__(self, path):
+        self.path = path
+
+    def __enter__(self):
+        self.file = open(self.path)
+        return self.file        # this becomes the `as` target
+
+    def __exit__(self, exc_type, exc_val, exc_tb):
+        self.file.close()
+        return False            # False = don't suppress exceptions
+
+with ManagedFile("data.txt") as f:
+    print(f.read())
+```
+
+**PCAP trap:** The correct dunder pair is `__enter__` / `__exit__` — not `__open__`/`__close__` or `__start__`/`__stop__`.
+
+---
+
+### 2.8 — Logging
 
 | Concept | Correct answer |
 |---------|----------------|
