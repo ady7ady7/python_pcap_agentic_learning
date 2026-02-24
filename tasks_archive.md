@@ -1377,3 +1377,24 @@ Task 8 expected values were wrong. Correct: 4 winners, $1050 total PnL.
 - Context managers section added to week8_exam_crunch.md (one PCAP question possible)
 
 ---
+
+## Week 8, Day 2 - 2026-02-24
+
+**Topic:** OOP Deep Drills + PCAP Simulation
+**Score:** ~88% (B+) | **Time:** 2 hours | **Difficulty:** 6/10
+
+**Tasks:**
+1. Predict 8 outputs — 6.5/8 (Q6 wrong: circular linked list, a.next.next.val = 1 not None)
+2. OOP bug hunt (Animal→Dog→GuideDog) — 7/10 (core bug identified; fix introduced positional arg order error in GuideDog)
+3. PCAP simulation 12 questions — 12/12 (perfect, including untaught metaclass Q7 by reasoning)
+4. Custom Countdown iterator — 9/10 (protocol correct; reset() has unnecessary print side-effect)
+5. Exception handling refactor — 8/10 (with + specific exceptions correct; missed: print() is code smell in utility, should log or re-raise)
+6. Class vs instance attribute trap — 10/10 (fully resolved)
+7. Docstrings task — excused (files already documented)
+
+**Project goals noted for Days 3-5:**
+- R-multiple profit calculation (risk-normalised PnL, Sharpe, profit factor)
+- Strategy-aware positions (strategy_id, strategy_name on Position)
+- Per-strategy reporting grouped by strategy_id
+
+---

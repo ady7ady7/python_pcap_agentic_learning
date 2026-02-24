@@ -1,8 +1,8 @@
-# Daily Feedback — Week 8, Day 2
+# Daily Feedback — Week 8, Day 3
 
-**Date:** 2026-02-24
+**Date:** 2026-02-25
 
-**Topic:** Exam Crunch
+**Topic:** Exam Crunch + R-multiples & Strategy-aware Positions
 
 ---
 

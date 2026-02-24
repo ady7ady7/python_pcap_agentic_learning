@@ -70,9 +70,14 @@
 - [x] module-level logger = logging.getLogger(__name__) in BacktestEngine
 
 ### Week 8: Finalization (CURRENT)
-- [ ] Add Google-style docstrings to all public classes/methods
-- [ ] Run complete end-to-end backtest with real strategy
-- [ ] Final project demo script in main.py
+- [x] Add docstrings to all core engine classes (BacktestEngine, Position, Trade done)
+- [x] Run complete end-to-end backtest (main.py — 4 positions, 2 tickers, logging active)
+
+**Extended Goals (Days 3-5):**
+- [ ] R-multiple calculation on Trade: `R = pnl / (abs(entry - stop_loss) * quantity)`
+- [ ] Profit factor and Sharpe ratio on BacktestEngine
+- [ ] Strategy-aware Position: `strategy_id: str`, `strategy_name: str` attributes
+- [ ] Per-strategy reporting: group completed_trades by strategy_id, report R, win rate, profit factor per strategy and combined
 
 ---
 
@@ -83,5 +88,5 @@
 
 ---
 
-**Current Status:** Week 8, Day 1 - Monday
-**Last Updated:** 2026-02-23
+**Current Status:** Week 8, Day 2 - Tuesday
+**Last Updated:** 2026-02-24

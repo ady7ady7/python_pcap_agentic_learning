@@ -3363,3 +3363,43 @@ Wants ~10-20% more coding. Day 4 adjusted with one extra coding task.
 - Validation in BacktestEngine: SRP argument accepted — validation belongs in Position
 
 ---
+
+## Week 8, Day 2 — 2026-02-24
+
+**Topic:** OOP Deep Drills + PCAP Simulation
+**Score:** ~88% (B+) after disputes | **Time:** 2 hours | **Difficulty:** 6/10
+
+### Student Notes
+- Long session, 2 hours
+- PCAP sim felt solid — metaclass question handled by reasoning
+- Iterator protocol doesn't feel fully rooted yet
+- Task 7 was redundant — files already documented
+
+### Mentor Assessment
+
+| Task | Score | Notes |
+|------|-------|-------|
+| 1 — Predict | 6.5/8 | Q6: circular list, a.next.next = a, val = 1 not None |
+| 2 — OOP debug | 7/10 | Bug 1 identified; fix introduced positional order error in GuideDog super() call |
+| 3 — PCAP sim | 12/12 | Perfect — all correct including untaught metaclass by reasoning |
+| 4 — Iterator | 9/10 | Protocol correct; reset() print is side-effect code smell |
+| 5 — Refactor | 8/10 | with + specific exceptions good; print() in utility = code smell; missed re-raise option |
+| 6 — Trap | 10/10 | Class vs instance mutation fully understood |
+| 7 — Docstrings | 10/10 | Excused — files already documented |
+
+**Total: ~88% (B+)**
+
+### Key Corrections
+- **Q6 circular list**: `a.next.next` wraps back to `a` via the cycle; `.val` = 1
+- **GuideDog super() args**: `super().__init__(name, breed, sound)` should be `super().__init__(name, sound, breed)` — positional order must match parent signature
+- **print() in utility functions**: use logging or re-raise; callers shouldn't see stdout from helper functions
+
+### Disputes Upheld
+- Task 7 excused — Position and Trade already have docstrings
+
+### Project Roadmap (noted for Days 3-5)
+- R-multiple calculation: R = pnl / (abs(entry - sl) * qty)
+- Strategy-aware Position: strategy_id + strategy_name attributes
+- Per-strategy reporting grouped by strategy_id
+
+---

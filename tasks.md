@@ -1,208 +1,28 @@
-# Week 8, Day 1 — Exam Crunch & Documentation
-**Date:** 2026-02-23 | **Focus:** PCAP gap consolidation + project docstrings
+# Week 8, Day 2 — Exam Crunch
+**Date:** 2026-02-24 | **Focus:** OOP deep drills + PCAP simulation
 
 ---
 
-## Task 1 — PCAP Trap Gauntlet (no code, pure prediction)
+## Task 1 — Predict the Output (no code, 8 questions)
 
-Answer all 8. No running code allowed.
-
-**Q1:** What is the output?
-```python
-x = []
-def f(val, lst=x):
-    lst.append(val)
-    return lst
-
-f(1)
-f(2)
-print(x)
-```
-
-**Q2:** What is the output?
+**Q1:**
 ```python
 class A:
-    count = 0
     def __init__(self):
-        A.count += 1
+        self.x = 1
 
-a1 = A()
-a2 = A()
-a3 = A()
-print(A.count, a1.count)
+class B(A):
+    def __init__(self):
+        super().__init__()
+        self.y = 2
+
+b = B()
+print(b.x, b.y)
+
+1, 2
 ```
 
-**Q3:** What is the output?
-```python
-def make():
-    funcs = []
-    for i in range(3):
-        funcs.append(lambda x, i=i: x + i)
-    return funcs
-
-fns = make()
-print(fns[0](10), fns[1](10), fns[2](10))
-```
-
-**Q4:** What is the output?
-```python
-try:
-    pass
-except ValueError:
-    print("A")
-else:
-    print("B")
-finally:
-    print("C")
-```
-
-**Q5:** What is the output?
-```python
-gen = (x ** 2 for x in range(4))
-next(gen)
-next(gen)
-print(sum(gen))
-```
-
-**Q6:** What is the output?
-```python
-class Base:
-    def greet(self):
-        return "Base"
-
-class Child(Base):
-    def greet(self):
-        return super().greet() + " Child"
-
-class GrandChild(Child):
-    def greet(self):
-        return super().greet() + " GrandChild"
-
-print(GrandChild().greet())
-```
-
-**Q7:** What is the output?
-```python
-a = (1, [2, 3], 4)
-a[1].append(5)
-print(a)
-```
-
-**Q8:** What is the output?
-```python
-print(type(lambda: None).__name__)
-```
-
----
-
-## Task 2 — Scope Trap Drill (write + predict)
-
-Fill in each blank so the function works correctly, then predict the final output.
-
-**Puzzle A:** Make this run without error and print `1`:
-```python
-def outer():
-    count = 0
-    def inner():
-        ___________
-        count += 1
-        return count
-    return inner
-
-f = outer()
-print(f())
-```
-
-**Puzzle B:** Make this print `[10, 20]` using a closure (no class):
-```python
-def make_accumulator(factor):
-    items = []
-    def add(x):
-        items.append(_________)
-        return items
-    return add
-
-acc = make_accumulator(10)
-acc(1)
-print(acc(2))
-```
-
-**Puzzle C:** Predict the output — think before you answer:
-```python
-def outer():
-    x = "outer"
-    def middle():
-        x = "middle"
-        def inner():
-            print(x)
-        inner()
-    middle()
-
-outer()
-```
-
----
-
-## Task 3 — Exception Hierarchy (PCAP direct)
-
-Answer without running code.
-
-**Q1:** Python's exception hierarchy — which of the following is TRUE?
-- A) `Exception` inherits from `BaseException`
-- B) `SystemExit` inherits from `Exception`
-- C) `KeyboardInterrupt` inherits from `Exception`
-- D) All exceptions must inherit from `Exception`
-
-**Q2:** What is the output?
-```python
-def risky():
-    try:
-        raise KeyboardInterrupt
-    except Exception:
-        return "caught by Exception"
-    except BaseException:
-        return "caught by BaseException"
-
-print(risky())
-```
-
-**Q3:** Write a custom exception `InvalidPriceError` that:
-- Inherits from `ValueError`
-- Takes `price` and `reason` in `__init__`
-- `__str__` returns: `"Invalid price 99.0: must be positive"`
-
-Demonstrate it being raised and caught in a `try/except` block.
-
-Work in `practice.py`. Paste final class + demo in the answer box below.
-
----
-
-## Task 4 — PROJECT: Docstrings Pass (Google style)
-
-Open [algo_backtest/engine/backtest_engine.py](algo_backtest/engine/backtest_engine.py).
-
-**Your job:**
-1. The module currently has no module-level docstring. Add one.
-2. The class docstring exists but is minimal. Rewrite it in proper Google style (include `Attributes:` section).
-3. `open_position()` has a docstring but is missing `Args:` and `Raises:` (it should raise `ValueError` if `side` is not `"BUY"` or `"SELL"`). Add the validation + full docstring.
-4. `process_price()` docstring has implementation notes inside it (step 1, 2, 3…). Replace with clean Google-style (`Args:`, `Returns:`).
-5. Remove the dead `fmt` formatter object at module level (line 10 — it's never attached to anything).
-
-Write the finished file in place. This is a real project edit, not `practice.py`.
-
----
-
-## Task 5 — PCAP Simulation (10 questions, 12 minutes)
-
-Time yourself. No code runner.
-
-**Q1:** Which statement about `__slots__` is true?
-- A) Prevents instance attribute creation entirely
-- B) Replaces `__dict__` with a fixed set of allowed attributes, reducing memory usage
-- C) Is inherited automatically by subclasses
-- D) Can only be used with `@dataclass`
-
-**Q2:** What is the output?
+**Q2:**
 ```python
 class A:
     def __init__(self):
@@ -213,128 +33,547 @@ class B(A):
         self.y = 2
 
 b = B()
-print(hasattr(b, 'x'), hasattr(b, 'y'))
+print(b.x, b.y)
+
+
+AttributeError
 ```
-- A) `True True`
-- B) `False True`
-- C) `True False`
-- D) `AttributeError`
 
-**Q3:** Which is the correct way to make a class a context manager?
-- A) Define `__enter__` and `__exit__`
-- B) Define `__open__` and `__close__`
-- C) Inherit from `contextlib.ContextManager`
-- D) Define `__start__` and `__stop__`
-
-**Q4:** What is the output?
+**Q3:**
 ```python
-x = "Python"
-print(x[-3:])
+def decorator(func):
+    def wrapper(*args, **kwargs):
+        return func(*args, **kwargs) * 2
+    return wrapper
+
+@decorator
+@decorator
+def get_five():
+    return 5
+
+print(get_five())
+
+20
 ```
-- A) `"Pyt"`
-- B) `"hon"`
-- C) `"tho"`
-- D) `"ython"`
 
-**Q5:** `@staticmethod` vs `@classmethod` — which is true?
-- A) Both receive the instance as their first argument
-- B) `@classmethod` receives `cls`; `@staticmethod` receives neither `self` nor `cls`
-- C) `@staticmethod` can access class attributes via `cls`
-- D) They are interchangeable
-
-**Q6:** What is the output?
+**Q4:**
 ```python
-def f(*args, **kwargs):
-    print(type(args).__name__, type(kwargs).__name__)
+class C:
+    _x = 0
 
-f(1, 2, a=3)
+    @classmethod
+    def increment(cls):
+        cls._x += 1
+
+    @staticmethod
+    def description():
+        return "I am C"
+
+C.increment()
+C.increment()
+print(C._x, C.description())
+
+
+2, I am C
 ```
-- A) `list dict`
-- B) `tuple dict`
-- C) `tuple OrderedDict`
-- D) `list OrderedDict`
 
-**Q7:** What does `__repr__` return by default (no override)?
-- A) The object's `__str__` output
-- B) `None`
-- C) A string like `<ClassName object at 0x...>`
-- D) `"object"`
-
-**Q8:** What is the output?
+**Q5:**
 ```python
-d = {"a": 1}
-d2 = d.copy()
-d2["a"] = 99
-print(d["a"])
+try:
+    x = int("abc")
+except (ValueError, TypeError) as e:
+    print(type(e).__name__)
+
+
+ValueError
+
+```
+
+**Q6:**
+```python
+class Node:
+    def __init__(self, val):
+        self.val = val
+        self.next = None
+
+a = Node(1)
+b = Node(2)
+a.next = b
+b.next = a
+
+print(a.next.next.val)
+
+None
+
+```
+
+**Q7:**
+```python
+xs = [1, 2, 3, 4, 5]
+result = list(filter(lambda x: x % 2 == 0, map(lambda x: x + 1, xs)))
+print(result)
+
+[2, 4, 6]
+
+
+```
+
+**Q8:**
+```python
+def f(x=[]):
+    x.append(1)
+    return len(x)
+
+print(f(), f(), f())
+
+1 2 3
+```
+
+---
+
+## Task 2 — OOP Drill: Inheritance & super()
+
+The following class chain has **two bugs**. Find them, explain why each is a bug, and write the corrected version in `practice.py`.
+
+```python
+class Animal:
+    def __init__(self, name: str, sound: str):
+        self.name = name
+        self.sound = sound
+
+    def speak(self) -> str:
+        return f"{self.name} says {self.sound}"
+
+
+class Dog(Animal):
+    def __init__(self, name: str, breed: str):
+        self.breed = breed
+
+    def speak(self) -> str:
+        return super().speak() + f" (breed: {self.breed})"
+
+
+class GuideDog(Dog):
+    def __init__(self, name: str, breed: str, owner: str):
+        super().__init__(name, breed)
+        self.owner = owner
+
+    def speak(self) -> str:
+        return super().speak() + f" [guide dog for {self.owner}]"
+
+
+gd = GuideDog("Rex", "Labrador", "Alice")
+print(gd.speak())
+```
+
+Paste corrected code + bug explanations in the answer box.
+
+# #Erratic class chain - bug identification
+# class Animal:
+#     def __init__(self, name: str, sound: str):
+#         self.name = name
+#         self.sound = sound
+
+#     def speak(self) -> str:
+#         return f"{self.name} says {self.sound}"
+# #everything ok up to this point
+
+# class Dog(Animal):
+#     def __init__(self, name: str, breed: str): #sound missing
+#         #ISSUE 1 - WE'RE NOT fetching anything from our parent class - this will be an issue
+#         self.breed = breed
+
+#     def speak(self) -> str:
+#         return super().speak() + f" (breed: {self.breed})"
+
+
+# class GuideDog(Dog):
+#     def __init__(self, name: str, breed: str, owner: str): #sound missing as well...
+#         super().__init__(name, breed)
+#         self.owner = owner
+
+#     def speak(self) -> str:
+#         return super().speak() + f" [guide dog for {self.owner}]"
+
+
+# gd = GuideDog("Rex", "Labrador", "Alice")
+# print(gd.speak())
+
+
+
+#FIX
+class Animal:
+    def __init__(self, name: str, sound: str):
+        self.name = name
+        self.sound = sound
+
+    def speak(self) -> str:
+        return f"{self.name} says {self.sound}"
+#everything ok up to this point
+
+class Dog(Animal):
+    def __init__(self, name, sound, breed: str):
+        super().__init__(name, sound)
+        self.breed = breed
+
+    def speak(self) -> str:
+        return super().speak() + f" (breed: {self.breed})"
+    
+#fixed this now
+
+
+class GuideDog(Dog):
+    def __init__(self, name: str, sound: str, breed: str, owner: str):
+        super().__init__(name, breed, sound)
+        self.owner = owner
+
+    def speak(self) -> str:
+        return super().speak() + f" [guide dog for {self.owner}]"
+
+
+dog = Dog('Johny', 'Woof', 'Labrador')
+print(dog.speak())
+
+gd = GuideDog("Rex", 'Woof', "Labrador", "Alice")
+print(gd.speak())
+
+It's fixed and it works properly now
+
+
+---
+
+## Task 3 — PCAP Simulation (12 questions, 15 minutes)
+
+Time yourself. No code runner.
+
+**Q1:** What is the output?
+```python
+x = 10
+def f():
+    global x
+    x += 5
+f()
+print(x)
+```
+- A) `10`
+- B) `15`
+- C) `UnboundLocalError`
+- D) `NameError`
+
+B
+
+**Q2:** Which of the following is true about `@abstractmethod`?
+- A) A class with abstract methods can be instantiated if at least one method is implemented
+- B) A subclass that doesn't implement all abstract methods raises `TypeError` on instantiation
+- C) `@abstractmethod` can only be used on `__init__`
+- D) Abstract methods must have an empty body
+
+B
+
+**Q3:** What is the output?
+```python
+a = [1, 2, 3]
+b = a[:]
+a[0] = 99
+print(b[0])
 ```
 - A) `99`
 - B) `1`
-- C) `KeyError`
-- D) `None`
+- C) `None`
+- D) `TypeError`
 
-**Q9:** Which raises `TypeError`?
-- A) `raise ValueError`
-- B) `raise ValueError()`
-- C) `raise "error message"`
-- D) `raise ValueError from None`
+B #it creates a new object essentially
 
-**Q10:** What is the output?
+**Q4:** What is the output?
 ```python
-class Counter:
-    def __init__(self, limit):
-        self.current = 0
-        self.limit = limit
+class A:
+    def method(self):
+        return "A"
+
+class B(A):
+    pass
+
+class C(A):
+    def method(self):
+        return "C"
+
+class D(B, C):
+    pass
+
+print(D().method())
+```
+- A) `"A"`
+- B) `"B"`
+- C) `"C"`
+- D) `AttributeError`
+
+C
+
+
+
+**Q5:** What is the output?
+```python
+s = {1, 2, 3}
+s.add(2)
+s.add(4)
+print(len(s))
+```
+- A) `3`
+- B) `4`
+- C) `5`
+- D) `TypeError`
+
+B
+
+**Q6:** What is the output?
+```python
+def gen():
+    yield 1
+    yield 2
+    yield 3
+
+g = gen()
+print(next(g), next(g))
+print(list(g))
+
+
+A
+```
+- A) `1 2` then `[3]`
+- B) `1 2` then `[1, 2, 3]`
+- C) `1 2` then `[]`
+- D) `StopIteration`
+
+**Q7:** What is the output?
+```python
+class Meta(type):
+    pass
+
+class MyClass(metaclass=Meta):
+    pass
+
+print(type(MyClass))
+```
+- A) `<class 'type'>`
+- B) `<class '__main__.Meta'>`
+- C) `<class '__main__.MyClass'>`
+- D) `TypeError`
+
+B - but it's my speculation - WE DIDN'T HAVE THAT!
+
+**Q8:** What is the output?
+```python
+x = "hello world"
+print(x.split()[1].upper()[:3])
+```
+- A) `"WOR"`
+- B) `"hel"`
+- C) `"WO"`
+- D) `"wor"`
+
+A
+
+**Q9:** What is the output?
+```python
+def f(a, b, /, c, d):
+    return a + b + c + d
+
+print(f(1, 2, c=3, d=4))
+```
+- A) `10`
+- B) `TypeError`
+- C) `SyntaxError`
+- D) `NameError`
+
+A
+
+**Q10:** Which is true about `__eq__` and `__hash__`?
+- A) Defining `__eq__` automatically defines `__hash__`
+- B) Defining `__eq__` without `__hash__` sets `__hash__` to `None`, making the object unhashable
+- C) `__hash__` is never needed if `__eq__` is defined
+- D) Both are optional and independent
+
+B
+
+**Q11:** What is the output?
+```python
+d = {"a": 1, "b": 2, "c": 3}
+print({v: k for k, v in d.items()})
+```
+- A) `{"a": 1, "b": 2, "c": 3}`
+- B) `{1: "a", 2: "b", 3: "c"}`
+- C) `TypeError`
+- D) `{("a", 1), ("b", 2), ("c", 3)}`
+
+B
+
+**Q12:** What is the output?
+```python
+class A:
+    def __init__(self):
+        self.__x = 10
+
+    def get_x(self):
+        return self.__x
+
+a = A()
+print(a.get_x(), a._A__x)
+```
+- A) `10 AttributeError`
+- B) `AttributeError AttributeError`
+- C) `10 10`
+- D) `10 None`
+
+C
+
+---
+
+## Task 4 — Write: Custom Iterator
+
+Write a class `Countdown` in `practice.py` that:
+- Takes a `start: int` in `__init__`
+- Implements the full iterator protocol (`__iter__`, `__next__`)
+- Yields values from `start` down to `1` inclusive
+- After reaching `1`, raises `StopIteration`
+- Can be reset by calling `.reset()` which restores the counter to `start`
+
+Demonstrate it works by:
+1. Using it in a `for` loop — prints `3 2 1`
+2. Calling `reset()` and doing `list(countdown)` — confirms reusability
+
+Paste final code in the answer box.
+
+class Countdown:
+    '''A practice iterator class which takes the following args:
+    
+    start: int
+    
+    It yields values from start down to 1 inclusive, and then raises StopIteration,
+    but the value can be reset by calling .reset() method.
+    '''
+    
+    def __init__(self, start: int):
+        self.start = start
+        self.current = start
+        
     def __iter__(self):
         return self
+    
     def __next__(self):
-        if self.current >= self.limit:
+        if self.current < 1:
             raise StopIteration
-        self.current += 1
-        return self.current
+        else:
+            value = self.current
+            self.current -= 1
+            return value
+    
+    def reset(self):
+        self.current = self.start
+        print('Restored the current value to the starting value.')
+    
+    
 
-print(list(Counter(3)))
-```
-- A) `[0, 1, 2]`
-- B) `[1, 2, 3]`
-- C) `StopIteration`
-- D) `[0, 1, 2, 3]`
+for x in Countdown(5):
+    print(x)
+
+print(list(Countdown(4)))
+print(list(Countdown(7)))
+
+Done it, but IT DOESN'T FEEL like a strongly rooted concept - I had to look things up to make sure it works.
+
+
 
 ---
 
-## Task 6 — Refactor / Debug
+## Task 5 — Refactor: Exception Handling
 
-The following decorator is broken. Identify **all** bugs and write the corrected version in `practice.py`. There are **three** bugs.
+The following code runs but has **three professional-quality issues** (not syntax errors — style and logic problems). Identify them all, then write a corrected version.
 
 ```python
-import logging
-
-def log_call(func):
-    def wrapper(*args):
-        logging.info("Calling %s", func.__name__)
-        result = func(*args)
-        logging.info("Done")
-        return
-    return func
+def load_price(filepath):
+    try:
+        f = open(filepath)
+        data = f.read()
+        f.close()
+        return float(data.strip())
+    except:
+        return None
 ```
 
-Paste the corrected version + a brief comment on each bug into the answer box.
+def load_price(filepath):
+    try:
+        with open(filepath, 'r') as r:
+            data = r.read()
+            return float(data.strip())
+    except FileNotFoundError:
+        print('File not found!')
+    except Exception as e:
+        print(f'Unexpected exception: {str(e)}')
 
 ---
 
-## Task 7 — PROJECT: Run the full backtest
+## Task 6 — PCAP Trap: Spot the Difference
 
-Open [algo_backtest/main.py](algo_backtest/main.py).
+Both snippets look similar. Predict what each prints and explain why they differ.
 
-Write a `main()` function (or extend the existing one) that runs a **complete end-to-end demonstration**:
+**Snippet A:**
+```python
+class Account:
+    balance = 0
 
-1. Call `setup_logging()` at the top
-2. Create a `BacktestEngine`
-3. Open at least **3 positions** on 2 different tickers with realistic prices (use FDAX and EURUSD from the existing test data in the file)
-4. Feed price ticks that trigger at least **2 SL hits and 1 TP hit**
-5. Print the engine summary via `print(engine)` — make sure `__str__` works correctly
-6. Print `total_pnl` and `win_rate`
+a1 = Account()
+a2 = Account()
+a1.balance += 100
+print(a1.balance, a2.balance)
 
-Run it from `practice.py` or directly (`python -m algo_backtest.main`). Paste the console output into the answer box below.
+
+100, 0
+
+balance here is a class attribute, shared by all instances of the class as a new instance is created, but if we instantiate the balance and then change it in a given class instance, IT WILL BE in that class instance only. Anyway, this is rather weird approach in this case.
+
+```
+
+**Snippet B:**
+```python
+class Account:
+    balance = 0
+
+a1 = Account()
+a2 = Account()
+Account.balance += 100
+print(a1.balance, a2.balance)
+
+100 100
+
+Here we're changing the whole class attribute, not the instance attribute only.
+```
+
+---
+
+## Task 7 — PROJECT: Docstrings on Position and Trade
+
+Open [algo_backtest/engine/position.py](algo_backtest/engine/position.py) and [algo_backtest/engine/trade.py](algo_backtest/engine/trade.py).
+
+For each file, add:
+1. A module-level docstring (one sentence is enough)
+2. A proper class docstring with `Attributes:` section
+3. Docstrings on any public methods that currently lack them
+
+You already know what format you prefer — use it consistently. This is the final documentation pass for the core engine classes.
+
+Edit the files directly. Paste a note here confirming it's done and mention anything interesting you found.
+
+
+I think this is a completely wrong choice of tasks, as both files HAVE these docstrings, and in the format you asked for with Attributes section.
+
+This is a misguided task that I don't need to do, and I DON'T WANT YOU TO TAKE AWAY POINTS FROM ME FOR TODAY.
+
+As for the future progress and GOALS of my backtesting repo, I need the following things:
+- I want to calculate the R profit, based on a risk unit rather than P/L in $, as it's more important for me, and we might always calculate the equity curve based on the risk amount per risk unit, starting balance etc. Beside that, it would be nice to calculate sharpe ratio and profit factor.
+
+
+- I'd like to be able to test several strategies at once, which means that each position should also contain information about given strategy that it implements if applicable - what is more, I might be testing the same strategy that uses the same basic constraints or base factors, but with a twist as slightly different SL/TP settings etc., and it still should be distinguished, so have a different strategy_id. This modularity/objectification is very important.
+- In the end, we should have a nice and clear raporting of all strategies performance (in R values) together and separately. This is the total endgoal.
 
 ---
 
@@ -352,19 +591,10 @@ Q7:
 Q8:
 
 ### Task 2
-Puzzle A (blank):
-Puzzle B (blank):
-Puzzle C output:
+Bugs:
+Corrected code:
 
 ### Task 3
-Q1:
-Q2:
-Code (InvalidPriceError):
-
-### Task 4
-(edit made directly in backtest_engine.py — paste any notes here)
-
-### Task 5
 Q1:
 Q2:
 Q3:
@@ -375,11 +605,20 @@ Q7:
 Q8:
 Q9:
 Q10:
+Q11:
+Q12:
 
-### Task 6
-Bugs found:
+### Task 4
+Code:
+
+### Task 5
+Issues:
 Corrected code:
 
+### Task 6
+Snippet A output + explanation:
+Snippet B output + explanation:
+
 ### Task 7
-Console output:
+Notes:
 ```
