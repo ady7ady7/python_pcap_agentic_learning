@@ -1398,3 +1398,22 @@ Task 8 expected values were wrong. Correct: 4 winners, $1050 total PnL.
 - Per-strategy reporting grouped by strategy_id
 
 ---
+
+## Week 8, Day 3 - 2026-02-25
+
+**Topic:** R-Multiples & Strategy-Aware Positions
+**Score:** ~83% (B) | **Time:** 2 hours | **Difficulty:** 7/10
+
+**Tasks:**
+1. PCAP warm-up — 4/5 scored (Q4 missing; Q6 __iadd__ excused/correct; Q5 correct)
+2. Fix stray print + exit_reason casing — done cleanly
+3. R-multiple property on Trade + stop_loss/take_profit passed through BacktestEngine — working: [1.08, 0.74, 3.81, -2.25]
+4. strategy_id + strategy_name on Position, wired through BacktestEngine — working; trailing comma bug (strategy_id tuple) fixed by mentor
+5. PCAP sim — 7/10 (zip stops at shortest; *b = list; raise from __cause__)
+6. PCAP traps — 7/9 (None == None is True; use is None by convention not because == fails)
+
+**Bugs fixed post-assessment:**
+- position.py: trailing comma on strategy_id assignment created tuple — fixed
+- trade.py: r_multiple used self.__pnl (backing var) instead of self.pnl (property) — fixed
+
+---

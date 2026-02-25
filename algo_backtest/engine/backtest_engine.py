@@ -1,5 +1,6 @@
 from typing import List
 from datetime import datetime
+from typing import Optional
 import logging
 from engine.position import Position
 from engine.trade import Trade
@@ -52,7 +53,15 @@ class BacktestEngine:
         return f'{__name__}: {(self.position_manager.get_position_count())} open | {len(self.completed_trades)} closed | PnL: ${self.total_pnl}'
         
         
-    def open_position(self, ticker, side, entry, quantity, stop_loss, take_profit) -> Position:
+    def open_position(self, 
+                      ticker, 
+                      side, 
+                      entry, 
+                      quantity, 
+                      stop_loss, 
+                      take_profit, 
+                      strategy_id: Optional[str] = None, 
+                      strategy_name: Optional[str] = None) -> Position:
         """
         Open a new position and add to manager.
         
@@ -69,9 +78,9 @@ class BacktestEngine:
             The created Position object
         """
         
-        position = Position(ticker, side, entry, quantity, stop_loss, take_profit)
+        position = Position(ticker, side, entry, quantity, stop_loss, take_profit, strategy_id, strategy_name)
         self.position_manager.add_position(position)
-        logger.info(f'Position {position.position_id}: {position.side} {position.ticker} @ {entry}')
+        logger.info(f'@Strategy {position.strategy_name}: {position.strategy_id} Position {position.position_id}: {position.side} {position.ticker} @ {entry}')
         return position
         
     
@@ -109,8 +118,12 @@ class BacktestEngine:
                           position.entry_price, 
                           current_price, 
                           position.quantity,
+                          stop_loss = position.stop_loss,
+                          take_profit = position.take_profit,
+                          strategy_id = position.strategy_id,
+                          strategy_name = position.strategy_name,
                           exit_reason = exit_reason)
-            logger.info(f'Position {trade.position_id} @ {position.ticker} closed with {trade.pnl} as a {exit_reason}')
+            logger.info(f'@Strategy {position.strategy_id}, {position.strategy_name} || Position {trade.position_id} @ {position.ticker} closed with {trade.pnl} as a {exit_reason}')
             newly_closed_trades.append(trade)
             self.completed_trades.append(trade)
             
@@ -133,24 +146,5 @@ class BacktestEngine:
     
 
 if __name__ == '__main__':
-    engine = BacktestEngine()
-
-    # Open positions on different tickers
-    engine.open_position('FDAX', 'BUY', 24500, 1, stop_loss=24450, take_profit=24600)
-    engine.open_position('EURUSD', 'BUY', 1.0800, 10000, stop_loss=1.0750, take_profit=1.0850)
-
-    # FDAX price moves — should only affect FDAX position
-    closed = engine.process_price('FDAX', 24600)
-    print(f'FDAX trades closed: {len(closed)}')       # 1 (TP hit)
-    print(f'Open positions: {engine.position_manager.get_position_count()}')  # 1 (EURUSD still open)
-
-    # EURUSD price moves — should only affect EURUSD position
-    closed = engine.process_price('EURUSD', 1.0850)
-    print(f'EURUSD trades closed: {len(closed)}')      # 1 (TP hit)
-    print(f'Open positions: {engine.position_manager.get_position_count()}')  # 0
-
-    # Verify unique IDs
-    engine2 = BacktestEngine()
-    p1 = engine2.open_position('FDAX', 'BUY', 24500, 1, stop_loss=24450, take_profit=24600)
-    p2 = engine2.open_position('FDAX', 'SELL', 24500, 1, stop_loss=24550, take_profit=24400)
-    print(p1.position_id != p2.position_id)  # True — different IDs
+    pass
+###Outdated test, removed for now

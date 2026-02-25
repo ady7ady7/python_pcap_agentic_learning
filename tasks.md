@@ -1,579 +1,456 @@
-# Week 8, Day 2 — Exam Crunch
-**Date:** 2026-02-24 | **Focus:** OOP deep drills + PCAP simulation
+# Week 8, Day 3 — R-Multiples & Strategy-Aware Positions
+**Date:** 2026-02-25 | **Focus:** PCAP crunch + project extended goals (R-multiple, strategy_id)
 
 ---
 
-## Task 1 — Predict the Output (no code, 8 questions)
-
-**Q1:**
-```python
-class A:
-    def __init__(self):
-        self.x = 1
-
-class B(A):
-    def __init__(self):
-        super().__init__()
-        self.y = 2
-
-b = B()
-print(b.x, b.y)
-
-1, 2
-```
-
-**Q2:**
-```python
-class A:
-    def __init__(self):
-        self.x = 1
-
-class B(A):
-    def __init__(self):
-        self.y = 2
-
-b = B()
-print(b.x, b.y)
-
-
-AttributeError
-```
-
-**Q3:**
-```python
-def decorator(func):
-    def wrapper(*args, **kwargs):
-        return func(*args, **kwargs) * 2
-    return wrapper
-
-@decorator
-@decorator
-def get_five():
-    return 5
-
-print(get_five())
-
-20
-```
-
-**Q4:**
-```python
-class C:
-    _x = 0
-
-    @classmethod
-    def increment(cls):
-        cls._x += 1
-
-    @staticmethod
-    def description():
-        return "I am C"
-
-C.increment()
-C.increment()
-print(C._x, C.description())
-
-
-2, I am C
-```
-
-**Q5:**
-```python
-try:
-    x = int("abc")
-except (ValueError, TypeError) as e:
-    print(type(e).__name__)
-
-
-ValueError
-
-```
-
-**Q6:**
-```python
-class Node:
-    def __init__(self, val):
-        self.val = val
-        self.next = None
-
-a = Node(1)
-b = Node(2)
-a.next = b
-b.next = a
-
-print(a.next.next.val)
-
-None
-
-```
-
-**Q7:**
-```python
-xs = [1, 2, 3, 4, 5]
-result = list(filter(lambda x: x % 2 == 0, map(lambda x: x + 1, xs)))
-print(result)
-
-[2, 4, 6]
-
-
-```
-
-**Q8:**
-```python
-def f(x=[]):
-    x.append(1)
-    return len(x)
-
-print(f(), f(), f())
-
-1 2 3
-```
-
----
-
-## Task 2 — OOP Drill: Inheritance & super()
-
-The following class chain has **two bugs**. Find them, explain why each is a bug, and write the corrected version in `practice.py`.
-
-```python
-class Animal:
-    def __init__(self, name: str, sound: str):
-        self.name = name
-        self.sound = sound
-
-    def speak(self) -> str:
-        return f"{self.name} says {self.sound}"
-
-
-class Dog(Animal):
-    def __init__(self, name: str, breed: str):
-        self.breed = breed
-
-    def speak(self) -> str:
-        return super().speak() + f" (breed: {self.breed})"
-
-
-class GuideDog(Dog):
-    def __init__(self, name: str, breed: str, owner: str):
-        super().__init__(name, breed)
-        self.owner = owner
-
-    def speak(self) -> str:
-        return super().speak() + f" [guide dog for {self.owner}]"
-
-
-gd = GuideDog("Rex", "Labrador", "Alice")
-print(gd.speak())
-```
-
-Paste corrected code + bug explanations in the answer box.
-
-# #Erratic class chain - bug identification
-# class Animal:
-#     def __init__(self, name: str, sound: str):
-#         self.name = name
-#         self.sound = sound
-
-#     def speak(self) -> str:
-#         return f"{self.name} says {self.sound}"
-# #everything ok up to this point
-
-# class Dog(Animal):
-#     def __init__(self, name: str, breed: str): #sound missing
-#         #ISSUE 1 - WE'RE NOT fetching anything from our parent class - this will be an issue
-#         self.breed = breed
-
-#     def speak(self) -> str:
-#         return super().speak() + f" (breed: {self.breed})"
-
-
-# class GuideDog(Dog):
-#     def __init__(self, name: str, breed: str, owner: str): #sound missing as well...
-#         super().__init__(name, breed)
-#         self.owner = owner
-
-#     def speak(self) -> str:
-#         return super().speak() + f" [guide dog for {self.owner}]"
-
-
-# gd = GuideDog("Rex", "Labrador", "Alice")
-# print(gd.speak())
-
-
-
-#FIX
-class Animal:
-    def __init__(self, name: str, sound: str):
-        self.name = name
-        self.sound = sound
-
-    def speak(self) -> str:
-        return f"{self.name} says {self.sound}"
-#everything ok up to this point
-
-class Dog(Animal):
-    def __init__(self, name, sound, breed: str):
-        super().__init__(name, sound)
-        self.breed = breed
-
-    def speak(self) -> str:
-        return super().speak() + f" (breed: {self.breed})"
-    
-#fixed this now
-
-
-class GuideDog(Dog):
-    def __init__(self, name: str, sound: str, breed: str, owner: str):
-        super().__init__(name, breed, sound)
-        self.owner = owner
-
-    def speak(self) -> str:
-        return super().speak() + f" [guide dog for {self.owner}]"
-
-
-dog = Dog('Johny', 'Woof', 'Labrador')
-print(dog.speak())
-
-gd = GuideDog("Rex", 'Woof', "Labrador", "Alice")
-print(gd.speak())
-
-It's fixed and it works properly now
-
-
----
-
-## Task 3 — PCAP Simulation (12 questions, 15 minutes)
-
-Time yourself. No code runner.
+## Task 1 — PCAP Warm-up (no code, 6 questions)
 
 **Q1:** What is the output?
 ```python
-x = 10
-def f():
-    global x
-    x += 5
-f()
-print(x)
+def f(a, b=2, *args, c=3):
+    print(a, b, c, args)
+
+f(1, 4, 5, 6, c=10)
+
+1, 4, 10, (5, 6)
 ```
-- A) `10`
-- B) `15`
-- C) `UnboundLocalError`
-- D) `NameError`
 
-B
-
-**Q2:** Which of the following is true about `@abstractmethod`?
-- A) A class with abstract methods can be instantiated if at least one method is implemented
-- B) A subclass that doesn't implement all abstract methods raises `TypeError` on instantiation
-- C) `@abstractmethod` can only be used on `__init__`
-- D) Abstract methods must have an empty body
-
-B
-
-**Q3:** What is the output?
-```python
-a = [1, 2, 3]
-b = a[:]
-a[0] = 99
-print(b[0])
-```
-- A) `99`
-- B) `1`
-- C) `None`
-- D) `TypeError`
-
-B #it creates a new object essentially
-
-**Q4:** What is the output?
+**Q2:** What is the output?
 ```python
 class A:
-    def method(self):
-        return "A"
+    pass
 
 class B(A):
     pass
 
 class C(A):
-    def method(self):
-        return "C"
+    pass
 
 class D(B, C):
     pass
 
-print(D().method())
+print(D.__mro__)
+
+
+
 ```
-- A) `"A"`
-- B) `"B"`
-- C) `"C"`
+Pick the correct MRO order:
+- A) `D → B → C → A → object`
+- B) `D → B → A → C → object`
+- C) `D → C → B → A → object`
+- D) `D → A → B → C → object`
+
+A
+
+**Q3:** What is the output?
+```python
+a = {"x": 1}
+b = a.copy()
+b["x"] = 99
+b["y"] = 2
+print(a)
+
+
+x : 1 (with proper formatting, but you get the idea)
+
+
+```
+
+**Q4:** What is the output?
+```python
+print(bool(0), bool(""), bool([]), bool(0.0), bool(None))
+```
+
+**Q5:** What is the output?
+```python
+def gen(n):
+    for i in range(n):
+        yield i * i
+
+g = gen(5)
+print(next(g), next(g), sum(g))
+
+
+
+0 1 29
+
+```
+
+**Q6:** What is the output?
+```python
+class A:
+    def __init__(self):
+        self.items = []
+
+    def __iadd__(self, other):
+        self.items.append(other)
+        return self
+
+a = A()
+a += "x"
+a += "y"
+print(a.items)
+```
+
+WE DIDN'T HAVE iadd!!!!
+I reckon it's [x, y] but IT SHOULDN'T BE HERE!
+
+
+---
+
+## Task 2 — PROJECT: Fix the stray print in Trade
+
+Before adding new features, clean up one existing bug.
+
+Open [algo_backtest/engine/trade.py](algo_backtest/engine/trade.py).
+
+`calculate_win_rate()` has a stray `print(trades_profits)` inside it — that's what was printing the PnL list before the win rate in Day 1's console output. Remove it.
+
+While you're there: `exit_reason` in `__init__` calls `.upper()` on the reason string, but `should_close()` returns strings like `"Buy TP hit"`. After `.upper()` that becomes `"BUY TP HIT"` — inconsistent with what gets logged. Change the `exit_reason` storage to preserve the original case (remove the `.upper()` call, or lowercase it consistently — your choice, but pick one and apply it).
+
+Edit the file directly. No answer box needed — just note what you changed.
+
+- print(trades_profits) removed
+- init exit reason also changed to .lower() instead
+
+    def __init__(self,
+                 position_id: str,
+                 ticker: str,
+                 side: str,
+                 entry_price: float,
+                 exit_price: float,
+                 quantity: float,
+                 entry_time: Optional[str] = None,
+                 exit_time: Optional[str] = None,
+                 stop_loss: Optional[float] = None,
+                 take_profit: Optional[float] = None,
+                 exit_reason: Optional[str] = None
+                 ):
+        
+        """Initialize a completed trade and calculate P&L."""
+        
+        self._position_id = position_id
+        self._ticker = ticker
+        self._side = side.upper()
+        self._entry_price = entry_price
+        self._exit_price = exit_price
+        self._quantity = quantity
+        self._entry_time = entry_time
+        self._exit_time = exit_time
+        self._stop_loss = stop_loss
+        self._take_profit = take_profit
+        
+        if exit_reason is not None:
+            self._exit_reason = exit_reason.lower()
+        else:
+            self._exit_reason = ''
+
+
+---
+
+## Task 3 — PROJECT: R-multiple on Trade
+
+The R-multiple measures profit in units of risk, not dollars. It's the standard metric in professional trading:
+
+```
+R = pnl / (abs(entry_price - stop_loss) * quantity)
+```
+
+A trade that risked $100 and made $300 = **+3R**.
+A trade that risked $100 and lost $100 = **-1R** (by definition).
+
+Open [algo_backtest/engine/trade.py](algo_backtest/engine/trade.py).
+
+Add a `r_multiple` property that:
+- Returns `pnl / (abs(entry_price - stop_loss) * quantity)`
+- If `stop_loss` is `None` or `stop_loss == entry_price` (division by zero), returns `None`
+- Is a read-only `@property`, consistent with the other properties on this class
+
+Then open [algo_backtest/engine/backtest_engine.py](algo_backtest/engine/backtest_engine.py).
+
+`process_price()` creates `Trade` objects but currently doesn't pass `stop_loss` and `take_profit` through from the closed `Position`. Fix this — pass `position.stop_loss` and `position.take_profit` as keyword arguments when constructing the `Trade`. Without this, `r_multiple` will always return `None`.
+
+Verify it works by running main.py and checking that `r_multiple` gives a sensible number for at least one trade.
+
+---
+
+## Task 4 — PROJECT: strategy_id on Position
+
+Open [algo_backtest/engine/position.py](algo_backtest/engine/position.py).
+
+Add two optional attributes to `Position.__init__`:
+- `strategy_id: Optional[str] = None` — a unique ID for this strategy instance (e.g. `"ma_cross_v1"`)
+- `strategy_name: Optional[str] = None` — a human-readable label (e.g. `"MA Crossover"`)
+
+Update:
+1. `__init__` signature and body
+2. `__str__` — include strategy info if present: append `[strategy: {strategy_name}]` at the end when `strategy_name` is not None
+3. `__repr__` — include both new fields
+4. The class docstring `Attributes:` section
+
+Then open [algo_backtest/engine/backtest_engine.py](algo_backtest/engine/backtest_engine.py).
+
+Add `strategy_id` and `strategy_name` as optional keyword arguments to `open_position()`, defaulting to `None`. Pass them through to `Position(...)`.
+
+Verify: open two positions with different `strategy_id` values and confirm `position.strategy_id` reflects what you passed.
+
+---
+
+Everything done, it took some time as I had to check and modify backtest_engine, position.py, position_kmanager, trade.py - literally every component we have.
+
+This is the test formulated in main.py
+
+if __name__ == '__main__':
+    setup_logging()
+    print('Starting the backtest test procedure in main.py - logging set!')
+    engine = BacktestEngine()
+    engine.open_position('EURUSD', 'BUY', 105.6, 10000, 103.2, 107.7, strategy_id = '432', strategy_name = 'Super XD')
+    engine.open_position('EURUSD', 'SELL', 105.6, 10000, 110.2, 102.7, strategy_id = '432', strategy_name = 'Super XD')
+    engine.open_position('FDAX', 'BUY', 25554, 10, 25500, 25750, strategy_id = '6546', strategy_name = 'DAXI')
+    engine.open_position('FDAX', 'SELL', 25580, 10, 25660, 25350, strategy_id = '2334', strategy_name = 'DAXI')    
+    
+
+    engine.process_price('EURUSD', 104.2)
+    engine.process_price('EURUSD', 106.2)
+    engine.process_price('EURUSD', 108.2)
+    engine.process_price('EURUSD', 102.2)
+    
+    engine.process_price('FDAX', 25654)
+    engine.process_price('FDAX', 25760)
+    engine.process_price('FDAX', 25620)
+    engine.process_price('FDAX', 25440)
+    engine.process_price('FDAX', 25240)
+    
+    print(engine)
+    print(engine.total_pnl)
+    print(engine.win_rate)
+    print([trade.r_multiple for trade in engine.completed_trades])
+
+
+LOG BELOW:
+
+$ python algo_backtest/main.py
+2026-02-25 13:48:52,345 [DEBUG   ] root: Logging in main initialized.
+Starting the backtest test procedure in main.py - logging set!
+Position @Strategy ('Super XD', ('432',)), Position_id = fb3f533a-34b2-42e1-8e35-a28570c53096 | BUY 10000 EURUSD @ 105.6 [SL = 103.2, TP = 107.7] added successfully
+2026-02-25 13:48:52,345 [INFO    ] engine.backtest_engine: @Strategy Super XD: ('432',) Position fb3f533a-34b2-42e1-8e35-a28570c53096: BUY EURUSD @ 105.6
+Position @Strategy ('Super XD', ('432',)), Position_id = 75f08aa7-bb63-40bb-9f98-5c8acfc81008 | SELL 10000 EURUSD @ 105.6 [SL = 110.2, TP = 102.7] added successfully
+2026-02-25 13:48:52,345 [INFO    ] engine.backtest_engine: @Strategy Super XD: ('432',) Position 75f08aa7-bb63-40bb-9f98-5c8acfc81008: SELL EURUSD @ 105.6
+Position @Strategy ('DAXI', ('6546',)), Position_id = ec86cf92-f0e0-475c-bed2-c5300e3e2c28 | BUY 10 FDAX @ 25554 [SL = 25500, TP = 25750] added successfully
+2026-02-25 13:48:52,345 [INFO    ] engine.backtest_engine: @Strategy DAXI: ('6546',) Position ec86cf92-f0e0-475c-bed2-c5300e3e2c28: BUY FDAX @ 25554
+Position @Strategy ('DAXI', ('2334',)), Position_id = e27914ba-8572-4d83-938f-4f99060c8cbd | SELL 10 FDAX @ 25580 [SL = 25660, TP = 25350] added successfully
+2026-02-25 13:48:52,346 [INFO    ] engine.backtest_engine: @Strategy DAXI: ('2334',) Position e27914ba-8572-4d83-938f-4f99060c8cbd: SELL FDAX @ 25580
+2026-02-25 13:48:52,346 [DEBUG   ] engine.backtest_engine: Processing price for EURUSD at $104.2
+2026-02-25 13:48:52,346 [DEBUG   ] engine.backtest_engine: Processing price for EURUSD at $106.2
+2026-02-25 13:48:52,346 [DEBUG   ] engine.backtest_engine: Processing price for EURUSD at $108.2
+2026-02-25 13:48:52,346 [INFO    ] engine.backtest_engine: @Strategy ('432',), Super XD || Position fb3f533a-34b2-42e1-8e35-a28570c53096 @ EURUSD closed with 26000.000000000084 as a Buy TP hit
+2026-02-25 13:48:52,346 [DEBUG   ] engine.backtest_engine: Processing price for EURUSD at $102.2
+2026-02-25 13:48:52,346 [INFO    ] engine.backtest_engine: @Strategy ('432',), Super XD || Position 75f08aa7-bb63-40bb-9f98-5c8acfc81008 @ EURUSD closed with 33999.99999999991 as a Sell TP hit
+2026-02-25 13:48:52,346 [DEBUG   ] engine.backtest_engine: Processing price for FDAX at $25654
+2026-02-25 13:48:52,346 [DEBUG   ] engine.backtest_engine: Processing price for FDAX at $25760
+2026-02-25 13:48:52,346 [INFO    ] engine.backtest_engine: @Strategy ('6546',), DAXI || Position ec86cf92-f0e0-475c-bed2-c5300e3e2c28 @ FDAX closed with 2060 as a Buy TP hit
+2026-02-25 13:48:52,347 [INFO    ] engine.backtest_engine: @Strategy ('2334',), DAXI || Position e27914ba-8572-4d83-938f-4f99060c8cbd @ FDAX closed with -1800 as a Sell SL hit
+2026-02-25 13:48:52,347 [DEBUG   ] engine.backtest_engine: Processing price for FDAX at $25620
+2026-02-25 13:48:52,347 [DEBUG   ] engine.backtest_engine: Processing price for FDAX at $25440
+2026-02-25 13:48:52,347 [DEBUG   ] engine.backtest_engine: Processing price for FDAX at $25240
+engine.backtest_engine: 0 open | 4 closed | PnL: $60260.0
+60260.0
+75.0
+[1.08, 0.74, 3.81, -2.25]
+
+It all seems to work, although we definitely will have to test it on a real battlefield soon :))
+I'm hoping to achieve full functionality by the end of next week.
+
+## Task 5 — PCAP Simulation (10 questions, 12 minutes)
+
+Time yourself. No code runner.
+
+**Q1:** What is the output?
+```python
+x = 5
+y = 3
+print(x // y, x % y, x ** y)
+```
+- A) `1 2 125`
+- B) `1 2 15`
+- C) `2 2 125`
+- D) `1.67 2 125`
+
+A
+
+**Q2:** Which correctly creates a set with one element?
+- A) `{}`
+- B) `set()`
+- C) `{"hello"}`
+- D) `set["hello"]`
+
+C
+
+**Q3:** What is the output?
+```python
+class A:
+    def __init__(self):
+        self.x = 10
+    def __add__(self, other):
+        return A() if isinstance(other, A) else NotImplemented
+
+a = A()
+b = A()
+c = a + b
+print(type(c).__name__)
+```
+- A) `TypeError`
+- B) `NotImplemented`
+- C) `A`
+- D) `int`
+
+C
+
+**Q4:** What is the output?
+```python
+s = "racecar"
+print(s == s[::-1])
+```
+- A) `False`
+- B) `True`
+- C) `TypeError`
+- D) `"racecar"`
+
+B
+
+**Q5:** What does `zip([1,2,3], [4,5])` produce?
+- A) `[(1,4), (2,5), (3, None)]`
+- B) `[(1,4), (2,5)]`
+- C) `TypeError`
+- D) `[(1,4,3), (2,5)]`
+
+A
+
+
+
+
+**Q6:** What is the output?
+```python
+def f():
+    return 1, 2, 3
+
+a, *b = f()
+print(a, b)
+```
+- A) `1 [2, 3]`
+- B) `1 (2, 3)`
+- C) `TypeError`
+- D) `1 2`
+
+B
+
+**Q7:** What is the output?
+```python
+try:
+    raise ValueError("bad") from TypeError("cause")
+except ValueError as e:
+    print(type(e.__cause__).__name__)
+```
+- A) `ValueError`
+- B) `TypeError`
+- C) `None`
+- D) `AttributeError`
+
+A
+
+**Q8:** Which statement about `@property` is true?
+- A) A property can only have a getter, never a setter
+- B) A property setter is defined with `@prop_name.setter`
+- C) Properties are only valid in classes that inherit from `object`
+- D) A property must return a value — returning `None` raises `TypeError`
+
+B
+
+**Q9:** What is the output?
+```python
+d = {}
+for i in range(3):
+    d[i] = i ** 2
+print(d)
+```
+- A) `{0: 0, 1: 1, 2: 4}`
+- B) `{1: 1, 2: 4, 3: 9}`
+- C) `[0, 1, 4]`
+- D) `TypeError`
+
+A
+
+**Q10:** What is the output?
+```python
+class C:
+    def __init__(self, val):
+        self._val = val
+
+    @property
+    def val(self):
+        return self._val
+
+    @val.setter
+    def val(self, new):
+        self._val = new * 2
+
+c = C(5)
+c.val = 3
+print(c.val)
+```
+- A) `3`
+- B) `5`
+- C) `6`
 - D) `AttributeError`
 
 C
 
-
-
-**Q5:** What is the output?
-```python
-s = {1, 2, 3}
-s.add(2)
-s.add(4)
-print(len(s))
-```
-- A) `3`
-- B) `4`
-- C) `5`
-- D) `TypeError`
-
-B
-
-**Q6:** What is the output?
-```python
-def gen():
-    yield 1
-    yield 2
-    yield 3
-
-g = gen()
-print(next(g), next(g))
-print(list(g))
-
-
-A
-```
-- A) `1 2` then `[3]`
-- B) `1 2` then `[1, 2, 3]`
-- C) `1 2` then `[]`
-- D) `StopIteration`
-
-**Q7:** What is the output?
-```python
-class Meta(type):
-    pass
-
-class MyClass(metaclass=Meta):
-    pass
-
-print(type(MyClass))
-```
-- A) `<class 'type'>`
-- B) `<class '__main__.Meta'>`
-- C) `<class '__main__.MyClass'>`
-- D) `TypeError`
-
-B - but it's my speculation - WE DIDN'T HAVE THAT!
-
-**Q8:** What is the output?
-```python
-x = "hello world"
-print(x.split()[1].upper()[:3])
-```
-- A) `"WOR"`
-- B) `"hel"`
-- C) `"WO"`
-- D) `"wor"`
-
-A
-
-**Q9:** What is the output?
-```python
-def f(a, b, /, c, d):
-    return a + b + c + d
-
-print(f(1, 2, c=3, d=4))
-```
-- A) `10`
-- B) `TypeError`
-- C) `SyntaxError`
-- D) `NameError`
-
-A
-
-**Q10:** Which is true about `__eq__` and `__hash__`?
-- A) Defining `__eq__` automatically defines `__hash__`
-- B) Defining `__eq__` without `__hash__` sets `__hash__` to `None`, making the object unhashable
-- C) `__hash__` is never needed if `__eq__` is defined
-- D) Both are optional and independent
-
-B
-
-**Q11:** What is the output?
-```python
-d = {"a": 1, "b": 2, "c": 3}
-print({v: k for k, v in d.items()})
-```
-- A) `{"a": 1, "b": 2, "c": 3}`
-- B) `{1: "a", 2: "b", 3: "c"}`
-- C) `TypeError`
-- D) `{("a", 1), ("b", 2), ("c", 3)}`
-
-B
-
-**Q12:** What is the output?
-```python
-class A:
-    def __init__(self):
-        self.__x = 10
-
-    def get_x(self):
-        return self.__x
-
-a = A()
-print(a.get_x(), a._A__x)
-```
-- A) `10 AttributeError`
-- B) `AttributeError AttributeError`
-- C) `10 10`
-- D) `10 None`
-
-C
-
 ---
 
-## Task 4 — Write: Custom Iterator
+## Task 6 — PCAP Trap: Predict + Explain
 
-Write a class `Countdown` in `practice.py` that:
-- Takes a `start: int` in `__init__`
-- Implements the full iterator protocol (`__iter__`, `__next__`)
-- Yields values from `start` down to `1` inclusive
-- After reaching `1`, raises `StopIteration`
-- Can be reset by calling `.reset()` which restores the counter to `start`
-
-Demonstrate it works by:
-1. Using it in a `for` loop — prints `3 2 1`
-2. Calling `reset()` and doing `list(countdown)` — confirms reusability
-
-Paste final code in the answer box.
-
-class Countdown:
-    '''A practice iterator class which takes the following args:
-    
-    start: int
-    
-    It yields values from start down to 1 inclusive, and then raises StopIteration,
-    but the value can be reset by calling .reset() method.
-    '''
-    
-    def __init__(self, start: int):
-        self.start = start
-        self.current = start
-        
-    def __iter__(self):
-        return self
-    
-    def __next__(self):
-        if self.current < 1:
-            raise StopIteration
-        else:
-            value = self.current
-            self.current -= 1
-            return value
-    
-    def reset(self):
-        self.current = self.start
-        print('Restored the current value to the starting value.')
-    
-    
-
-for x in Countdown(5):
-    print(x)
-
-print(list(Countdown(4)))
-print(list(Countdown(7)))
-
-Done it, but IT DOESN'T FEEL like a strongly rooted concept - I had to look things up to make sure it works.
-
-
-
----
-
-## Task 5 — Refactor: Exception Handling
-
-The following code runs but has **three professional-quality issues** (not syntax errors — style and logic problems). Identify them all, then write a corrected version.
-
-```python
-def load_price(filepath):
-    try:
-        f = open(filepath)
-        data = f.read()
-        f.close()
-        return float(data.strip())
-    except:
-        return None
-```
-
-def load_price(filepath):
-    try:
-        with open(filepath, 'r') as r:
-            data = r.read()
-            return float(data.strip())
-    except FileNotFoundError:
-        print('File not found!')
-    except Exception as e:
-        print(f'Unexpected exception: {str(e)}')
-
----
-
-## Task 6 — PCAP Trap: Spot the Difference
-
-Both snippets look similar. Predict what each prints and explain why they differ.
+No code runner. Give the output and a one-sentence explanation for each.
 
 **Snippet A:**
 ```python
-class Account:
-    balance = 0
+def f(x):
+    return x * 2
 
-a1 = Account()
-a2 = Account()
-a1.balance += 100
-print(a1.balance, a2.balance)
+result = map(f, [1, 2, 3])
+print(result) #map memory object - we'd need to wrap it in a list to see the actual values
+print(list(result)) #[2, 4, 6] - we get the actual list of values from the map generator
+print(list(result)) #[] - the generator is exhausted at this point
 
 
-100, 0
 
-balance here is a class attribute, shared by all instances of the class as a new instance is created, but if we instantiate the balance and then change it in a given class instance, IT WILL BE in that class instance only. Anyway, this is rather weird approach in this case.
+
 
 ```
 
 **Snippet B:**
 ```python
-class Account:
-    balance = 0
+a = [1, 2, 3]
+b = [4, 5, 6]
+c = [*a, *b]
+d = (*a, *b)
+print(type(c).__name__, type(d).__name__)
 
-a1 = Account()
-a2 = Account()
-Account.balance += 100
-print(a1.balance, a2.balance)
+list tuple
 
-100 100
+It's pretty self explanatory, it's enough to just check the brackets.
 
-Here we're changing the whole class attribute, not the instance attribute only.
 ```
 
----
+**Snippet C:**
+```python
+x = None
+print(x is None, x == None, type(x).__name__)
 
-## Task 7 — PROJECT: Docstrings on Position and Trade
+True, False, NoneType
 
-Open [algo_backtest/engine/position.py](algo_backtest/engine/position.py) and [algo_backtest/engine/trade.py](algo_backtest/engine/trade.py).
+NoneType is not a real VALUE, so it cannot be compared as in ==, >= or <= etc. It can only be IS NONE or IS NOT NONE.
 
-For each file, add:
-1. A module-level docstring (one sentence is enough)
-2. A proper class docstring with `Attributes:` section
-3. Docstrings on any public methods that currently lack them
-
-You already know what format you prefer — use it consistently. This is the final documentation pass for the core engine classes.
-
-Edit the files directly. Paste a note here confirming it's done and mention anything interesting you found.
-
-
-I think this is a completely wrong choice of tasks, as both files HAVE these docstrings, and in the format you asked for with Attributes section.
-
-This is a misguided task that I don't need to do, and I DON'T WANT YOU TO TAKE AWAY POINTS FROM ME FOR TODAY.
-
-As for the future progress and GOALS of my backtesting repo, I need the following things:
-- I want to calculate the R profit, based on a risk unit rather than P/L in $, as it's more important for me, and we might always calculate the equity curve based on the risk amount per risk unit, starting balance etc. Beside that, it would be nice to calculate sharpe ratio and profit factor.
-
-
-- I'd like to be able to test several strategies at once, which means that each position should also contain information about given strategy that it implements if applicable - what is more, I might be testing the same strategy that uses the same basic constraints or base factors, but with a twist as slightly different SL/TP settings etc., and it still should be distinguished, so have a different strategy_id. This modularity/objectification is very important.
-- In the end, we should have a nice and clear raporting of all strategies performance (in R values) together and separately. This is the total endgoal.
+```
 
 ---
 
@@ -587,14 +464,17 @@ Q3:
 Q4:
 Q5:
 Q6:
-Q7:
-Q8:
 
 ### Task 2
-Bugs:
-Corrected code:
+Changes made:
 
 ### Task 3
+Notes (verify r_multiple works):
+
+### Task 4
+Notes (verify strategy_id passes through):
+
+### Task 5
 Q1:
 Q2:
 Q3:
@@ -605,20 +485,9 @@ Q7:
 Q8:
 Q9:
 Q10:
-Q11:
-Q12:
-
-### Task 4
-Code:
-
-### Task 5
-Issues:
-Corrected code:
 
 ### Task 6
-Snippet A output + explanation:
-Snippet B output + explanation:
-
-### Task 7
-Notes:
+Snippet A:
+Snippet B:
+Snippet C:
 ```

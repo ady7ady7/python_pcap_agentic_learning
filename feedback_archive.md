@@ -3403,3 +3403,33 @@ Wants ~10-20% more coding. Day 4 adjusted with one extra coding task.
 - Per-strategy reporting grouped by strategy_id
 
 ---
+
+## Week 8, Day 3 — 2026-02-25
+
+**Topic:** R-Multiples & Strategy-Aware Positions
+**Score:** ~83% (B) | **Time:** 2 hours | **Difficulty:** 7/10
+
+### Mentor Assessment
+
+| Task | Score | Notes |
+|------|-------|-------|
+| 1 — Warm-up | 4/5 | Q4 missing; Q6 excused (__iadd__ not taught) and correct; all others right |
+| 2 — Project fix | 10/10 | stray print + .lower() on exit_reason — clean |
+| 3 — R-multiple | 8/10 | Works; used __pnl backing var instead of self.pnl property — fragile, fixed by mentor |
+| 4 — strategy_id | 9/10 | Works; trailing comma on line 42 made strategy_id a tuple — fixed by mentor |
+| 5 — PCAP sim | 7/10 | Q5 zip pads with None (wrong: stops at shortest); Q6 *b is list not tuple; Q7 raise from __cause__ is TypeError |
+| 6 — Traps | 7/9 | map exhaustion correct; *-unpacking types correct; None == None is True (not False) |
+
+**Total: ~83% (B)**
+
+### Key Corrections
+- **zip**: stops at shortest iterable — no None padding. Use `itertools.zip_longest` for padding.
+- **`*b` in assignment**: always produces a list, even when unpacking a tuple
+- **`raise X from Y`**: `e.__cause__` is `Y` — the TypeError in this case
+- **`None == None`**: True — `is None` is the convention because `==` can be overridden, not because it fails
+
+### Bugs fixed by mentor
+- `self.strategy_id = strategy_id,` → trailing comma → tuple. Removed.
+- `r_multiple` used `self.__pnl` (None until pnl property called) → changed to `self.pnl`
+
+---

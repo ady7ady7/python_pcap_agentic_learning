@@ -1,12 +1,12 @@
-# Daily Feedback — Week 8, Day 3
+# Daily Feedback — Week 8, Day 4
 
-**Date:** 2026-02-25
+**Date:** 2026-02-26
 
-**Topic:** Exam Crunch + R-multiples & Strategy-aware Positions
+**Topic:** Per-Strategy Reporting + PCAP Final Crunch
 
 ---
 
-**Tasks completed:** ___ / 7
+**Tasks completed:** ___ / 6
 
 **Time spent:** ___ minutes
 

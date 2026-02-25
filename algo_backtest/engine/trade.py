@@ -28,7 +28,9 @@ class Trade:
                  exit_time: Optional[str] = None,
                  stop_loss: Optional[float] = None,
                  take_profit: Optional[float] = None,
-                 exit_reason: Optional[str] = None
+                 exit_reason: Optional[str] = None,
+                 strategy_id: Optional[str] = None,
+                 strategy_name: Optional[str] = None,
                  ):
         
         """Initialize a completed trade and calculate P&L."""
@@ -43,13 +45,16 @@ class Trade:
         self._exit_time = exit_time
         self._stop_loss = stop_loss
         self._take_profit = take_profit
+        self.strategy_id = strategy_id
+        self.strategy_name = strategy_name
         
         if exit_reason is not None:
-            self._exit_reason = exit_reason.upper()
+            self._exit_reason = exit_reason.lower()
         else:
             self._exit_reason = ''
 
         #Properties - is_winner + pnl + return_percent
+        self.__r_multiple: Optional[float] = None
         self.__pnl: Optional[float] = None
         self.__is_winner: Optional[bool] = None
         self.__return_percent: Optional[float] = None
@@ -68,14 +73,14 @@ class Trade:
         else:
             result = '[LOSS]'
         
-        return (f'''Trade {self._position_id}: {result} {self._side} {self._quantity} {self._ticker}: 
+        return (f'''Strategy {self.strategy_id, self.strategy_name} || Trade {self._position_id}: {result} {self._side} {self._quantity} {self._ticker}: 
                 {self._entry_price} -> {self._exit_price} {self._exit_reason}
                 | P&L: ${self.pnl:.2f}''')
     
     def __repr__(self):
         
         
-        return (f'Trade {self._position_id}: (ticker = {self._ticker!r}, side = {self._side!r}, '
+        return (f'Strategy {self.strategy_id, self.strategy_name} || Trade {self._position_id}: (ticker = {self._ticker!r}, side = {self._side!r}, '
                 f'entry_price = {self._entry_price}, exit_price = {self._exit_price}, '
                 f'quantity = {self._quantity}, pnl = {self.pnl:.2f}, exit_reason = {self._exit_reason!r}'
         )
@@ -106,6 +111,15 @@ class Trade:
         elif self._side == 'SELL':
             self.__pnl = (self._entry_price - self._exit_price) * self._quantity
             return self.__pnl
+        
+    @property
+    def r_multiple(self) -> float:
+        '''Calculates the R multiple based on pnl, entry price and stop loss times quantity (risked value)'''
+        if self._stop_loss is None or self._stop_loss == self._entry_price:
+            return None
+        else:
+            self.__r_multiple = round(self.pnl / (abs(self._entry_price - self._stop_loss) * self._quantity), 2)
+            return self.__r_multiple
         
     @property 
     def is_winner(self) -> bool:
@@ -152,8 +166,6 @@ class Trade:
         if trades is not None:
             trades_profits = [trade.pnl for trade in trades]
             winners = [profit for profit in trades_profits if profit > 0]
-            print(trades_profits)
             return (len(winners) / len(trades_profits)) * 100
-            
         else:
             return 0
