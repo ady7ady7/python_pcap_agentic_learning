@@ -3433,3 +3433,56 @@ Wants ~10-20% more coding. Day 4 adjusted with one extra coding task.
 - `r_multiple` used `self.__pnl` (None until pnl property called) → changed to `self.pnl`
 
 ---
+
+---
+
+## Week 8, Day 4 - 2026-02-26
+
+**Topic:** Per-Strategy Reporting + Final PCAP Crunch
+**Student Self-Report:** ~90 minutes | Difficulty: 5-6/10
+
+### Mentor Assessment
+
+**Overall Score: ~86%**
+
+#### Task 1 — PCAP Warm-up (5.5/6)
+- Q1: Correct (logic right, formatting not penalised)
+- Q2: WRONG — `sorted(key=lambda x: -x)` sorts by negated key but returns ORIGINAL values → `[9, 5, 4]` not `[-9, -5, -4]`
+- Q3: Correct (f(4) = 10)
+- Q4: Correct (zip / zip(*zip))
+- Q5: Correct (reduce product = 24)
+- Q6: Correct ([C(1), C(2), C(3)])
+
+#### Task 2 — trades_by_strategy() + strategy_report() (9.5/10)
+Working implementation. Sound architecture.
+- (strategy_id, strategy_name) tuple as dict key — correctly separates two DAXI strategies with different IDs
+- Single source of truth respected (portfolio total uses self.completed_trades directly)
+- Minor: `return None` vs `return {}` — type inconsistency with annotation, but does not crash
+- Minor: strategy name/ID label inverted in print header (cosmetic)
+
+#### Task 3 — PCAP Simulation (8.5/10)
+- Q1: Correct (NoneType — format nuance, not penalised)
+- Q2: Excused — property(getter, setter) classic syntax was never taught; answered A, full credit given
+- Q3-Q7: All correct
+- Q8: WRONG — isinstance(b, A) is True when B inherits from A. Correct answer: A (True True True)
+- Q9-Q10: Correct
+
+#### Task 4 — __str__ fix (10/10)
+`__class__.__name__` works correctly in class method scope. Verified output correct.
+
+#### Task 5 — PCAP Traps (10/10)
+- Snippet A: Correct ([1,2,3] — rebinding creates new list object)
+- Snippet B: Correct ([1,2,3,4] — += mutates in place)
+- Snippet C: Correct given ambiguity (f(1) → 1, base case)
+
+### Key Rules Confirmed This Session
+- Format/cosmetic differences in predicted output → NEVER penalised
+- Logic correct = full credit
+- Two real mistakes to remember:
+  1. `sorted(key=lambda x: -x)` → returns original values, sorted by negated key
+  2. `isinstance(child, Parent)` → True (inheritance flows upward)
+
+### Architecture Notes
+- `completed_trades` flat list as single source of truth confirmed — correct design for Monte Carlo, per-strategy slicing, and portfolio-level analysis
+- `trades_by_strategy()` derives groupings on demand without adding class attributes — clean and extensible
+

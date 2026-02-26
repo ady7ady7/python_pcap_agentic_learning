@@ -1417,3 +1417,30 @@ Task 8 expected values were wrong. Correct: 4 winners, $1050 total PnL.
 - trade.py: r_multiple used self.__pnl (backing var) instead of self.pnl (property) — fixed
 
 ---
+
+---
+
+## Week 8, Day 4 - 2026-02-26
+
+**Topic:** Per-Strategy Reporting + Final PCAP Crunch
+**Score:** ~86% | Time: ~90 minutes | Difficulty: 5-6/10
+
+**Tasks Completed:**
+1. PCAP Warm-up (6 output predictions) — 5.5/6
+2. PROJECT: trades_by_strategy() + strategy_report() on BacktestEngine — working, sound architecture
+3. PCAP Simulation 10 MC questions — 8.5/10
+4. Refactor: __str__ fix with __class__.__name__ — correct
+5. PCAP Traps: x+[4] vs x+=[4], mutable default memo dict — correct
+
+**Pre-session fixes by mentor:**
+- should_close() missing explicit return (implicit None)
+- risk_reward_ratio crashed on None SL/TP
+- calculate_win_rate([]) ZeroDivisionError
+- Tuple-in-f-string bug in Position/Trade __str__/__repr__
+
+**Key Mistakes:**
+- sorted(key=lambda x: -x) returns original values sorted by negated key, NOT negated values
+- isinstance(b, A) is True when B inherits from A — inheritance flows upward
+
+**Architecture Decision:** completed_trades as flat single source of truth; trades_by_strategy() derives on demand — correct for future Monte Carlo at portfolio + per-strategy level.
+

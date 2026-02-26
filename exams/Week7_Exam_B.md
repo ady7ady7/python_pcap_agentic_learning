@@ -3,6 +3,9 @@
 
 **Instructions:** No running code. Choose the single best answer. Time yourself.
 
+
+#Start 14:40
+
 ---
 
 ### Q1
@@ -22,6 +25,8 @@ print(f())
 - B) `0`
 - C) `UnboundLocalError`
 - D) `NameError`
+
+C
 
 ---
 
@@ -45,6 +50,8 @@ print(f())
 - C) `0` then `1`
 - D) `UnboundLocalError`
 
+B
+
 ---
 
 ### Q3
@@ -54,6 +61,8 @@ What does `iter(gen)` return when `gen` is a generator?
 - C) `gen` itself — the same object
 - D) `TypeError`
 
+C
+
 ---
 
 ### Q4
@@ -62,6 +71,8 @@ What does `iter(gen)` return when `gen` is a generator?
 - B) `"base"`
 - C) `"__main__"`
 - D) `"strategies.base"`
+
+C
 
 ---
 
@@ -81,6 +92,9 @@ print(a2.data)
 - C) `AttributeError`
 - D) `TypeError`
 
+
+B
+
 ---
 
 ### Q6
@@ -89,6 +103,8 @@ What is `raise TypeError` without parentheses?
 - B) Valid — raises a `TypeError` instance with no message
 - C) Raises the `TypeError` class itself, not an instance
 - D) `AttributeError`
+
+B
 
 ---
 
@@ -103,6 +119,8 @@ print(x[1:4])
 - C) `"ello"`
 - D) `"hell"`
 
+B
+
 ---
 
 ### Q8
@@ -112,6 +130,8 @@ Which format code gives the **full 4-digit year** in `strftime`?
 - C) `%d`
 - D) `%j`
 
+B
+
 ---
 
 ### Q9
@@ -120,6 +140,8 @@ Which format code gives the **full 4-digit year** in `strftime`?
 - B) Logs at ERROR, appends traceback, does not raise or stop execution
 - C) Only valid inside `except` blocks; raises outside them
 - D) Identical to `logging.error("msg")`
+
+B
 
 ---
 
@@ -133,6 +155,8 @@ print(d.get('c', 0))
 - B) `KeyError`
 - C) `0`
 - D) `AttributeError`
+
+C
 
 ---
 
@@ -148,6 +172,8 @@ print(list(gen))
 - B) `[2, 3, 4]`
 - C) `[0, 1]`
 - D) `StopIteration`
+
+B
 
 ---
 
@@ -173,6 +199,8 @@ class C:
 - C) C only
 - D) All three
 
+A
+
 ---
 
 ### Q13
@@ -191,6 +219,8 @@ print(a.__dict__)
 - C) `{'x': 1}`
 - D) `AttributeError`
 
+B
+
 ---
 
 ### Q14
@@ -199,6 +229,8 @@ The root logger's default level is:
 - B) `INFO`
 - C) `WARNING`
 - D) `NOTSET`
+
+C
 
 ---
 
@@ -220,6 +252,8 @@ print(f())
 - C) `"caught"` then `"finally"`
 - D) `ZeroDivisionError`
 
+B
+
 ---
 
 ### Q16
@@ -228,6 +262,9 @@ print(f())
 - B) Whether `obj` is an instance of `int` or `str` (including subclasses)
 - C) `TypeError` — tuple argument not allowed
 - D) Returns the type name
+
+B
+
 
 ---
 
@@ -247,6 +284,8 @@ print(d.sound)
 - C) `"woof"`
 - D) `None`
 
+A
+
 ---
 
 ### Q18
@@ -255,6 +294,9 @@ Which statement about a `FileHandler` and `StreamHandler` sharing a `Formatter` 
 - B) A single `Formatter` instance can be passed to multiple handlers with `setFormatter()`
 - C) `Formatter` is attached to the logger, not to handlers
 - D) `StreamHandler` does not accept a `Formatter`
+
+B
+
 
 ---
 
@@ -268,6 +310,8 @@ print(0.1 + 0.2 == 0.3)
 - C) `TypeError`
 - D) Depends on platform
 
+A
+
 ---
 
 ### Q20
@@ -276,6 +320,9 @@ Which is the correct way to call `super().__init__()` in `class B(A)`?
 - B) `super(B, self).__init__()`  ← only valid way
 - C) `super().__init__()`  ← the modern preferred way (Python 3)
 - D) Both B and C are valid
+
+
+C (A would also work)
 
 ---
 
@@ -292,6 +339,9 @@ print(b)
 - C) `[1, 2, 3, 4, 5, 6]`
 - D) `None`
 
+A
+
+
 ---
 
 ### Q22
@@ -300,6 +350,8 @@ print(b)
 - B) Checks `obj.__dict__` only
 - C) Raises `AttributeError` if the attribute is missing
 - D) Returns the attribute value, not a boolean
+
+A
 
 ---
 
@@ -323,6 +375,8 @@ print(greet.__name__)
 - C) `"dec"`
 - D) `AttributeError`
 
+B
+
 ---
 
 ### Q24
@@ -331,6 +385,8 @@ print(greet.__name__)
 - B) 1 — loggers are singletons keyed by name
 - C) 2 — first call creates, subsequent calls copy
 - D) Depends on whether handlers are attached
+
+B
 
 ---
 
@@ -350,6 +406,9 @@ print(issubclass(B, A), issubclass(A, B))
 - C) `False True`
 - D) `False False`
 
+B
+
+
 ---
 
 ### Q26
@@ -358,6 +417,9 @@ Which `open()` mode creates a new file, and **raises an error** if the file alre
 - B) `'a'`
 - C) `'x'`
 - D) `'r+'`
+
+
+C
 
 ---
 
@@ -373,6 +435,8 @@ logging.debug("test")
 - B) Prints the debug message — first `basicConfig` wins
 - C) Prints the debug message twice
 - D) `AttributeError`
+
+B
 
 ---
 
@@ -396,6 +460,8 @@ for item in ml:
 - C) `[10, 20, 30]`
 - D) `TypeError`
 
+A
+
 ---
 
 ### Q29
@@ -411,6 +477,8 @@ print(x)
 - C) `[4]`
 - D) `TypeError`
 
+B
+
 ---
 
 ### Q30
@@ -419,6 +487,12 @@ Which is true about abstract base classes (`ABC`) and `@abstractmethod`?
 - B) A subclass that does not implement all `@abstractmethod` methods raises `TypeError` on instantiation
 - C) `@abstractmethod` methods must have no body (pass only)
 - D) `ABC` is in the `typing` module
+
+
+B
+
+#End 14:49
+
 
 ---
 

@@ -73,16 +73,17 @@ class Trade:
         else:
             result = '[LOSS]'
         
-        return (f'''Strategy {self.strategy_id, self.strategy_name} || Trade {self._position_id}: {result} {self._side} {self._quantity} {self._ticker}: 
-                {self._entry_price} -> {self._exit_price} {self._exit_reason}
-                | P&L: ${self.pnl:.2f}''')
+        strategy_tag = f'[@{self.strategy_name} | {self.strategy_id}] ' if self.strategy_name else ''
+        return (f'{strategy_tag}Trade {self._position_id}: {result} {self._side} {self._quantity} {self._ticker}: '
+                f'{self._entry_price} -> {self._exit_price} ({self._exit_reason}) | P&L: ${self.pnl:.2f}')
     
     def __repr__(self):
         
         
-        return (f'Strategy {self.strategy_id, self.strategy_name} || Trade {self._position_id}: (ticker = {self._ticker!r}, side = {self._side!r}, '
-                f'entry_price = {self._entry_price}, exit_price = {self._exit_price}, '
-                f'quantity = {self._quantity}, pnl = {self.pnl:.2f}, exit_reason = {self._exit_reason!r}'
+        return (f'Trade(position_id={self._position_id!r}, ticker={self._ticker!r}, side={self._side!r}, '
+                f'entry_price={self._entry_price}, exit_price={self._exit_price}, '
+                f'quantity={self._quantity}, pnl={self.pnl:.2f}, exit_reason={self._exit_reason!r}, '
+                f'strategy_id={self.strategy_id!r}, strategy_name={self.strategy_name!r})'
         )
     
     @property
@@ -142,12 +143,13 @@ class Trade:
         return self.__return_percent
     
     @property
-    def risk_reward_ratio(self) -> float:
-        '''A property used to calc R:R ratio'''
+    def risk_reward_ratio(self) -> Optional[float]:
+        '''A property used to calc R:R ratio. Returns None if SL or TP not set.'''
+        if self._stop_loss is None or self._take_profit is None:
+            return None
         if self._stop_loss == self._entry_price:
             return 0
-        else:
-            self.__risk_reward_ratio = abs(self._take_profit - self._entry_price) / abs(self._entry_price - self._stop_loss)
+        self.__risk_reward_ratio = abs(self._take_profit - self._entry_price) / abs(self._entry_price - self._stop_loss)
         return self.__risk_reward_ratio
     
     @classmethod
@@ -163,9 +165,8 @@ class Trade:
             Returns 0 if no trades.
         """
 
-        if trades is not None:
-            trades_profits = [trade.pnl for trade in trades]
-            winners = [profit for profit in trades_profits if profit > 0]
-            return (len(winners) / len(trades_profits)) * 100
-        else:
-            return 0
+        if not trades:
+            return 0.0
+        trades_profits = [trade.pnl for trade in trades]
+        winners = [profit for profit in trades_profits if profit > 0]
+        return (len(winners) / len(trades_profits)) * 100

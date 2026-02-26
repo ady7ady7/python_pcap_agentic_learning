@@ -3,6 +3,8 @@
 
 **Instructions:** No running code. Choose the single best answer. Time yourself.
 
+
+#Start 13:48
 ---
 
 ### Q1
@@ -18,6 +20,8 @@ f()
 - C) `5`
 - D) `None`
 
+C
+
 ---
 
 ### Q2
@@ -28,6 +32,8 @@ def f():
     x = x + 1
     print(x)
 f()
+
+A
 ```
 - A) `6`
 - B) `NameError`
@@ -43,6 +49,8 @@ f()
 - C) The same generator object
 - D) `TypeError`
 
+C
+
 ---
 
 ### Q4
@@ -51,6 +59,8 @@ What is `__name__` equal to inside `algo_backtest/engine/trade.py` when it is **
 - B) `"engine.trade"`
 - C) `"algo_backtest.engine.trade"`
 - D) `"__main__"`
+
+C
 
 ---
 
@@ -63,6 +73,8 @@ raise "something went wrong"
 - B) `TypeError` at runtime
 - C) `ValueError` at runtime
 - D) Raises the string as an exception message
+
+D
 
 ---
 
@@ -82,6 +94,8 @@ print(f())
 - C) `1` then `2`
 - D) `None`
 
+B
+
 ---
 
 ### Q7
@@ -90,6 +104,8 @@ Which of the following correctly describes `logging.exception("msg")`?
 - B) Logs at ERROR and appends the traceback; does not raise
 - C) Only valid outside `except` blocks
 - D) Identical to `logging.error("msg")`
+
+B
 
 ---
 
@@ -110,6 +126,8 @@ print(A.x, B.x)
 - C) `10 20`
 - D) `20 10`
 
+C
+
 ---
 
 ### Q9
@@ -129,6 +147,8 @@ print(fns[0](), fns[1](), fns[2]())
 - C) `0 0 0`
 - D) `TypeError`
 
+B
+
 ---
 
 ### Q10
@@ -137,6 +157,8 @@ print(fns[0](), fns[1](), fns[2]())
 - B) `True` — `bool` is a subclass of `int`
 - C) `TypeError`
 - D) Depends on Python version
+
+B
 
 ---
 
@@ -157,6 +179,8 @@ finally:
 - C) `A B C`
 - D) `SyntaxError`
 
+A
+
 ---
 
 ### Q12
@@ -166,6 +190,8 @@ A generator function has been exhausted. What happens when you call `next()` on 
 - C) Raises `StopIteration`
 - D) Raises `GeneratorExit`
 
+C
+
 ---
 
 ### Q13
@@ -174,6 +200,8 @@ What does `%y` produce in `strftime`?
 - B) 2-digit year (e.g. `26`)
 - C) ISO year number
 - D) Timezone-aware year
+
+B
 
 ---
 
@@ -190,6 +218,8 @@ print(x)
 - C) `[4]`
 - D) `TypeError`
 
+B
+
 ---
 
 ### Q15
@@ -198,6 +228,8 @@ Which statement about `basicConfig()` is true?
 - B) Has no effect if any handler has already been added to the root logger
 - C) Only affects named loggers, not the root logger
 - D) Automatically adds a `FileHandler`
+
+B
 
 ---
 
@@ -218,6 +250,8 @@ print(add5(10))
 - C) `99`
 - D) `AttributeError`
 
+B
+
 ---
 
 ### Q17
@@ -226,6 +260,8 @@ What is the default logging level for a newly created logger?
 - B) `INFO`
 - C) `WARNING`
 - D) `NOTSET`
+
+C
 
 ---
 
@@ -244,6 +280,8 @@ print(c.val)
 - C) `RecursionError`
 - D) `TypeError`
 
+A
+
 ---
 
 ### Q19
@@ -252,6 +290,8 @@ print(c.val)
 - B) Returns that value instead of raising `AttributeError` if the attribute doesn't exist
 - C) Raises `ValueError` if the attribute doesn't exist
 - D) Acts as a type hint for the attribute
+
+B
 
 ---
 
@@ -269,6 +309,8 @@ for k in d:
 - C) `RuntimeError: dictionary changed size during iteration`
 - D) `StopIteration`
 
+C
+
 ---
 
 ### Q21
@@ -277,6 +319,8 @@ Which is true about `__dict__` on an instance vs. on a class?
 - B) Instance `__dict__` holds instance attributes; class `__dict__` holds class-level attributes and methods
 - C) Instance `__dict__` includes inherited attributes
 - D) Class `__dict__` is always empty
+
+B
 
 ---
 
@@ -295,6 +339,8 @@ print(f(2))
 - C) `[1, 2]` then `[1, 2]`
 - D) `TypeError`
 
+B
+
 ---
 
 ### Q23
@@ -303,6 +349,8 @@ A logger named `"app.engine"` has no handlers. Its parent `"app"` has a `StreamH
 - B) The message propagates to `"app"` and its `StreamHandler` handles it
 - C) `AttributeError` — logger must have its own handlers
 - D) The message goes to the root logger only
+
+B
 
 ---
 
@@ -324,6 +372,8 @@ print(Dog().greet())
 - C) `AttributeError`
 - D) `TypeError`
 
+A
+
 ---
 
 ### Q25
@@ -332,6 +382,9 @@ Which raises `AttributeError`?
 - B) `obj.missing` where `missing` doesn't exist
 - C) `hasattr(obj, "missing")`
 - D) `dir(obj)` when `missing` is not present
+
+
+B
 
 ---
 
@@ -347,6 +400,8 @@ print(list(gen))
 - C) `[]` then `[0, 2, 4]`
 - D) `StopIteration`
 
+B
+
 ---
 
 ### Q27
@@ -355,6 +410,9 @@ print(list(gen))
 - B) `logging.warning()` writes to the logging system; `warnings.warn()` triggers Python's built-in warning mechanism
 - C) `warnings.warn()` is only for deprecated code
 - D) `logging.warning()` raises an exception; `warnings.warn()` does not
+
+
+B
 
 ---
 
@@ -380,6 +438,8 @@ print(C().method())
 - C) `"ABC"`
 - D) `"ACB"`
 
+C
+
 ---
 
 ### Q29
@@ -395,6 +455,8 @@ logger.debug("second")
 - B) Prints `first` and `second`
 - C) Prints nothing — no handler attached
 - D) `first` only — basicConfig has no effect because root already has a handler from `logger.warning`
+
+B
 
 ---
 
@@ -432,6 +494,10 @@ class Counter:
 - B) Option B only
 - C) Option C only
 - D) All three
+
+A
+
+#End 14:02
 
 ---
 

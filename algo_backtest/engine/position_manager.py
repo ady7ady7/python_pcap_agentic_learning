@@ -4,7 +4,7 @@ A class used to handle multiple positions
 
 
 from typing import List
-from algo_backtest.engine.position import Position
+from engine.position import Position
 
 
 class PositionManager:

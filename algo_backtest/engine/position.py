@@ -46,12 +46,13 @@ class Position:
         
     def __str__(self) -> str:
         '''A Python magic method used to return information about class instead of memory object'''
-        return f'@Strategy {self.strategy_name, self.strategy_id}, Position_id = {self.position_id} | {self.side} {self.quantity} {self.ticker} @ {self.entry_price} [SL = {self.stop_loss}, TP = {self.take_profit}]'
+        strategy_tag = f' [@{self.strategy_name} | {self.strategy_id}]' if self.strategy_name else ''
+        return f'Position_id = {self.position_id} | {self.side} {self.quantity} {self.ticker} @ {self.entry_price} [SL = {self.stop_loss}, TP = {self.take_profit}]{strategy_tag}'
     
     
     def __repr__(self) -> str:
         '''A Python magic method used to provide devs with useful information to recreate the object '''
-        return f'@Strategy {self.strategy_name, self.strategy_id}, Position(position_id = {self.position_id}, ticker = {self.ticker}, side = {self.side}, entry_price = {self.entry_price}, quantity = {self.quantity}, stop_loss = {self.stop_loss}, take_profit = {self.take_profit})'
+        return f'Position(position_id={self.position_id!r}, ticker={self.ticker!r}, side={self.side!r}, entry_price={self.entry_price}, quantity={self.quantity}, stop_loss={self.stop_loss}, take_profit={self.take_profit}, strategy_id={self.strategy_id!r}, strategy_name={self.strategy_name!r})'
     
     def __hash__(self):
         '''A dunder method that allows us to hash a given position to later be used in a dictionary'''
@@ -116,8 +117,8 @@ class Position:
         elif self.side == 'SELL' and current_price <= self.take_profit:
             return (True, 'Sell TP hit')
 
-        
-        
+        return (False, 'Still open')
+
     @classmethod
     def calculate_position_size(cls,
                                 account_balance: float,

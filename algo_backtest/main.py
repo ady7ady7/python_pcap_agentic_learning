@@ -53,3 +53,7 @@ if __name__ == '__main__':
     print(engine.total_pnl)
     print(engine.win_rate)
     print([trade.r_multiple for trade in engine.completed_trades])
+    #print(engine.trades_by_strategy()) - not needed, we will directly request this in strategy_report
+    x = engine.trades_by_strategy()
+    print(x)
+    engine.strategy_report()

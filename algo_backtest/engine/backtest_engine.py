@@ -27,6 +27,9 @@ class BacktestEngine:
     - open_position(self, ticker, side, entry, quantity, stop_loss, take_profit) -> returns a Position object + appends it to the position manager
     - process_price(self, ticker: str, current_price: float) -> returns a list of closed trades for a given ticker,
     based on the processed price, automatically creates trade objects for every closed trade and appends them to self.completed_trades list.
+    
+    - trades_by_strategy @26.02.26 - method used to group all trades based on their strategy for reporting, so we can see how different strats perform
+    - strategy_report  @26.02.26 - self explanatory, reporting method for strategies
 
     Read-only properties:
     win_rate 
@@ -50,7 +53,7 @@ class BacktestEngine:
         BacktestEngine: 2 open | 3 closed | PnL: $1500.00
         """
         
-        return f'{__name__}: {(self.position_manager.get_position_count())} open | {len(self.completed_trades)} closed | PnL: ${self.total_pnl}'
+        return f'{__class__.__name__}: {(self.position_manager.get_position_count())} open | {len(self.completed_trades)} closed | PnL: ${self.total_pnl}'
         
         
     def open_position(self, 
@@ -128,8 +131,60 @@ class BacktestEngine:
             self.completed_trades.append(trade)
             
         return newly_closed_trades
-            
- 
+    
+    def trades_by_strategy(self) -> dict[str, list[Trade]]:
+        '''Method used to filter trades based on their strategy - it can be called explicitly and/or its return may be eventually added to Class attributes, 
+        but for now it just returns the dict, and we will use it in strategy_report without adding extra Class attributes
+        
+        Args:
+        None - we use the self.completed_trades from our Class instance
+        
+        Returns:
+        A dict where each strategy_id represents a key, and its trades are represented as a list.
+        
+        e.g 
+        
+        {'432': [Trade(position_id='957d8746-f5c1-4c9e-93df-2342e2a316d6', ticker='EURUSD', side='BUY', entry_price=105.6, exit_price=104.2, quantity=10000, pnl=-14000.00, exit_reason='still open', strategy_id='432', strategy_name='Super XD'), 
+        Trade(position_id='e14c1475-c77b-4683-90cd-fda6946f42dd', ticker='EURUSD', side='SELL', entry_price=105.6, exit_price=104.2, quantity=10000, pnl=14000.00, exit_reason='still open', strategy_id='432', strategy_name='Super XD')]}
+        '''
+        
+        if not self.completed_trades:
+            logger.info(f'There are no completed trades in self.completed_trades, and we cannot proceed with filtering them by the strategy.')
+            return None
+        else:
+            strategies_set = set([(trade.strategy_id, trade.strategy_name) for trade in self.completed_trades])
+            completed_trades_by_strategy = {}
+            for strategy in strategies_set:
+                filtered_trades = [trade for trade in self.completed_trades if trade.strategy_id == strategy[0]]
+                completed_trades_by_strategy[strategy] = filtered_trades
+            return completed_trades_by_strategy
+        
+    def strategy_report(self):
+        '''Method used to call trades_by_strategy method to get filtered trades and print out a report with stats for every strategy and portfolio total'''
+        
+        trades_filtered_by_strategy = self.trades_by_strategy()
+        for strategy in trades_filtered_by_strategy:
+            total_pnl = round(sum([trade.pnl for trade in trades_filtered_by_strategy[strategy]]), 2)
+            win_rate = Trade.calculate_win_rate(trades_filtered_by_strategy[strategy])
+            avg_r = sum(trade.r_multiple for trade in trades_filtered_by_strategy[strategy]) / len(trades_filtered_by_strategy[strategy])
+            print(f'''{3* '-'} {strategy[0]} (ID: {strategy[1]}) {3* '-'}
+                  
+                  Trades: {len(trades_filtered_by_strategy[strategy])}
+                  Win Rate: {win_rate}%
+                  Total PnL: ${total_pnl:.2f}
+                  Avg R: {avg_r:.2f}R
+                  
+                  ''')
+        print(f'''{3* '-'} PORTFOLIO TOTAL  {3* '-'}
+                  
+                  Trades: {len(self.completed_trades)}
+                  Win Rate: {self.win_rate}%
+                  Total PnL: ${self.total_pnl}
+                  Avg R: {round(sum(trade.r_multiple for trade in self.completed_trades) / len(self.completed_trades), 2)}R
+                  
+                  ''')
+        
+
  
     @property
     def total_pnl(self) -> float:

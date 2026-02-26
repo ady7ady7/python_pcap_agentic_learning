@@ -1,460 +1,391 @@
-# Week 8, Day 3 — R-Multiples & Strategy-Aware Positions
-**Date:** 2026-02-25 | **Focus:** PCAP crunch + project extended goals (R-multiple, strategy_id)
+# Week 8, Day 5 — Final PCAP Crunch + Week 8 Review
+**Date:** 2026-02-27 | **Focus:** Closing remaining gaps before exams + Project: BacktestEngine polish
 
 ---
 
-## Task 1 — PCAP Warm-up (no code, 6 questions)
+## Task 1 — PCAP Warm-up: Sort & isinstance traps (no code, 4 questions)
 
-**Q1:** What is the output?
-```python
-def f(a, b=2, *args, c=3):
-    print(a, b, c, args)
+These are the exact two gaps from Day 4 — drill them until they are automatic.
 
-f(1, 4, 5, 6, c=10)
-
-1, 4, 10, (5, 6)
-```
+**Q1:** What does `sorted([3, 1, 4, 1, 5], key=lambda x: -x)` return?
 
 **Q2:** What is the output?
 ```python
-class A:
+class Animal:
     pass
 
-class B(A):
+class Dog(Animal):
     pass
 
-class C(A):
+class Poodle(Dog):
     pass
 
-class D(B, C):
-    pass
-
-print(D.__mro__)
-
-
-
+p = Poodle()
+print(isinstance(p, Animal), isinstance(p, Dog), isinstance(p, Poodle))
 ```
-Pick the correct MRO order:
-- A) `D → B → C → A → object`
-- B) `D → B → A → C → object`
-- C) `D → C → B → A → object`
-- D) `D → A → B → C → object`
-
-A
 
 **Q3:** What is the output?
 ```python
-a = {"x": 1}
-b = a.copy()
-b["x"] = 99
-b["y"] = 2
-print(a)
-
-
-x : 1 (with proper formatting, but you get the idea)
-
-
+xs = [10, 20, 30, 40, 50]
+result = sorted(xs, key=lambda x: x % 3)
+print(result)
 ```
+Think carefully — what are the keys, and what values are returned?
 
 **Q4:** What is the output?
 ```python
-print(bool(0), bool(""), bool([]), bool(0.0), bool(None))
+class A: pass
+class B(A): pass
+class C(B): pass
+
+obj = C()
+print(issubclass(C, A), issubclass(A, C), isinstance(obj, A))
 ```
 
-**Q5:** What is the output?
+---
+
+## Task 2 — PCAP Trap Gauntlet: 6 tricky snippets (no code)
+
+Predict output + one-sentence explanation for each.
+
+**Snippet A:**
 ```python
-def gen(n):
-    for i in range(n):
-        yield i * i
+def f(x=[]):
+    x.append(1)
+    return x
 
-g = gen(5)
-print(next(g), next(g), sum(g))
-
-
-
-0 1 29
-
+print(f())
+print(f())
+print(f([]))
+print(f())
 ```
 
-**Q6:** What is the output?
+**Snippet B:**
 ```python
-class A:
-    def __init__(self):
-        self.items = []
+x = 5
+def outer():
+    x = 10
+    def inner():
+        print(x)
+    return inner
 
-    def __iadd__(self, other):
-        self.items.append(other)
-        return self
-
-a = A()
-a += "x"
-a += "y"
-print(a.items)
+outer()()
 ```
 
-WE DIDN'T HAVE iadd!!!!
-I reckon it's [x, y] but IT SHOULDN'T BE HERE!
+**Snippet C:**
+```python
+try:
+    raise ValueError("bad")
+except ValueError as e:
+    result = str(e)
+finally:
+    result = "cleaned"
 
-
----
-
-## Task 2 — PROJECT: Fix the stray print in Trade
-
-Before adding new features, clean up one existing bug.
-
-Open [algo_backtest/engine/trade.py](algo_backtest/engine/trade.py).
-
-`calculate_win_rate()` has a stray `print(trades_profits)` inside it — that's what was printing the PnL list before the win rate in Day 1's console output. Remove it.
-
-While you're there: `exit_reason` in `__init__` calls `.upper()` on the reason string, but `should_close()` returns strings like `"Buy TP hit"`. After `.upper()` that becomes `"BUY TP HIT"` — inconsistent with what gets logged. Change the `exit_reason` storage to preserve the original case (remove the `.upper()` call, or lowercase it consistently — your choice, but pick one and apply it).
-
-Edit the file directly. No answer box needed — just note what you changed.
-
-- print(trades_profits) removed
-- init exit reason also changed to .lower() instead
-
-    def __init__(self,
-                 position_id: str,
-                 ticker: str,
-                 side: str,
-                 entry_price: float,
-                 exit_price: float,
-                 quantity: float,
-                 entry_time: Optional[str] = None,
-                 exit_time: Optional[str] = None,
-                 stop_loss: Optional[float] = None,
-                 take_profit: Optional[float] = None,
-                 exit_reason: Optional[str] = None
-                 ):
-        
-        """Initialize a completed trade and calculate P&L."""
-        
-        self._position_id = position_id
-        self._ticker = ticker
-        self._side = side.upper()
-        self._entry_price = entry_price
-        self._exit_price = exit_price
-        self._quantity = quantity
-        self._entry_time = entry_time
-        self._exit_time = exit_time
-        self._stop_loss = stop_loss
-        self._take_profit = take_profit
-        
-        if exit_reason is not None:
-            self._exit_reason = exit_reason.lower()
-        else:
-            self._exit_reason = ''
-
-
----
-
-## Task 3 — PROJECT: R-multiple on Trade
-
-The R-multiple measures profit in units of risk, not dollars. It's the standard metric in professional trading:
-
-```
-R = pnl / (abs(entry_price - stop_loss) * quantity)
+print(result)
 ```
 
-A trade that risked $100 and made $300 = **+3R**.
-A trade that risked $100 and lost $100 = **-1R** (by definition).
+**Snippet D:**
+```python
+class Meta(type):
+    def __new__(mcs, name, bases, namespace):
+        namespace['greeting'] = 'hello'
+        return super().__new__(mcs, name, bases, namespace)
 
-Open [algo_backtest/engine/trade.py](algo_backtest/engine/trade.py).
+class Foo(metaclass=Meta):
+    pass
 
-Add a `r_multiple` property that:
-- Returns `pnl / (abs(entry_price - stop_loss) * quantity)`
-- If `stop_loss` is `None` or `stop_loss == entry_price` (division by zero), returns `None`
-- Is a read-only `@property`, consistent with the other properties on this class
+print(Foo.greeting)
+```
 
-Then open [algo_backtest/engine/backtest_engine.py](algo_backtest/engine/backtest_engine.py).
+**Snippet E:**
+```python
+gen = (x * 2 for x in range(5))
+print(3 in gen)
+print(list(gen))
+```
 
-`process_price()` creates `Trade` objects but currently doesn't pass `stop_loss` and `take_profit` through from the closed `Position`. Fix this — pass `position.stop_loss` and `position.take_profit` as keyword arguments when constructing the `Trade`. Without this, `r_multiple` will always return `None`.
-
-Verify it works by running main.py and checking that `r_multiple` gives a sensible number for at least one trade.
-
----
-
-## Task 4 — PROJECT: strategy_id on Position
-
-Open [algo_backtest/engine/position.py](algo_backtest/engine/position.py).
-
-Add two optional attributes to `Position.__init__`:
-- `strategy_id: Optional[str] = None` — a unique ID for this strategy instance (e.g. `"ma_cross_v1"`)
-- `strategy_name: Optional[str] = None` — a human-readable label (e.g. `"MA Crossover"`)
-
-Update:
-1. `__init__` signature and body
-2. `__str__` — include strategy info if present: append `[strategy: {strategy_name}]` at the end when `strategy_name` is not None
-3. `__repr__` — include both new fields
-4. The class docstring `Attributes:` section
-
-Then open [algo_backtest/engine/backtest_engine.py](algo_backtest/engine/backtest_engine.py).
-
-Add `strategy_id` and `strategy_name` as optional keyword arguments to `open_position()`, defaulting to `None`. Pass them through to `Position(...)`.
-
-Verify: open two positions with different `strategy_id` values and confirm `position.strategy_id` reflects what you passed.
+**Snippet F:**
+```python
+a = (1,)
+b = (1,)
+print(a == b, a is b)
+```
 
 ---
 
-Everything done, it took some time as I had to check and modify backtest_engine, position.py, position_kmanager, trade.py - literally every component we have.
-
-This is the test formulated in main.py
-
-if __name__ == '__main__':
-    setup_logging()
-    print('Starting the backtest test procedure in main.py - logging set!')
-    engine = BacktestEngine()
-    engine.open_position('EURUSD', 'BUY', 105.6, 10000, 103.2, 107.7, strategy_id = '432', strategy_name = 'Super XD')
-    engine.open_position('EURUSD', 'SELL', 105.6, 10000, 110.2, 102.7, strategy_id = '432', strategy_name = 'Super XD')
-    engine.open_position('FDAX', 'BUY', 25554, 10, 25500, 25750, strategy_id = '6546', strategy_name = 'DAXI')
-    engine.open_position('FDAX', 'SELL', 25580, 10, 25660, 25350, strategy_id = '2334', strategy_name = 'DAXI')    
-    
-
-    engine.process_price('EURUSD', 104.2)
-    engine.process_price('EURUSD', 106.2)
-    engine.process_price('EURUSD', 108.2)
-    engine.process_price('EURUSD', 102.2)
-    
-    engine.process_price('FDAX', 25654)
-    engine.process_price('FDAX', 25760)
-    engine.process_price('FDAX', 25620)
-    engine.process_price('FDAX', 25440)
-    engine.process_price('FDAX', 25240)
-    
-    print(engine)
-    print(engine.total_pnl)
-    print(engine.win_rate)
-    print([trade.r_multiple for trade in engine.completed_trades])
-
-
-LOG BELOW:
-
-$ python algo_backtest/main.py
-2026-02-25 13:48:52,345 [DEBUG   ] root: Logging in main initialized.
-Starting the backtest test procedure in main.py - logging set!
-Position @Strategy ('Super XD', ('432',)), Position_id = fb3f533a-34b2-42e1-8e35-a28570c53096 | BUY 10000 EURUSD @ 105.6 [SL = 103.2, TP = 107.7] added successfully
-2026-02-25 13:48:52,345 [INFO    ] engine.backtest_engine: @Strategy Super XD: ('432',) Position fb3f533a-34b2-42e1-8e35-a28570c53096: BUY EURUSD @ 105.6
-Position @Strategy ('Super XD', ('432',)), Position_id = 75f08aa7-bb63-40bb-9f98-5c8acfc81008 | SELL 10000 EURUSD @ 105.6 [SL = 110.2, TP = 102.7] added successfully
-2026-02-25 13:48:52,345 [INFO    ] engine.backtest_engine: @Strategy Super XD: ('432',) Position 75f08aa7-bb63-40bb-9f98-5c8acfc81008: SELL EURUSD @ 105.6
-Position @Strategy ('DAXI', ('6546',)), Position_id = ec86cf92-f0e0-475c-bed2-c5300e3e2c28 | BUY 10 FDAX @ 25554 [SL = 25500, TP = 25750] added successfully
-2026-02-25 13:48:52,345 [INFO    ] engine.backtest_engine: @Strategy DAXI: ('6546',) Position ec86cf92-f0e0-475c-bed2-c5300e3e2c28: BUY FDAX @ 25554
-Position @Strategy ('DAXI', ('2334',)), Position_id = e27914ba-8572-4d83-938f-4f99060c8cbd | SELL 10 FDAX @ 25580 [SL = 25660, TP = 25350] added successfully
-2026-02-25 13:48:52,346 [INFO    ] engine.backtest_engine: @Strategy DAXI: ('2334',) Position e27914ba-8572-4d83-938f-4f99060c8cbd: SELL FDAX @ 25580
-2026-02-25 13:48:52,346 [DEBUG   ] engine.backtest_engine: Processing price for EURUSD at $104.2
-2026-02-25 13:48:52,346 [DEBUG   ] engine.backtest_engine: Processing price for EURUSD at $106.2
-2026-02-25 13:48:52,346 [DEBUG   ] engine.backtest_engine: Processing price for EURUSD at $108.2
-2026-02-25 13:48:52,346 [INFO    ] engine.backtest_engine: @Strategy ('432',), Super XD || Position fb3f533a-34b2-42e1-8e35-a28570c53096 @ EURUSD closed with 26000.000000000084 as a Buy TP hit
-2026-02-25 13:48:52,346 [DEBUG   ] engine.backtest_engine: Processing price for EURUSD at $102.2
-2026-02-25 13:48:52,346 [INFO    ] engine.backtest_engine: @Strategy ('432',), Super XD || Position 75f08aa7-bb63-40bb-9f98-5c8acfc81008 @ EURUSD closed with 33999.99999999991 as a Sell TP hit
-2026-02-25 13:48:52,346 [DEBUG   ] engine.backtest_engine: Processing price for FDAX at $25654
-2026-02-25 13:48:52,346 [DEBUG   ] engine.backtest_engine: Processing price for FDAX at $25760
-2026-02-25 13:48:52,346 [INFO    ] engine.backtest_engine: @Strategy ('6546',), DAXI || Position ec86cf92-f0e0-475c-bed2-c5300e3e2c28 @ FDAX closed with 2060 as a Buy TP hit
-2026-02-25 13:48:52,347 [INFO    ] engine.backtest_engine: @Strategy ('2334',), DAXI || Position e27914ba-8572-4d83-938f-4f99060c8cbd @ FDAX closed with -1800 as a Sell SL hit
-2026-02-25 13:48:52,347 [DEBUG   ] engine.backtest_engine: Processing price for FDAX at $25620
-2026-02-25 13:48:52,347 [DEBUG   ] engine.backtest_engine: Processing price for FDAX at $25440
-2026-02-25 13:48:52,347 [DEBUG   ] engine.backtest_engine: Processing price for FDAX at $25240
-engine.backtest_engine: 0 open | 4 closed | PnL: $60260.0
-60260.0
-75.0
-[1.08, 0.74, 3.81, -2.25]
-
-It all seems to work, although we definitely will have to test it on a real battlefield soon :))
-I'm hoping to achieve full functionality by the end of next week.
-
-## Task 5 — PCAP Simulation (10 questions, 12 minutes)
+## Task 3 — PCAP Simulation (10 questions, 12 minutes)
 
 Time yourself. No code runner.
 
 **Q1:** What is the output?
 ```python
-x = 5
-y = 3
-print(x // y, x % y, x ** y)
+x = [1, 2, 3]
+y = x[:]
+y.append(4)
+print(x, y)
 ```
-- A) `1 2 125`
-- B) `1 2 15`
-- C) `2 2 125`
-- D) `1.67 2 125`
+- A) `[1, 2, 3] [1, 2, 3, 4]`
+- B) `[1, 2, 3, 4] [1, 2, 3, 4]`
+- C) `[1, 2, 3] [1, 2, 3]`
+- D) `TypeError`
 
-A
-
-**Q2:** Which correctly creates a set with one element?
-- A) `{}`
-- B) `set()`
-- C) `{"hello"}`
-- D) `set["hello"]`
-
-C
-
-**Q3:** What is the output?
+**Q2:** What is the output?
 ```python
-class A:
-    def __init__(self):
-        self.x = 10
-    def __add__(self, other):
-        return A() if isinstance(other, A) else NotImplemented
+def gen():
+    yield 1
+    yield 2
+    yield 3
 
-a = A()
-b = A()
-c = a + b
-print(type(c).__name__)
+g = gen()
+print(next(g))
+print(next(g))
+g2 = iter(g)
+print(g is g2)
 ```
-- A) `TypeError`
-- B) `NotImplemented`
-- C) `A`
-- D) `int`
+- A) `1`, `2`, `True`
+- B) `1`, `2`, `False`
+- C) `1`, `1`, `True`
+- D) `TypeError`
 
-C
+**Q3:** Which of the following raises `AttributeError`?
+```python
+# A
+class C:
+    @property
+    def x(self): return 42
+c = C(); c.x = 10
+
+# B
+class C:
+    def __init__(self): self._x = 0
+    @property
+    def x(self): return self._x
+    @x.setter
+    def x(self, v): self._x = v
+c = C(); c.x = 10
+
+# C
+class C:
+    pass
+c = C(); c.x = 10
+```
+- A) A only
+- B) B only
+- C) C only
+- D) None of them
 
 **Q4:** What is the output?
 ```python
-s = "racecar"
-print(s == s[::-1])
+from functools import reduce
+xs = [2, 3, 4]
+print(reduce(lambda acc, x: acc + x, xs, 10))
 ```
-- A) `False`
-- B) `True`
-- C) `TypeError`
-- D) `"racecar"`
+- A) `9`
+- B) `19`
+- C) `24`
+- D) `TypeError`
 
-B
+**Q5:** What is the output?
+```python
+def outer():
+    count = 0
+    def inner():
+        nonlocal count
+        count += 1
+        return count
+    return inner
 
-**Q5:** What does `zip([1,2,3], [4,5])` produce?
-- A) `[(1,4), (2,5), (3, None)]`
-- B) `[(1,4), (2,5)]`
-- C) `TypeError`
-- D) `[(1,4,3), (2,5)]`
-
-A
-
-
-
+f = outer()
+g = outer()
+print(f(), f(), g())
+```
+- A) `1 2 1`
+- B) `1 2 3`
+- C) `1 1 1`
+- D) `NameError`
 
 **Q6:** What is the output?
 ```python
-def f():
-    return 1, 2, 3
+class A:
+    x = 10
 
-a, *b = f()
-print(a, b)
+class B(A):
+    pass
+
+B.x = 99
+print(A.x, B.x)
 ```
-- A) `1 [2, 3]`
-- B) `1 (2, 3)`
-- C) `TypeError`
-- D) `1 2`
-
-B
+- A) `99 99`
+- B) `10 99`
+- C) `10 10`
+- D) `AttributeError`
 
 **Q7:** What is the output?
 ```python
-try:
-    raise ValueError("bad") from TypeError("cause")
-except ValueError as e:
-    print(type(e.__cause__).__name__)
+xs = [1, 2, 3, 4, 5]
+evens = filter(lambda x: x % 2 == 0, xs)
+print(list(evens))
+print(list(evens))
 ```
-- A) `ValueError`
-- B) `TypeError`
-- C) `None`
-- D) `AttributeError`
+- A) `[2, 4]` then `[2, 4]`
+- B) `[2, 4]` then `[]`
+- C) `[1, 3, 5]` then `[]`
+- D) `TypeError`
 
-A
+**Q8:** What is the output?
+```python
+def f(*args, **kwargs):
+    print(type(args), type(kwargs))
 
-**Q8:** Which statement about `@property` is true?
-- A) A property can only have a getter, never a setter
-- B) A property setter is defined with `@prop_name.setter`
-- C) Properties are only valid in classes that inherit from `object`
-- D) A property must return a value — returning `None` raises `TypeError`
-
-B
+f(1, 2, a=3)
+```
+- A) `<class 'list'> <class 'dict'>`
+- B) `<class 'tuple'> <class 'dict'>`
+- C) `<class 'tuple'> <class 'list'>`
+- D) `TypeError`
 
 **Q9:** What is the output?
 ```python
-d = {}
-for i in range(3):
-    d[i] = i ** 2
-print(d)
-```
-- A) `{0: 0, 1: 1, 2: 4}`
-- B) `{1: 1, 2: 4, 3: 9}`
-- C) `[0, 1, 4]`
-- D) `TypeError`
+class C:
+    def __init__(self, x):
+        self.x = x
+    def __eq__(self, other):
+        return self.x == other.x
 
-A
+a = C(1)
+b = C(1)
+c = a
+print(a == b, a is b, a is c)
+```
+- A) `True False True`
+- B) `True True True`
+- C) `False False True`
+- D) `TypeError`
 
 **Q10:** What is the output?
 ```python
-class C:
-    def __init__(self, val):
-        self._val = val
-
-    @property
-    def val(self):
-        return self._val
-
-    @val.setter
-    def val(self, new):
-        self._val = new * 2
-
-c = C(5)
-c.val = 3
-print(c.val)
+import sys
+xs = list(range(1000))
+gen = (x for x in range(1000))
+print(sys.getsizeof(xs) > sys.getsizeof(gen))
 ```
-- A) `3`
-- B) `5`
-- C) `6`
-- D) `AttributeError`
-
-C
+- A) `True`
+- B) `False`
+- C) `TypeError`
+- D) Depends on Python version
 
 ---
 
-## Task 6 — PCAP Trap: Predict + Explain
+## Task 4 — PROJECT: `__repr__` on BacktestEngine
 
-No code runner. Give the output and a one-sentence explanation for each.
+Open [algo_backtest/engine/backtest_engine.py](algo_backtest/engine/backtest_engine.py).
 
-**Snippet A:**
+The engine has `__str__` but no `__repr__`. When you type `engine` in a REPL or put the engine inside a list, Python falls back to the default `<BacktestEngine object at 0x...>`.
+
+Add a `__repr__` that returns the same string as `__str__`. One rule: `__repr__` must call `self.__str__()` — do not duplicate the format string.
+
+Verify: `repr(engine)` and `str(engine)` produce the same output.
+
+---
+
+## Task 5 — PCAP Final Gap: Decorators + Exception flow (5 questions, no code)
+
+**Q1:** What is the output?
 ```python
-def f(x):
-    return x * 2
+def deco(f):
+    def wrapper(*args, **kwargs):
+        print("before")
+        result = f(*args, **kwargs)
+        print("after")
+        return result
+    return wrapper
 
-result = map(f, [1, 2, 3])
-print(result) #map memory object - we'd need to wrap it in a list to see the actual values
-print(list(result)) #[2, 4, 6] - we get the actual list of values from the map generator
-print(list(result)) #[] - the generator is exhausted at this point
+@deco
+def greet(name):
+    print(f"hello {name}")
 
-
-
-
-
+greet("Ada")
 ```
 
-**Snippet B:**
+**Q2:** What is the output?
 ```python
-a = [1, 2, 3]
-b = [4, 5, 6]
-c = [*a, *b]
-d = (*a, *b)
-print(type(c).__name__, type(d).__name__)
+def deco_a(f):
+    def wrapper():
+        print("A in")
+        f()
+        print("A out")
+    return wrapper
 
-list tuple
+def deco_b(f):
+    def wrapper():
+        print("B in")
+        f()
+        print("B out")
+    return wrapper
 
-It's pretty self explanatory, it's enough to just check the brackets.
+@deco_a
+@deco_b
+def hello():
+    print("hello")
 
+hello()
 ```
 
-**Snippet C:**
+**Q3:** What is the output?
 ```python
-x = None
-print(x is None, x == None, type(x).__name__)
+try:
+    x = int("abc")
+except (ValueError, TypeError) as e:
+    print(type(e).__name__)
+else:
+    print("no error")
+finally:
+    print("done")
+```
 
-True, False, NoneType
+**Q4:** What is the output?
+```python
+def f():
+    try:
+        return 1
+    finally:
+        return 2
 
-NoneType is not a real VALUE, so it cannot be compared as in ==, >= or <= etc. It can only be IS NONE or IS NOT NONE.
+print(f())
+```
 
+**Q5:** What is the output?
+```python
+class CustomError(Exception):
+    pass
+
+try:
+    raise CustomError("oops")
+except Exception as e:
+    print(isinstance(e, CustomError), isinstance(e, Exception))
 ```
 
 ---
 
-```
+## Task 6 — Week 8 Self-Assessment
+
+No code. Answer honestly.
+
+Rate yourself 1-5 on each topic (1 = shaky, 5 = exam-ready):
+
+1. OOP: properties, encapsulation, `__dunder__` methods
+2. Inheritance, MRO, super()
+3. Closures, nonlocal, late binding
+4. Decorators (simple + parameterised + stacking)
+5. Generators, iterators, `iter(gen) is gen`
+6. Logging (two-gate filtering, exception(), __name__)
+7. Exceptions (hierarchy, try/except/else/finally flow)
+8. Built-ins: sorted/filter/map/reduce, zip, enumerate
+
+Which single topic are you least confident about going into the weekend exams?
+
+---
+
 ## Answers
 
 ### Task 1
@@ -462,19 +393,16 @@ Q1:
 Q2:
 Q3:
 Q4:
-Q5:
-Q6:
 
 ### Task 2
-Changes made:
+Snippet A:
+Snippet B:
+Snippet C:
+Snippet D:
+Snippet E:
+Snippet F:
 
 ### Task 3
-Notes (verify r_multiple works):
-
-### Task 4
-Notes (verify strategy_id passes through):
-
-### Task 5
 Q1:
 Q2:
 Q3:
@@ -486,8 +414,16 @@ Q8:
 Q9:
 Q10:
 
+### Task 4
+Done / notes:
+
+### Task 5
+Q1:
+Q2:
+Q3:
+Q4:
+Q5:
+
 ### Task 6
-Snippet A:
-Snippet B:
-Snippet C:
-```
+Ratings:
+Weakest topic:
