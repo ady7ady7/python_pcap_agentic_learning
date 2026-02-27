@@ -3486,3 +3486,74 @@ Working implementation. Sound architecture.
 - `completed_trades` flat list as single source of truth confirmed — correct design for Monte Carlo, per-strategy slicing, and portfolio-level analysis
 - `trades_by_strategy()` derives groupings on demand without adding class attributes — clean and extensible
 
+
+---
+
+## Week 8, Day 5 - 2026-02-27
+
+**Topic:** Final PCAP Crunch + Week 8 Review
+**Student Self-Report:** ~45 minutes | Difficulty: 3/10
+
+### Mentor Assessment
+
+**Overall Score: ~97% — Strongest day of the program.**
+
+#### Task 1 — Sort & isinstance warm-up (4/4)
+All correct. Both Day 4 gaps drilled and closed:
+- sorted(key=lambda x: -x) returns original values — confirmed correct understanding with explanation
+- isinstance follows full inheritance chain — confirmed
+
+#### Task 2 — Trap Gauntlet (6/6)
+All 6 snippets correct. Notable: Snippet E (generator `in` exhaustion) — correctly predicted False + [] because 3 is never produced by range(5)*2.
+
+#### Task 3 — PCAP Simulation (10/10)
+Perfect. Includes Q2: iter(generator) is generator → True — gap closed after 5+ prior failures.
+
+#### Task 4 — __repr__ on BacktestEngine (10/10)
+Correct. __repr__ calls self.__str__(). Verified output matches.
+
+#### Task 5 — Decorators + Exception flow (5/5)
+All correct. Stacking order (@deco_a @deco_b) solid: A in → B in → hello → B out → A out.
+
+#### Task 6 — Self-Assessment
+Honest and accurate. Identified: complex inheritance edge cases, generators edge cases, and basic built-ins (lambda, etc.) as weakest areas. Aligns with observed performance history.
+
+---
+
+## Week 8 End-of-Week Summary
+
+| Day | Score | Topic |
+|-----|-------|-------|
+| 1 | 82% | Exam Crunch & Documentation |
+| 2 | 88% | OOP Deep Drills + PCAP Simulation |
+| 3 | 83% | R-Multiples & Strategy-Aware Positions |
+| 4 | 86% | Per-Strategy Reporting |
+| 5 | 97% | Final PCAP Crunch |
+
+**Week 8 Average: ~87.2% (B+)**
+
+### Strengths Observed
+- PCAP theory now sharp under timed conditions (3 perfect simulations this week)
+- Project architecture decisions are professional-grade (single source of truth, on-demand grouping)
+- Stacked decorators, closures, exception flow — all solid
+- Takes disputes seriously and argues with evidence
+
+### Recurring Mistakes This Week
+- sorted(key=lambda x: -x) — original values not negated values (closed Day 5)
+- isinstance(child, Parent) → True (closed Day 5)
+- iter(generator) is generator → True (closed Day 5 after 5+ failures)
+
+### Project Progress Assessment
+- BacktestEngine: working, logging integrated, per-strategy reporting, __str__/__repr__
+- Position/Trade: R-multiples, strategy_id/name propagation, encapsulation correct
+- Architecture: ready for real data integration in Week 9
+
+### Gaps Entering Week 9 / Weekend Exams
+- Complex inheritance edge cases (MRO in diamond + super() chain)
+- Generator protocol edge cases (resettable iterators, yield from on strings)
+- PCAP basic built-ins: lambdas, sorted, filter, map, reduce under exam pressure
+- OOP dunders: self-rated 3.5/5 — needs more reps
+
+### Readiness Assessment
+**Exam not yet ready — needs Week 9.** Strong B+ average but PCAP requires 70%+ consistently under exam conditions. The weekend exams will reveal remaining gaps. Week 9 plan: PCAP-heavy, drilling identified weak spots with official PCAP site material integration.
+

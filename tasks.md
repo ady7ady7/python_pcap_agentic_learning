@@ -9,6 +9,8 @@ These are the exact two gaps from Day 4 — drill them until they are automatic.
 
 **Q1:** What does `sorted([3, 1, 4, 1, 5], key=lambda x: -x)` return?
 
+[5, 4, 3, 1, 1] - the values get sorted by their '-x' value (ascending), but shown in their standard form, which makes it work as descending sorting in the end.
+
 **Q2:** What is the output?
 ```python
 class Animal:
@@ -22,6 +24,8 @@ class Poodle(Dog):
 
 p = Poodle()
 print(isinstance(p, Animal), isinstance(p, Dog), isinstance(p, Poodle))
+
+True, True, True
 ```
 
 **Q3:** What is the output?
@@ -32,6 +36,10 @@ print(result)
 ```
 Think carefully — what are the keys, and what values are returned?
 
+1 2 0 1 2 -> the keys
+Returned values: [30 10 40 20 50]
+
+
 **Q4:** What is the output?
 ```python
 class A: pass
@@ -40,6 +48,8 @@ class C(B): pass
 
 obj = C()
 print(issubclass(C, A), issubclass(A, C), isinstance(obj, A))
+
+True, False, True
 ```
 
 ---
@@ -58,6 +68,12 @@ print(f())
 print(f())
 print(f([]))
 print(f())
+
+[1]
+[1, 1]
+[1]
+[1, 1, 1]
+
 ```
 
 **Snippet B:**
@@ -70,6 +86,8 @@ def outer():
     return inner
 
 outer()()
+
+10
 ```
 
 **Snippet C:**
@@ -82,6 +100,8 @@ finally:
     result = "cleaned"
 
 print(result)
+
+cleaned
 ```
 
 **Snippet D:**
@@ -95,6 +115,9 @@ class Foo(metaclass=Meta):
     pass
 
 print(Foo.greeting)
+
+
+hello
 ```
 
 **Snippet E:**
@@ -102,6 +125,11 @@ print(Foo.greeting)
 gen = (x * 2 for x in range(5))
 print(3 in gen)
 print(list(gen))
+
+
+False
+[]
+
 ```
 
 **Snippet F:**
@@ -109,6 +137,8 @@ print(list(gen))
 a = (1,)
 b = (1,)
 print(a == b, a is b)
+
+True, False
 ```
 
 ---
@@ -129,6 +159,8 @@ print(x, y)
 - C) `[1, 2, 3] [1, 2, 3]`
 - D) `TypeError`
 
+A
+
 **Q2:** What is the output?
 ```python
 def gen():
@@ -141,11 +173,15 @@ print(next(g))
 print(next(g))
 g2 = iter(g)
 print(g is g2)
+
+
 ```
 - A) `1`, `2`, `True`
 - B) `1`, `2`, `False`
 - C) `1`, `1`, `True`
 - D) `TypeError`
+
+A
 
 **Q3:** Which of the following raises `AttributeError`?
 ```python
@@ -174,6 +210,8 @@ c = C(); c.x = 10
 - C) C only
 - D) None of them
 
+A
+
 **Q4:** What is the output?
 ```python
 from functools import reduce
@@ -184,6 +222,10 @@ print(reduce(lambda acc, x: acc + x, xs, 10))
 - B) `19`
 - C) `24`
 - D) `TypeError`
+
+B
+
+
 
 **Q5:** What is the output?
 ```python
@@ -204,6 +246,8 @@ print(f(), f(), g())
 - C) `1 1 1`
 - D) `NameError`
 
+A
+
 **Q6:** What is the output?
 ```python
 class A:
@@ -220,6 +264,9 @@ print(A.x, B.x)
 - C) `10 10`
 - D) `AttributeError`
 
+
+B
+
 **Q7:** What is the output?
 ```python
 xs = [1, 2, 3, 4, 5]
@@ -232,6 +279,8 @@ print(list(evens))
 - C) `[1, 3, 5]` then `[]`
 - D) `TypeError`
 
+B
+
 **Q8:** What is the output?
 ```python
 def f(*args, **kwargs):
@@ -243,6 +292,10 @@ f(1, 2, a=3)
 - B) `<class 'tuple'> <class 'dict'>`
 - C) `<class 'tuple'> <class 'list'>`
 - D) `TypeError`
+
+B
+
+
 
 **Q9:** What is the output?
 ```python
@@ -262,6 +315,8 @@ print(a == b, a is b, a is c)
 - C) `False False True`
 - D) `TypeError`
 
+A
+
 **Q10:** What is the output?
 ```python
 import sys
@@ -274,6 +329,9 @@ print(sys.getsizeof(xs) > sys.getsizeof(gen))
 - C) `TypeError`
 - D) Depends on Python version
 
+
+A
+
 ---
 
 ## Task 4 — PROJECT: `__repr__` on BacktestEngine
@@ -285,6 +343,11 @@ The engine has `__str__` but no `__repr__`. When you type `engine` in a REPL or 
 Add a `__repr__` that returns the same string as `__str__`. One rule: `__repr__` must call `self.__str__()` — do not duplicate the format string.
 
 Verify: `repr(engine)` and `str(engine)` produce the same output.
+
+Added and verified:
+
+repr: BacktestEngine: 0 open | 4 closed | PnL: $260.0
+str: BacktestEngine: 0 open | 4 closed | PnL: $260.0
 
 ---
 
@@ -305,6 +368,12 @@ def greet(name):
     print(f"hello {name}")
 
 greet("Ada")
+
+
+before
+Hello Ada
+after
+
 ```
 
 **Q2:** What is the output?
@@ -329,6 +398,15 @@ def hello():
     print("hello")
 
 hello()
+
+
+A in
+B in
+hello
+B out
+A out
+
+
 ```
 
 **Q3:** What is the output?
@@ -341,6 +419,10 @@ else:
     print("no error")
 finally:
     print("done")
+
+
+ValueError
+done
 ```
 
 **Q4:** What is the output?
@@ -352,6 +434,9 @@ def f():
         return 2
 
 print(f())
+
+
+2
 ```
 
 **Q5:** What is the output?
@@ -363,6 +448,9 @@ try:
     raise CustomError("oops")
 except Exception as e:
     print(isinstance(e, CustomError), isinstance(e, Exception))
+
+
+True, True
 ```
 
 ---
@@ -373,16 +461,20 @@ No code. Answer honestly.
 
 Rate yourself 1-5 on each topic (1 = shaky, 5 = exam-ready):
 
-1. OOP: properties, encapsulation, `__dunder__` methods
-2. Inheritance, MRO, super()
-3. Closures, nonlocal, late binding
-4. Decorators (simple + parameterised + stacking)
-5. Generators, iterators, `iter(gen) is gen`
-6. Logging (two-gate filtering, exception(), __name__)
-7. Exceptions (hierarchy, try/except/else/finally flow)
-8. Built-ins: sorted/filter/map/reduce, zip, enumerate
+1. OOP: properties, encapsulation, `__dunder__` methods: depends, 3.5/5
+2. Inheritance, MRO, super() - 4/5
+3. Closures, nonlocal, late binding - 5/5
+4. Decorators (simple + parameterised + stacking) 4/5
+5. Generators, iterators, `iter(gen) is gen` 4/5
+6. Logging (two-gate filtering, exception(), __name__) 4/5
+7. Exceptions (hierarchy, try/except/else/finally flow) - 5
+8. Built-ins: sorted/filter/map/reduce, zip, enumerate - 4/5
 
 Which single topic are you least confident about going into the weekend exams?
+
+Still some complex inheritance / generators and someimtes exceptions.
+Also, it would be useful to review more basic concepts like lambdas etc.
+
 
 ---
 

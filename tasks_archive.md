@@ -1444,3 +1444,26 @@ Task 8 expected values were wrong. Correct: 4 winners, $1050 total PnL.
 
 **Architecture Decision:** completed_trades as flat single source of truth; trades_by_strategy() derives on demand — correct for future Monte Carlo at portfolio + per-strategy level.
 
+
+---
+
+## Week 8, Day 5 - 2026-02-27
+
+**Topic:** Final PCAP Crunch + Week 8 Review
+**Score:** ~97% | Time: ~45 minutes | Difficulty: 3/10
+
+**Tasks Completed:**
+1. Sort & isinstance warm-up (4/4) — Day 4 gaps fully closed
+2. PCAP Trap Gauntlet — 6 snippets (6/6) — mutable defaults, closures, finally, metaclass, generator `in`, tuple identity
+3. PCAP Simulation 10 questions (10/10) — perfect including iter(generator) is generator
+4. PROJECT: __repr__ on BacktestEngine — correct, calls __str__()
+5. Decorators + Exception flow 5 questions (5/5) — stacking order solid
+6. Week 8 self-assessment — honest and accurate
+
+**Gaps Closed This Session:**
+- sorted(key=lambda x: -x) returns original values — CLOSED
+- isinstance(child, Parent) is True — CLOSED
+- iter(generator) is generator → True — CLOSED
+
+**Week 8 Average: ~87%**
+

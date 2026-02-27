@@ -54,6 +54,9 @@ class BacktestEngine:
         """
         
         return f'{__class__.__name__}: {(self.position_manager.get_position_count())} open | {len(self.completed_trades)} closed | PnL: ${self.total_pnl}'
+    
+    def __repr__(self):
+        return self.__str__()
         
         
     def open_position(self, 
