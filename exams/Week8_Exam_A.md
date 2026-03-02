@@ -4,6 +4,7 @@
 **Instructions:** No running code. Choose the single best answer. Time yourself.
 
 ---
+#Start 21:11
 
 ### Q1
 What is the output?
@@ -15,6 +16,8 @@ print(xs[1:4:2])
 - B) `[2, 3, 4]`
 - C) `[1, 3, 5]`
 - D) `[2, 3]`
+
+A
 
 ---
 
@@ -31,6 +34,7 @@ f(1, 3, 4, 5)
 - C) `1 3 [4, 5]`
 - D) `TypeError`
 
+B
 ---
 
 ### Q3
@@ -58,6 +62,8 @@ print(D().greet())
 - C) `BC`
 - D) `BA` then `CA`
 
+B
+
 ---
 
 ### Q4
@@ -72,6 +78,8 @@ print(list(gen))
 - B) `0`, `1`, `[0, 1, 4, 9, 16]`
 - C) `0`, `1`, `[2, 3, 4]`
 - D) `0`, `0`, `[0, 1, 4, 9, 16]`
+
+A
 
 ---
 
@@ -92,6 +100,8 @@ finally:
 - C) `caught TypeError`
 - D) `final`
 
+A
+
 ---
 
 ### Q6
@@ -108,6 +118,8 @@ print(add10.__name__, add10(5))
 - B) `<lambda> 15`
 - C) `make_adder 15`
 - D) `AttributeError`
+
+A
 
 ---
 
@@ -130,6 +142,8 @@ logger.warning("w")
 - C) Only `d` printed
 - D) Nothing printed
 
+B
+
 ---
 
 ### Q8
@@ -144,6 +158,8 @@ print(x, y)
 - B) `[1, 2, 3, 4, 5] [1, 2, 3, 4, 5]`
 - C) `[1, 2, 3] [1, 2, 3]`
 - D) `TypeError`
+
+A
 
 ---
 
@@ -169,6 +185,8 @@ print(C.get_count())
 - C) `2`
 - D) `AttributeError`
 
+C
+
 ---
 
 ### Q10
@@ -191,6 +209,7 @@ print(val())
 - C) `12`
 - D) `3`
 
+C
 ---
 
 ### Q11
@@ -203,6 +222,8 @@ print(sorted(xs, key=lambda x: -x)[:3])
 - B) `[9, 6, 5]`
 - C) `[1, 1, 2]`
 - D) `[-3, -1, -4]`
+
+B
 
 ---
 
@@ -222,6 +243,8 @@ print(f())
 - C) `try` then `finally`
 - D) `RuntimeError`
 
+B
+
 ---
 
 ### Q13
@@ -230,6 +253,8 @@ Which statement about `iter(obj)` is correct?
 - B) `iter(generator) is generator` evaluates to `True`
 - C) `iter()` can only be called on lists and tuples
 - D) `iter(obj)` always raises `TypeError` if `obj` has no `__iter__`
+
+B
 
 ---
 
@@ -251,6 +276,8 @@ print(A.x, B.x, b.x)
 - C) `1 99 99`
 - D) `AttributeError`
 
+A
+
 ---
 
 ### Q15
@@ -263,6 +290,8 @@ print(reduce(lambda a, b: a if a > b else b, [3, 7, 2, 9, 4]))
 - B) `7`
 - C) `9`
 - D) `25`
+
+C
 
 ---
 
@@ -283,6 +312,8 @@ print(f(), f(), f())
 - B) `10 11 12`
 - C) `11 11 11`
 - D) `UnboundLocalError`
+
+A
 
 ---
 
@@ -309,6 +340,8 @@ print([a.speak() for a in animals])
 - C) `TypeError`
 - D) `['woof', 'meow']`
 
+A
+
 ---
 
 ### Q18
@@ -322,6 +355,8 @@ print(list(g))
 - B) `True`, `[1, 2, 3, 4, 5]`
 - C) `True`, `[]`
 - D) `False`, `[1, 2, 3, 4, 5]`
+
+A
 
 ---
 
@@ -344,6 +379,8 @@ print(c.get(), c.__v)
 - C) `42 42`
 - D) `AttributeError`
 
+D
+
 ---
 
 ### Q20
@@ -358,6 +395,8 @@ logging.debug("hello")
 - B) Nothing printed
 - C) `DEBUG:root:hello`
 - D) `WARNING:root:hello`
+
+B
 
 ---
 
@@ -374,6 +413,8 @@ print(xs, ys)
 - C) `[1, 2, 3] [1, 2, 3, 1, 2, 3]`
 - D) `TypeError`
 
+B
+
 ---
 
 ### Q22
@@ -389,6 +430,8 @@ print(type(result).__name__)
 - B) `float`
 - C) `str`
 - D) `TypeError`
+
+C
 
 ---
 
@@ -419,6 +462,8 @@ print(c.n)
 - C) `ValueError` is raised
 - D) `AttributeError`
 
+C
+
 ---
 
 ### Q24
@@ -434,6 +479,8 @@ print(a, b)
 - C) `(1, 2, 3) [1, 2, 3]`
 - D) `TypeError`
 
+B
+
 ---
 
 ### Q25
@@ -447,6 +494,8 @@ print(dt.strftime("%y-%m-%d"))
 - B) `26-02-27`
 - C) `2026-2-27`
 - D) `TypeError`
+
+B
 
 ---
 
@@ -465,6 +514,8 @@ print(next(g1), next(g2), next(g1))
 - B) `0 0 0`
 - C) `0 1 2`
 - D) `StopIteration`
+
+A
 
 ---
 
@@ -488,6 +539,8 @@ print(c.x, c.y)
 - C) `None 2`
 - D) `1 None`
 
+B
+
 ---
 
 ### Q28
@@ -501,6 +554,8 @@ print(result)
 - B) `[2, 4, 6]`
 - C) `[None, 2, None, 4, None, 6]`
 - D) `[]`
+
+B
 
 ---
 
@@ -528,6 +583,8 @@ print(D().method())
 - C) `TypeError`
 - D) `AttributeError`
 
+A
+
 ---
 
 ### Q30
@@ -544,6 +601,10 @@ print(type(f), callable(f), f.__name__)
 - B) `<class 'method'> True f`
 - C) `<class 'function'> False f`
 - D) `TypeError`
+
+A
+
+#Koniec 21:23
 
 ---
 

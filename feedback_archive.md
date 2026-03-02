@@ -3557,3 +3557,17 @@ Honest and accurate. Identified: complex inheritance edge cases, generators edge
 ### Readiness Assessment
 **Exam not yet ready — needs Week 9.** Strong B+ average but PCAP requires 70%+ consistently under exam conditions. The weekend exams will reveal remaining gaps. Week 9 plan: PCAP-heavy, drilling identified weak spots with official PCAP site material integration.
 
+
+---
+
+## Week 8 Exams — 2026-03-02
+
+**Exam A: 28/30 = 93%** | 12 minutes
+**Exam B: 23/30 = 77%** | 11 minutes
+**Combined: 51/60 = 85%**
+
+Exam A was outstanding — only 2 misses, both subtle name-mangling and MRO traps.
+Exam B exposed a cluster of gaps under time pressure. All gaps logged and targeted for Week 9.
+
+Both exams pass the 70% PCAP threshold. Week 9 focus: close the 7 Exam B gaps + PCAP-heavy drilling with official syllabus material.
+

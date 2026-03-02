@@ -1782,3 +1782,34 @@ Both exams passed comfortably above 70%. Core Week 6 content (iterators, generat
 - nonlocal only for assignment, not reading (B-Q1/Q2 correct)
 
 ---
+
+---
+
+## Week 8 Exams — 2026-03-02
+
+### Exam A: 28/30 = 93% | Time: 12 minutes
+### Exam B: 23/30 = 77% | Time: 11 minutes
+### Combined: 51/60 = 85%
+
+**Exam A — Misses (2):**
+- Q19: Name mangling — `c.__v = 99` outside class creates NEW `__v` attr (no mangling). `get()` still returns `_C__v` = 42. Answer: A (42 99), not D
+- Q29: MRO — D(B,C): B has no `method`, C does → C wins. Answer: B (C), not A
+
+**Exam B — Misses (7):**
+- Q7: sorted by `x%4` — keys: 8→0, 5/1/9→1, 2→2, 3→3. Result: [8,5,1,9,2,3]. Answer: A, not B
+- Q13: `__add__` returns `A()` → `__init__` runs → `val=10`. Answer: A (A 10), not B
+- Q15: `Child.class_var.append(2)` mutates SAME list (no rebinding) → `[1,2]`. Answer: B, not A
+- Q17: format `%(levelname)s:%(message)s` has no `%(name)s` → `INFO:hello`. Answer: B, not A
+- Q19: `@property` returning `self.x` → RecursionError (infinite self-call). Answer: C, not B
+- Q20: `zip` stops at shortest → `[(1,4,7),(2,5,8)]`. Answer: B, not C
+- Q27: `f(*a, *b)` unpacks to positional args → tuple `(1,2,3,4)`. Answer: B, not C
+
+**Gap Analysis:**
+- Mutable class attribute shared via reference (Week 9 target)
+- logging format string components (Week 9 target)
+- @property recursion trap (Week 9 target)
+- zip shortest-stops under pressure (stress slip — was correct Day 5)
+- *unpacking in call site → tuple not list (Week 9 target)
+
+**Status:** Both exams PASS (70% threshold). Exam A = strong. Exam B = gap exposure.
+

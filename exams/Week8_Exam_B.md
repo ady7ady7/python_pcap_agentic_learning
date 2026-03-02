@@ -5,6 +5,8 @@
 
 ---
 
+#Start 21:24
+
 ### Q1
 What is the output?
 ```python
@@ -15,6 +17,8 @@ print(list(d.items())[:2])
 - B) `['a', 'b']`
 - C) `[1, 2]`
 - D) `TypeError`
+
+A
 
 ---
 
@@ -31,6 +35,8 @@ print(f(1, y=2))
 - B) `3`, `TypeError`
 - C) `TypeError`, `3`
 - D) `TypeError`, `TypeError`
+
+A
 
 ---
 
@@ -50,6 +56,8 @@ print(hasattr(a, '_A__y'), hasattr(a, '__y'))
 - C) `False True`
 - D) `False False`
 
+B
+
 ---
 
 ### Q4
@@ -65,6 +73,8 @@ print(xs, ys)
 - B) `[1, 2, 3, 4, 5] [1, 2, 3, 4]`
 - C) `[1, 2, 3, 4, 5] [1, 2, 3]`
 - D) `TypeError`
+
+B
 
 ---
 
@@ -96,6 +106,8 @@ print(list(obj))
 - C) `[0, 1, 2]`, `StopIteration`
 - D) `TypeError`
 
+B
+
 ---
 
 ### Q6
@@ -121,6 +133,8 @@ print(hello.__name__, hello.__doc__)
 - C) `wrapper says hello`
 - D) `hello None`
 
+B
+
 ---
 
 ### Q7
@@ -133,6 +147,8 @@ print(sorted(xs, key=lambda x: x % 4))
 - B) `[1, 2, 3, 5, 8, 9]`
 - C) `[8, 5, 9, 1, 2, 3]`
 - D) The order is stable but there are multiple valid answers depending on sort stability
+
+B
 
 ---
 
@@ -150,6 +166,8 @@ print(list(gen()))
 - C) `[0, 0, 1, 1, 2, 2]`
 - D) `TypeError`
 
+B
+
 ---
 
 ### Q9
@@ -164,6 +182,8 @@ print(logger is logger2)
 - B) `True`
 - C) `AttributeError`
 - D) Depends on Python version
+
+B
 
 ---
 
@@ -188,6 +208,8 @@ print(f"{c!r}")
 - C) `C-str`, `C-repr`, `C-repr`, `C-str`
 - D) `C-str`, `C-str`, `C-str`, `C-str`
 
+A
+
 ---
 
 ### Q11
@@ -206,6 +228,8 @@ print([f() for f in fns])
 - B) `[2, 2, 2]`
 - C) `[0, 0, 0]`
 - D) `NameError`
+
+B
 
 ---
 
@@ -227,6 +251,8 @@ finally:
 - B) `ValueError`, `else`, `finally`
 - C) `Exception`, `finally`
 - D) `ValueError`
+
+A
 
 ---
 
@@ -250,6 +276,8 @@ print(type(c).__name__, c.val)
 - C) `int 10`
 - D) `TypeError`
 
+B
+
 ---
 
 ### Q14
@@ -263,6 +291,8 @@ print(total, sum(xs))
 - B) `285 0`
 - C) `0 285`
 - D) `TypeError`
+
+B
 
 ---
 
@@ -284,6 +314,8 @@ print(Base.class_var)
 - C) `[2]`
 - D) `AttributeError`
 
+A
+
 ---
 
 ### Q16
@@ -301,6 +333,8 @@ print(f(5))
 - C) `5`
 - D) `RecursionError`
 
+B
+
 ---
 
 ### Q17
@@ -314,6 +348,8 @@ logging.info("hello")
 - B) `INFO:hello`
 - C) `hello`
 - D) Nothing printed
+
+A
 
 ---
 
@@ -330,6 +366,8 @@ print(a, b)
 - B) `[4, 5, 6, 99] [4, 5, 6, 99]`
 - C) `[1, 2, 3, 99] [1, 2, 3, 99]`
 - D) `[4, 5, 6] [1, 2, 3]`
+
+A
 
 ---
 
@@ -349,6 +387,7 @@ print(c.x)
 - C) `RecursionError`
 - D) `0`
 
+B
 ---
 
 ### Q20
@@ -363,6 +402,9 @@ print(list(zip(xs, ys, zs)))
 - B) `[(1, 4, 7), (2, 5, 8)]`
 - C) `[(1, 4, 7), (2, 5, 8), (3, 6, None)]`
 - D) `TypeError`
+
+C
+
 
 ---
 
@@ -383,6 +425,8 @@ print(double(5), triple(5), double(triple(2)))
 - C) `10 15 30`
 - D) `TypeError`
 
+A
+
 ---
 
 ### Q22
@@ -401,6 +445,8 @@ print(issubclass(B, A), issubclass(A, B), issubclass(A, object))
 - C) `True False False`
 - D) `False True True`
 
+A
+
 ---
 
 ### Q23
@@ -415,6 +461,8 @@ print(d2.strftime("%Y-%m-%d"))
 - B) `2026-03-01`
 - C) `2026-02-28`
 - D) `ValueError`
+
+B
 
 ---
 
@@ -437,6 +485,8 @@ print(x)
 - C) `start`, `middle`, `1`
 - D) `start`
 
+A
+
 ---
 
 ### Q25
@@ -450,6 +500,8 @@ print(xs ^ ys)
 - B) `{1, 2, 5, 6}`
 - C) `{1, 2, 3, 4, 5, 6}`
 - D) `TypeError`
+
+B
 
 ---
 
@@ -472,6 +524,8 @@ print([i.x for i in items])
 - C) `[3, 2, 1]`
 - D) `TypeError`
 
+B
+
 ---
 
 ### Q27
@@ -488,6 +542,8 @@ print(f(*a, *b))
 - B) `(1, 2, 3, 4)`
 - C) `[1, 2, 3, 4]`
 - D) `TypeError`
+
+C
 
 ---
 
@@ -516,6 +572,8 @@ print(D().method())
 - C) `C`
 - D) `TypeError`
 
+C
+
 ---
 
 ### Q29
@@ -530,6 +588,9 @@ print(list(doubled)[:4])
 - B) `[0, 4, 8, 12]`
 - C) `[2, 4, 6, 8]`
 - D) `[0, 2, 4, 6, 8]`
+
+
+B
 
 ---
 
@@ -555,6 +616,10 @@ print(a == b, a == c, repr(a))
 - B) `False False C(1)`
 - C) `True True C(1)`
 - D) `AttributeError`
+
+A
+
+#Finish 21:35
 
 ---
 
