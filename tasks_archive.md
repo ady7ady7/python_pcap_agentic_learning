@@ -1467,3 +1467,29 @@ Task 8 expected values were wrong. Correct: 4 winners, $1050 total PnL.
 
 **Week 8 Average: ~87%**
 
+
+---
+
+## Week 9, Day 1 - 2026-03-02
+
+**Topic:** Exam B Gap Closure
+**Score:** ~80% | Time: short session | Difficulty: light
+
+**Tasks Completed:**
+1. Warm-up 5 predictions — 4.5/5 (Q5 logged WARNING not DEBUG)
+2. Name mangling snippets — 10/10 (Exam A Q19 gap fully closed)
+3. PCAP Simulation 6 questions — 4/6 (Q3 logging level, Q4 *args/**kwargs types)
+4. Self-check 3 explanations — 6/10 (logic partially correct, precision lacking)
+
+**Gaps Closed:**
+- Mutable class attr via reference (.append mutates same object) — CLOSED
+- @property self-reference → RecursionError (not AttributeError) — CLOSED
+- zip stops at shortest — CLOSED
+- *a, *b unpacking → args is tuple — partially closed (still wrong on Q4 T3)
+- Name mangling outside class — CLOSED
+
+**Still open:**
+- logging level gate under exam pressure (logged DEBUG instead of WARNING)
+- *xs, **d → args=(1,2), kwargs={'a':3} — confused with ([1,2], {}) form
+- Self-check explanations need more precision (same object reference, not just "parent class")
+

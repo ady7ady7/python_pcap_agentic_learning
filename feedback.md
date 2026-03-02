@@ -1,12 +1,12 @@
-# Daily Feedback — Week 9, Day 1
+# Daily Feedback — Week 9, Day 2
 
-**Date:** 2026-03-02
+**Date:** 2026-03-03
 
-**Topic:** Exam B Gap Closure
+**Topic:** TBD
 
 ---
 
-**Tasks completed:** ___ / 4
+**Tasks completed:** ___ / 6
 
 **Time spent:** ___ minutes
 

@@ -3571,3 +3571,36 @@ Exam B exposed a cluster of gaps under time pressure. All gaps logged and target
 
 Both exams pass the 70% PCAP threshold. Week 9 focus: close the 7 Exam B gaps + PCAP-heavy drilling with official syllabus material.
 
+
+---
+
+## Week 9, Day 1 - 2026-03-02
+
+**Topic:** Exam B Gap Closure
+**Score: ~80%** | Short session, exhausted day
+
+### Mentor Assessment
+
+#### Task 1 — Warm-up (4.5/5)
+Q1-Q4 all correct. Q5 wrong: format is `%(levelname)s:%(message)s`, call is `logging.warning(...)` → output is `WARNING:watch out`, not `DEBUG:watch out`. Minor level-name slip.
+
+#### Task 2 — Name mangling (10/10)
+Perfect. Both snippets correct. Exam A Q19 gap fully closed.
+
+#### Task 3 — Simulation (4/6)
+- Q1 A: Correct (+ creates new list, A.data untouched)
+- Q2 B: Correct
+- Q3 A: Wrong — level=INFO blocks DEBUG. Answer B (`INFO - started` only)
+- Q4 A: Wrong — `*xs` → args tuple `(1,2)`, `**d` → kwargs dict `{'a':3}`. Return is `((1,2),{'a':3})`. Answer B
+- Q5 D: Correct (both B and C cause RecursionError)
+- Q6 A: Correct (D→B wins, E→C wins)
+
+#### Task 4 — Self-check (6/10)
+1. Partially correct — "parent class" misses the key point: same list object, .append mutates in place
+2. Correct in spirit — imprecise on mechanism (should say: getter calls getter, not "self referencing each other")
+3. Wrong framing — f(*a, *b) passes 4 integers; f(a, b) passes 2 lists. Not about "freedom of assignment"
+
+### Key notes
+- Logging level trap recurring under pressure — must read threshold carefully
+- *xs, **d unpacking type distinction (tuple vs list) still not solid
+
