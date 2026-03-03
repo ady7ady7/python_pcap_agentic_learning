@@ -170,7 +170,7 @@ class BacktestEngine:
             total_pnl = round(sum([trade.pnl for trade in trades_filtered_by_strategy[strategy]]), 2)
             win_rate = Trade.calculate_win_rate(trades_filtered_by_strategy[strategy])
             avg_r = sum(trade.r_multiple for trade in trades_filtered_by_strategy[strategy]) / len(trades_filtered_by_strategy[strategy])
-            print(f'''{3* '-'} {strategy[0]} (ID: {strategy[1]}) {3* '-'}
+            print(f'''{3* '-'} {strategy[1]} (ID: {strategy[0]}) {3* '-'}
                   
                   Trades: {len(trades_filtered_by_strategy[strategy])}
                   Win Rate: {win_rate}%

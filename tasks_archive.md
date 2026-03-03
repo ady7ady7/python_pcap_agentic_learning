@@ -1493,3 +1493,28 @@ Task 8 expected values were wrong. Correct: 4 winners, $1050 total PnL.
 - *xs, **d → args=(1,2), kwargs={'a':3} — confused with ([1,2], {}) form
 - Self-check explanations need more precision (same object reference, not just "parent class")
 
+
+---
+
+## Week 9, Day 2 - 2026-03-03
+
+**Topic:** PCAP Heavy: Unpacking, Logging, Strings & Exception Traps
+**Score:** ~83% | Time: ~30 minutes | Difficulty: moderate
+
+**Tasks Completed:**
+1. Logging level gate + unpacking warm-up (6/6) — both Day 1 gaps fully closed
+2. String trap gauntlet (5.5/6) — Snippet A: lo w vs low (space error)
+3. PCAP Simulation 10 questions (8/10) — Q6 f() is None → True; Q8 closure captures n=6 → 12
+4. Exception hierarchy drill (7/10) — Q2+Q4: parent-before-child in except chain catches at parent
+5. Scope & binding snippets (3.5/4) — Snippet A: UnboundLocalError not AttributeError
+6. PROJECT: strategy_report() label fix — trivial, verified correct
+
+**Key Gaps Closed:**
+- Logging level gate *(read level name correctly, not just threshold)* — CLOSED
+- *xs, **d unpacking → args tuple, kwargs dict — CLOSED
+
+**Remaining gaps:**
+- except clause ordering: parent-before-child → parent catches first (Q2+Q4 same mistake)
+- Closure captures final enclosing value, not initial: outer(5) → n=6 → inner()=12
+- UnboundLocalError vs AttributeError for pre-assignment read of local variable
+

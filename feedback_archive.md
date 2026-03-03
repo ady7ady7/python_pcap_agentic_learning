@@ -3604,3 +3604,38 @@ Perfect. Both snippets correct. Exam A Q19 gap fully closed.
 - Logging level trap recurring under pressure — must read threshold carefully
 - *xs, **d unpacking type distinction (tuple vs list) still not solid
 
+
+---
+
+## Week 9, Day 2 - 2026-03-03
+
+**Topic:** PCAP Heavy: Unpacking, Logging, Strings & Exception Traps
+**Score: ~83%** | ~30 minutes | Difficulty: moderate
+
+### Mentor Assessment
+
+#### Task 1 — Logging + Unpacking (6/6)
+All correct including Q6 (basicConfig one-shot, first call wins at DEBUG). Both Day 1 gaps closed.
+
+#### Task 2 — String Gauntlet (5.5/6)
+Snippet A: `"hello world"[2:8:2]` → indices 2,4,6 = l,o,w → `low` not `lo w`.
+
+#### Task 3 — Simulation (8/10)
+- Q6: Wrong — `f() is None` → True (answer B, not A)
+- Q8: Wrong — `n = n+1` → n=6 before inner returned; closure captures 6; `6*2=12` (answer B, not C)
+
+#### Task 4 — Exception Hierarchy (7/10)
+- Q1: Hierarchy correct, direction disputed — full credit
+- Q2: Wrong — `except Exception` before `except ValueError` → Exception catches first. Parent-before-child means parent wins.
+- Q3: Correct (logic right — type(e).__name__ = MyError, logic scored)
+- Q4: Wrong — `except IOError` before `except FileNotFoundError` → IOError catches first. Same mistake as Q2.
+- Q5: Correct
+
+**Critical rule to memorise:** In `except` chains, always order most-specific FIRST. If parent appears before child, parent catches everything matching it.
+
+#### Task 5 — Scope (3.5/4)
+Snippet A: `UnboundLocalError`, not `AttributeError`. Python pre-scans function and marks `x` as local because of the assignment `x = "local"`. Reading `x` before assignment → UnboundLocalError.
+
+#### Task 6 — Project (10/10)
+Trivial fix done correctly. Output verified and correct.
+

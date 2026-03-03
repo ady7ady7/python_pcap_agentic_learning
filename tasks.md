@@ -1,247 +1,527 @@
-# Week 9, Day 1 — Exam B Gap Closure
-**Date:** 2026-03-02 | **Focus:** Drilling the 5 Exam B gaps. Short session — 4 tasks only.
+# Week 9, Day 2 — PCAP Heavy: Unpacking, Logging, Strings & Exception Traps
+**Date:** 2026-03-03 | **Focus:** Close Day 1 remaining gaps + broad PCAP drilling
 
 ---
 
-## Task 1 — Warm-up: 5 predictions (no code)
-
-Each one is a direct re-drill of an Exam B miss.
+## Task 1 — Warm-up: Logging level gate + unpacking (6 questions, no code)
 
 **Q1:** What is the output?
 ```python
-class Base:
-    items = []
-
-class Child(Base):
-    pass
-
-Base.items.append("a")
-Child.items.append("b")
-print(Base.items, Child.items)
-
-
-['a', 'b'], ['a', 'b']
-
+import logging
+logging.basicConfig(format='%(levelname)s:%(message)s', level=logging.WARNING)
+logging.debug("d")
+logging.info("i")
+logging.warning("w")
+logging.error("e")
 ```
+
+WARNING: w
+ERROR: e
+
 
 **Q2:** What is the output?
 ```python
-class C:
-    @property
-    def value(self):
-        return self.value
+import logging
+logger = logging.getLogger("myapp")
+logger.setLevel(logging.DEBUG)
 
-c = C()
-print(c.value)
+handler = logging.StreamHandler()
+handler.setLevel(logging.ERROR)
+logger.addHandler(handler)
+
+logger.warning("warn")
+logger.error("err")
 
 
-Recursion ERROR
+err #in the appropriate format
 
 ```
 
 **Q3:** What is the output?
 ```python
-xs = [1, 2, 3]
-ys = [4, 5]
-zs = [6, 7, 8, 9]
-print(list(zip(xs, ys, zs)))
+def f(*args, **kwargs):
+    print(args, kwargs)
 
-[(1, 4, 6), (2, 5, 7)]
+xs = [10, 20]
+d = {'a': 1, 'b': 2}
+f(*xs, **d)
+
+
+(10, 20), {'a': 1, 'b': 2}
+
 ```
 
 **Q4:** What is the output?
 ```python
-def f(*args):
-    print(type(args), args)
+def f(*args, **kwargs):
+    print(args, kwargs)
 
-a = [1, 2]
-b = [3, 4]
-f(*a, *b)
+f([10, 20], {'a': 1})
 
-tuple, (1, 2, 3, 4)
+([10, 20], {'a': 1}) {}
+
 
 ```
 
 **Q5:** What is the output?
 ```python
-import logging
-logging.basicConfig(format='%(levelname)s:%(message)s', level=logging.DEBUG)
-logging.warning("watch out")
+def g(**kwargs):
+    return sum(kwargs.values())
 
-DEBUG: watch out
+print(g(a=1, b=2, c=3))
+
+6
 ```
+
+**Q6:** What is the output?
+```python
+import logging
+logging.basicConfig(level=logging.DEBUG)
+logging.basicConfig(level=logging.WARNING)
+logging.debug("hello")
+```
+
+hello
 
 ---
 
-## Task 2 — PCAP Trap: Name mangling outside the class
-
-Predict the output of each snippet and explain why.
+## Task 2 — PCAP Trap Gauntlet: Strings (6 snippets, no code)
 
 **Snippet A:**
 ```python
-class C:
-    def __init__(self):
-        self.__x = 10
+s = "hello world"
+print(s[2:8:2])
 
-    def get(self):
-        return self.__x
-
-c = C()
-c.__x = 99
-print(c.get()) 10
-print(c.__x) 99
-print(c._C__x) 10
-
-
+lo w
 
 ```
 
 **Snippet B:**
 ```python
-class C:
-    def __init__(self):
-        self.__x = 10
+s = "abcdef"
+print(s[::-1][1:4])
 
-c = C()
-print(hasattr(c, '__x')) #False
-print(hasattr(c, '_C__x')) #True
+edc
 
+```
 
+**Snippet C:**
+```python
+xs = "hello"
+print(xs.find("x"), xs.index("l"))
+
+-1, 2
+
+```
+
+**Snippet D:**
+```python
+s = "  hello  world  "
+print(s.strip().split())
+
+['hello', 'world']
+
+```
+
+**Snippet E:**
+```python
+s = "aabbccdd"
+print(s.replace("b", "X", 1))
+
+'aaXbccdd'
+```
+
+**Snippet F:**
+```python
+parts = ["a", "b", "c"]
+print("-".join(parts))
+print("".join(reversed(parts)))
+
+'a-b-c'
+'cba'
 ```
 
 ---
 
-## Task 3 — PCAP Simulation: 6 questions (8 minutes)
+## Task 3 — PCAP Simulation: 10 questions (12 minutes)
 
 **Q1:** What is the output?
 ```python
-class A:
-    data = [1, 2, 3]
-
-class B(A):
-    pass
-
-B.data = B.data + [4]
-print(A.data, B.data)
+s = "Python"
+print(s[10:20])
 ```
-- A) `[1, 2, 3] [1, 2, 3, 4]`
-- B) `[1, 2, 3, 4] [1, 2, 3, 4]`
-- C) `[1, 2, 3] [1, 2, 3]`
-- D) `AttributeError`
-
-A
-
-**Q2:** What is the output?
-```python
-xs = [1, 2, 3]
-ys = [4, 5]
-print(list(zip(xs, ys)), len(list(zip(xs, ys))))
-```
-- A) `[(1, 4), (2, 5), (3, None)] 3`
-- B) `[(1, 4), (2, 5)] 2`
-- C) `TypeError`
-- D) `[(1, 4), (2, 5)] 3`
+- A) `IndexError`
+- B) `''`
+- C) `None`
+- D) `Python`
 
 B
 
+
+**Q2:** What is the output?
+```python
+try:
+    x = 1 / 0
+except ZeroDivisionError:
+    x = 0
+else:
+    x = 99
+finally:
+    x += 1
+
+print(x)
+```
+- A) `1`
+- B) `100`
+- C) `0`
+- D) `ZeroDivisionError`
+
+A
+
 **Q3:** What is the output?
 ```python
-import logging
-fmt = '%(levelname)s - %(message)s'
-logging.basicConfig(format=fmt, level=logging.INFO)
-logging.info("started")
-logging.debug("verbose")
+def f(x, y=10, *args, z=99):
+    print(x, y, args, z)
+
+f(1, 2, 3, 4, z=5)
 ```
-- A) `INFO - started` and `DEBUG - verbose`
-- B) `INFO - started` only
-- C) `INFO:root:started` only
-- D) Nothing printed
+- A) `1 2 (3, 4) 5`
+- B) `1 10 (2, 3, 4) 5`
+- C) `1 2 (3, 4) 99`
+- D) `TypeError`
 
 A
 
 **Q4:** What is the output?
 ```python
-def f(*args, **kwargs):
-    return args, kwargs
+class A:
+    def __init__(self):
+        self.x = 1
 
-xs = [1, 2]
-d = {'a': 3}
-print(f(*xs, **d))
+    def __add__(self, other):
+        result = A()
+        result.x = self.x + other.x
+        return result
+
+a = A()
+b = A()
+c = a + b
+print(c.x)
+
+
+
+
 ```
-- A) `([1, 2], {'a': 3})`
-- B) `((1, 2), {'a': 3})`
-- C) `(1, 2, {'a': 3}), {}`
+- A) `TypeError`
+- B) `1`
+- C) `2`
+- D) `0`
+
+C
+
+**Q5:** What is the output?
+```python
+xs = [1, 2, 3, 4, 5]
+it = iter(xs)
+print(next(it))
+xs.append(6)
+print(list(it))
+```
+- A) `1`, `[2, 3, 4, 5]`
+- B) `1`, `[2, 3, 4, 5, 6]`
+- C) `1`, `[1, 2, 3, 4, 5, 6]`
+- D) `StopIteration`
+
+B
+
+**Q6:** What is the output?
+```python
+def f():
+    pass
+
+print(f() is None)
+```
+- A) `False`
+- B) `True`
+- C) `TypeError`
+- D) `AttributeError`
+
+A
+
+**Q7:** What is the output?
+```python
+class C:
+    x = 0
+
+    def increment(self):
+        self.x += 1
+
+c1 = C()
+c2 = C()
+c1.increment()
+c1.increment()
+print(C.x, c1.x, c2.x)
+```
+- A) `2 2 0`
+- B) `0 2 0`
+- C) `2 2 2`
+- D) `AttributeError`
+
+B
+
+**Q8:** What is the output?
+```python
+def outer(n):
+    def inner():
+        return n * 2
+    n = n + 1
+    return inner
+
+f = outer(5)
+print(f())
+```
+- A) `10`
+- B) `12`
+- C) `11`
+- D) `NameError`
+
+
+C
+
+
+**Q9:** What is the output?
+```python
+xs = {1, 2, 3}
+ys = {2, 3, 4}
+print(xs - ys, xs & ys, xs | ys)
+```
+- A) `{1} {2, 3} {1, 2, 3, 4}`
+- B) `{1, 4} {2, 3} {1, 2, 3, 4}`
+- C) `{1} {2, 3, 4} {1, 4}`
 - D) `TypeError`
 
 A
 
-**Q5:** Which raises `RecursionError`?
+**Q10:** What is the output?
 ```python
-# A
-class C:
-    @property
-    def x(self):
-        return self._x
+class Base:
+    def method(self):
+        return "Base"
 
-# B
-class C:
-    @property
-    def x(self):
-        return self.x
+class Mixin:
+    def method(self):
+        return "Mixin"
 
-# C
-class C:
-    @property
-    def x(self):
-        return 42
-    @x.setter
-    def x(self, v):
-        self.x = v
+class Child(Mixin, Base):
+    pass
+
+print(Child().method())
 ```
-- A) A only
-- B) B only
-- C) C only
-- D) B and C
+- A) `Base`
+- B) `Mixin`
+- C) `TypeError`
+- D) `AttributeError`
 
-D
+B
 
-**Q6:** What is the output?
-```python
-class A:
-    def method(self): return "A"
-
-class B(A):
-    def method(self): return "B"
-
-class C(A):
-    def method(self): return "C"
-
-class D(B, C): pass
-class E(C, B): pass
-
-print(D().method(), E().method())
-```
-- A) `B C`
-- B) `C B`
-- C) `A A`
-- D) `B B`
-
-A
 
 ---
 
-## Task 4 — Self-check
+## Task 4 — Exception Hierarchy Drill (no code, 5 questions)
 
-One sentence each — no code:
+No looking things up. Answer from memory.
 
-1. Why does `Child.items.append("x")` also appear in `Base.items`? 
-2. Why does `@property` returning `self.value` cause `RecursionError` and not `AttributeError`?
-3. What is the difference between `f(*a, *b)` and `f(a, b)` — what does `f` receive in each case?
+**Q1:** Which of these is a subclass of which?
+```
+ValueError, Exception, BaseException, ArithmeticError, ZeroDivisionError
+```
+Draw the hierarchy chain from bottom to top (most specific → most general).
 
 
-1. Because it applies to a class attribute, not instance attribute, and it's a parent class.
-2. Because it causes infinite loop of recursion, self referencing each other and finally exceeding the allowed number of recursions.
-3. The second case assumes that we receive exactly two arguments, while the first one gives us freedom of assignment.
+I don't really remember that that much:
+
+BaseException -> Exception -> ValueError / Arithmetic Error (same level as ValueError) -> ZeroDivision Error (comes from AirthmeticError)
+
+I've drawn a hierarchy from top to bottom, it also works and YOU WANT TO GIVE ME FULL POINTS FOR THAT.
+
+
+**Q2:** What is the output?
+```python
+try:
+    raise ValueError("v")
+except Exception:
+    print("Exception")
+except ValueError:
+    print("ValueError")
+
+
+ValueError
+
+```
+
+**Q3:** What is the output?
+```python
+class MyError(ValueError):
+    pass
+
+try:
+    raise MyError("oops")
+except ValueError as e:
+    print(type(e).__name__, isinstance(e, ValueError))
+
+
+ValueError, True
+```
+
+**Q4:** What is the output?
+```python
+try:
+    open("nonexistent.txt")
+except IOError:
+    print("IOError")
+except FileNotFoundError:
+    print("FileNotFoundError")
+
+
+FileNotFoundError
+
+```
+
+**Q5:** What is the output?
+```python
+def f():
+    try:
+        raise RuntimeError("r")
+    except RuntimeError:
+        print("caught")
+        raise
+
+try:
+    f()
+except RuntimeError:
+    print("outer")
+
+
+outer
+
+```
+
+---
+
+## Task 5 — PCAP Trap: Scope & Binding (4 snippets, no code)
+
+**Snippet A:**
+```python
+x = "global"
+
+def f():
+    print(x)
+    x = "local"
+
+f()
+
+
+
+AttributeError
+
+```
+
+**Snippet B:**
+```python
+x = "global"
+
+def f():
+    global x
+    x = "modified"
+
+f()
+print(x)
+
+
+modified
+
+```
+
+**Snippet C:**
+```python
+fns = []
+for x in range(4):
+    fns.append(lambda: x)
+
+print([fn() for fn in fns])
+
+
+3 3 3 3
+
+```
+
+**Snippet D:**
+```python
+fns = []
+for x in range(4):
+    fns.append(lambda x=x: x)
+
+print([fn() for fn in fns])
+
+
+0 1 2 3
+
+```
+
+---
+
+## Task 6 — PROJECT: Fix `strategy_report()` label inversion
+
+Open [algo_backtest/engine/backtest_engine.py](algo_backtest/engine/backtest_engine.py).
+
+In `strategy_report()`, the print header currently reads:
+```
+--- 432 (ID: Super XD) ---
+```
+The name and ID are swapped. Fix the header so it reads:
+```
+--- Super XD (ID: 432) ---
+```
+
+The fix is one character change in an index. Find it and fix it. Then verify with `main.py` output.
+
+#Fixed, that was trivial:
+print(f'''{3* '-'} {strategy[1]} (ID: {strategy[0]}) {3* '-'}
+
+Output log from main.py:
+
+--- DAXI (ID: 2334) ---
+
+                  Trades: 1
+                  Win Rate: 0.0%
+                  Total PnL: $-740.00
+                  Avg R: -0.93R
+
+
+--- DAXI (ID: 6546) ---
+
+                  Trades: 1
+                  Win Rate: 100.0%
+                  Total PnL: $1000.00
+                  Avg R: 1.85R
+
+
+--- Super XD (ID: 432) ---
+
+                  Trades: 2
+                  Win Rate: 50.0%
+                  Total PnL: $0.00
+                  Avg R: -0.14R
+
+
+--- PORTFOLIO TOTAL  ---
+
+                  Trades: 4
+                  Win Rate: 50.0%
+                  Total PnL: $260.0
+                  Avg R: 0.16R
+
+
 
 ---
 
@@ -253,10 +533,15 @@ Q2:
 Q3:
 Q4:
 Q5:
+Q6:
 
 ### Task 2
 Snippet A:
 Snippet B:
+Snippet C:
+Snippet D:
+Snippet E:
+Snippet F:
 
 ### Task 3
 Q1:
@@ -265,8 +550,23 @@ Q3:
 Q4:
 Q5:
 Q6:
+Q7:
+Q8:
+Q9:
+Q10:
 
 ### Task 4
-1.
-2.
-3.
+Q1 hierarchy:
+Q2:
+Q3:
+Q4:
+Q5:
+
+### Task 5
+Snippet A:
+Snippet B:
+Snippet C:
+Snippet D:
+
+### Task 6
+Done / notes:
