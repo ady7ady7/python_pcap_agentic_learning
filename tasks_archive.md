@@ -1518,3 +1518,27 @@ Task 8 expected values were wrong. Correct: 4 winners, $1050 total PnL.
 - Closure captures final enclosing value, not initial: outer(5) → n=6 → inner()=12
 - UnboundLocalError vs AttributeError for pre-assignment read of local variable
 
+
+---
+
+## Week 9, Day 3 — 2026-03-04
+
+**Topic:** Gap Closure: except ordering, UnboundLocalError, closures + DataLoader wiring
+**Score:** ~85% | Difficulty: moderate
+
+**Tasks Completed:**
+1. Warm-up predictions (4/6) — T1Q2: OSError before FileNotFoundError catches at parent (missed); T1Q5: make_adder(3) → n=30, fn(1)=31 not 40 (arithmetic slip)
+2. except ordering deep-dive (4/4) — GAP CLOSED ✓
+3. UnboundLocalError vs NameError (3.5/4) — Q4 counter() without global still triggers UnboundLocalError (not "no output")
+4. PCAP Simulation 10q (8/10) — Q5 logging two-gate still wrong (same error: logger DEBUG + handler WARNING → handler blocks)
+5. Closure capture by reference (3/3) — GAP CLOSED ✓
+6. PROJECT: DataLoader adapted — removed hardcoded columns, added self.columns (schema-agnostic), removed column validation (correct decision), kept NaN + high/low checks, declined get_close_series (correct — premature assumption about price column)
+
+**Key Gaps Closed:**
+- except parent-before-child ordering — CLOSED
+- Closure final-value capture (loop + factory) — CLOSED
+
+**Remaining gaps entering Day 4:**
+- Logging two-gate: logger level + handler level both must pass (3rd session with same error)
+- UnboundLocalError: counter() without global → UnboundLocalError, not silent execution
+- Closure arithmetic: trace n = n * 10 fully before computing return value

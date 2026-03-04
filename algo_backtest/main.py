@@ -29,31 +29,40 @@ def setup_logging():
 
 
 if __name__ == '__main__':
-    setup_logging()
-    print('Starting the backtest test procedure in main.py - logging set!')
-    engine = BacktestEngine()
-    engine.open_position('EURUSD', 'BUY', 105.6, 10000, 103.2, 107.7, strategy_id = '432', strategy_name = 'Super XD')
-    engine.open_position('EURUSD', 'SELL', 105.6, 10000, 110.2, 102.7, strategy_id = '432', strategy_name = 'Super XD')
-    engine.open_position('FDAX', 'BUY', 25554, 10, 25500, 25750, strategy_id = '6546', strategy_name = 'DAXI')
-    engine.open_position('FDAX', 'SELL', 25580, 10, 25660, 25350, strategy_id = '2334', strategy_name = 'DAXI')    
+    
+    x = DataLoader('ohlc_mock_data.csv')
+    print(x)
+    x.load_data()
+    print(x.columns)
+    
+    # setup_logging()
+    # print('Starting the backtest test procedure in main.py - logging set!')
+    # engine = BacktestEngine()
+    # engine.open_position('EURUSD', 'BUY', 105.6, 10000, 103.2, 107.7, strategy_id = '432', strategy_name = 'Super XD')
+    # engine.open_position('EURUSD', 'SELL', 105.6, 10000, 110.2, 102.7, strategy_id = '432', strategy_name = 'Super XD')
+    # engine.open_position('FDAX', 'BUY', 25554, 10, 25500, 25750, strategy_id = '6546', strategy_name = 'DAXI')
+    # engine.open_position('FDAX', 'SELL', 25580, 10, 25660, 25350, strategy_id = '2334', strategy_name = 'DAXI')    
     
 
-    engine.process_price('EURUSD', 104.2)
-    engine.process_price('EURUSD', 106.2)
-    engine.process_price('EURUSD', 108.2)
-    engine.process_price('EURUSD', 102.2)
+    # engine.process_price('EURUSD', 104.2)
+    # engine.process_price('EURUSD', 106.2)
+    # engine.process_price('EURUSD', 108.2)
+    # engine.process_price('EURUSD', 102.2)
     
-    engine.process_price('FDAX', 25654)
-    engine.process_price('FDAX', 25760)
-    engine.process_price('FDAX', 25620)
-    engine.process_price('FDAX', 25440)
-    engine.process_price('FDAX', 25240)
+    # engine.process_price('FDAX', 25654)
+    # engine.process_price('FDAX', 25760)
+    # engine.process_price('FDAX', 25620)
+    # engine.process_price('FDAX', 25440)
+    # engine.process_price('FDAX', 25240)
     
-    print(engine)
-    print(engine.total_pnl)
-    print(engine.win_rate)
-    print([trade.r_multiple for trade in engine.completed_trades])
-    #print(engine.trades_by_strategy()) - not needed, we will directly request this in strategy_report
-    x = engine.trades_by_strategy()
-    print(x)
-    engine.strategy_report()
+    # print(engine)
+    # print(f'repr: {repr(engine)}')
+    # print(f'str: {str(engine)}')
+    # print(engine.total_pnl)
+    # print(engine.win_rate)
+    # print([trade.r_multiple for trade in engine.completed_trades])
+    # #print(engine.trades_by_strategy()) - not needed, we will directly request this in strategy_report
+    # x = engine.trades_by_strategy()
+    # print(x)
+    # engine.strategy_report()
+    

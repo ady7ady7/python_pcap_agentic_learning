@@ -1,8 +1,8 @@
-# Daily Feedback — Week 9, Day 3
+# Daily Feedback — Week 9, Day 4
 
-**Date:** 2026-03-04
+**Date:** 2026-03-05
 
-**Topic:** TBD
+**Topic:** Logging two-gate, UnboundLocalError in augmented assignment, closure arithmetic
 
 ---
 

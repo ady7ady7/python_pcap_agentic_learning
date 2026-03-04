@@ -200,4 +200,22 @@ This directory contains all theoretical lessons organized by week and topic.
 
 ---
 
+## Week 9: Stream Errors & errno
+
+### [File Streams, open() & Diagnosing Errors with errno](week9_errno_fileio.md)
+- Files and streams — open before use, close after processing
+- Three open modes: read, write, update
+- `open()` syntax: `file_name`, `mode`, `encoding`
+- `BufferedIOBase` (binary) vs `TextIOBase` (text) stream classes
+- Predefined streams: `sys.stdin`, `sys.stdout`, `sys.stderr`
+- `IOError.errno` attribute — reading OS error codes from exceptions
+- The `errno` module and its symbolic constants
+- 8 key constants: `ENOENT`, `EACCES`, `EEXIST`, `EFBIG`, `EISDIR`, `EMFILE`, `EBADF`, `ENOSPC`
+- `OSError` / `IOError` / `EnvironmentError` — all aliases in Python 3
+- Named subclasses (Python 3.3+): `FileNotFoundError`, `PermissionError`, `FileExistsError`, `IsADirectoryError`
+- Branching on `errno` vs catching named subclasses
+- **PCAP Traps:** `IOError is OSError` (True), `exc.errno` can be `None`, parent-before-child ordering with `OSError` subclasses, `open('x', 'x')` raises `FileExistsError`, forgetting `close()` → `EMFILE`
+
+---
+
 **Navigation Tip:** Use your IDE's file search (Ctrl+P / Cmd+P) to quickly jump to specific lessons!

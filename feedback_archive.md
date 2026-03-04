@@ -3639,3 +3639,46 @@ Snippet A: `UnboundLocalError`, not `AttributeError`. Python pre-scans function 
 #### Task 6 — Project (10/10)
 Trivial fix done correctly. Output verified and correct.
 
+
+---
+
+## Week 9, Day 3 — 2026-03-04 | Score: ~85%
+
+**Topic:** Gap Closure — except ordering, UnboundLocalError, closures + DataLoader wiring
+
+### Task 1 — Warm-up (4/6)
+- Q1 ✓ Exception (parent catches first — understands why)
+- Q2 ✗ Answered FileNotFoundError; OSError appears before it and catches first → OSError
+- Q3 ✓ UnboundLocalError
+- Q4 ✓ 10 then 20
+- Q5 ✗ Answered 40; make_adder(3): n=3 → n=3*10=30 → fn(1)=1+30=31. Arithmetic trace incomplete.
+- Q6 ✓ [4, 4, 4]
+
+### Task 2 — except ordering (4/4) — GAP CLOSED
+All correct. Rule stated cleanly. Parent-before-child trap fully internalised.
+
+### Task 3 — UnboundLocalError (3.5/4)
+- Q1-Q3 ✓
+- Q4 ✗ counter() without global: `count += 1` makes `count` local, reading before assignment → UnboundLocalError. Not "no output, would be 1". Same trap as Task 1 Q3 from a different angle.
+- Explanation of mechanism: correct intuition about pre-scan. Precise wording: Python compiler marks any assigned name as local throughout the function at compile time, before runtime begins.
+
+### Task 4 — PCAP Simulation (8/10)
+- Q1-Q4 ✓ (args/kwargs, class var shared mutation, send(), shallow copy)
+- Q5 ✗ Logging two-gate: logger.setLevel(DEBUG) passes debug messages from logger, but basicConfig(WARNING) sets root handler to WARNING. Handler blocks debug. Answer B, not A. **3rd session with same error.**
+- Q6-Q10 ✓ (name mangling, mutable default, exception variable str(), iterator state, nonlocal)
+
+### Task 5 — Closure capture (3/3) — GAP CLOSED
+All three snippets correct. Default-arg snapshot fix pattern fully understood.
+
+### Task 6 — Project: DataLoader
+Full credit. User's architectural decisions:
+- self.columns populated from actual CSV header → schema-agnostic. Correct.
+- Column validation removed — correct: no fixed schema to validate against.
+- get_close_series() declined — correct: which column feeds the engine is a caller decision, not DataLoader's.
+- NaN check and high/low sanity check retained — correct: data integrity, not schema checks.
+User also flagged EOBI tick data as future direction: tick-level feeds would resolve same-candle SL/TP ambiguity.
+
+### Remaining Gaps for Day 4
+1. Logging two-gate — PRIORITY (3 sessions, same error)
+2. UnboundLocalError in augmented assignment without global
+3. Closure arithmetic: full trace of enclosing-scope mutations before closure is called
