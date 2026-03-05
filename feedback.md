@@ -1,12 +1,12 @@
-# Daily Feedback — Week 9, Day 4
+# Daily Feedback — Week 9, Day 5
 
-**Date:** 2026-03-05
+**Date:** 2026-03-06
 
-**Topic:** Logging two-gate, UnboundLocalError in augmented assignment, closure arithmetic
+**Topic:** Logging double-propagation, IEEE 754, starred unpacking, full PCAP gap closure + Two Weekend Mock Exams
 
 ---
 
-**Tasks completed:** ___ / 6
+**Tasks completed:** ___ / 8
 
 **Time spent:** ___ minutes
 

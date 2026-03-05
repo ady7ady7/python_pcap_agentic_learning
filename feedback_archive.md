@@ -3682,3 +3682,92 @@ User also flagged EOBI tick data as future direction: tick-level feeds would res
 1. Logging two-gate — PRIORITY (3 sessions, same error)
 2. UnboundLocalError in augmented assignment without global
 3. Closure arithmetic: full trace of enclosing-scope mutations before closure is called
+
+---
+
+## Week 9, Day 4 - 2026-03-05
+
+**Topic:** Logging two-gate (3rd session), UnboundLocalError, closure arithmetic
+
+### Mentor Assessment — Score: ~88%
+
+---
+
+### Task 1 — Logging two-gate (5.5/6)
+
+- Q1 ✓ Both messages print (basicConfig DEBUG → root handler passes all)
+- Q2 ✓ Only error (logger.ERROR gate blocks warn before handler)
+- Q3 ✓ Only warn and error (logger passes all, handler blocks debug/info)
+- Q4 ✓ Only warn (basicConfig one-shot, first call at WARNING wins)
+- Q5 ✓ Both print — CORRECT. Child level=DEBUG passes info, propagates to parent's handler (level=DEBUG). Both messages reach the handler.
+- Q6 ✓ warn prints (LastResort handler at WARNING level, bare format)
+
+**Note on Q5:** Initially you stated "parent's rules work for the handler here and pass both messages" — correct outcome, but phrasing suggests the parent's logger level gates the child's messages. It does not when child has its own setLevel(). The child's level gates first, then propagation sends to parent's handler directly.
+
+---
+
+### Task 2 — UnboundLocalError on augmented assignment (4.5/5)
+
+- Q1 ✓ UnboundLocalError — total += n contains assignment → total is local → read before assign
+- Q2 ✓ [1] — items.append(x) contains no assignment to items → LEGB finds it in enclosing/global scope → no error
+- Q3 — Partial credit. You said "lists behave differently" (0.5/1). The real mechanism: the presence or absence of an ASSIGNMENT STATEMENT to the name in the function. `total += n` is assignment. `items.append(x)` is a method call — no assignment to `items`. Python decides local vs non-local at compile time, not runtime. The type (list vs int) is irrelevant.
+- Q4 ✓ 2 — global counter fixes the binding
+- Q5 ✓ UnboundLocalError — x += 1 in inner() → x is local to inner → read before assign
+
+**Gap closed:** You correctly identified both UnboundLocalError cases (Q1, Q5). The mechanism explanation was the only gap.
+
+---
+
+### Task 3 — Closure arithmetic (4/4) — GAP CLOSED
+
+- Q1 ✓ n=12, f(2)=24
+- Q2 ✓ result=14, fn()=14
+- Q3 ✓ val=30, g()=30
+- Q4 ✓ n=30, h()=31 — closure captures reference, not snapshot; n=n*10 runs before step1 is ever called
+
+**Your observation on Q4:** Flagged as bad code smell (PEP 8/readability). Correct. In real code review, defining a closure before mutating the variable it captures is an anti-pattern. The Python semantics are correct but unintuitive. This IS a real trap — it appears in PCAP because it tests whether you understand late binding vs snapshot semantics.
+
+---
+
+### Task 4 — PCAP Simulation (7.5/10)
+
+- Q1 ✓ A — ValueError
+- Q2 ✓ A — True <class 'NoneType'>
+- Q3 ✗ B answered. Correct: A — `a, *b, c = (1,2,3)` → b=[2] (list). **`*b` in starred unpacking ALWAYS produces a list regardless of source type.**
+- Q4 ✓ C — AttributeError after del a.x
+- Q5 ✗ B answered. Correct: D. logger "app" has its own handler (level=ERROR) + propagates to root (basicConfig INFO handler). `info` → blocked by app handler but passes to root handler (INFO level) → 1 line. `error` → passes app handler AND root handler → 2 lines. Total: 2 lines, info from root, error from both. **This is the hardest logging variant.**
+- Q6 ✗ A answered. Correct: B — `0.1 + 0.2 == 0.3` → **False** (IEEE 754 floating point). `0.1 + 0.2 = 0.30000000000000004`.
+- Q7 ✓ A — args=(2,3), b=99, kwargs={'c':4,'d':5}
+- Q8 ✓ C — Base+Child
+- Q9 — Correct answer (False, [9,16]) not in options. You caught this. The generator exhausts UP TO AND INCLUDING the first element ≥ 3 that matches — `3 in gen` checks 0→1→4→ (no 3 found, exhausts up to 9 at x=3 which gives 9... wait: x=0→0, x=1→1, x=2→4 (no match), x=3→9 (no match for 3 in [0,1,4,9,16]). `3 in gen` → False (3 never appears). Generator consumed through x=4 (value 16). list(gen) → []. So answer is False, []. None of the options match. Full credit for catching the error.
+- Q10 ✓ C — `raise X from None` suppresses chaining, __cause__=None
+
+---
+
+### Task 5 — errno & binary I/O (3.5/4)
+
+- Q1 ✓ exc.errno = integer OS error code on the exception instance; errno.ENOENT = symbolic constant (value=2) for "no such file or directory"
+- Q2 ✓ True, True — IOError and EnvironmentError are aliases for OSError in Python 3
+- Q3 ✗ Stated Exception → OSError → FileNotFoundError (most-general first). Question asked most-specific first. Correct: **FileNotFoundError → OSError → Exception**. Most specific first in except clauses — or Python catches the parent class and never reaches the child.
+- Q4 ✓ readinto() fills a pre-existing bytearray in-place and returns the number of bytes read (no new object created); read() returns a new bytes/str object
+
+---
+
+### Task 6 — Project: main.py DataLoader wiring (full credit)
+
+Working output confirmed:
+- DataLoader loaded 50 rows from ohlc_mock_data.csv
+- Columns printed, row count printed, head(3) printed
+- iterrows() loop over head(10) printing close prices
+- Engine block kept commented out
+
+User initiative: used head(10) instead of head(5) — minor deviation, no deduction.
+
+---
+
+### Remaining Gaps for Day 5
+1. **Logging double-propagation** — named handler + root handler both fire when propagate=True (T4 Q5, now 4th session)
+2. **`*b` starred unpacking** → always list even from tuple source (T4 Q3)
+3. **IEEE 754** — `0.1 + 0.2 == 0.3` → False (T4 Q6, classic PCAP trap)
+4. **except clause ordering** — most-specific first (T5 Q3)
+

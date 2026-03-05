@@ -5,6 +5,28 @@ Format: Date | Topic | Score | Difficulty | Notes
 
 ---
 
+## Week 9, Day 4 - 2026-03-05
+
+**Topic:** Logging two-gate (3rd session), UnboundLocalError on augmented assignment, closure arithmetic
+**Score:** ~88% (25.5/29 points across 6 tasks)
+**Difficulty:** Medium-Hard
+
+**Tasks Completed:**
+1. Logging two-gate — 6 predict-the-output (5.5/6 — propagation double-print variant still catching)
+2. UnboundLocalError on augmented assignment — 5 questions (4.5/5 — Q3 mechanism explained, gap closed)
+3. Closure arithmetic trace — 4 full traces (4/4 — GAP CLOSED including unintuitive Q4)
+4. PCAP Simulation — 10 questions (7.5/10 — missed: `*b` → list, IEEE 754 False, double-propagation logging)
+5. errno & binary I/O — 4 questions (3.5/4 — except order stated most-general-first instead of most-specific-first)
+6. Project: DataLoader → DataFrame → iterrows() in main.py (full credit, working output confirmed)
+
+**Key Gaps Identified for Day 5:**
+- Logging double-propagation: named handler + root handler both fire when propagate=True
+- `*b` starred unpacking ALWAYS produces a list, even from tuple
+- IEEE 754: `0.1 + 0.2 == 0.3` → `False`
+- except clause ordering: most-specific first
+
+---
+
 ## Week 1, Day 1 - 2026-01-05
 
 **Topic:** Modules, Packages & Import Mechanisms
