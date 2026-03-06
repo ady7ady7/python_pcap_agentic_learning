@@ -645,139 +645,16 @@ if __name__ == '__main__':
 | `os.path.isfile()` | Check if it's a file | `True/False` |
 | `os.path.isdir()` | Check if it's a directory | `True/False` |
 | `os.environ` | Environment variables dict | `os.environ['HOME']` |
-| `os.name` | OS type | `'nt'` or `'posix'` |
+| `os.name` | OS type | `'nt'`- Windows or `'posix' - Unix or 'java' - if code is written in sth like Jython` |
+
+
+FOR UNIX/LINUX
+| os.uname()) |  information about the current operating system | systemname / nodename, release, version, machine (e.g. x86_64)
+
 
 ---
 
----
-
-## The `datetime` Module
-
-The `datetime` module provides classes for working with dates and times.
-
-```python
-from datetime import date, time, datetime, timedelta
-```
-
-### `date` - Date Objects
-
-```python
-from datetime import date
-
-# Create a date
-d = date(2026, 2, 2)  # year, month, day
-print(d)  # 2026-02-02
-
-# Today's date
-today = date.today()
-
-# Access components
-print(today.year)   # 2026
-print(today.month)  # 2
-print(today.day)    # 2
-
-# Day of week (Monday = 0, Sunday = 6)
-print(today.weekday())     # 0 (Monday)
-print(today.isoweekday())  # 1 (Monday = 1)
-```
-
-### `time` - Time Objects
-
-```python
-from datetime import time
-
-# Create a time
-t = time(14, 30, 45)  # hour, minute, second
-print(t)  # 14:30:45
-
-# Access components
-print(t.hour)    # 14
-print(t.minute)  # 30
-print(t.second)  # 45
-```
-
-### `datetime` - Combined Date and Time
-
-```python
-from datetime import datetime
-
-# Create datetime
-dt = datetime(2026, 2, 2, 14, 30, 45)
-print(dt)  # 2026-02-02 14:30:45
-
-# Current datetime
-now = datetime.now()
-
-# From timestamp (Unix time)
-dt = datetime.fromtimestamp(1738500000)
-
-# To timestamp
-ts = now.timestamp()
-```
-
-### `strftime` and `strptime` - Formatting
-
-```python
-from datetime import datetime
-
-now = datetime.now()
-
-# strftime = "string format time" → datetime to string
-formatted = now.strftime("%Y-%m-%d %H:%M:%S")
-# '2026-02-02 14:30:45'
-
-# strptime = "string parse time" → string to datetime
-dt = datetime.strptime("2026-02-02", "%Y-%m-%d")
-
-# Common format codes:
-# %Y - 4-digit year (2026)
-# %m - 2-digit month (02)
-# %d - 2-digit day (02)
-# %H - 24-hour (14)
-# %M - minute (30)
-# %S - second (45)
-# %A - weekday name (Monday)
-# %B - month name (February)
-```
-
-**PCAP Trap:** `strftime` vs `strptime`
-- strftime = **f**ormat → datetime to string
-- strptime = **p**arse → string to datetime
-
-### `timedelta` - Date Arithmetic
-
-```python
-from datetime import datetime, timedelta
-
-now = datetime.now()
-
-# Create timedelta
-delta = timedelta(days=7, hours=3, minutes=30)
-
-# Add/subtract
-future = now + delta
-past = now - delta
-
-# Difference between datetimes
-dt1 = datetime(2026, 2, 10)
-dt2 = datetime(2026, 2, 2)
-diff = dt1 - dt2
-print(diff.days)  # 8
-print(diff.total_seconds())  # 691200.0
-```
-
-### `datetime` Quick Reference
-
-| Class/Function | Description | Example |
-|----------------|-------------|---------|
-| `date(y, m, d)` | Create date | `date(2026, 2, 2)` |
-| `date.today()` | Current date | `date(2026, 2, 2)` |
-| `time(h, m, s)` | Create time | `time(14, 30, 45)` |
-| `datetime(...)` | Create datetime | `datetime(2026, 2, 2, 14, 30)` |
-| `datetime.now()` | Current datetime | Current timestamp |
-| `strftime(fmt)` | Format to string | `"%Y-%m-%d"` |
-| `strptime(s, fmt)` | Parse from string | String to datetime |
-| `timedelta(...)` | Duration | `timedelta(days=7)` |
+> **`datetime` and `time` modules** have been moved to a dedicated lesson: [`week9_datetime_time.md`](week9_datetime_time.md)
 
 ---
 
@@ -810,6 +687,8 @@ f.close()  # Easy to forget!
 
 'r+'  # Read and write (file must exist)
 'w+'  # Write and read (truncates)
+
+
 ```
 
 ### Reading Files

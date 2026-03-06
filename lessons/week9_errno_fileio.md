@@ -19,6 +19,8 @@ codes through `IOError.errno` and the `errno` module.
 - [Common errno constants](#common-errno-constants)
 - [Practical pattern: branching on errno](#practical-pattern-branching-on-errno)
 - [PCAP Traps](#pcap-traps)
+- [bytearray and binary files](#bytearray-and-binary-files)
+- [Text vs binary reading — full comparison](#text-vs-binary-reading--full-comparison)
 
 ---
 
@@ -384,6 +386,421 @@ errno.EBADF    →  (no direct subclass)       Operating on closed stream
 errno.EFBIG    →  (no direct subclass)       File exceeds OS size limit
 errno.EMFILE   →  (no direct subclass)       Too many open file descriptors
 errno.ENOSPC   →  (no direct subclass)       Disk full
+```
+
+---
+
+## bytearray and binary files
+
+### What is amorphous data?
+
+**Amorphous data** is data with no specific shape or form — just a series of bytes.
+It may represent meaningful content (a bitmap image, a compressed archive, a binary
+protocol packet) but at the point of reading or writing, you either cannot or do not
+need to interpret it as text, numbers, or any other typed structure.
+
+Amorphous data cannot be stored in a string (strings require valid text encoding) or
+a plain list (too general, no binary semantics). Python provides a dedicated container
+for it: `bytearray`.
+
+---
+
+### bytearray — the container
+
+`bytearray` is a **mutable sequence of bytes**, where each element is an integer in
+the range `0–255`.
+
+```python
+data = bytearray(10)   # creates 10 bytes, all initialised to zero
+print(data)            # bytearray(b'\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00')
+print(len(data))       # 10
+```
+
+You can also initialise it with content:
+
+```python
+data = bytearray([65, 66, 67])   # from a list of ints
+print(data)                       # bytearray(b'ABC')
+
+data = bytearray(b'hello')        # from a bytes literal
+```
+
+Individual elements are integers, not characters:
+
+```python
+data = bytearray(3)
+data[0] = 255
+data[1] = 0
+data[2] = 128
+print(data[0])   # 255  (int, not str)
+```
+
+`bytearray` is **mutable** — you can assign to individual indices, unlike `bytes`
+which is immutable.
+
+---
+
+### Writing a bytearray to a binary file
+
+Binary files are opened with the `'b'` flag in the mode string (`'wb'`, `'rb'`, `'ab'`).
+
+```python
+data = bytearray(10)
+for i in range(len(data)):
+    data[i] = 10 + i   # fill with values 10, 11, 12, ..., 19
+
+with open('file.bin', 'wb') as bf:
+    bytes_written = bf.write(data)
+
+print(bytes_written)   # 10
+```
+
+Key points:
+
+- `write()` takes a `bytearray` (or any bytes-like object) and writes it to the file
+- `write()` returns the **number of bytes successfully written**
+- If the return value differs from `len(data)`, a write error occurred
+- The `'wb'` mode creates the file if it doesn't exist, or truncates it if it does
+
+---
+
+### Reading bytes from a binary file with `readinto()`
+
+Binary reading uses `readinto()` — it fills a **pre-existing** `bytearray` rather
+than creating a new object.
+
+```python
+from os import strerror
+
+data = bytearray(10)
+
+try:
+    bf = open('file.bin', 'rb')
+    bytes_read = bf.readinto(data)
+    bf.close()
+
+    for b in data:
+        print(hex(b), end=' ')   # 0xa 0xb 0xc 0xd 0xe 0xf 0x10 0x11 0x12 0x13
+except IOError as e:
+    print("I/O error occurred:", strerror(e.errno))
+```
+
+Key points:
+
+- `readinto()` does **not** create a new object — it writes into the bytearray you pass
+- It returns the **number of bytes read**
+- If the file has more data than the bytearray can hold, reading stops when the array is full
+- If the file has fewer bytes than the array, only those bytes are written; the rest
+  of the array retains its previous values
+- `strerror(e.errno)` from the `os` module converts an errno code to a human-readable
+  string — a clean alternative to `exc.strerror`
+
+---
+
+### `os.strerror()` — another way to read errno
+
+The `os` module provides `strerror()` which maps an errno integer to a text description:
+
+```python
+import os
+import errno
+
+print(os.strerror(errno.ENOENT))   # No such file or directory
+print(os.strerror(errno.EACCES))   # Permission denied
+print(os.strerror(errno.ENOSPC))   # No space left on device
+```
+
+This is equivalent to accessing `exc.strerror` on a caught `IOError`, but can be
+called anywhere — useful when you have only the error number and not the exception object.
+
+---
+
+### bytearray vs bytes — when to use which
+
+| | `bytes` | `bytearray` |
+|---|---|---|
+| Mutable? | No | Yes |
+| Created with | `b'...'` literals, `bytes()` | `bytearray()` |
+| Use for | Read-only binary data, dict keys | Binary I/O buffers, in-place modification |
+| `readinto()` accepts | No | Yes |
+
+---
+
+### PCAP Traps — bytearray and binary I/O
+
+**Trap 1: binary mode requires `'b'` in the mode string**
+
+```python
+# WRONG — opens in text mode, write() rejects bytearray
+with open('file.bin', 'w') as f:
+    f.write(bytearray(10))   # TypeError
+
+# CORRECT
+with open('file.bin', 'wb') as f:
+    f.write(bytearray(10))   # OK
+```
+
+**Trap 2: `readinto()` fills, not creates**
+
+```python
+data = bytearray(10)
+bf = open('file.bin', 'rb')
+n = bf.readinto(data)
+# data now contains the bytes read; n tells you how many were actually read
+# if n < 10, the file had fewer than 10 bytes — the rest of data is unchanged
+```
+
+**Trap 3: elements of bytearray are integers, not characters**
+
+```python
+data = bytearray(b'ABC')
+print(data[0])          # 65  (not 'A')
+print(type(data[0]))    # <class 'int'>
+```
+
+**Trap 4: `bytearray(n)` fills with zeros, not garbage**
+
+```python
+data = bytearray(5)
+print(list(data))   # [0, 0, 0, 0, 0]  — always zeros
+```
+
+---
+
+---
+
+## Text vs binary reading — full comparison
+
+This is the section to read before any exam question involving file reading methods.
+The split between text streams and binary streams determines which methods you call
+and what Python returns.
+
+---
+
+### Side-by-side overview
+
+| | **Text mode** (`'r'`) | **Binary mode** (`'rb'`) |
+|---|---|---|
+| Stream class | `TextIOWrapper` | `BufferedReader` |
+| Unit returned | `str` | `bytes` or fills `bytearray` |
+| Newlines | `\r\n` → `\n` (auto) | Raw bytes, no translation |
+| `read()` | Returns full file as `str` | Returns full file as `bytes` |
+| `read(n)` | Returns next `n` **characters** as `str` | Returns next `n` **bytes** as `bytes` |
+| `readline()` | Returns one line as `str` (includes `\n`) | Returns one line as `bytes` (includes `b'\n'`) |
+| `readlines()` | Returns `list[str]` | Returns `list[bytes]` |
+| `readinto(buf)` | **Not available** | Fills pre-existing `bytearray`, returns count |
+
+---
+
+### Text reading methods
+
+#### `read()` — entire file as one string
+
+```python
+with open("notes.txt", "r") as f:
+    content = f.read()       # one big str
+    print(type(content))     # <class 'str'>
+```
+
+#### `read(n)` — next n characters
+
+```python
+with open("notes.txt", "r") as f:
+    chunk = f.read(5)        # first 5 characters
+    rest  = f.read()         # everything after the cursor
+```
+
+The file has a **cursor**. Every read advances it. Reading past the end returns `""`.
+
+#### `readline()` — one line at a time
+
+```python
+with open("notes.txt", "r") as f:
+    line1 = f.readline()     # "hello\n"   ← includes newline
+    line2 = f.readline()     # "world\n"
+    line3 = f.readline()     # ""          ← empty string = end of file
+```
+
+Key rule: `readline()` **includes the `\n`** at the end of each line.
+When the file is exhausted, it returns `""` (empty string), NOT `StopIteration`.
+
+#### `readlines()` — all lines as a list
+
+```python
+with open("notes.txt", "r") as f:
+    lines = f.readlines()    # ['hello\n', 'world\n', 'last line\n']
+    print(type(lines))       # <class 'list'>
+```
+
+Each element is a `str` and includes its `\n`. Use `.strip()` to remove it:
+
+```python
+lines = [line.strip() for line in f.readlines()]
+```
+
+#### Iterating directly — the Pythonic way
+
+```python
+with open("notes.txt", "r") as f:
+    for line in f:           # same as calling readline() repeatedly
+        print(line.strip())  # f is its own iterator
+```
+
+---
+
+### Binary reading methods
+
+#### `read()` — entire file as `bytes`
+
+```python
+with open("file.bin", "rb") as f:
+    raw = f.read()           # returns bytes object
+    print(type(raw))         # <class 'bytes'>
+```
+
+Wrap in `bytearray()` to get a mutable buffer:
+
+```python
+with open("file.bin", "rb") as f:
+    data = bytearray(f.read())   # mutable copy of all bytes
+```
+
+This is the pattern from the PCAP material — `bytearray(bf.read())` reads all bytes
+and wraps them in a mutable container in one step.
+
+#### `read(n)` — next n bytes
+
+```python
+with open("file.bin", "rb") as f:
+    header = f.read(4)       # first 4 bytes as bytes object
+    body   = f.read()        # the rest
+```
+
+#### `readline()` on binary stream — reads until `b'\n'`
+
+```python
+with open("file.bin", "rb") as f:
+    line = f.readline()      # reads until b'\n' or EOF
+    print(type(line))        # <class 'bytes'>
+```
+
+Usually only useful on binary files that happen to be line-delimited. For true
+binary data (images, compiled files) use `read(n)` or `readinto()`.
+
+#### `readinto(buffer)` — fill a pre-existing bytearray
+
+```python
+from os import strerror
+
+data = bytearray(10)   # pre-allocate exactly how many bytes you want
+
+try:
+    with open("file.bin", "rb") as bf:
+        n = bf.readinto(data)   # fills data in-place, returns count
+    for b in data:
+        print(hex(b), end=' ')
+except IOError as e:
+    print("I/O error occurred:", strerror(e.errno))
+```
+
+Contrast with `bytearray(f.read())`:
+
+| | `bytearray(f.read())` | `f.readinto(buf)` |
+|---|---|---|
+| Allocates new object? | Yes — `bytes` then `bytearray` | No — fills existing buffer |
+| Memory efficiency | Two copies briefly | One copy |
+| Control over size | Reads everything | Reads exactly `len(buf)` bytes |
+| Returns | `bytearray` | number of bytes read (int) |
+
+---
+
+### Complete worked example: write then read
+
+```python
+from os import strerror
+
+# --- WRITE ---
+data = bytearray(10)
+for i in range(len(data)):
+    data[i] = 10 + i   # values: 10, 11, 12, ..., 19
+
+try:
+    bf = open('file.bin', 'wb')
+    bf.write(data)
+    bf.close()
+except IOError as e:
+    print("I/O error occurred:", strerror(e.errno))
+
+# --- READ with readinto() ---
+data = bytearray(10)
+
+try:
+    bf = open('file.bin', 'rb')
+    bf.readinto(data)
+    bf.close()
+    for b in data:
+        print(hex(b), end=' ')   # 0xa 0xb 0xc 0xd 0xe 0xf 0x10 0x11 0x12 0x13
+except IOError as e:
+    print("I/O error occurred:", strerror(e.errno))
+
+# --- READ with bytearray(read()) ---
+try:
+    bf = open('file.bin', 'rb')
+    data = bytearray(bf.read())  # reads all, wraps in mutable bytearray
+    bf.close()
+    for b in data:
+        print(hex(b), end=' ')   # same output
+except IOError as e:
+    print("I/O error occurred:", strerror(e.errno))
+```
+
+---
+
+### PCAP traps — reading methods
+
+**Trap 1: `readline()` includes `\n`, `read()` does not strip anything**
+
+```python
+with open("f.txt", "w") as f:
+    f.write("abc")          # no newline written
+
+with open("f.txt", "r") as f:
+    line = f.readline()     # "abc"  — no \n because none was written
+    rest = f.read()         # ""     — cursor is at end, nothing left
+```
+
+**Trap 2: `readlines()` returns a list, NOT a string**
+
+```python
+lines = open("f.txt").readlines()
+print(type(lines))   # <class 'list'>  — not str
+```
+
+**Trap 3: `read()` on exhausted stream returns `""` / `b""`, not an error**
+
+```python
+with open("f.txt", "r") as f:
+    f.read()             # consume everything
+    again = f.read()     # "" — no StopIteration, no exception
+```
+
+**Trap 4: `readinto()` is binary-only — not available on text streams**
+
+```python
+with open("f.txt", "r") as f:
+    buf = bytearray(10)
+    f.readinto(buf)      # AttributeError — text stream has no readinto
+```
+
+**Trap 5: `read(n)` counts characters in text mode, bytes in binary mode**
+
+```python
+# "é" is 1 character but 2 bytes in UTF-8
+with open("f.txt", "r", encoding="utf-8") as f:
+    print(len(f.read(1)))   # 1 — one character
+
+with open("f.txt", "rb") as f:
+    print(len(f.read(1)))   # 1 — one byte (may not be a complete character)
 ```
 
 ---

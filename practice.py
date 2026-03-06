@@ -7843,4 +7843,1791 @@ the answer is no (as there are neither the letters "d", "o", or "g", in this ord
 # print(is_valid_price(43))
 # print(is_valid_price(-1))
 
-# print(isinstance(True, int))
+# print(isinstance(True, int))\
+
+#W8 D1 T1
+
+# a = (1, [2, 3], 4)
+# a[1].append(5)
+# print(a)
+
+# print(type(lambda: None).__name__)
+
+
+#W8 D1 T2
+
+# def outer():
+#     count = 0
+#     def inner():
+#         nonlocal count
+#         count += 1
+#         return count
+#     return inner
+
+# f = outer()
+# print(f())
+
+
+# def make_accumulator(factor):
+#     items = []
+#     def add(x):
+#         items.append(x * factor)
+#         return items
+#     return add
+
+# acc = make_accumulator(10)
+# acc(1)
+# print(acc(2))
+
+
+# def outer():
+#     x = "outer"
+#     def middle():
+#         x = "middle"
+#         def inner():
+#             print(x)
+#         inner()
+#     middle()
+
+# outer()
+
+
+#W8 D1 T3
+
+# class InvalidPriceError(ValueError):
+#     '''A cusom exception based on ValueError that takes price + reason'''
+#     def __init__(self, *args, reason: str, price: float):
+#         super().__init__(*args)
+#         self.price = price
+#         self.reason = reason
+        
+#     def __str__(self):
+#         return f'Invalid price 99.0: must be positive: {self.reason}, {self.price}'
+
+
+# entry_price = -50.0
+# quantity = 10
+# try:
+#     result = entry_price * quantity
+#     if entry_price < 0:
+#         raise InvalidPriceError(reason = 'XD', price = entry_price)
+# except InvalidPriceError:
+#     print(f'InvalidPriceError: Invalid price 99.0: must be positive: XD, {entry_price}')
+
+
+#W8 D1 T4 - updated algo_backtest/engine/backtest_engine.py - added module level docstring
+
+
+#W8 D1 T6 - broken decorator
+
+# import logging
+
+# def log_call(func):
+#     def wrapper(*args):
+#         logging.info("Calling %s", func.__name__) #this would return wrapper as the func name, and I reckon it's not what we want
+#         result = func(*args) #we're calculating the result, but not returnign any
+#         logging.info("Done")
+#         return #lack of return
+#     return func #wrong return
+
+# #fixed version:
+
+
+# import logging
+# logging.basicConfig(level = logging.INFO)
+
+# def log_call(func):
+#     def wrapper(*args):
+#         logging.info("Calling %s", func.__name__)
+#         result = func(*args)
+#         logging.info("Done")
+#         return result
+#     return wrapper
+
+# @log_call
+# def add(a, b):
+#     return a + b
+
+# x = add(5, 15)
+# print(x)
+
+
+#W8 D1 T7 - full backtest in main.py
+'''I'm not pasting the code, check main.py for reference - the backtest went successfully and I also had a chance
+to fix a few imports + references in backtest_engine/position_manager'''
+
+
+
+#W8 D2 T1
+
+# class A:
+#     def __init__(self):
+#         self.x = 1
+
+# class B(A):
+#     def __init__(self):
+#         self.y = 2
+
+# b = B()
+# print(b.x, b.y)
+
+# def decorator(func):
+#     def wrapper(*args, **kwargs):
+#         return func(*args, **kwargs) * 2
+#     return wrapper
+
+# @decorator
+# @decorator
+# def get_five():
+#     return 5
+
+# print(get_five())
+
+# class C:
+#     _x = 0
+
+#     @classmethod
+#     def increment(cls):
+#         cls._x += 1
+
+#     @staticmethod
+#     def description():
+#         return "I am C"
+
+# C.increment()
+# C.increment()
+# print(C._x, C.description())
+
+# try:
+#     x = int("abc")
+# except (ValueError, TypeError) as e:
+#     print(type(e).__name__)
+
+# class Node:
+#     def __init__(self, val):
+#         self.val = val
+#         self.next = None
+
+# a = Node(1)
+# b = Node(2)
+# a.next = b
+# b.next = a
+
+# print(a.next.next.val)
+
+
+#W8 D2 T2
+
+# #Erratic class chain - bug identification
+# class Animal:
+#     def __init__(self, name: str, sound: str):
+#         self.name = name
+#         self.sound = sound
+
+#     def speak(self) -> str:
+#         return f"{self.name} says {self.sound}"
+# #everything ok up to this point
+
+# class Dog(Animal):
+#     def __init__(self, name: str, breed: str):
+#         #ISSUE 1 - WE'RE NOT fetching name, sound from our parent class - this will be an issue in speak
+#         self.breed = breed
+
+#     def speak(self) -> str:
+#         return super().speak() + f" (breed: {self.breed})"
+
+
+# class GuideDog(Dog):
+#     def __init__(self, name: str, breed: str, owner: str):
+#         super().__init__(name, breed)
+#         self.owner = owner
+
+#     def speak(self) -> str:
+#         return super().speak() + f" [guide dog for {self.owner}]"
+
+
+# gd = GuideDog("Rex", "Labrador", "Alice")
+# print(gd.speak())
+
+
+
+#FIX
+
+#Erratic class chain - bug identification
+# class Animal:
+#     def __init__(self, name: str, sound: str):
+#         self.name = name
+#         self.sound = sound
+
+#     def speak(self) -> str:
+#         return f"{self.name} says {self.sound}"
+# #everything ok up to this point
+
+# class Dog(Animal):
+#     def __init__(self, name, sound, breed: str):
+#         super().__init__(name, sound)
+#         self.breed = breed
+
+#     def speak(self) -> str:
+#         return super().speak() + f" (breed: {self.breed})"
+    
+# #fixed this now
+
+
+# class GuideDog(Dog):
+#     def __init__(self, name: str, sound: str, breed: str, owner: str):
+#         super().__init__(name, breed, sound)
+#         self.owner = owner
+
+#     def speak(self) -> str:
+#         return super().speak() + f" [guide dog for {self.owner}]"
+
+
+# dog = Dog('Johny', 'Woof', 'Labrador')
+# print(dog.speak())
+
+# gd = GuideDog("Rex", 'Woof', "Labrador", "Alice")
+# print(gd.speak())
+
+
+# a = [1, 2, 3]
+# b = a[:]
+# a[0] = 99
+# print(b[0])
+
+
+# class A:
+#     def method(self):
+#         return "A"
+
+# class B(A):
+#     pass
+
+# class C(A):
+#     def method(self):
+#         return "C"
+
+# class D(B, C):
+#     pass
+
+# print(D().method())
+
+
+# def f(a, b, /, c, d):
+#     return a + b + c + d
+
+# print(f(1, 2, c=3, d=4))
+
+
+# class A:
+#     def __init__(self):
+#         self.__x = 10
+
+#     def get_x(self):
+#         return self.__x
+
+# a = A()
+# print(a.get_x(), a._A__x)
+
+#W8 D2 T4
+
+# class Countdown:
+#     '''A practice iterator class which takes the following args:
+    
+#     start: int
+    
+#     It yields values from start down to 1 inclusive, and then raises StopIteration,
+#     but the value can be reset by calling .reset() method.
+#     '''
+    
+#     def __init__(self, start: int):
+#         self.start = start
+#         self.current = start
+        
+#     def __iter__(self):
+#         return self
+    
+#     def __next__(self):
+#         if self.current < 1:
+#             raise StopIteration
+#         else:
+#             value = self.current
+#             self.current -= 1
+#             return value
+    
+#     def reset(self):
+#         self.current = self.start
+#         print('Restored the current value to the starting value.')
+    
+    
+
+# for x in Countdown(5):
+#     print(x)
+
+# print(list(Countdown(4)))
+# print(list(Countdown(7)))
+
+#W8 D2 T5 - identifying issues & refactoring
+# def load_price(filepath):
+#     try:
+#         f = open(filepath) #lack of opening mode + lack of context manager
+#         data = f.read()  #this is just the effect of choosing the above way
+#         f.close() #THIS IS NECESSARY HERE, BUT IT'S A FAULTY APPROACH, AN OLD-STYLE WHICH CAUSES US TO USE THIS
+#         return float(data.strip()) #this is weird, but maybe we need float, who knows
+#     except:
+#         return None #LACK OF ERROR HANDLING
+    
+# #fixed version
+
+# def load_price(filepath):
+#     try:
+#         with open(filepath, 'r') as r:
+#             data = r.read()
+#             return float(data.strip())
+#     except FileNotFoundError:
+#         print('File not found!')
+#     except Exception as e:
+#         print(f'Unexpected exception: {str(e)}')
+    
+
+# class Account:
+#     balance = 0
+
+# a1 = Account()
+# a2 = Account()
+# a1.balance += 100
+# print(a1.balance, a2.balance) #100 0
+
+
+# class Account:
+#     balance = 0
+
+# a1 = Account()
+# a2 = Account()
+# Account.balance += 100
+# print(a1.balance, a2.balance) #100 100
+
+#Crappy Data Python
+# lista = [5, 2, 6, 4, 2, 9, 6, 3, 8, 1, 7, 2, 6, 10, 4, 2, 11, 6, 13, 2, 14, 6, 15, 2, 16]
+
+# lista.pop(3)
+# lista.pop(lista.index(6))
+# lista.insert(2, 8)
+# print(lista)
+# lista.reverse()
+# print(lista)
+# find_index = lista.index(2)
+# print(find_index)
+# len_lista = len(lista)
+
+#W8 D3 T1
+
+# def f(a, b=2, *args, c=3):
+#     print(a, b, c, args)
+
+# f(1, 4, 5, 6, c=10)
+
+
+# class A:
+#     pass
+
+# class B(A):
+#     pass
+
+# class C(A):
+#     pass
+
+# class D(B, C):
+#     pass
+
+# print(D.__mro__)
+
+# a = {"x": 1}
+# b = a.copy()
+# b["x"] = 99
+# b["y"] = 2
+# print(a)
+
+# def gen(n):
+#     for i in range(n):
+#         yield i * i
+
+# g = gen(5)
+# print(next(g), next(g), sum(g))
+
+
+#W8 D3 T2 - engine/trade.py small tweaks
+# - removed print(trades_profits)
+# - init exit reason changed to .lower() for consistency with other modules
+
+#W8 D3 T3  - engine/trade.py + backtest_engine.py
+# - added R multiple as a property
+
+#W8 D3 T4 - Continuation - added strategy_id + strategy_name
+#It required multiple checks and modifications in all of the components (backtest_engine, position, position_manager, trade)
+#and I'm unable to list them all here, but generally speaking I've added strategy id/name wherever needed
+#and created a test in main.py which ran with success
+
+# zip([1,2,3], [4,5])
+
+#W8 D3 T6
+# def f(x):
+#     return x * 2
+
+# result = map(f, [1, 2, 3])
+# print(result) #map memory object - we'd need to wrap it in a list to see the actual values
+# print(list(result)) #[2, 4, 6]
+# print(list(result)) #[]
+
+
+# a = [1, 2, 3]
+# b = [4, 5, 6]
+# c = [*a, *b]
+# d = (*a, *b)
+# print(type(c).__name__, type(d).__name__)
+
+
+#W8 D4 T1
+
+# a = [1, 2, 3]
+# b = [4, 5, 6]
+# print(list(zip(a, b)))
+# print(list(zip(*zip(a, b))))
+
+
+# class C:
+#     def __init__(self, val):
+#         self._val = val
+#     def __repr__(self):
+#         return f'C({self._val!r})'
+
+# items = [C(3), C(1), C(2)]
+# items.sort(key=lambda c: c._val)
+# print(items)
+
+#W8 D4 T2 - added two new methods in algo_backtest/engine/backtest_engine.py
+
+'''trades_by_strategy filters trades based on their strategy
+
+    strategy_report calls trades_by_strategy and prints out a report with division based on strategies and a total report
+    
+    Currently the report is rather minimalistic but I will definitely be testing and updating it as soon as we get the project ready and work on real data (soon)
+'''
+
+    # def trades_by_strategy(self) -> dict[str, list[Trade]]:
+    #     '''Method used to filter trades based on their strategy - it can be called explicitly and/or its return may be eventually added to Class attributes, 
+    #     but for now it just returns the dict, and we will use it in strategy_report without adding extra Class attributes
+        
+    #     Args:
+    #     None - we use the self.completed_trades from our Class instance
+        
+    #     Returns:
+    #     A dict where each strategy_id represents a key, and its trades are represented as a list.
+        
+    #     e.g 
+        
+    #     {'432': [Trade(position_id='957d8746-f5c1-4c9e-93df-2342e2a316d6', ticker='EURUSD', side='BUY', entry_price=105.6, exit_price=104.2, quantity=10000, pnl=-14000.00, exit_reason='still open', strategy_id='432', strategy_name='Super XD'), 
+    #     Trade(position_id='e14c1475-c77b-4683-90cd-fda6946f42dd', ticker='EURUSD', side='SELL', entry_price=105.6, exit_price=104.2, quantity=10000, pnl=14000.00, exit_reason='still open', strategy_id='432', strategy_name='Super XD')]}
+    #     '''
+        
+    #     if not self.completed_trades:
+    #         logger.info(f'There are no completed trades in self.completed_trades, and we cannot proceed with filtering them by the strategy.')
+    #         return None
+    #     else:
+    #         strategies_set = set([(trade.strategy_id, trade.strategy_name) for trade in self.completed_trades])
+    #         completed_trades_by_strategy = {}
+    #         for strategy in strategies_set:
+    #             filtered_trades = [trade for trade in self.completed_trades if trade.strategy_id == strategy[0]]
+    #             completed_trades_by_strategy[strategy] = filtered_trades
+    #         return completed_trades_by_strategy
+        
+    # def strategy_report(self):
+    #     '''Method used to call trades_by_strategy method to get filtered trades and print out a report with stats for every strategy and portfolio total'''
+        
+    #     trades_filtered_by_strategy = self.trades_by_strategy()
+    #     for strategy in trades_filtered_by_strategy:
+    #         total_pnl = round(sum([trade.pnl for trade in trades_filtered_by_strategy[strategy]]), 2)
+    #         win_rate = Trade.calculate_win_rate(trades_filtered_by_strategy[strategy])
+    #         avg_r = sum(trade.r_multiple for trade in trades_filtered_by_strategy[strategy]) / len(trades_filtered_by_strategy[strategy])
+    #         print(f'''{3* '-'} {strategy[0]} (ID: {strategy[1]}) {3* '-'}
+                  
+    #               Trades: {len(trades_filtered_by_strategy[strategy])}
+    #               Win Rate: {win_rate}%
+    #               Total PnL: ${total_pnl:.2f}
+    #               Avg R: {avg_r:.2f}R
+                  
+    #               ''')
+    #     print(f'''{3* '-'} PORTFOLIO TOTAL  {3* '-'}
+                  
+    #               Trades: {len(self.completed_trades)}
+    #               Win Rate: {self.win_rate}%
+    #               Total PnL: ${self.total_pnl}
+    #               Avg R: {round(sum(trade.r_multiple for trade in self.completed_trades) / len(self.completed_trades), 2)}R
+                  
+    #               ''')
+    
+
+
+#W8 D4 T3
+
+# class A:
+#     def __init__(self):
+#         self.__x = 10
+
+# a = A()
+# a.__x = 99
+# print(a.__x, a._A__x)
+
+# x = {1, 2, 3}
+# y = {2, 3, 4}
+# print(x & y, x | y, x - y)
+
+# def f(x: int) -> str:
+#     return x * 2
+
+# print(f("hello"))
+
+#W8 D4 T5
+
+# x = [1, 2, 3]
+# y = x
+# x = x + [4]
+# print(y)
+
+# def f(n, memo={}):
+#     if n in memo:
+#         return memo[n]
+#     if n <= 1:
+#         return n
+#     memo[n] = f(n-1) + f(n-2)
+#     return memo[n]
+
+#Edube - Module 4 - exercises
+
+#1
+# any_list = [1, 2, 3, 4]
+# even_list = list(map(lambda x: x + 1 if x % 2 == 0 else x, any_list))
+# print(even_list)
+# x = list(map(lambda n: n | 1, any_list)) #This is the solution proposed by Edube - | is an operator I didn't know.
+# print(x)
+
+#2
+# def replace_spaces(replacement='*'):
+#     def new_replacement(text):
+#         return text.replace(' ', replacement)
+#     return new_replacement
+
+
+# stars = replace_spaces()
+# print(stars("And Now for Something Completely Different"))
+
+#W8 D5 T1
+
+# class Animal:
+#     pass
+
+# class Dog(Animal):
+#     pass
+
+# class Poodle(Dog):
+#     pass
+
+# p = Poodle()
+# print(isinstance(p, Animal), isinstance(p, Dog), isinstance(p, Poodle))
+
+# xs = [10, 20, 30, 40, 50]
+# result = sorted(xs, key=lambda x: x % 3)
+# print(result)
+
+# class A: pass
+# class B(A): pass
+# class C(B): pass
+
+# obj = C()
+# print(issubclass(C, A), issubclass(A, C), isinstance(obj, A))
+
+
+#W8 D5 T2
+
+# def f(x=[]):
+#     x.append(1)
+#     return x
+
+# print(f())
+# print(f())
+# print(f([]))
+# print(f())
+
+
+# x = 5
+# def outer():
+#     x = 10
+#     def inner():
+#         print(x)
+#     return inner
+
+# outer()()
+
+
+# try:
+#     raise ValueError("bad")
+# except ValueError as e:
+#     result = str(e)
+# finally:
+#     result = "cleaned"
+
+# print(result) #'cleaned'
+
+
+# class Meta(type):
+#     def __new__(mcs, name, bases, namespace):
+#         namespace['greeting'] = 'hello'
+#         return super().__new__(mcs, name, bases, namespace)
+
+# class Foo(metaclass=Meta):
+#     pass
+
+# print(Foo.greeting)
+
+
+#W8 D5 T3
+
+# gen = (x * 2 for x in range(5))
+# print(3 in gen)
+# print(list(gen))
+
+
+# x = [1, 2, 3]
+# y = x[:]
+# y.append(4)
+# print(x, y)
+
+# def gen():
+#     yield 1
+#     yield 2
+#     yield 3
+
+# g = gen()
+# print(next(g))
+# print(next(g))
+# g2 = iter(g)
+# print(g is g2)
+
+# xs = [1, 2, 3, 4, 5]
+# evens = filter(lambda x: x % 2 == 0, xs)
+# print(list(evens))
+# print(list(evens))
+
+
+# def f(*args, **kwargs):
+#     print(type(args), type(kwargs))
+
+# f(1, 2, a=3)
+
+# class C:
+#     def __init__(self, x):
+#         self.x = x
+#     def __eq__(self, other):
+#         return self.x == other.x
+
+# a = C(1)
+# b = C(1)
+# c = a
+# print(a == b, a is b, a is c)
+
+# import sys
+# xs = list(range(1000))
+# gen = (x for x in range(1000))
+# print(sys.getsizeof(xs) > sys.getsizeof(gen))
+
+#W8 D5 T4 - backtest_engine.py
+#Added repr and verified it by testing what repr and str print in main.py
+
+
+#W8 D5 T5
+# def deco_a(f):
+#     def wrapper():
+#         print("A in")
+#         f()
+#         print("A out")
+#     return wrapper
+
+# def deco_b(f):
+#     def wrapper():
+#         print("B in")
+#         f()
+#         print("B out")
+#     return wrapper
+
+# @deco_a
+# @deco_b
+# def hello():
+#     print("hello")
+
+# hello()
+
+
+# try:
+#     x = int("abc")
+# except (ValueError, TypeError) as e:
+#     print(type(e).__name__)
+# else:
+#     print("no error")
+# finally:
+#     print("done")
+
+# class CustomError(Exception):
+#     pass
+
+# try:
+#     raise CustomError("oops")
+# except Exception as e:
+#     print(isinstance(e, CustomError), isinstance(e, Exception)) #True True
+
+
+# x = [2, 5, 8]
+# x.append(6)
+# x.insert(0, 7)
+# x.sort()
+# x[0]
+
+# del x[4]
+# print(x)
+
+
+# x = (2, "text", 3)
+# x.index(3)
+# x.count(2)
+# x.insert(0, 'xd')
+
+# uczniowie = ('aleksander', 'adam', 'seweryn', 'bartosz', 'tomasz')
+
+# uczniowie_tuple = tuple(('aleksander', 'adam', 'seweryn', 'bartosz', 'tomasz'))
+# print(uczniowie_tuple)
+
+
+# class C:
+#     @property
+#     def x(self):
+#         return self.x
+
+# c = C()
+# print(c.x)
+# 
+
+# a_set = {1, 2, 3}
+# a_set.add(56)
+# print(a_set) #{1, 2, 3, 56}
+# b_set = {4, 5, 6}
+# print(a_set.update(b_set))
+# print(a_set)
+
+#W9 D1
+
+# def f(*args, **kwargs):
+#     print(args, kwargs)
+
+# xs = [10, 20]
+# d = {'a': 1, 'b': 2}
+# f(*xs, **d)
+
+
+# f([10, 20], {'a': 1})
+
+
+# xs = "hello"
+# print(xs.find("x"), xs.index("l"))
+
+# s = "  hello  world  "
+# print(s.strip().split())
+
+# s = "aabbccdd"
+# print(s.replace("b", "X", 1))
+
+
+# parts = ["a", "b", "c"]
+# print("-".join(parts))
+# print("".join(reversed(parts)))
+
+
+# class C:
+#     x = 0
+
+#     def increment(self):
+#         self.x += 1
+
+# c1 = C()
+# c2 = C()
+# c1.increment()
+# c1.increment()
+# print(C.x, c1.x, c2.x)
+
+
+# students_scores = {"anna kowalska":8.5,"piotr nowak":6.2,"marta wisniewska":9.1,"tomasz kaczmarek":4.7,"karolina mazur":7.8,"jakub zielinski":5.3,"agnieszka lewandowska":9.9,"pawel szymanski":3.4,"katarzyna wojcik":8.0,"marcin kaminska":6.6,"monika dabrowska":7.2,"lukasz piotrkowski":2.9,"aleksandra adamska":9.4,"bartosz grabowski":5.8,"natalia pawlak":8.7,"krzysztof michalski":4.1,"dorota krol":6.9,"sebastian jablonski":7.5,"weronika wrobel":9.0,"mateusz czarnecki":3.8,"joanna stefanska":8.3,"damian kubiak":5.0,"klaudia piotrowska":7.1,"adrian lis":6.4,"patrycja baran":9.6}
+# students = [student for student in students_scores.items() if student[1] > 6.0]
+# print(students)
+
+
+#W9 D3 -  T1
+
+# def make_adder(n):
+#     def add(x):
+#         return x + n
+#     n = n * 10
+#     return add
+
+# fn = make_adder(3)
+# print(fn(1))
+
+#W9 D3 -  T2
+
+# try:
+#     raise FileNotFoundError("no file")
+# except Exception:
+#     print("A") #this will be printed
+# except OSError:
+#     print("B")
+# except FileNotFoundError:
+#     print("C")
+    
+    
+# try:
+#     open("x.txt")
+# except FileNotFoundError:
+#     print("file missing")
+# except Exception:
+#     print("generic")
+
+
+# try:
+#     raise KeyError("k")
+# except LookupError:
+#     print("LookupError")
+# except KeyError:
+#     print("KeyError")
+
+#W9 D3 -  T3
+# def f():
+#     print(val)
+#     val = 5
+
+# f() #UNBOUNDLOCALEERROR
+
+# def f():
+#     print(val)
+
+# f() #NAMEERROR
+
+'''It seems that UnboundLocalError relates to situations where a given name is occupied/defined, but it's defined later. 
+It seems that it still precreates a memory object or something like that, that makes it an UnboundLocalError before a given variable/name is actually defined. 
+Anyway, for me this is a sign that the variables/object names are prechecked to check if they exist, before they are checked again to check their values. Interesting.
+
+As for NameError, it simply occurs when a given name is not defined.'''
+
+
+#W9 D3 -  T4
+# class A:
+#     data = []
+
+# class B(A):
+#     pass
+
+# B.data.append(1)
+# A.data.append(2)
+# print(A.data, B.data) #[1, 2] [1, 2]
+
+# import logging
+# logging.basicConfig(level=logging.WARNING)
+# logger = logging.getLogger("test")
+# logger.setLevel(logging.DEBUG)
+# logger.debug("debug msg") #printed, this logger is not affected by the basicconfig setting
+# logger.warning("warn msg") #printed
+
+
+# try:
+#     raise RuntimeError("r")
+# except RuntimeError as e:
+#     err = e
+
+# print(err)
+
+# xs = list(range(5))
+# it = iter(xs)
+# next(it)
+# next(it)
+# print(list(it)) #[2, 3, 4]
+
+
+# multipliers = []
+# for n in [1, 2, 3]:
+#     multipliers.append(lambda x: x * n)
+
+# print([m(10) for m in multipliers])  #[30, 30, 30]
+
+
+# def make_fns():
+#     result = []
+#     for i in range(4):
+#         def fn(i=i):
+#             return i ** 2
+#         result.append(fn)
+#     return result
+
+# print([f() for f in make_fns()]) #[0, 1, 4, 9]
+
+
+#Edube - Module 4 - File I/O practice
+
+#readline()
+# stream = open('text.txt', 'r')
+# x = stream.readline(20)
+# y = stream.readline(20)
+# z = stream.readline(20)
+# a = stream.readline(20)
+# b = stream.readline(20)
+
+# '''
+# If we use readline and set a limit of bytes and it will not print out a given line's content,
+# in the next call of readline() we will continue with the previous line's content, e.g.
+# '''
+
+# print(x) #timestamp,ticker,ope
+# print(y) #n,high,low,close,vol
+# print(z) #ume
+# print(a) #2024-01-01 09:00:00,
+# print(b) #EURUSD,100.50,101.20
+# stream.close()
+
+# '''If we set enough bytes as limit in readlines,
+# it will properly print full content of a given line
+# And we will not exceed that'''
+
+# #Example below:
+# stream = open('text.txt', 'r')
+# x = stream.readline(120)
+# y = stream.readline(120)
+# z = stream.readline(120)
+# a = stream.readline(120)
+# b = stream.readline(120)
+
+# print(x) #timestamp,ticker,open,high,low,close,volume
+# print(y) #2024-01-01 09:00:00,EURUSD,100.50,101.20,100.10,100.80,15000
+# print(z) #2024-01-01 09:01:00,EURUSD,100.80,101.50,100.70,101.30,18000
+# print(a) #2024-01-01 09:02:00,EURUSD,101.30,101.80,101.00,101.50,22000
+# print(b) #2024-01-01 09:03:00,EURUSD,101.50,102.00,101.20,101.90,25000
+# stream.close()
+
+
+# from os import strerror
+
+# try:
+# 	fo = open('newtext.txt', 'wt') # A new file (newtext.txt) is created.
+# 	for i in range(10):
+# 		s = f'line #{i + 1}\n'
+#   #"line #" + str(i+1) + "\n"
+# 		for ch in s:
+# 			fo.write(ch)
+# 	fo.close()
+# except IOError as e:
+# 	print("I/O error occurred: ", strerror(e.errno))
+
+# import sys
+# sys.stderr.write("Error message") #the stderr stream is automatically written, no need to open anything
+
+
+
+# data = bytearray(10)
+
+# for i in range(len(data)):
+#     data[i] = 10 - i
+
+# for b in data:
+#     print(hex(b))
+
+
+# from os import strerror
+
+# data = bytearray(10)
+
+# for i in range(len(data)):
+#     data[i] = 10 + i
+
+# try:
+#     bf = open('file.bin', 'wb')
+#     bf.write(data)
+#     bf.close()
+# except IOError as e:
+#     print("I/O error occurred:", strerror(e.errno))
+
+# Your code that reads bytes from the stream should go here.
+
+
+# data = bytearray(10)
+
+# for i in range(len(data)):
+#     data[i] = 10 + i
+
+# try:
+#     bf = open('file.bin', 'wb')
+#     bf.write(data)
+#     bf.close()
+# except IOError as e:
+#     print("I/O error occurred:", strerror(e.errno))
+
+# # Your code that reads bytes from the stream should go here.
+
+
+# from os import strerror
+
+# try:
+#     bf = open('file.bin', 'rb')
+#     data = bytearray(bf.read())
+#     bf.close()
+
+#     for b in data:
+#         print(hex(b), end=' ')
+
+# except IOError as e:
+#     print("I/O error occurred:", strerror(e.errno))
+
+
+
+
+#Edube - Module 4 - File IO - Labs #1
+
+'''
+Level of difficulty
+Medium
+
+Objectives
+improving the student's skills in operating with files (reading)
+using data collections for counting numerous data.
+Scenario
+A text file contains some text (nothing unusual) but we need to know how often (or how rare) each letter appears in the text. Such an analysis may be useful in cryptography, so we want to be able to do that in reference to the Latin alphabet.
+
+Your task is to write a program which:
+
+asks the user for the input file's name;
+reads the file (if possible) and counts all the Latin letters (lower- and upper-case letters are treated as equal)
+prints a simple histogram in alphabetical order (only non-zero counts should be presented)
+Create a test file for the code, and check if your histogram contains valid results.
+
+Assuming that the test file contains just one line filled with:
+
+aBc
+samplefile.txt
+
+the expected output should look as follows:
+
+a -> 1
+b -> 1
+c -> 1
+
+'''
+
+
+# from os import strerror
+# from collections import defaultdict
+
+# file_name = input('Please input the file name e.g. (file.txt): ')
+# try:
+#     with open(file_name, 'w') as w:
+#         w.write('aBc')
+# except IOError as exc:
+#     print(f'IOError occured: {strerror(exc.errno)}')
+    
+# letters_count = defaultdict(int)
+# try:
+#     r = open(file_name, 'r')
+#     read = r.read()
+#     print(read)
+#     for char in read:
+#         char = char.lower()
+#         if char.isalpha():
+#             letters_count[char] += 1
+#             print(f'{char} -> 1')
+#         else:
+#             continue
+#     r.close()
+#     letters_count = sorted(letters_count.keys())
+#     print(letters_count)
+# except IOError as e: 
+#     print(f'IOError: {strerror(e.errno)}')
+
+
+#Edube - Module 4 - File IO - Labs #2
+
+'''
+Level of difficulty
+Medium
+
+Prerequisites
+4.3.1.15
+
+Objectives
+improve the student's skills in operating with files (reading/writing)
+using lambdas to change the sort order.
+Scenario
+The previous code needs to be improved. It's okay, but it has to be better.
+
+Your task is to make some amendments, which generate the following results:
+
+the output histogram will be sorted based on the characters' frequency (the bigger counter should be presented first)
+the histogram should be sent to a file with the same name as the input one, but with the suffix '.hist' (it should be concatenated to the original name)
+Assuming that the input file contains just one line filled with:
+
+'''
+
+
+
+# from os import strerror
+# from collections import defaultdict
+
+# file_name = input('Please input the file name e.g. (file.txt): ')
+
+# try:
+#     with open(file_name, 'w') as w:
+#         w.write('cBabAafdsa3092mkvcaddASDK32dt45t4vcxxz')
+# except IOError as exc:
+#     print(f'IOError occured: {strerror(exc.errno)}')
+
+
+# letters_count = defaultdict(int)
+# try:
+#     r = open(file_name, 'r')
+#     read = r.read()
+#     print(read)
+#     for char in read:
+#         char = char.lower()
+#         if char.isalpha():
+#             letters_count[char] += 1
+#         else:
+#             continue
+#     r.close()
+#     print(letters_count)
+#     letters_count = sorted(letters_count.items(), key = lambda x: x[1], reverse = True)
+#     for item, value in letters_count:
+#         print(f'{item} -> {value}\n')
+
+#     new_filename_core = file_name.split('.')[0]
+#     with open(f'{new_filename_core}.hist', 'w') as w:
+#         for item, value in letters_count:
+#             w.write(f'{item} -> {value}\n')
+
+# except IOError as e: 
+#     print(f'IOError: {strerror(e.errno)}')
+    
+    
+   
+#Edube - Module 4 - File IO - Labs #3
+
+
+# class StudentsDataException(Exception):
+#     pass
+
+
+# class BadLine(StudentsDataException):
+#     def __init__(self, line_content):
+#         self.line_content = line_content
+#         super().__init__(f'Bad line: {line_content.strip()}')
+
+# class FileEmpty(StudentsDataException):
+#     def __init__(self, filename):
+#         self.filename = filename
+#         super().__init__(f'FileEmpty: The file {filename} is empty!')
+
+# grades_dict = {}
+# filename = 'jekyll.txt'
+
+# try:
+#     with open(filename, 'r') as r:
+#         if not r:
+#             raise FileEmpty(filename)
+#         for line in r:
+#             contents = line.split()
+#             if len(contents) != 3:
+#                 raise BadLine(contents)
+#             name = contents[0] + ' ' + contents[1]
+#             if not name in grades_dict:
+#                 grades_dict.update({name : float(contents[2])})
+#             else:
+#                 grades_dict[name] += float(contents[2])
+                
+#         grades_dict = sorted(grades_dict.items(), key = lambda x: x[0])
+#         for student, grades_sum in grades_dict:
+#             print(f'''{student}: {grades_sum}''')
+        
+#         print(grades_dict)
+# except FileNotFoundError:
+#     print(f'Error: The file {filename} does not exist')
+# except FileEmpty as e:
+#     print(f'Error: {str(e)}')
+# except BadLine as e:
+#     print(f'Error: {str(e)}')
+    
+    
+
+#W9 D4 T1
+
+# import logging
+# logging.basicConfig(level=logging.DEBUG)
+# logging.warning("warn")
+# logging.debug("debug")
+
+
+# import logging
+
+# parent = logging.getLogger("app")
+# child  = logging.getLogger("app.module")
+
+# parent.setLevel(logging.WARNING)
+# child.setLevel(logging.DEBUG)
+
+# handler = logging.StreamHandler()
+# handler.setLevel(logging.DEBUG)
+# parent.addHandler(handler)
+
+# child.info("info from child")
+# child.warning("warning from child")
+
+
+#W9 D4 T2
+
+
+# total = 0
+
+# def add(n):
+#     total += n
+#     return total
+
+# add(5) #UnboundLocalError
+
+
+# items = []
+
+# def append_item(x):
+#     items.append(x)
+
+# append_item(1)
+# print(items) #[1]
+
+
+
+# def outer():
+#     x = 0
+#     def inner():
+#         x += 1
+#         return x
+#     return inner()
+
+# outer() #UnboundLocalError
+
+#W9 D4 T3
+
+
+# def make_multiplier(n):
+#     n = n * 3
+#     def fn(x):
+#         return x * n
+#     return fn
+
+# f = make_multiplier(4)
+# print(f(2)) --> 24
+
+# def outer(a, b):
+#     result = a + b
+#     result = result * 2
+#     def inner():
+#         return result
+#     return inner
+
+# fn = outer(3, 4)
+# print(fn()) 
+
+
+# def factory(val):
+#     val += 10
+#     val *= 2
+#     def fn():
+#         return val
+#     return fn
+
+# g = factory(5)
+# print(g()) #30
+
+
+# def build(n):
+#     def step1():
+#         return n + 1
+#     n = n * 10
+#     return step1
+
+# h = build(3)
+# print(h()) #31
+
+
+#W9 D4 T4
+# try:
+#     x = int("abc")
+# except (ValueError, TypeError) as e:
+#     print(type(e).__name__)
+
+
+# gen = (x * x for x in range(5))
+# print(3 in gen) #False
+# print(list(gen)) #[]
+
+
+# from os import strerror
+# import errno
+
+# print(IOError is OSError)
+# print(EnvironmentError is OSError)
+
+
+# try:
+#     stream = open("image.png", "rb")
+#     image = bytearray(stream.read())
+#     stream.close()
+# except IOError:
+#     print("failed")
+# else:
+#     print("success")
+
+
+#Edube - Module 4 - os
+
+# import os
+
+# print(os.listdir())
+# os.chdir('algo_backtest')
+# print(os.getcwd())
+# os.chdir('../')
+# print(os.getcwd())
+
+# os.mkdir('testxd')
+# print(os.listdir())
+# os.chdir('testxd')
+# os.chdir('../')
+# os.rmdir('testxd')
+# print(os.listdir())
+
+# print(os.getcwd())
+
+
+# import os
+# os.system('pwd') #allows to run shell commands - returns 0 (exit status indicating success on Unix systems)
+
+
+#Edube - Module 4 - os - Labs - #1
+
+'''
+you need to write a program that will search for directories in a given location.
+
+Your program should meet the following requirements:
+
+Write a function or method called find that takes two arguments called path and dir. 
+The path argument should accept a relative or absolute path to a directory
+where the search should start, while the dir argument should be the name of a directory that you want to find in the given path. 
+Your program should display the absolute paths if it finds a directory with the given name.
+The directory search should be done recursively. This means that the search should also include all subdirectories in the given path.
+
+Creating the required test directory structure to be able to test everything properly'''
+
+# os.makedirs('tree/c/other_courses/cpp')
+# os.chdir('tree')
+# os.makedirs('cpp/other_courses/c')
+# os.makedirs('python/other_courses/c')
+# os.chdir('c/other_courses')
+# os.mkdir('python')
+# os.chdir('../../')
+# os.chdir('cpp/other_courses')
+# os.mkdir('python')
+# os.chdir('../../')
+# os.chdir('python/other_courses')
+# os.mkdir('cpp')
+# os.chdir('../../')
+# print(os.listdir())
+
+# import os
+
+# def find(path: str, dir: str) -> str:
+#     '''A function that allows to find and list the absolute paths and finds the directory with a given name
+#     It recursively searches all subdirectories in the given path
+    
+#     Args:
+#         path: str = relative/absolute path to a dreictory where the search should start
+#         dir: str = name of a directory that we want to find in a given path
+#     '''
+#     file_location = None
+    
+#     os.chdir(path)
+#     folders = [directory for directory in os.listdir()]
+#     print(folders)
+#     if dir in folders:
+#         print(f'Directory found in {os.getcwd()}')
+#         file_location = os.getcwd()
+#         return file_location
+#     else:
+#         for folder in folders:
+#             os.chdir(folder)
+#             print(f'Current directory: {os.getcwd()}')
+#             print(f'{os.listdir()}')
+#             current_folders = [directory for directory in os.listdir()]
+#             if dir in current_folders:
+#                 print(f'Directory found in {os.getcwd()}')
+#                 file_location = os.getcwd()
+#                 return file_location
+#             else:
+#                 os.chdir('../')
+#         print('Directory not found!')            
+
+# find(path="./tree", dir="xd")
+
+
+#Edube - datetime review
+
+# from datetime import date
+# import time
+
+# today = date.today()
+
+# print("Today:", today)
+# print("Year:", today.year)
+# print("Month:", today.month)
+# print("Day:", today.day)
+
+# timestamp = time.time() #in UNIX - the difference between a particular date (including time) and January 1, 1970, 00:00:00 (UTC)
+# print("Timestamp:", timestamp)
+
+# d = date.fromtimestamp(timestamp)
+# print("Date:", d)
+# d = date.fromisoformat('2019-11-04')
+# print(d)
+# d = d.replace(year = 1995, month = 12, day = 22)
+# print(d)
+
+
+# d = date(2019, 11, 6)
+# print(d.weekday())
+
+# from datetime import time #it works differently than standard python module 'time'
+
+# t = time(14, 53, 20, 1)
+
+# print("Time:", t)
+# print("Hour:", t.hour)
+# print("Minute:", t.minute)
+# print("Second:", t.second)
+# print("Microsecond:", t.microsecond)
+
+
+# import time
+
+# class Student:
+#     def take_nap(self, seconds):
+#         print("I'm very tired. I have to take a nap. See you later.")
+#         time.sleep(seconds)
+#         print("I slept well! I feel great!")
+
+# student = Student()
+# student.take_nap(5)
+
+
+# import time
+
+# timestamp = 1572879180
+# x = time.ctime(timestamp) #converts time in secs since Jan 1, 1970 (Unix) to str
+
+# timestamp = 1572879180
+# print(time.gmtime(timestamp))
+# print(time.localtime(timestamp))
+
+
+# st = time.gmtime(timestamp)
+
+# print(time.asctime(st))
+# print(time.mktime((2019, 11, 4, 14, 53, 0, 0, 308, 0)))
+
+
+# from datetime import datetime
+
+# dt = datetime(2019, 11, 4, 14, 53)
+
+# print("Datetime:", dt)
+# print("Date:", dt.date())
+# print("Time:", dt.time())
+
+# from datetime import datetime
+
+# print("today:", datetime.today())
+# print("now:", datetime.now())
+# print(f'Timestamp: {dt.timestamp()}')
+
+
+# dt = datetime(2020, 10, 4, 14, 55)
+# print("Timestamp:", dt.timestamp())
+
+# from datetime import date, datetime
+# d = datetime(2020, 1, 4, 15, 39, 10)
+# print(d.strftime('%Y/%m/%d %H:%M:%S'))
+
+
+# from datetime import time
+# from datetime import datetime
+
+# t = time(14, 53)
+# print(t.strftime("%H:%M:%S"))
+
+# dt = datetime(2020, 11, 4, 14, 53)
+# print(dt.strftime("%Y/%m/%d %H:%M:%S"))
+
+# import time
+
+# timestamp = 1572879180
+# st = time.gmtime(timestamp)
+
+# print(time.strftime("%Y/%m/%d %H:%M:%S", st))
+# print(time.strftime("%Y/%m/%d %H:%M:%S"))
+
+# timestamp = 1572879180
+# st = time.gmtime(timestamp)
+
+# print(datetime.strptime("2019/11/04 14:53:00", "%Y/%m/%d %H:%M:%S"))
+# datetime.strftime
+# datetime.strptime
+
+
+# from datetime import date
+# from datetime import datetime
+
+# d1 = date(2020, 11, 4) 
+# d2 = date(2019, 11, 4)
+
+# print(d1 - d2) #timedelta object, created automatically
+
+# dt1 = datetime(2020, 11, 4, 0, 0, 0)
+# dt2 = datetime(2019, 11, 4, 14, 53, 0)
+
+# print(dt1 - dt2) #timedelta object, created automatically
+
+
+# from datetime import timedelta
+
+# delta = timedelta(weeks=2, days=2, hours=3)
+# print(delta)
+# print("Days:", delta.days)
+# print("Seconds:", delta.seconds)
+# print("Microseconds:", delta.microseconds)
+
+
+# a = {"anna": 3, "ola": 5, "kinga": 1}
+# a["anna"] = 4
+# print(a["anna"])
+
+
+# a = {"a"}
+# b = {}
+# print(type(a) == type(b))
+
+# x = (1, 2)
+# print(x[-1])
+
+# x = {-1 : 'a'}
+# print(x[-1])
+
+# x = [8]
+# print(x[-1])
+
+
+# a = {1, 2, 3, 4}
+# b = {4, 5, 6, 7}
+# c = a.union(b)
+# print(len(c))
+
+
+#W9 D5 T1
+# import logging
+
+# logging.basicConfig(level=logging.INFO)   # root handler: INFO+
+
+# logger = logging.getLogger("app")
+# logger.setLevel(logging.DEBUG)
+
+# handler = logging.StreamHandler()
+# handler.setLevel(logging.ERROR)
+# logger.addHandler(handler)
+
+# logger.info("info") #INFO:app:info - root handler prints this, named handler does not
+# logger.error("error") #error / ERROR:app:error - printed both by the named handler and the root handler
+
+
+# import logging
+
+# logging.basicConfig(level=logging.WARNING)  # root handler: WARNING+
+
+# logger = logging.getLogger("app")
+# logger.setLevel(logging.DEBUG)
+
+# handler = logging.StreamHandler()
+# handler.setLevel(logging.DEBUG)
+# logger.addHandler(handler)
+
+# logger.debug("debug")
+# logger.warning("warn")
+
+
+# import logging
+
+# logging.basicConfig(level=logging.DEBUG)
+
+# logger = logging.getLogger("app")
+# logger.setLevel(logging.DEBUG)
+# logger.propagate = False             # <-- notice this
+
+# handler = logging.StreamHandler()
+# handler.setLevel(logging.DEBUG)
+# logger.addHandler(handler)
+
+# logger.info("info")
+# logger.error("error")
+
+# import logging
+
+# parent = logging.getLogger("app")
+# child  = logging.getLogger("app.module")
+
+# parent.setLevel(logging.DEBUG)
+# child.setLevel(logging.DEBUG)
+
+# handler = logging.StreamHandler()
+# handler.setLevel(logging.DEBUG)
+# parent.addHandler(handler)
+
+# child.warning("warn from child")
+
+
+
+# import logging
+
+# logging.basicConfig(level=logging.DEBUG)
+
+# logger = logging.getLogger("app")
+# # No setLevel called on logger
+# # No handlers added to logger
+
+# logger.debug("debug")
+# logger.warning("warn")
+
+# #
+# import logging
+
+# logging.basicConfig(level=logging.ERROR)
+
+# logger = logging.getLogger("app")
+# logger.setLevel(logging.DEBUG)
+
+# h1 = logging.StreamHandler()
+# h1.setLevel(logging.WARNING)
+# logger.addHandler(h1)
+
+# logger.warning("warn")
+# logger.error("error")
+# logger.critical("critical")
+
+#W9 D5 T2
+
+# print(round(0.1 + 0.2, 10) == round(0.3, 10))
+
+
+# a = 0.1
+# b = 0.1
+# c = 0.1
+# print(a + b + c == 0.3)
+# print(a + b + c)
+# 
+
+
+#W9 D5 T3
+
+# a, *b, c = (1, 2, 3, 4, 5)
+# print(type(b), b)
+
+# first, *rest = "hello"
+# print(type(rest), rest)
+
+# *a, b = [10
+#          ]
+# print(a, b)
+
+# x, *y, z = range(5)
+# print(x, y, z)
+
+#W9 D5 T5
+
+# try:
+#     open("nofile.txt")
+# except Exception:
+#     print("Exception") #exception gets printed, as it's first
+# except FileNotFoundError:
+#     print("FileNotFoundError")
+
+# try:
+#     raise ValueError("v")
+# except (TypeError, ValueError):
+#     print("caught")
+# except Exception:
+#     print("exception")
+
+# gen = (i for i in range(10))
+# print(next(gen))
+# print(next(gen))
+# list(gen)
+# print(next(gen))
+
+
+# try:
+#     raise ValueError("v")
+# except ValueError as e:
+#     err = e
+# print(err)
+
+
+# def outer():
+#     x = 1
+#     def inner():
+#         nonlocal x
+#         x += 1
+#     inner()
+#     inner()
+#     return x
+# print(outer())
+
+# class Counter:
+#     count = 0
+#     def __init__(self):
+#         Counter.count += 1
+
+# c1 = Counter()
+# c2 = Counter()
+# c3 = Counter()
+# print(Counter.count)
+
+# import logging
+
+# logging.basicConfig(level=logging.INFO)
+
+# logger = logging.getLogger("myapp")
+# logger.setLevel(logging.DEBUG)
+
+# h = logging.StreamHandler()
+# h.setLevel(logging.WARNING)
+# logger.addHandler(h)
+
+# logger.info("info")
+# logger.warning("warn")
+# logger.error("error")
+
+# 5 lines — `info` from root, `warn` from both, `error` from both
+
+

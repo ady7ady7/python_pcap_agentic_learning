@@ -137,8 +137,8 @@ This directory contains all theoretical lessons organized by week and topic.
 
 ## Week 5: datetime, File I/O & Decorators
 
-### [Standard Library, datetime, File I/O & Logging](week3_5_7_stdlib_fileio.md)
-- datetime module: `strftime` (format), `strptime` (parse), `timedelta`
+### [Standard Library, File I/O & Logging](week3_5_7_stdlib_fileio.md)
+- `datetime` and `time` modules → see [week9_datetime_time.md](week9_datetime_time.md)
 - File modes: `'w'` (write), `'a'` (append), `'r'` (read), `'x'` (exclusive create)
 - File read methods: `read()`, `readline()`, `readlines()`
 - Context managers (`with` statement)
@@ -202,6 +202,15 @@ This directory contains all theoretical lessons organized by week and topic.
 
 ## Week 9: Stream Errors & errno
 
+### [`time` vs `datetime` — Full Reference](week9_datetime_time.md)
+- `time` module: `time()`, `ctime()`, `localtime()`, `gmtime()`, `mktime()`, `strftime()`, `strptime()`, `sleep()`, `perf_counter()`
+- `datetime` module: `date`, `time`, `datetime`, `timedelta` classes
+- Unix timestamp ↔ datetime conversion (`fromtimestamp`, `.timestamp()`)
+- `strftime` (format) vs `strptime` (parse) — mnemonic and examples
+- Date arithmetic with `timedelta` — `.days` vs `.total_seconds()`
+- Side-by-side comparison: same task in both modules
+- **PCAP Traps:** `from datetime import time` shadows the `time` module, `timedelta.seconds` vs `.total_seconds()`, `datetime.time` has no `.now()`, `weekday()` vs `isoweekday()` off-by-one
+
 ### [File Streams, open() & Diagnosing Errors with errno](week9_errno_fileio.md)
 - Files and streams — open before use, close after processing
 - Three open modes: read, write, update
@@ -214,7 +223,16 @@ This directory contains all theoretical lessons organized by week and topic.
 - `OSError` / `IOError` / `EnvironmentError` — all aliases in Python 3
 - Named subclasses (Python 3.3+): `FileNotFoundError`, `PermissionError`, `FileExistsError`, `IsADirectoryError`
 - Branching on `errno` vs catching named subclasses
-- **PCAP Traps:** `IOError is OSError` (True), `exc.errno` can be `None`, parent-before-child ordering with `OSError` subclasses, `open('x', 'x')` raises `FileExistsError`, forgetting `close()` → `EMFILE`
+- `bytearray` — mutable byte sequence for binary I/O buffers
+- Writing binary data with `open('f', 'wb')` and `write(bytearray)`
+- Reading binary data with `readinto()` — fills existing array, returns bytes read
+- `os.strerror()` — converting errno codes to human-readable strings
+- `bytearray` vs `bytes` — mutable vs immutable
+- **Text vs binary reading — full comparison table**
+- Text: `read()`, `read(n)`, `readline()` (includes `\n`), `readlines()` → `list[str]`, iteration
+- Binary: `read()` → `bytes`, `bytearray(f.read())`, `read(n)` → n bytes, `readinto(buf)` → fills in-place
+- Complete write + readinto + bytearray(read()) worked example
+- **PCAP Traps:** `IOError is OSError` (True), `exc.errno` can be `None`, parent-before-child ordering with `OSError` subclasses, `open('x', 'x')` raises `FileExistsError`, forgetting `close()` → `EMFILE`, binary mode requires `'b'` flag, `bytearray` elements are `int` not `str`, `bytearray(n)` fills with zeros, `readline()` includes `\n`, `read()` on exhausted stream returns `""` not error, `readinto()` not available on text streams, `read(n)` counts chars vs bytes depending on mode
 
 ---
 
