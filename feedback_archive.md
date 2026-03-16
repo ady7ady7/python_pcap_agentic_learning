@@ -3771,3 +3771,30 @@ User initiative: used head(10) instead of head(5) — minor deviation, no deduct
 3. **IEEE 754** — `0.1 + 0.2 == 0.3` → False (T4 Q6, classic PCAP trap)
 4. **except clause ordering** — most-specific first (T5 Q3)
 
+
+---
+
+## Week 10, Day 1 - 2026-03-17
+
+**Topic:** PCAP Review warm-up — mutable defaults, MRO, basicConfig one-shot
+
+### Mentor Assessment — Score: ~83% (2.5/3)
+
+**Exercise 1 — Mutable default argument (0.5/1)**
+- `[1, 2]` ✓ and `[3]` ✓ — both correct
+- `f(4)` answered `[3, 4]` ✗ — correct answer `[1, 2, 4]`. `f(3, [])` uses a fresh explicit list and does not touch the shared default. Default after f(1) and f(2) is `[1, 2]`. f(4) appends to it → `[1, 2, 4]`.
+
+**Exercise 2 — MRO + super() (1/1)**
+- `ACB` ✓ and `D → B → C → A` ✓
+- User requested explanation. Delivered: C3 linearisation rule — left-to-right depth-first, no class before all its subclasses appear. super() follows MRO of the actual object, not the declaring class's direct parent. This is why B.super() hits C, not A.
+- User noted this feels like an edge case — correct. Real code avoids diamond inheritance. Still testable on PCAP.
+
+**Exercise 3 — basicConfig one-shot (1/1)**
+- Identified root cause correctly: first basicConfig call wins, second is silently ignored.
+- Fix correct: one call with level=DEBUG.
+- User feedback: logging is not prominently on the PCAP syllabus they studied. Agreed — logging questions in review week will be minimal (1-2 per set, most testable patterns only).
+
+### Session Notes
+- Light session by design (busy day). 3 exercises only.
+- Week 10 = full PCAP review week. Target: sit exam next weekend.
+- Day 2 onwards: full task sets covering all PCAP sections systematically.

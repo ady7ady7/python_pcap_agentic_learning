@@ -5,6 +5,21 @@ Format: Date | Topic | Score | Difficulty | Notes
 
 ---
 
+## Week 10, Day 1 - 2026-03-17
+
+**Topic:** PCAP Review — mutable default arguments, MRO + super(), basicConfig one-shot
+**Score:** ~83% (2.5/3)
+**Difficulty:** Light (intentional — end-of-day warm-up session)
+
+**Tasks Completed:**
+1. Mutable default argument trace — concept correct, f(4) output wrong ([1,2,4] not [3,4])
+2. MRO + cooperative inheritance — `ACB` correct, `D→B→C→A` correct. Gap: needed explanation of C3 linearisation and why super() follows MRO not direct parent
+3. basicConfig one-shot bug fix — correct
+
+**Notes:** User requested logging deprioritised for review week. MRO explanation delivered. Week 10 = full review week targeting PCAP exam next weekend.
+
+---
+
 ## Week 9, Day 4 - 2026-03-05
 
 **Topic:** Logging two-gate (3rd session), UnboundLocalError on augmented assignment, closure arithmetic

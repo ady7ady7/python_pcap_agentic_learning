@@ -138,7 +138,7 @@ This directory contains all theoretical lessons organized by week and topic.
 ## Week 5: datetime, File I/O & Decorators
 
 ### [Standard Library, File I/O & Logging](week3_5_7_stdlib_fileio.md)
-- `datetime` and `time` modules → see [week9_datetime_time.md](week9_datetime_time.md)
+- `datetime` and `time` modules → see [week9_datetime_time_calendar.md](week9_datetime_time_calendar.md)
 - File modes: `'w'` (write), `'a'` (append), `'r'` (read), `'x'` (exclusive create)
 - File read methods: `read()`, `readline()`, `readlines()`
 - Context managers (`with` statement)
@@ -202,14 +202,15 @@ This directory contains all theoretical lessons organized by week and topic.
 
 ## Week 9: Stream Errors & errno
 
-### [`time` vs `datetime` — Full Reference](week9_datetime_time.md)
+### [`time` vs `datetime` vs `calendar` — Full Reference](week9_datetime_time_calendar.md)
 - `time` module: `time()`, `ctime()`, `localtime()`, `gmtime()`, `mktime()`, `strftime()`, `strptime()`, `sleep()`, `perf_counter()`
 - `datetime` module: `date`, `time`, `datetime`, `timedelta` classes
 - Unix timestamp ↔ datetime conversion (`fromtimestamp`, `.timestamp()`)
 - `strftime` (format) vs `strptime` (parse) — mnemonic and examples
 - Date arithmetic with `timedelta` — `.days` vs `.total_seconds()`
 - Side-by-side comparison: same task in both modules
-- **PCAP Traps:** `from datetime import time` shadows the `time` module, `timedelta.seconds` vs `.total_seconds()`, `datetime.time` has no `.now()`, `weekday()` vs `isoweekday()` off-by-one
+- `calendar` module: day constants (`MONDAY`–`SUNDAY` = 0–6), `weekday()`, `monthrange()`, `isleap()`, `leapdays()`, `prmonth()`, `prcal()`, `TextCalendar`, `HTMLCalendar`
+- **PCAP Traps:** `from datetime import time` shadows the module, `timedelta.seconds` vs `.total_seconds()`, `calendar` constants match `weekday()` not `isoweekday()`, `prcal()` returns `None`
 
 ### [File Streams, open() & Diagnosing Errors with errno](week9_errno_fileio.md)
 - Files and streams — open before use, close after processing
