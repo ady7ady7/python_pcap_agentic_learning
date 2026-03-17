@@ -2,7 +2,7 @@
 
 **Date:** 2026-03-19
 
-**Topic:** PCAP Full Review — TBD
+**Topic:** PCAP Module Drills — File I/O, os, datetime, time, calendar
 
 ---
 

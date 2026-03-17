@@ -3839,3 +3839,40 @@ All other 7 correct including shallow copy (Q8), dict mutation safety (Q6), para
 ~60 minutes. Strong performance across all sections. Two small gaps remain:
 1. `__repr__` vs `__str__` in container context
 2. Truthy strings — non-empty = always True
+
+---
+
+## Week 10, Day 2 - 2026-03-18
+
+**Topic:** PCAP Full Review — Exceptions, OOP, Scope, Generators, Functional, Strings
+
+### Mentor Assessment — Score: ~95% (37/39)
+
+**Task 1 — Exceptions (5/5)**
+All correct. Q3 (finally overrides return → 3) and Q4 (bare raise re-raises, "done" never printed) both clean.
+
+**Task 2 — OOP (5.5/6)**
+Q1-Q5 ✓. Q6 ✗ partial:
+- print([a]) → [repr_A] not [str_A]. Containers call __repr__ on elements.
+- f"{a}" → str_A not {repr_A}. F-strings call __str__. Output has no braces.
+Rule: print()/f-strings → __str__. Any container ([a], {a}, (a,)) → __repr__ on elements.
+
+**Task 3 — Scope (5/5)**
+Late binding [3,3,3,3] ✓ and default-arg snapshot [0,1,2,3] ✓. Gap fully closed.
+
+**Task 4 — Generators (5/5)**
+All correct. Custom iterator protocol, yield from, exhausted generator all clean.
+
+**Task 5 — Functional (5/5)**
+Stacked decorators (before/before/hello/after/after), reduce with initial value. All correct.
+User observation on decorator execution order noted — correct intuition (func() runs and prints as side effect before "after" prints).
+
+**Task 6 — Strings (4.5/5)**
+Q1-Q4 ✓. Q5: 123 ✓, cab ✓. f"{'hello':>10}" unknown — noted as PCAP relevant.
+Format spec: < left-align, > right-align, ^ centre. Field width follows the symbol. Know all three.
+
+**Task 7 — Simulation (7/8)**
+Q1-Q4 ✓, Q6-Q8 ✓. Q5 ✗: answered B (True False True), correct A (True True True).
+bool("0") = True. Non-empty string is always truthy regardless of content. Only "" is falsy.
+
+**Day 3 plan:** PCAP module drills — File I/O, os, datetime, time, calendar.

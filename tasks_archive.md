@@ -1600,3 +1600,24 @@ Task 8 expected values were wrong. Correct: 4 winners, $1050 total PnL.
 - Logging two-gate: logger level + handler level both must pass (3rd session with same error)
 - UnboundLocalError: counter() without global → UnboundLocalError, not silent execution
 - Closure arithmetic: trace n = n * 10 fully before computing return value
+
+---
+
+## Week 10, Day 2 - 2026-03-18
+
+**Topic:** PCAP Full Review — Exceptions, OOP, Scope, Generators, Functional, Strings, Simulation
+**Score:** ~95% (37/39)
+**Difficulty:** Medium
+
+**Tasks Completed:**
+1. Exceptions (5/5) — finally overrides return, bare raise, nested try/finally all correct
+2. OOP (5.5/6) — name mangling, property setter, polymorphism all correct. Miss: print([a]) uses __repr__ not __str__; f"{a}" uses __str__ not __repr__
+3. Scope (5/5) — late binding [3,3,3,3] and default-arg snapshot [0,1,2,3] both correct. Gap fully closed.
+4. Generators (5/5) — exhausted generator, yield from, custom __iter__/__next__ all correct
+5. Functional (5/5) — stacked decorators, reduce with initial value, all correct
+6. Strings (4.5/5) — f-string alignment syntax (:>10) unknown; noted as PCAP relevant
+7. Simulation (7/8) — bool("0") = True missed (non-empty string always truthy); rest all correct
+
+**Key corrections:**
+- print([a]) → __repr__; f"{a}" → __str__. Containers always use repr on elements.
+- bool("0") = True. Only "" (empty string) is falsy. "0", "False", "None" all truthy.
