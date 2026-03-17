@@ -5,6 +5,27 @@ Format: Date | Topic | Score | Difficulty | Notes
 
 ---
 
+## Week 10, Day 2 - 2026-03-18
+
+**Topic:** PCAP Full Review — exceptions, OOP, scope, generators, functional, strings, simulation
+**Score:** 95% (37/39)
+**Difficulty:** Medium | Time: ~60 min
+
+**Tasks Completed:**
+1. Exception hierarchy — 5/5 (finally override, bare raise, nested try all correct)
+2. OOP — 5.5/6 (miss: `print([a])` uses `__repr__` not `__str__`)
+3. Scope/closures — 5/5 (late binding + default-arg fix both correct)
+4. Generators — 5/5 (exhaustion, yield from, custom iterator all correct)
+5. Functional programming — 5/5 (stacked decorators correct)
+6. Strings — 4.5/5 (f-string alignment `:>10` unknown — PCAP relevant)
+7. Simulation — 7/8 (miss: `bool("0")` → True, non-empty string always truthy)
+
+**Key corrections:**
+- Containers (`[a]` display) use `__repr__`, not `__str__`
+- Any non-empty string is truthy — `"0"`, `"False"`, `"None"` all True
+
+---
+
 ## Week 10, Day 1 - 2026-03-17
 
 **Topic:** PCAP Review — mutable default arguments, MRO + super(), basicConfig one-shot

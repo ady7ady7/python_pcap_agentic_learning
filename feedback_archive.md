@@ -3798,3 +3798,44 @@ User initiative: used head(10) instead of head(5) — minor deviation, no deduct
 - Light session by design (busy day). 3 exercises only.
 - Week 10 = full PCAP review week. Target: sit exam next weekend.
 - Day 2 onwards: full task sets covering all PCAP sections systematically.
+
+---
+
+## Week 10, Day 2 - 2026-03-18
+
+**Topic:** PCAP Full Review — exceptions, OOP, scope, generators, functional, strings, simulation
+
+### Mentor Assessment — Score: 95% (37/39)
+
+**Task 1 — Exceptions (5/5)**
+All correct. finally overriding return, bare raise re-raising, nested try/except routing all clean.
+
+**Task 2 — OOP (5.5/6)**
+Q1-Q5 all correct. Q6 miss: `print([a])` → `[repr_A]` not `[str_A]`.
+Rule: containers display elements via `__repr__`. Only `print(a)` and f-strings use `__str__`.
+Also: `print(f"{a}")` → `str_A` (not `{repr_A}` — no braces in output, f-string calls __str__).
+
+**Task 3 — Scope (5/5)**
+Late binding (Q4) and default-arg snapshot (Q5) both correct. These were recurring gaps — now closed.
+
+**Task 4 — Generators (5/5)**
+All correct including exhausted generator returning `[]` on second list(), custom iterator protocol,
+yield from chaining. User noted decorator execution order intuition — correct observation.
+
+**Task 5 — Functional (5/5)**
+All correct. Stacked decorators (Q5) correct — outer before/after wraps already-decorated function.
+
+**Task 6 — Strings (4.5/5)**
+Q1-Q4 all correct. Q5: `123` and `cab` correct. f-string alignment `f"{'hello':>10}"` unknown.
+Answer: right-aligns in field of 10 chars → `     hello`. Operators: `<` left, `>` right, `^` centre.
+This IS on PCAP syllabus.
+
+**Task 7 — Simulation (7/8)**
+Q5 miss: `bool("0")` → True. Any non-empty string is truthy regardless of content.
+Only `""` is falsy. `"0"`, `"False"`, `"None"` are all True.
+All other 7 correct including shallow copy (Q8), dict mutation safety (Q6), parameter ordering (Q7).
+
+### Session Notes
+~60 minutes. Strong performance across all sections. Two small gaps remain:
+1. `__repr__` vs `__str__` in container context
+2. Truthy strings — non-empty = always True
