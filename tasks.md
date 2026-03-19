@@ -1,553 +1,213 @@
-# Week 10, Day 3 — Module Drills + Mock Gap Closure
-**Date:** 2026-03-19 | **Focus:** File I/O, os, datetime/time/calendar, + 10 targeted gap questions from mock 1
+# Week 10, Day 5 — Code Writing + Project: VWAPStrategy
+**Date:** 2026-03-21 | **Focus:** Writing code from scratch, real FDAX data, VWAP strategy
 
 ---
 
-## Task 1 — Mock 1 gap drill: 10 questions (no code, write answers directly)
+## Task 1 — Write a function from scratch: `flatten`
 
-**Q1:** How many `except` blocks can execute for a single `try` block?
-- A) One or more
-- B) Not more than one
-- C) Exactly one
-- D) All matching ones
+Write a function `flatten(nested: list) -> list` that takes a list which may contain other lists (one level deep only) and returns a flat list of all elements.
 
-B
-
-
-**Q2:** What is the output?
 ```python
-try:
-    raise ValueError("v")
-except Exception:
-    print("Exception")
-except ValueError:
-    print("ValueError")
-
-
-Exception
-
+flatten([1, [2, 3], 4, [5, 6]])  # → [1, 2, 3, 4, 5, 6]
+flatten([1, 2, 3])               # → [1, 2, 3]
+flatten([[1], [2], [3]])         # → [1, 2, 3]
 ```
 
-**Q3:** What happens?
-```python
-try:
-    raise ValueError
-except:
-    print("c")
-except Exception:
-    print("b")
-
-SyntaxError - raw except CANNOT be the front except 
-```
-
-**Q4:** What is the output?
-```python
-for line in open('nonexistent_file.txt', 'rt'):
-    print(line)
-```
-- A) SyntaxError — you can't iterate `open()` directly
-- B) Nothing — open() returns None for missing files
-- C) FileNotFoundError
-- D) Reads line by line
-
-D
-
-
-**Q5:** Iterating a file object with `for line in f:` yields lines:
-- A) Without the `\n` character
-- B) Including the `\n` character
-- C) As a list of characters
-- D) As bytes
-
-B
-
-
-**Q6:** What is the output?
-```python
-import random
-a = random.choice((0, 100, 3))
-print(a == 6)
-```
-- A) True — `choice` returns a value from the range
-- B) False — `choice` picks from the tuple, 6 is not in it
-- C) Sometimes True
-- D) TypeError
-
-b
-
-
-**Q7:** What is `len(x)`?
-```python
-x = '\\'
-
-1
-
-```
-
-**Q8:** What is the output?
-```python
-print(chr(ord('a') + 3))
-
-d
-
-```
-
-**Q9:** What is the output?
-```python
-class A:
-    x = 10
-    def __init__(self):
-        self.y = 20
-
-print(hasattr(A, 'x')) True
-print(hasattr(A, 'y')) False
-```
-
-**Q10:** A file `utils.py` contains `print(__name__)`. It is imported by `main.py` with `import utils`. What is printed?
-
-
-utils
+Requirements:
+- Use a list comprehension (one line body)
+- Type hints required
+- No imports
 
 ---
 
-## Task 2 — File I/O: 6 predict-the-output
+## Task 2 — Write a class from scratch: `BoundedList`
 
-**Q1:** What is the output?
+Write a class `BoundedList` that behaves like a list but never exceeds a fixed max size. When a new item is added and the list is full, the oldest item is removed (FIFO).
+
 ```python
-with open('test.txt', 'w') as f:
-    f.write('hello\nworld\n')
-
-with open('test.txt', 'r') as f:
-    lines = f.readlines()
-
-print(len(lines)) #2
-print(repr(lines[0])) #'hello\n'
+bl = BoundedList(max_size=3)
+bl.add(1)
+bl.add(2)
+bl.add(3)
+bl.add(4)      # drops 1
+print(bl.values)   # [2, 3, 4]
+print(len(bl))     # 3
 ```
 
-**Q2:** What is the output?
-```python
-with open('test.txt', 'w') as f:
-    f.writelines(['a', 'b', 'c'])
-
-with open('test.txt', 'r') as f:
-    print(f.read())
-
-'abc'
-```
-
-**Q3:** What is the output?
-```python
-with open('test.txt', 'w') as f:
-    f.write('hello world')
-
-with open('test.txt', 'r') as f:
-    print(f.read(5))
-    print(f.tell())
-    f.seek(0)
-    print(f.read(5))
-
-'hello '
-5
-'hello '
-```
-
-**Q4:** Which mode raises `FileExistsError` if the file already exists?
-- A) `'w'`
-- B) `'a'`
-- C) `'x'`
-- D) `'r+'`
-
-C
-
-**Q5:** What is the output?
-```python
-with open('test.txt', 'w') as f:
-    f.write('line1\nline2\nline3\n')
-
-with open('test.txt', 'r') as f:
-    line = f.readline()
-    print(repr(line)) #'line1\n'
-
-
-line1\n
-```
-
-**Q6:** What happens if you call `f.read()` on an already-exhausted file object (cursor at end)?
-- A) `StopIteration`
-- B) `IOError`
-- C) Returns `''` (empty string)
-- D) Returns `None`
-
-C
+Requirements:
+- `__init__(self, max_size: int)`
+- `add(self, item: float) -> None`
+- `values` property returning a copy of the internal list
+- `__len__` returning current size
+- `average() -> float` returning mean of current values (return 0.0 if empty)
+- Type hints throughout
 
 ---
 
-## Task 3 — `os` module: 6 questions
+## Task 3 — Write a context manager from scratch: `Timer`
 
-**Q1:** What is the output?
-```python
-import os
-print(type(os.environ))
-print(os.environ.get('NONEXISTENT_KEY_XYZ', 'default'))
+Write a class `Timer` that works as a context manager and prints elapsed time on exit.
 
-I don't know, we're printing a class environ
-default
-
-
-
-```
-
-**Q2:** What is the difference between `os.mkdir('a/b/c')` and `os.makedirs('a/b/c')`?
-
-In the first example we make dir c in directory a/b/
-in the second example we make three dirs a, b, c in the current dir I guess
-
-
-**Q3:** What is the output?
-```python
-import os
-print(os.path.basename('/home/user/project/main.py'))
-print(os.path.dirname('/home/user/project/main.py'))
-print(os.path.splitext('data.csv'))
-
-#main.py
-#home/user/project
-#('data', '.csv')
-
-
-```
-
-**Q4:** What is the output?
-```python
-import os
-print(os.name)
-```
-- A) `'windows'`
-- B) `'nt'` on Windows, `'posix'` on Linux/macOS
-- C) `'win32'`
-- D) The full OS name string
-
-B
-
-
-**Q5:** What is the output?
-```python
-import os
-path = os.path.join('algo_backtest', 'data', 'prices.csv')
-print(path)
-```
-(Answer for both Windows and Linux)
-
-/algo_backtest/data/prices.csv
-
-
-
-**Q6:** `os.rmdir('folder')` fails. What is the most likely reason?
-
-Most likely the folder does not exist in the current working directory.
-
-
----
-
-## Task 4 — `datetime` / `time` / `calendar`: 8 questions
-
-**Q1:** What is the output?
-```python
-from datetime import datetime
-dt = datetime(2026, 3, 19, 14, 30, 0)
-print(dt.strftime("%A, %d %B %Y"))
-print(dt.strftime("%H:%M"))
-
-#Thursday, 19 March 2026
-#14:30
-
-
-```
-
-**Q2:** What is the output?
-```python
-from datetime import datetime
-s = "19/03/2026 14:30"
-dt = datetime.strptime(s, "%d/%m/%Y %H:%M")
-print(dt.year, dt.month, dt.day)
-
-#2026 3 19
-```
-
-**Q3:** What is the output?
-```python
-from datetime import timedelta
-delta = timedelta(days=2, hours=3, seconds=30)
-print(delta.days)
-print(delta.seconds)
-print(delta.total_seconds())
-
-2
-10830
-183630.0
-
-Although I ran that code - it's a stupid question to assume I'd know it or calculate by heart. It's weird.
-
-
-```
-
-**Q4:** What is the output?
 ```python
 import time
-t = time.localtime()
-print(type(t).__name__)
-print(t.tm_wday)   # assuming today is Wednesday
-```
-- What type is returned?
-- What does `tm_wday` value mean? (Monday = ?)
 
-time
-2
+with Timer("data loading"):
+    time.sleep(0.1)
 
-
-**Q5:** What is the output?
-```python
-import time
-print(type(time.time()))
-
-float
+# Output: data loading: 0.10s
 ```
 
-**Q6:** What is the output?
+Requirements:
+- Implement `__enter__` and `__exit__`
+- Use `time.perf_counter()`
+- `__exit__` must accept `exc_type, exc_val, exc_tb` and return `False` (don't suppress exceptions)
+- Type hints throughout
+
+---
+
+## Task 4 — Fix the bugs: 3 broken snippets
+
+Write the corrected version of each. Identify what is wrong first (one sentence), then fix it.
+
+**Snippet A:**
 ```python
-import calendar
-print(calendar.weekday(2026, 3, 19))
-print(calendar.THURSDAY)
-print(calendar.isleap(2026))
+def running_average(numbers):
+    total = 0
+    for n in numbers:
+        total += n
+    return total / len(numbers)
 
-3
-3
-False
-
+print(running_average([]))
 ```
 
-**Q7:** What is the output?
+**Snippet B:**
 ```python
-import calendar
-first_day, num_days = calendar.monthrange(2024, 2)
-print(first_day, num_days)
+class Stack:
+    items = []
 
-3 29
+    def push(self, item):
+        self.items.append(item)
 
-Again I had to run this code to check it as there's no way to know that without that...
-I'm just a human being
+    def pop(self):
+        return self.items.pop()
 
+s1 = Stack()
+s2 = Stack()
+s1.push(1)
+print(s2.items)  # expected: []
 ```
 
-**Q8:** What is the output?
+**Snippet C:**
 ```python
-import calendar
-calendar.setfirstweekday(calendar.SUNDAY)
-print(calendar.weekheader(2)
+import os
 
-Su Mo Tu We Th Fr Sa
+def find_csvs(folder: str) -> list:
+    return [f for f in os.listdir(folder) if f.endswith('.csv')]
+
+files = find_csvs('nonexistent_folder')
+print(files)
 ```
 
 ---
 
-## Task 5 — Mixed PCAP simulation: 10 questions
+## Task 5 — PROJECT: Load real FDAX data
 
-**Q1:** What is the output?
-```python
-x = "hello"
-print(x[1:4])
-print(x[-2:])
-print(x[::-1])
-
-ell
-lo
-olleh
-
+Your real data CSV has these columns:
+```
+candle_open, candle_close, open, high, low, close,
+bid_volume, ask_volume, vwap_rth, vwap_full
 ```
 
-**Q2:** What is the output?
-```python
-class A:
-    count = 0
-    def __init__(self):
-        A.count += 1
+1. Copy your real FDAX CSV into `algo_backtest/data/` and note the filename.
+2. In `main.py`, load it with `DataLoader` and print:
+   - `data.columns`
+   - `data.head(3)`
+   - `len(data)`
+   - Whether `validate_data()` passes
 
-a1 = A()
-a2 = A()
-a3 = A()
-print(A.count)
-print(a1.count)
+Write your output in the answers section below.
 
+---
 
-3
-3
+## Task 6 — PROJECT: Implement `VWAPStrategy`
 
-```
+Create `algo_backtest/strategies/vwap_strategy.py`.
 
-**Q3:** What is the output?
-```python
-def f(x, items=[]):
-    items.append(x)
-    return items
+The strategy rule:
+- If `close > vwap_rth` → signal = `'BUY'`
+- If `close < vwap_rth` → signal = `'SELL'`
+- If `close == vwap_rth` → signal = `'HOLD'`
 
-print(f(1))
-print(f(2, []))
-print(f(3))
+Requirements:
+- Inherit from `BaseStrategy`
+- `__init__(self, ticker: str)` — call `super().__init__('VWAP Strategy')`
+- `generate_signal(self, price: float, vwap: float) -> str` — override the abstract method signature to accept `vwap` as well
+- Docstring on the class and on `generate_signal`
+- Type hints throughout
 
-[1]
-[2]
-[1, 3]
+Note: `BaseStrategy.generate_signal` takes only `price`. You are extending the signature. This is fine for now — note it as a design decision in a comment.
 
-```
+---
 
-**Q4:** What is the output?
-```python
-print(bool(""))
-print(bool("0"))
-print(bool([]))
-print(bool([0]))
+## Task 7 — PROJECT: Wire VWAPStrategy into `run_backtest()`
 
-False
-True
-False
-True
+Rewrite `run_backtest(df: pd.DataFrame) -> BacktestEngine` in `main.py` to use `VWAPStrategy`.
 
-```
+Logic:
+1. Create a `VWAPStrategy` instance (ticker = `'FDAX'`)
+2. Create a `BacktestEngine`
+3. Track whether there is a currently open position (`current_position = None`)
+4. Iterate `df.iterrows()`:
+   - Get signal: `strategy.generate_signal(row['close'], row['vwap_rth'])`
+   - If signal == `'BUY'` and no open position:
+     - `engine.open_position('FDAX', 'BUY', row['close'], quantity=1, stop_loss=row['close'] - 50, take_profit=row['close'] + 100, strategy_id='1', strategy_name='VWAP Strategy')`
+     - Set `current_position = True`
+   - If signal == `'SELL'` and no open position:
+     - Open a SELL position with same SL/TP logic (reversed)
+     - Set `current_position = True`
+   - Always call `engine.process_price('FDAX', row['close'])`
+   - If any trades were closed in that bar: set `current_position = None`
+5. Return `engine`
 
-**Q5:** What is the output?
-```python
-x = (1, 2, 3)
-y = x
-y += (4,)
-print(x)
-print(y)
-
-(1, 2, 3, 4)
-(1, 2, 3, 4)
-```
-
-**Q6:** What is the output?
-```python
-try:
-    raise ValueError("v")
-except ValueError as e:
-    msg = str(e)
-print(msg)
-```
-- A) `ValueError: v`
-- B) `v`
-- C) `NameError`
-- D) `<class 'ValueError'>`
-
-A
-
-**Q7:** What is the output?
-```python
-def outer():
-    x = 10
-    def inner():
-        return x * 2
-    x = 20
-    return inner()
-
-print(outer())
-
-
-40
-
-```
-
-**Q8:** What is the output?
-```python
-a, *b, c = [1, 2, 3, 4, 5]
-print(type(b))
-print(b)
-print(c)
-
-tuple
-(2, 3, 4)
-5
-
-```
-
-**Q9:** What is the output?
-```python
-xs = [1, 2, 3]
-ys = xs[:]
-ys[0] = 99
-print(xs[0])
-print(ys[0])
-
-1
-99
-
-
-
-```
-
-**Q10:** What is the output?
-```python
-print(__name__)
-```
-- A) `__main__` always
-- B) The filename without `.py`
-- C) `__main__` if run directly, module name if imported
-- D) `None`
-
-
-C
-
+Call it from `if __name__ == '__main__'` and print `engine.strategy_report()`.
 
 ---
 
 ## Answers
 
-### Task 1
-Q1:
-Q2:
-Q3:
-Q4:
-Q5:
-Q6:
-Q7:
-Q8:
-Q9:
-Q10:
+### Task 1 — flatten
+```python
 
-### Task 2
-Q1:
-Q2:
-Q3:
-Q4:
-Q5:
-Q6:
+```
 
-### Task 3
-Q1:
-Q2:
-Q3:
-Q4:
-Q5:
-Q6:
+### Task 2 — BoundedList
+```python
 
-### Task 4
-Q1:
-Q2:
-Q3:
-Q4:
-Q5:
-Q6:
-Q7:
-Q8:
+```
 
-### Task 5
-Q1:
-Q2:
-Q3:
-Q4:
-Q5:
-Q6:
-Q7:
-Q8:
-Q9:
-Q10:
+### Task 3 — Timer
+```python
+
+```
+
+### Task 4 — Bug fixes
+Snippet A — bug:
+Fix:
+
+Snippet B — bug:
+Fix:
+
+Snippet C — bug:
+Fix:
+
+### Task 5 — Real data output
+columns:
+head(3):
+len:
+validate_data():
+
+### Task 6 — VWAPStrategy
+Done / notes:
+
+### Task 7 — run_backtest() output
+Done / strategy_report() output:

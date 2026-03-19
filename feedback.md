@@ -1,8 +1,8 @@
-# Daily Feedback — Week 10, Day 4
+# Daily Feedback — Week 10, Day 5
 
-**Date:** 2026-03-20
+**Date:** 2026-03-21
 
-**Topic:** PCAP Review — TBD
+**Topic:** Code writing drills + Project: VWAPStrategy + real data run
 
 ---
 

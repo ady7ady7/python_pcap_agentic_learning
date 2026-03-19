@@ -1641,3 +1641,28 @@ Task 8 expected values were wrong. Correct: 4 winners, $1050 total PnL.
 - *b starred unpacking → always list (4th occurrence)
 - tuple += tuple → new tuple, original unchanged (3rd occurrence)
 - str(exception) → message only, not 'ExceptionType: msg' (3rd occurrence)
+
+---
+
+## Week 10, Day 4 - 2026-03-20
+
+**Topic:** Persistent gap elimination (*b→list, tuple+=, str(e)) + module drill + PCAP simulation
+**Score:** ~88% (29/33)
+**Difficulty:** Medium
+
+**Tasks Completed:**
+1. *b → list gap drill (5/5) — GAP CLOSED. All variants correct including range() source and edge case.
+2. tuple += new object gap drill (5/5) — GAP CLOSED. Q4 key insight: new tuple bound to local var in function, discarded on return.
+3. str(exception) gap drill (4.5/5) — GAP CLOSED. Miss: repr(e) = ValueError('msg') with parens/quotes, not 'ValueError: msg'.
+4. Module drill random/os.path/File I/O (6.5/8) — Misses: random.choice([]) = ValueError not IndexError; os.path.split/dirname never add trailing slash; exist_ok=True runs silently both calls (B not D).
+5. PCAP simulation (8/10) — Q1 ✓ (ValueError on *b with 1 element). Q4 miss: os.path.dirname trailing slash again. Q8 miss: exist_ok=True.
+
+**3 persistent gaps confirmed CLOSED:**
+- *b starred unpacking always produces list
+- tuple += creates new object, original unchanged
+- str(exception) = message only
+
+**Remaining gaps for Day 5:**
+- random.choice([]) raises ValueError (not IndexError)
+- os.path.split/dirname: no trailing slash on directory component
+- repr(exception) format: ValueError('msg') with parens, not colon

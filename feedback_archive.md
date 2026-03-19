@@ -3917,3 +3917,33 @@ Q8 ✗ (4th time): *b always list. a, *b, c = [1,2,3,4,5] → b=list [2,3,4], no
 1. *b unpacking → list always
 2. tuple += → new object, original unchanged
 3. str(exception) → message only
+
+---
+
+## Week 10, Day 4 - 2026-03-20
+
+**Topic:** Persistent gap elimination + module drill + PCAP simulation
+
+### Mentor Assessment — Score: ~88% (29/33)
+
+**Task 1 — *b → list (5/5) — GAP CLOSED**
+All correct. Q4: x, *y, z = [99] → ValueError (needs ≥2 elements). Correct conclusion, correct reasoning.
+
+**Task 2 — tuple += (5/5) — GAP CLOSED**
+All correct. Q4 key insight delivered: t += (99,) inside f() creates new tuple bound to local name t — discarded on return, x in outer scope unchanged. Q5: list += mutates in-place → x in outer scope IS affected.
+
+**Task 3 — str(exception) (4.5/5) — GAP CLOSED**
+Q1 partial: repr(ValueError("msg")) = ValueError('msg') — parentheses and single quotes, NOT "ValueError: msg". Colon format is traceback display only. Q2-Q5 all correct.
+
+**Task 4 — Module drill (6.5/8)**
+Q1 ✓ seed() reproducibility. Q4 ✓ os.path.exists returns False. Q5 ✓ abcdef. Q6 ✓ writelines no newlines → 1 line.
+Q2 ✗: random.choice([]) → ValueError not IndexError. Python validates non-empty before indexing.
+Q3 partial: os.path.split returns ('/home/user/project', 'main.py') — no trailing slash on dir component.
+Q7 partial: os.path.dirname returns 'data/raw' not 'data/raw/' — same trailing slash issue.
+Q8 ✗: exist_ok=True → both calls run silently (B), not D. Second call does nothing AND raises no error — B and D say the same thing about the second call, but B correctly describes both calls.
+
+**Task 5 — Simulation (8/10)**
+Q1 ✓ ValueError. Q2-Q3 ✓ gaps closed. Q4 ✓ WEDNESDAY=2, Thursday=3. Q5-Q6 ✓ struct_time. Q7-Q10 ✓.
+Trailing slash issue appeared again in simulation.
+
+**Day 5 plan:** Code-writing tasks (no ABCD), + project: load real FDAX data, implement VWAPStrategy, wire into run_backtest(), print strategy_report().
