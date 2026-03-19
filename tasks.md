@@ -1,627 +1,502 @@
-# Week 10, Day 2 — PCAP Full Review
-**Date:** 2026-03-18 | **Focus:** Exceptions, OOP, scope, generators, functional programming
+# Week 10, Day 3 — Module Drills + Mock Gap Closure
+**Date:** 2026-03-19 | **Focus:** File I/O, os, datetime/time/calendar, + 10 targeted gap questions from mock 1
 
 ---
 
-## Task 1 — Exception hierarchy: 5 predict-the-output
-
-**Q1:**
-```python
-try:
-    raise ValueError("v")
-except Exception as e:
-    print(type(e).__name__)
-    print(isinstance(e, BaseException))
-    print(isinstance(e, Exception))
-
-ValueError
-True
-True
-```
-
-**Q2:**
-```python
-try:
-    1 / 0
-except ArithmeticError:
-    print("arithmetic")
-except ZeroDivisionError:
-    print("zero")
-
-arithmetic
-```
-
-**Q3:**
-```python
-def f():
-    try:
-        return 1
-    except Exception:
-        return 2
-    finally:
-        return 3
-
-print(f())
-
-3
-```
-
-**Q4:**
-```python
-try:
-    raise TypeError("t")
-except (ValueError, TypeError) as e:
-    print("caught:", e)
-    raise
-
-print("done")
-
-caught: t
-TypeError: t
-```
-
-**Q5:**
-```python
-try:
-    try:
-        raise ValueError("inner")
-    except TypeError:
-        print("inner handler")
-except ValueError:
-    print("outer handler")
-finally:
-    print("finally")
-
-outer handler
-finally
-```
-
----
-
-## Task 2 — OOP: 6 predict-the-output
-
-**Q1:**
-```python
-class A:
-    x = []
-
-a = A()
-b = A()
-a.x.append(1)
-print(b.x)
-print(A.x)
-
-[1]
-[1]
-
-```
-
-**Q2:**
-```python
-class A:
-    def __init__(self):
-        self.__secret = 42
-
-a = A()
-print(a.__secret)
-
-
-AttributeError
-
-```
-
-**Q3:**
-```python
-class A:
-    def __init__(self):
-        self.__secret = 42
-
-a = A()
-print(a._A__secret)
-
-
-42
-```
-
-**Q4:**
-```python
-class Animal:
-    def speak(self):
-        return "..."
-
-class Dog(Animal):
-    def speak(self):
-        return "woof"
-
-class Cat(Animal):
-    def speak(self):
-        return "meow"
-
-animals = [Dog(), Cat(), Animal()]
-for a in animals:
-    print(a.speak())
-
-woof, meow, ...
-```
-
-**Q5:**
-```python
-class Counter:
-    def __init__(self):
-        self._count = 0
-
-    @property
-    def count(self):
-        return self._count
-
-    @count.setter
-    def count(self, value):
-        if value < 0:
-            raise ValueError("negative")
-        self._count = value
-
-c = Counter()
-c.count = 5
-print(c.count)
-c.count = -1
-
-5
-ValueError: negative
-
-
-```
-
-**Q6:**
-```python
-class A:
-    def __str__(self):
-        return "str_A"
-    def __repr__(self):
-        return "repr_A"
-
-a = A()
-print(a)
-print(repr(a))
-print([a])
-print(f"{a}")
-
-str_A
-repr_A
-[str_A]
-{repr_A}
-```
-
----
-
-## Task 3 — Scope (LEGB + closures): 5 questions
-
-**Q1:**
-```python
-x = "global"
-
-def outer():
-    x = "outer"
-    def inner():
-        x = "inner"
-        return x
-    return inner()
-
-print(outer())
-print(x)
-
-inner
-global
-
-```
-
-**Q2:**
-```python
-x = 0
-
-def f():
-    global x
-    x += 10
-
-f()
-f()
-print(x)
-
-20
-
-```
-
-**Q3:**
-```python
-def make_multiplier(n):
-    return lambda x: x * n
-
-double = make_multiplier(2)
-triple = make_multiplier(3)
-print(double(5)) #10
-print(triple(5)) #15
-print(double(triple(2))) #12
-
-10
-15
-12
-```
-
-**Q4:**
-```python
-fns = [lambda x: x + n for n in range(4)]
-print([f(0) for f in fns])
-
-[3, 3, 3, 3]
-
-```
-
-**Q5:**
-```python
-fns = [lambda x, n=n: x + n for n in range(4)]
-print([f(0) for f in fns])
-
-[0, 1, 2, 3]
-```
-
----
-
-## Task 4 — Generators and iterators: 5 questions
-
-**Q1:**
-```python
-def gen():
-    for i in range(3):
-        yield i * 2
-
-g = gen()
-print(next(g)) #0
-print(next(g)) #2
-print(list(g)) #[4]
-
-0
-2
-[4]
-```
-
-**Q2:**
-```python
-def gen():
-    yield 1
-    yield 2
-
-g = gen()
-print(list(g))
-print(list(g))
-
-[1, 2]
-[]
-```
-
-**Q3:**
-```python
-def countdown(n):
-    while n > 0:
-        yield n
-        n -= 1
-
-print(sum(countdown(5)))
-
-
-15
-```
-
-**Q4:**
-```python
-def gen():
-    yield from [1, 2, 3]
-    yield from range(3)
-
-print(list(gen()))
-
-[1, 2, 3, 0, 1, 2]
-
-
-```
-
-**Q5:**
-```python
-class Counter:
-    def __init__(self, stop):
-        self.current = 0
-        self.stop = stop
-
-    def __iter__(self):
-        return self
-
-    def __next__(self):
-        if self.current >= self.stop:
-            raise StopIteration
-        self.current += 1
-        return self.current
-
-print(list(Counter(3)))
-
-[1, 2, 3]
-```
-
----
-
-## Task 5 — Functional programming: 5 questions
-
-**Q1:**
-```python
-nums = [1, 2, 3, 4, 5, 6]
-result = list(filter(lambda x: x % 2 == 0, nums))
-print(result)
-
-[2, 4, 6]
-```
-
-**Q2:**
-```python
-nums = [1, 2, 3, 4]
-result = list(map(lambda x: x ** 2, nums))
-print(result)
-
-[1, 4, 9, 16]
-```
-
-**Q3:**
-```python
-from functools import reduce
-
-result = reduce(lambda acc, x: acc + x, [1, 2, 3, 4], 10)
-print(result)
-
-20
-```
-
-**Q4:**
-```python
-def decorator(func):
-    def wrapper(*args, **kwargs):
-        print("before")
-        result = func(*args, **kwargs)
-        print("after")
-        return result
-    return wrapper
-
-@decorator
-def greet(name):
-    print(f"hello {name}")
-
-greet("Alice")
-
-before
-hello Alice
-after
-
-#this is a bit unintuitive, as we return the result after 'after', but it actually prints as we calculate the result here, as there's a print in our function
-
-```
-
-**Q5:**
-```python
-def decorator(func):
-    def wrapper(*args, **kwargs):
-        print("before")
-        result = func(*args, **kwargs)
-        print("after")
-        return result
-    return wrapper
-
-@decorator
-@decorator
-def greet(name):
-    print(f"hello {name}")
-
-greet("Bob")
-
-
-before
-before
-hello Bob
-after
-after
-
-```
-
----
-
-## Task 6 — Strings and slicing: 5 questions
-
-**Q1:**
-```python
-s = "Python"
-print(s[1:4])
-print(s[-3:])
-print(s[::2])
-print(s[::-1])
-
-
-```
-
-**Q2:**
-```python
-s = "hello world"
-print(s.upper())
-print(s.capitalize())
-print(s.title())
-```
-
-**Q3:**
-```python
-s = "  hello  "
-print(len(s))
-print(len(s.strip()))
-```
-
-**Q4:**
-```python
-s = "a,b,,c,d"
-parts = s.split(",")
-print(len(parts))
-print(parts)
-```
-
-**Q5:**
-```python
-print("{}{}{}".format(1, 2, 3))
-print("{2}{0}{1}".format("a", "b", "c"))
-print(f"{'hello':>10}")
-```
-
-
-s = "Python"
-print(s[1:4]) #yth
-print(s[-3:]) #hon
-print(s[::2]) #Pto
-print(s[::-1]) #nohtyP
-
-
-s = "hello world"
-print(s.upper()) #HELLO WORLD
-print(s.capitalize()) #Hello world
-print(s.title()) #Hello World
-
-s = "  hello  "
-print(len(s)) #9
-print(len(s.strip())) #5
-
-
-
-s = "a,b,,c,d"
-parts = s.split(",") #
-print(len(parts)) #5
-print(parts) #['a', 'b', '', 'c', 'd']
-
-
-
-print("{}{}{}".format(1, 2, 3)) #123
-print("{2}{0}{1}".format("a", "b", "c")) #cab
-print(f"{'hello':>10}") #i don't know - this synthax is weird and we didn't use it I think. Neither it looks relevant
-
-
----
-
-## Task 7 — Mixed PCAP simulation: 8 questions (10 minutes)
-
-**Q1:** What is the output?
-```python
-x = [1, 2, 3]
-print(x[10:20])
-```
-- A) `IndexError`
-- B) `[]`
-- C) `[3]`
-- D) `None`
+## Task 1 — Mock 1 gap drill: 10 questions (no code, write answers directly)
+
+**Q1:** How many `except` blocks can execute for a single `try` block?
+- A) One or more
+- B) Not more than one
+- C) Exactly one
+- D) All matching ones
 
 B
+
 
 **Q2:** What is the output?
 ```python
-def f(*args, **kwargs):
-    print(len(args), len(kwargs))
+try:
+    raise ValueError("v")
+except Exception:
+    print("Exception")
+except ValueError:
+    print("ValueError")
 
-f(1, 2, 3, a=4, b=5)
+
+Exception
+
 ```
-- A) `5 0`
-- B) `3 2`
-- C) `2 3`
-- D) `TypeError`
 
-B
-
-**Q3:** What is the output?
+**Q3:** What happens?
 ```python
-class A:
-    pass
+try:
+    raise ValueError
+except:
+    print("c")
+except Exception:
+    print("b")
 
-a = A()
-a.x = 10
-print(a.__dict__)
+SyntaxError - raw except CANNOT be the front except 
 ```
-- A) `{}`
-- B) `{'x': 10}`
-- C) `AttributeError`
-- D) `{'A': {'x': 10}}`
-
-B
 
 **Q4:** What is the output?
 ```python
-xs = [1, 2, 3]
-ys = xs[:]
-ys.append(4)
-print(xs)
-print(ys)
+for line in open('nonexistent_file.txt', 'rt'):
+    print(line)
 ```
-- A) `[1,2,3,4]`, `[1,2,3,4]`
-- B) `[1,2,3]`, `[1,2,3,4]`
-- C) `[1,2,3]`, `[1,2,3]`
-- D) `TypeError`
+- A) SyntaxError — you can't iterate `open()` directly
+- B) Nothing — open() returns None for missing files
+- C) FileNotFoundError
+- D) Reads line by line
+
+D
+
+
+**Q5:** Iterating a file object with `for line in f:` yields lines:
+- A) Without the `\n` character
+- B) Including the `\n` character
+- C) As a list of characters
+- D) As bytes
 
 B
 
-**Q5:** What is the output?
-```python
-print(bool(0), bool(""), bool([]), bool(None))
-print(bool(1), bool("0"), bool([0]))
-```
-- A) `False False False False` / `True True True`
-- B) `False False False False` / `True False True`
-- C) `True True True True` / `True True True`
-- D) `False False False False` / `False True True`
-
-B
 
 **Q6:** What is the output?
 ```python
-d = {"a": 1, "b": 2}
-for k, v in d.items():
-    d[k] = v * 2
-
-print(d)
-
+import random
+a = random.choice((0, 100, 3))
+print(a == 6)
 ```
-- A) `RuntimeError: dictionary changed size during iteration`
-- B) `{"a": 2, "b": 4}`
-- C) `{"a": 1, "b": 2}`
-- D) `{"a": 2, "b": 2}`
+- A) True — `choice` returns a value from the range
+- B) False — `choice` picks from the tuple, 6 is not in it
+- C) Sometimes True
+- D) TypeError
 
-B
+b
 
-**Q7:** What is the output?
+
+**Q7:** What is `len(x)`?
 ```python
-def f(a, b=2, *args, **kwargs):
-    print(a, b, args, kwargs)
+x = '\\'
 
-f(1, 3, 4, 5, x=6)
+1
+
 ```
-- A) `1 2 (3, 4, 5) {'x': 6}`
-- B) `1 3 (4, 5) {'x': 6}`
-- C) `1 3 (3, 4, 5) {'x': 6}`
-- D) `TypeError`
-
-B
 
 **Q8:** What is the output?
 ```python
-import copy
+print(chr(ord('a') + 3))
 
-original = [[1, 2], [3, 4]]
-shallow = copy.copy(original)
-shallow[0].append(99)
+d
 
-print(original)
-print(shallow)
 ```
-- A) `[[1,2],[3,4]]`, `[[1,2,99],[3,4]]`
-- B) `[[1,2,99],[3,4]]`, `[[1,2,99],[3,4]]`
-- C) `[[1,2],[3,4]]`, `[[1,2],[3,4]]`
-- D) `TypeError`
+
+**Q9:** What is the output?
+```python
+class A:
+    x = 10
+    def __init__(self):
+        self.y = 20
+
+print(hasattr(A, 'x')) True
+print(hasattr(A, 'y')) False
+```
+
+**Q10:** A file `utils.py` contains `print(__name__)`. It is imported by `main.py` with `import utils`. What is printed?
+
+
+utils
+
+---
+
+## Task 2 — File I/O: 6 predict-the-output
+
+**Q1:** What is the output?
+```python
+with open('test.txt', 'w') as f:
+    f.write('hello\nworld\n')
+
+with open('test.txt', 'r') as f:
+    lines = f.readlines()
+
+print(len(lines)) #2
+print(repr(lines[0])) #'hello\n'
+```
+
+**Q2:** What is the output?
+```python
+with open('test.txt', 'w') as f:
+    f.writelines(['a', 'b', 'c'])
+
+with open('test.txt', 'r') as f:
+    print(f.read())
+
+'abc'
+```
+
+**Q3:** What is the output?
+```python
+with open('test.txt', 'w') as f:
+    f.write('hello world')
+
+with open('test.txt', 'r') as f:
+    print(f.read(5))
+    print(f.tell())
+    f.seek(0)
+    print(f.read(5))
+
+'hello '
+5
+'hello '
+```
+
+**Q4:** Which mode raises `FileExistsError` if the file already exists?
+- A) `'w'`
+- B) `'a'`
+- C) `'x'`
+- D) `'r+'`
+
+C
+
+**Q5:** What is the output?
+```python
+with open('test.txt', 'w') as f:
+    f.write('line1\nline2\nline3\n')
+
+with open('test.txt', 'r') as f:
+    line = f.readline()
+    print(repr(line)) #'line1\n'
+
+
+line1\n
+```
+
+**Q6:** What happens if you call `f.read()` on an already-exhausted file object (cursor at end)?
+- A) `StopIteration`
+- B) `IOError`
+- C) Returns `''` (empty string)
+- D) Returns `None`
+
+C
+
+---
+
+## Task 3 — `os` module: 6 questions
+
+**Q1:** What is the output?
+```python
+import os
+print(type(os.environ))
+print(os.environ.get('NONEXISTENT_KEY_XYZ', 'default'))
+
+I don't know, we're printing a class environ
+default
+
+
+
+```
+
+**Q2:** What is the difference between `os.mkdir('a/b/c')` and `os.makedirs('a/b/c')`?
+
+In the first example we make dir c in directory a/b/
+in the second example we make three dirs a, b, c in the current dir I guess
+
+
+**Q3:** What is the output?
+```python
+import os
+print(os.path.basename('/home/user/project/main.py'))
+print(os.path.dirname('/home/user/project/main.py'))
+print(os.path.splitext('data.csv'))
+
+#main.py
+#home/user/project
+#('data', '.csv')
+
+
+```
+
+**Q4:** What is the output?
+```python
+import os
+print(os.name)
+```
+- A) `'windows'`
+- B) `'nt'` on Windows, `'posix'` on Linux/macOS
+- C) `'win32'`
+- D) The full OS name string
 
 B
+
+
+**Q5:** What is the output?
+```python
+import os
+path = os.path.join('algo_backtest', 'data', 'prices.csv')
+print(path)
+```
+(Answer for both Windows and Linux)
+
+/algo_backtest/data/prices.csv
+
+
+
+**Q6:** `os.rmdir('folder')` fails. What is the most likely reason?
+
+Most likely the folder does not exist in the current working directory.
+
+
+---
+
+## Task 4 — `datetime` / `time` / `calendar`: 8 questions
+
+**Q1:** What is the output?
+```python
+from datetime import datetime
+dt = datetime(2026, 3, 19, 14, 30, 0)
+print(dt.strftime("%A, %d %B %Y"))
+print(dt.strftime("%H:%M"))
+
+#Thursday, 19 March 2026
+#14:30
+
+
+```
+
+**Q2:** What is the output?
+```python
+from datetime import datetime
+s = "19/03/2026 14:30"
+dt = datetime.strptime(s, "%d/%m/%Y %H:%M")
+print(dt.year, dt.month, dt.day)
+
+#2026 3 19
+```
+
+**Q3:** What is the output?
+```python
+from datetime import timedelta
+delta = timedelta(days=2, hours=3, seconds=30)
+print(delta.days)
+print(delta.seconds)
+print(delta.total_seconds())
+
+2
+10830
+183630.0
+
+Although I ran that code - it's a stupid question to assume I'd know it or calculate by heart. It's weird.
+
+
+```
+
+**Q4:** What is the output?
+```python
+import time
+t = time.localtime()
+print(type(t).__name__)
+print(t.tm_wday)   # assuming today is Wednesday
+```
+- What type is returned?
+- What does `tm_wday` value mean? (Monday = ?)
+
+time
+2
+
+
+**Q5:** What is the output?
+```python
+import time
+print(type(time.time()))
+
+float
+```
+
+**Q6:** What is the output?
+```python
+import calendar
+print(calendar.weekday(2026, 3, 19))
+print(calendar.THURSDAY)
+print(calendar.isleap(2026))
+
+3
+3
+False
+
+```
+
+**Q7:** What is the output?
+```python
+import calendar
+first_day, num_days = calendar.monthrange(2024, 2)
+print(first_day, num_days)
+
+3 29
+
+Again I had to run this code to check it as there's no way to know that without that...
+I'm just a human being
+
+```
+
+**Q8:** What is the output?
+```python
+import calendar
+calendar.setfirstweekday(calendar.SUNDAY)
+print(calendar.weekheader(2)
+
+Su Mo Tu We Th Fr Sa
+```
+
+---
+
+## Task 5 — Mixed PCAP simulation: 10 questions
+
+**Q1:** What is the output?
+```python
+x = "hello"
+print(x[1:4])
+print(x[-2:])
+print(x[::-1])
+
+ell
+lo
+olleh
+
+```
+
+**Q2:** What is the output?
+```python
+class A:
+    count = 0
+    def __init__(self):
+        A.count += 1
+
+a1 = A()
+a2 = A()
+a3 = A()
+print(A.count)
+print(a1.count)
+
+
+3
+3
+
+```
+
+**Q3:** What is the output?
+```python
+def f(x, items=[]):
+    items.append(x)
+    return items
+
+print(f(1))
+print(f(2, []))
+print(f(3))
+
+[1]
+[2]
+[1, 3]
+
+```
+
+**Q4:** What is the output?
+```python
+print(bool(""))
+print(bool("0"))
+print(bool([]))
+print(bool([0]))
+
+False
+True
+False
+True
+
+```
+
+**Q5:** What is the output?
+```python
+x = (1, 2, 3)
+y = x
+y += (4,)
+print(x)
+print(y)
+
+(1, 2, 3, 4)
+(1, 2, 3, 4)
+```
+
+**Q6:** What is the output?
+```python
+try:
+    raise ValueError("v")
+except ValueError as e:
+    msg = str(e)
+print(msg)
+```
+- A) `ValueError: v`
+- B) `v`
+- C) `NameError`
+- D) `<class 'ValueError'>`
+
+A
+
+**Q7:** What is the output?
+```python
+def outer():
+    x = 10
+    def inner():
+        return x * 2
+    x = 20
+    return inner()
+
+print(outer())
+
+
+40
+
+```
+
+**Q8:** What is the output?
+```python
+a, *b, c = [1, 2, 3, 4, 5]
+print(type(b))
+print(b)
+print(c)
+
+tuple
+(2, 3, 4)
+5
+
+```
+
+**Q9:** What is the output?
+```python
+xs = [1, 2, 3]
+ys = xs[:]
+ys[0] = 99
+print(xs[0])
+print(ys[0])
+
+1
+99
+
+
+
+```
+
+**Q10:** What is the output?
+```python
+print(__name__)
+```
+- A) `__main__` always
+- B) The filename without `.py`
+- C) `__main__` if run directly, module name if imported
+- D) `None`
+
+
+C
+
 
 ---
 
@@ -633,6 +508,11 @@ Q2:
 Q3:
 Q4:
 Q5:
+Q6:
+Q7:
+Q8:
+Q9:
+Q10:
 
 ### Task 2
 Q1:
@@ -648,29 +528,9 @@ Q2:
 Q3:
 Q4:
 Q5:
+Q6:
 
 ### Task 4
-Q1:
-Q2:
-Q3:
-Q4:
-Q5:
-
-### Task 5
-Q1:
-Q2:
-Q3:
-Q4:
-Q5:
-
-### Task 6
-Q1:
-Q2:
-Q3:
-Q4:
-Q5:
-
-### Task 7
 Q1:
 Q2:
 Q3:
@@ -679,3 +539,15 @@ Q5:
 Q6:
 Q7:
 Q8:
+
+### Task 5
+Q1:
+Q2:
+Q3:
+Q4:
+Q5:
+Q6:
+Q7:
+Q8:
+Q9:
+Q10:

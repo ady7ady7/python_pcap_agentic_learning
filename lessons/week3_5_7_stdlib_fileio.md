@@ -654,7 +654,7 @@ FOR UNIX/LINUX
 
 ---
 
-> **`datetime` and `time` modules** have been moved to a dedicated lesson: [`week9_datetime_time.md`](week9_datetime_time.md)
+> **`datetime` and `time` modules** have been moved to a dedicated lesson: [`week9_datetime_time_calendar.md`](week9_datetime_time_calendar.md)
 
 ---
 

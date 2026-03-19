@@ -237,4 +237,19 @@ This directory contains all theoretical lessons organized by week and topic.
 
 ---
 
+## Week 10: PCAP Review
+
+### [Mock 1 Gap Closure](gaps_pcap_mock1.md)
+- Multiple `except` — at most one runs; first match wins
+- Bare `except:` must be last or SyntaxError
+- `for line in open(...)` — file objects are iterable, yields lines with `\n`
+- `randint` (inclusive both ends) vs `randrange` (stop excluded) vs `choice` (picks from sequence only)
+- String escape trap: `'\\\''` is a SyntaxError — string never closed
+- `chr()` / `ord()` — character ↔ integer code point (`ord('p')` = 112, `chr(114)` = `'r'`)
+- `sys.stderr` → screen by default (not null device)
+- `hasattr(Class, attr)` — checks the class, not instances; `self.x` from `__init__` is not on the class
+- `__name__` → `'__main__'` when run directly, module name when imported
+
+---
+
 **Navigation Tip:** Use your IDE's file search (Ctrl+P / Cmd+P) to quickly jump to specific lessons!

@@ -1621,3 +1621,23 @@ Task 8 expected values were wrong. Correct: 4 winners, $1050 total PnL.
 **Key corrections:**
 - print([a]) → __repr__; f"{a}" → __str__. Containers always use repr on elements.
 - bool("0") = True. Only "" (empty string) is falsy. "0", "False", "None" all truthy.
+
+---
+
+## Week 10, Day 3 - 2026-03-19
+
+**Topic:** Mock 1 gap drill, File I/O, os module, datetime/time/calendar, PCAP simulation
+**Score:** ~84% (29.5/40)
+**Difficulty:** Medium
+
+**Tasks Completed:**
+1. Mock 1 gap drill (8/10) — bare except SyntaxError ✓, multiple except ✓. Miss: open() on missing file = FileNotFoundError before iteration, not D (reads line by line)
+2. File I/O (4.5/6) — modes, readlines, exhausted file ✓. Misses: print(f.read()) has no quotes in output; repr(line) includes quotes; f.read(5) = 'hello' not 'hello '
+3. os module (4/6) — basename/dirname/splitext/os.name ✓. Misses: os.path.join has no leading slash; os.rmdir fails because directory not empty (not because it doesn't exist); os.mkdir requires parents to exist
+4. datetime/time/calendar (6/8) — strftime/strptime/timedelta/isleap/weekday/weekheader ✓. Misses: type(localtime()).__name__ = 'struct_time' not 'time'
+5. PCAP simulation (7/10) — slicing/bool/closure/shallow copy ✓. Persistent misses: *b always list (4th time), tuple += new object (3rd time), str(e) = message only (3rd time)
+
+**Persistent gaps entering Day 4:**
+- *b starred unpacking → always list (4th occurrence)
+- tuple += tuple → new tuple, original unchanged (3rd occurrence)
+- str(exception) → message only, not 'ExceptionType: msg' (3rd occurrence)

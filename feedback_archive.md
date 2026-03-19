@@ -3876,3 +3876,44 @@ Q1-Q4 ✓, Q6-Q8 ✓. Q5 ✗: answered B (True False True), correct A (True True
 bool("0") = True. Non-empty string is always truthy regardless of content. Only "" is falsy.
 
 **Day 3 plan:** PCAP module drills — File I/O, os, datetime, time, calendar.
+
+---
+
+## Week 10, Day 3 - 2026-03-19
+
+**Topic:** Mock 1 gap drill, File I/O, os, datetime/time/calendar, PCAP simulation
+
+### Mentor Assessment — Score: ~84% (29.5/40)
+
+**Task 1 — Mock 1 gap drill (8/10)**
+Q1-Q3 ✓, Q5-Q9 ✓, Q10 ✓.
+Q4 ✗: answered D (reads line by line). Correct: C (FileNotFoundError). open() raises before iteration begins if file doesn't exist. Iterability is irrelevant when open() itself fails.
+Q3 ✓: bare except before typed clause = SyntaxError. Confirmed correct understanding.
+
+**Task 2 — File I/O (4.5/6)**
+Q1 ✓ (2, 'hello\n'). Q4 ✓ ('x' mode). Q6 ✓ ('' on exhausted).
+Q2 ✗: wrote 'abc' with quotes. print(f.read()) output has no quotes — quotes are repr() not str().
+Q3 ✗: wrote 'hello ' with space and quotes. f.read(5) on 'hello world' = 'hello' (no space, no quotes). f.tell() = 5 ✓.
+Q5 ✗ partial: wrote line1\n without quotes. Question asked repr(line) — repr adds quotes: 'line1\n'.
+
+**Task 3 — os module (4/6)**
+Q3 ✓ (basename/dirname/splitext). Q4 ✓ (os.name = 'nt'/'posix').
+Q1 partial: type(os.environ) is os._Environ not plain dict.
+Q2 partial: os.mkdir requires ALL parents to exist — fails with FileNotFoundError if any parent is missing. os.makedirs creates whole path including parents.
+Q5 ✗: os.path.join with relative components has no leading slash. Output: 'algo_backtest/data/prices.csv' (Linux) or 'algo_backtest\data\prices.csv' (Windows).
+Q6 ✗: os.rmdir fails most likely because directory is NOT EMPTY. If it didn't exist: FileNotFoundError. Non-empty: OSError.
+
+**Task 4 — datetime/time/calendar (6/8)**
+Q1-Q3 ✓, Q5-Q8 ✓.
+Q4 ✗: type(t).__name__ = 'struct_time' not 'time'. tm_wday=2 for Wednesday ✓.
+
+**Task 5 — PCAP simulation (7/10)**
+Q1-Q4 ✓, Q7 ✓, Q9-Q10 ✓.
+Q5 ✗ (3rd time): tuple += creates new tuple. x=(1,2,3) unchanged, y=(1,2,3,4).
+Q6 ✗ (3rd time): str(e) = 'v' not 'ValueError: v'. print() calls str(), not repr().
+Q8 ✗ (4th time): *b always list. a, *b, c = [1,2,3,4,5] → b=list [2,3,4], not tuple.
+
+**3 gaps must close before exam:**
+1. *b unpacking → list always
+2. tuple += → new object, original unchanged
+3. str(exception) → message only
