@@ -9630,4 +9630,1607 @@ Creating the required test directory structure to be able to test everything pro
 
 # 5 lines — `info` from root, `warn` from both, `error` from both
 
+# from datetime import datetime
 
+# today = datetime.today()
+# start_date = datetime.strptime('2025-10-20', '%Y-%m-%d')
+# print(start_date)
+# diff = today - start_date
+# print(f'It has been {diff.days} days')
+
+
+#Crappy Data Python tasks #3
+
+# value = "4"
+
+# def change_type(value=value):
+#     result = None
+#     conversions_attempted = False
+#     try:
+#         result = int(value)
+#     except TypeError as e:
+#         print(f'Cannot convert type {type(value)} to int: {str(e)}')
+#     except Exception as e:
+#         print(f'Unexpected exception occured: {str(e)}')
+#     finally:
+#         conversions_attempted = True
+
+#     #### wpisz kod powyżej
+#     return result, conversions_attempted
+
+
+# new_value, conversion = change_type(value=value)
+# print(new_value)
+# print(f"conversion attempted: {conversion}")
+
+# nums = [0, 1, 2, 3]
+# numbers = [16, 9, 0, 3, 58]
+# nums = [4, 12, 16, 17, 20, 12]
+
+# def find_median(numbers=numbers):
+#     ### wpisz kod poniżej
+
+#         median = None
+#         table_length = len(numbers)
+#         if table_length % 2 == 0:
+#             median = (numbers[table_length // 2] + numbers[table_length // 2 - 1]) / 2
+#         else:
+#             median = numbers[table_length // 2]
+
+#     #### wpisz kod powyżej
+#         return median
+
+
+# print(find_median(numbers))
+# print(find_median(nums))
+
+#Edube - Module 4
+
+# from datetime import timedelta
+# from datetime import date
+# from datetime import datetime
+
+# delta = timedelta(weeks=2, days=2, hours=2)
+# print(delta) #16 days, 2:00:00
+
+# delta2 = delta * 2
+# print(delta2)
+
+# d = date(2019, 10, 4) + delta2 
+# print(d) #2019-11-05
+
+# dt = datetime(2019, 10, 4, 14, 53) + delta2
+# print(dt)  #2019-11-05 18:53:00
+
+#Edube - Module 4 - datetime/time labs - Exercise 1
+
+# from datetime import datetime
+
+# def create_datetime(time_str: str) -> datetime:
+#     datetime_object1 = datetime.strftime(time_str, '%Y/%m/%d %H:%M:%S') #2020/11/04 14:53:00
+#     datetime_object2 = datetime.strftime(time_str, '%y/%B/%d %H:%M:%S %p') #20/November/04 14:53:00 PM
+#     datetime_object3 = datetime.strftime(time_str, '%a, %Y %b %d') #Wed, 2020 Nov 04
+#     datetime_object4 = datetime.strftime(time_str, 'Weekday: %u') #Weekday: 3
+#     datetime_object5 = datetime.strftime(time_str, 'Day of the year: %j') #Day of the year: 309
+#     datetime_object6 = datetime.strftime(time_str, 'Week number of the year: %U')
+#     print(datetime_object1)
+#     print(datetime_object2)
+#     print(datetime_object3)
+#     print(datetime_object4)
+#     print(datetime_object5)
+#     print(datetime_object6)
+    
+# time_string = datetime(2020, 11, 4, 14, 53, 0)
+# create_datetime(time_string)
+
+
+# from datetime import time
+
+# t = time(14, 53)
+# print(t.strftime("%H:%M:%S"))
+
+
+# from datetime import date
+# import time
+
+# timestamp = time.time() #Number of seconds that passed since Jan 1, 1970, 00:00 UTC
+# print(timestamp)
+# d = date.fromtimestamp(timestamp)
+
+# import calendar
+
+# x = calendar.setfirstweekday(calendar.SUNDAY)
+# print(x)
+# calendar.prmonth(2020, 12) #we print the whole December 2020 and every week starts from Sunday (as specified above)
+
+# print(calendar.weekday(2020, 12, 24)) #3
+
+# import calendar
+# print(calendar.weekheader(3)) #gives us headers/shortened versions of the weekdays
+# #based on number of chars specified in the parameter e.g.
+
+# #weekheader(2) Su Mo Tu We Th Fr Sa
+# #weekheader(3) Sun Mon Tue Wed Thu Fri Sat
+
+# #setfirstweekday affects this as well, so here's still Sunday as the first day of the week
+
+# '''Checking whether a given year is a leap year'''
+
+# print(calendar.isleap(2020)) #True/False - here True
+# print(calendar.leapdays(2010, 2021))  #Returns the number of leap days in the given range of years - here 3
+
+
+#Python Crappy Data - 12.03
+
+# value = "abc465e"
+
+# def check_value(value=value):
+#     ### wpisz kod poniżej
+
+#     tylko_litery = [char.isalpha() for char in value]
+#     tylko_cyfry = [char.isnumeric() for char in value]
+#     litery_i_cyfry = [char.isalnum() for char in value]
+
+
+#     if not False in tylko_litery:
+#         result = 'tekst zawiera tylko litery'
+#     elif not False in tylko_cyfry:
+#         result = 'tekst zawiera tylko cyfry'   
+#     elif not False in litery_i_cyfry:
+#         result = 'tekst zawiera litery i cyfry'
+#     else:
+#         result = 'tekst zawiera inne znaki'
+        
+        
+#     return result
+#     #### wpisz kod powyżej
+
+# print(check_value(value))
+
+
+# value = 120
+
+# def check_value(value=value):
+#     ### wpisz kod poniżej
+    
+#     if value > 100 or value % 2 == 0:
+#         chars = [char for char in str(value)]
+#         result = int(chars[0])
+#     else:
+#         result = None
+#     #### wpisz kod powyżej
+#     return result
+
+
+# print(check_value(value))
+
+# value = 120
+
+# def check_value(value=value):
+#     ### wpisz kod poniżej
+
+#     conditions = [value > 100, value % 2 == 0]
+#     print(conditions)
+#     if any(conditions):
+#         result = int(str(value)[0])
+#     else:
+#         result = None
+
+#     #### wpisz kod powyżej
+#     return result
+
+
+# print(check_value(value))
+
+
+# email = "ola@gmail.com"
+
+# def verify_email(email=email):
+#     ### wpisz kod poniżej
+#     verified_domains = ["gmail.com", "yahoo.com", "proton.com"]
+    
+#     if '@' not in email or email.split('@')[1] not in verified_domains:
+#         result = 'not verified'
+#     else:
+#         result = 'verified'
+
+#     #### wpisz kod powyżej
+#     return result
+
+
+# print(verify_email(email))
+
+
+#Crappy Data Python tasks - 13.03.26
+# number = 123
+
+# def reverse_number(number=number):
+#     ### wpisz kod poniżej
+
+#     result = [num for num in str(number)]
+#     result.reverse()
+#     result = int(('').join(result))
+#     #### wpisz kod powyżej
+#     return result
+
+
+# print(reverse_number(number=number))
+
+#Crappy Data Python #2
+
+#porównanie alfabetyczne nazwisk, jeśli są takie same to imion
+
+# person_1 = "Anna Kowalska"
+# person_2 = "Roman Nowak"
+
+# def find_name(person_1=person_1, person_2=person_2):
+#     ### wpisz kod poniżej
+
+#     result = None
+#     if person_1.split()[1] == person_2.split()[1]:
+#         result = person_1 if person_1 < person_2 else person_2
+#     else:
+#         result = person_1 if person_1.split()[1] < person_2.split()[1] else person_2
+
+#     #### wpisz kod powyżej
+#     return result
+
+
+# print(find_name(person_1=person_1, person_2=person_2))
+
+
+#Crappy Data Python #3
+
+# amount = 500
+# discounts = {
+#     250: 0.1,
+#     350: 0.2,
+#     500: 0.3
+# }
+
+# def calculate_new_amount(amount=amount, discounts=discounts):
+#     ### wpisz kod poniżej
+
+#     sorted_discounts = sorted(discounts.keys(), reverse = True)
+#     chosen_discount = 0
+#     for discount in sorted_discounts:
+#         if amount >= discount:
+#             chosen_discount = discount
+#             break
+    
+#     final_amount = round(amount - amount * discounts[chosen_discount], 2)
+#     #### wpisz kod powyżej
+#     return final_amount
+
+
+# print(calculate_new_amount(amount))
+
+# a = 15
+
+# if None:
+#     a = 10
+
+# print(a)
+
+# a = "blabla"
+
+# try:
+#     a = int(a)
+# except TypeError:
+#     pass
+    
+# print(type(a))
+
+
+# import calendar  
+
+# c = calendar.Calendar(calendar.SUNDAY)
+
+# for weekday in c.iterweekdays():
+#     print(weekday, end=" ")
+    
+# print(repr(c))
+# print(c)
+
+# for date in c.itermonthdates(2025, 5): #there are also days from April to complete the first week - it would be the same if the last day of may ended outside of Sunday, or other day specified in the Calendar object as the start of the week day
+#     print(date)
+    
+# for date in c.itermonthdays(2025, 5):
+#     print(date)
+    
+# for data in c.monthdays2calendar(2020, 12): #returns a tuple with (day of the month, day of week) e.g. (0, 6), (1, 1), (2, 2) etc.
+#     print(data)
+    
+
+#Edube - Module 4 - Calendar Labs - #1
+
+'''
+During this course, we looked at the Calendar class a bit. 
+Your task is to extend its functionality with a new method called count_weekday_in_year, 
+which takes a year and a weekday as parameters, and then returns the number of occurrences of a specific weekday in the year.
+
+Use the following tips:
+
+Create a class called MyCalendar that extends the Calendar class;
+create the count_weekday_in_year method with the year and weekday parameters. 
+The weekday parameter should be a value between 0-6, where 0 is Monday and 6 is Sunday. 
+The method should return the number of days as an integer;
+in your implementation, use the monthdays2calendar method of the Calendar class.
+The following are the expected results:
+
+'''
+
+
+# from calendar import Calendar
+
+
+# class MyCalendar(Calendar):
+    
+#     def count_weekday_in_year(self, year: int, weekday: int):
+#         counter = 0
+#         for month in range(1, 13):
+#             x = Calendar.monthdays2calendar(self, year = year, month = month)
+#             day_check = [day[1] for week in x for day in week if day[0] != 0]
+#             counter += sum([1 for day in day_check if day == weekday])
+#         return counter
+            
+# x = MyCalendar()
+# print(x.count_weekday_in_year(2000, 6))
+
+
+# import calendar
+# x = calendar.weekheader(3)
+# print(x)
+
+# print(calendar.calendar(2026))
+
+
+# x = [1, 5, 6, 54, 43]
+# b = list(map(lambda a: a**2, x))
+# print(b)
+
+# b = list(filter(lambda a: a > 2, x))
+# print(b)
+
+
+# number = (1, 2, 5, 9, 15)
+
+# def filter_numbers(num):
+#     nums = (1, 5, 17)
+#     if num in nums:
+#         return True
+#     else:
+#         return False
+
+# filtered_numbers = filter(filter_numbers, number)
+# for n in filtered_numbers:
+#     print(n)
+    
+    
+# import calendar
+# cal = calendar.isleap(2019)
+# print(cal)
+
+
+#W10 D1 T1
+
+# class A:
+#     def hello(self):
+#         return "A"
+
+# class B(A):
+#     def hello(self):
+#         return super().hello() + "B"
+
+# class C(A):
+#     def hello(self):
+#         return super().hello() + "C"
+
+# class D(B, C):
+#     pass
+
+# print(D().hello())
+# print(D.__mro__)
+
+
+
+# import logging
+
+# logging.basicConfig(level=logging.DEBUG)
+
+# logger = logging.getLogger("app")
+# logger.debug("debug")
+# logger.warning("warn")
+
+
+#CD Python tasks - 1
+
+# elements = [1, " ", 8.5, "blabla", 5]
+
+
+# def find_sum(elements=elements):
+#     ### wpisz kod poniżej
+
+#     result = sum([el if isinstance(el, (int, float)) and not isinstance(el, bool) else 0 for el in elements])
+#     #### wpisz kod powyżej
+#     return result
+
+
+# print(find_sum(elements))
+
+
+
+#CD Python tasks - 2
+
+# exam = {
+#     "anna kowalska": 18, "piotr nowak": 12, "marta zielinska": 15, "jakub lewandowski": 9,
+#     "agnieszka mazur": 17, "pawel kaminski": 14, "karolina dabrowska": 16, "tomasz wojcik": 11,
+#     "magdalena krupa": 19, "lukasz piotrowski": 13, "katarzyna kaczmarek": 15, "mateusz grabowski": 8,
+#     "monika pawlak": 20, "wojciech michalak": 10, "joanna adamczyk": 16, "dawid dudek": 7,
+#     "patrycja walczak": 18, "sebastian stepien": 12, "natalia baran": 17, "marcin lis": 14,
+#     "klaudia maj": 15, "rafal szymanski": 9, "dominika ostrowska": 16, "krzysztof gorski": 13
+# }
+
+# passed = [name for name, value in exam.items() if value >= 15]
+
+#CD Python tasks - 3
+
+# words = ['ola', 'ma', 'kota']
+
+# def find_longest_word(words=words):
+#     ### wpisz kod poniżej
+    
+#     longest = None
+#     length = 0
+    
+#     for word in words:
+#         if len(word) > length:
+#             length = len(word)
+#             longest = word
+        
+
+#     #### wpisz kod powyżej
+#     return longest
+
+# print(find_longest_word(words))
+
+
+#CD Python tasks - 4
+
+# from datetime import datetime, date
+
+# x = date.today()
+# start = date(2025, 10, 19)
+# print(x - start)
+
+# text = 'ania'
+# from collections import defaultdict
+
+# def count_letters(text=text):
+#     ### wpisz kod poniżej
+
+#     defdict = defaultdict(int)
+#     for i in text:
+#         defdict[i] += 1
+#     counter = dict(defdict)
+
+#     #### wpisz kod powyżej
+#     return counter
+
+
+# print(count_letters(text))
+
+
+#W10 D2 T1
+
+# try:
+#     raise ValueError("v")
+# except Exception as e:
+#     print(type(e).__name__)
+#     print(isinstance(e, BaseException))
+#     print(isinstance(e, Exception))
+
+# try:
+#     1 / 0
+# except ArithmeticError:
+#     print("arithmetic")
+# except ZeroDivisionError:
+#     print("zero")
+
+# try:
+#     raise TypeError("t")
+# except (ValueError, TypeError) as e:
+#     print("caught:", e)
+#     raise
+
+# print("done")
+#caught: t
+#TypeError: t
+
+# try:
+#     try:
+#         raise ValueError("inner")
+#     except TypeError:
+#         print("inner handler")
+# except ValueError:
+#     print("outer handler")
+# finally:
+#     print("finally")
+
+#outer handler - finally
+
+#W10 D2 T2
+# class A:
+#     x = []
+
+# a = A()
+# b = A()
+# a.x.append(1)
+# print(b.x)
+# print(A.x)
+
+
+# class A:
+#     def __init__(self):
+#         self.__secret = 42
+
+# a = A()
+# print(a.__secret) #AttributeError
+
+
+# class A:
+#     def __init__(self):
+#         self.__secret = 42
+
+# a = A()
+# print(a._A__secret) #42
+
+
+# class Animal:
+#     def speak(self):
+#         return "..."
+
+# class Dog(Animal):
+#     def speak(self):
+#         return "woof"
+
+# class Cat(Animal):
+#     def speak(self):
+#         return "meow"
+
+# animals = [Dog(), Cat(), Animal()]
+# for a in animals:
+#     print(a.speak())
+
+#woof, meow, ...
+
+
+# class Counter:
+#     def __init__(self):
+#         self._count = 0
+
+#     @property
+#     def count(self):
+#         return self._count
+
+#     @count.setter
+#     def count(self, value):
+#         if value < 0:
+#             raise ValueError("negative")
+#         self._count = value
+
+# c = Counter()
+# c.count = 5
+# print(c.count)
+# c.count = -1
+
+
+
+# class A:
+#     def __str__(self):
+#         return "str_A"
+#     def __repr__(self):
+#         return "repr_A"
+
+# a = A()
+# print(a)
+# print(repr(a))
+# print([a])
+# print(f"{a}")
+
+
+#W2 D2 T3
+
+# x = "global"
+
+# def outer():
+#     x = "outer"
+#     def inner():
+#         x = "inner"
+#         return x
+#     return inner()
+
+# print(outer()) #inner - no UnboundLocalError, as we do not modify the outer x
+# print(x) #global
+
+
+
+# x = 0
+
+# def f():
+#     global x
+#     x += 10
+
+# f()
+# f()
+# print(x) #20
+
+
+# def make_multiplier(n):
+#     return lambda x: x * n
+
+# double = make_multiplier(2)
+# triple = make_multiplier(3)
+# print(double(5)) #10
+# print(triple(5)) #15
+# print(double(triple(2))) #12
+
+
+# fns = [lambda x: x + n for n in range(4)]
+# print([f(0) for f in fns]) #[3, 3, 3, 3]
+
+# fns = [lambda x, n=n: x + n for n in range(4)]
+# print([f(0) for f in fns]) #[0, 1, 2, 3]
+
+#W10 D2 T4
+
+# def gen():
+#     for i in range(3):
+#         yield i * 2
+
+# g = gen()
+# print(next(g)) #0
+# print(next(g)) #2
+# print(list(g)) #[4, 6]
+
+
+# def gen():
+#     yield 1
+#     yield 2
+
+# g = gen()
+# print(list(g)) #[1, 2]
+# print(list(g)) #[]
+
+
+# def countdown(n):
+#     while n > 0:
+#         yield n
+#         n -= 1
+
+# print(sum(countdown(5))) #sum([5, 4, 3, 2, 1]) = 15
+
+# def gen():
+#     yield from [1, 2, 3]
+#     yield from range(3)
+
+# print(list(gen())) #[1, 2, 3, 0, 1, 2]
+
+
+
+# class Counter:
+#     def __init__(self, stop):
+#         self.current = 0
+#         self.stop = stop
+
+#     def __iter__(self):
+#         return self
+
+#     def __next__(self):
+#         if self.current >= self.stop:
+#             raise StopIteration
+#         self.current += 1
+#         return self.current
+
+# print(list(Counter(3))) #[1, 2, 3]
+
+
+#W10 D2 T5
+# nums = [1, 2, 3, 4, 5, 6]
+# result = list(filter(lambda x: x % 2 == 0, nums))
+# print(result)
+
+# #[2, 4, 6]
+
+
+# nums = [1, 2, 3, 4]
+# result = list(map(lambda x: x ** 2, nums))
+# print(result) #[1, 4, 9, 16]
+
+
+
+# from functools import reduce
+
+# result = reduce(lambda acc, x: acc + x, [1, 2, 3, 4], 10) #11 -> 13 -> 16 -> 20
+# print(result) #20
+
+
+
+# def decorator(func):
+#     def wrapper(*args, **kwargs):
+#         print("before")
+#         result = func(*args, **kwargs)
+#         print("after")
+#         return result
+#     return wrapper
+
+# @decorator
+# def greet(name):
+#     print(f"hello {name}")
+
+# greet("Alice")
+
+# def decorator(func):
+#     def wrapper(*args, **kwargs):
+#         print("before")
+#         result = func(*args, **kwargs)
+#         print("after")
+#         return result
+#     return wrapper
+
+# @decorator
+# @decorator
+# def greet(name):
+#     print(f"hello {name}")
+
+# greet("Bob")
+
+#W10 D2 T6 - SLICING exercises
+
+# s = "Python"
+# print(s[1:4]) #yth
+# print(s[-3:]) #hon
+# print(s[::2]) #Pto
+# print(s[::-1]) #nohtyP
+
+
+# s = "hello world"
+# print(s.upper()) #HELLO WORLD
+# print(s.capitalize()) #Hello world
+# print(s.title()) #Hello World
+
+# s = "  hello  "
+# print(len(s)) #9
+# print(len(s.strip())) #5
+
+
+
+# s = "a,b,,c,d"
+# parts = s.split(",") #
+# print(len(parts)) #5
+# print(parts) #['a', 'b', '', 'c', 'd']
+
+
+
+# print("{}{}{}".format(1, 2, 3)) #123
+# print("{2}{0}{1}".format("a", "b", "c")) #cab
+# print(f"{'hello':>10}") #i don't know
+
+#W10 D2 T7
+# class A:
+#     pass
+
+# a = A()
+# a.x = 10
+# print(a.__dict__)
+
+
+# xs = [1, 2, 3]
+# ys = xs[:]
+# ys.append(4)
+# print(xs) #[1, 2, 3]
+# print(ys) #[1, 2, 3, 4] - new object created with [:]
+
+# print(bool(0), bool(""), bool([]), bool(None)) #False False False FAlse
+# print(bool(1), bool("0"), bool([0])) #True True True
+
+
+# d = {"a": 1, "b": 2}
+# for k, v in d.items():
+#     d[k] = v * 2
+
+# print(d)
+
+
+# import copy
+
+# original = [[1, 2], [3, 4]]
+# shallow = copy.copy(original)
+# shallow[0].append(99)
+
+# print(original) [[1, 2, 99], [3,4]]
+# print(shallow) [[1, 2, 99], [3,4]]
+
+# my_tuple = (0, 1, 2, 3, 4, 5, 6)
+# foo = tuple(filter(lambda x: x>1, my_tuple))
+# print(foo)
+
+# foo = list(filter(lambda x: x-0 and x-1, my_tuple)) #[2, 3, 4, 5, 6]
+# print(foo)
+
+# foo = list(filter(lambda x: x==0 and x==1, my_tuple)) #[]
+# print(foo)
+
+# b = bytearray(3)
+# print(b)
+
+
+# def fun(n):
+#     s = '+'
+#     for i in range(n):
+#         print(f'Before: {s}')
+#         s += s
+#         print(f'After {s}')
+#         yield s
+        
+        
+# for x in fun(2):
+#     print(x, end = '')
+    
+    
+#lambda review
+
+#lambda args: expression (unltimited args, single expression)
+
+# f = lambda x: x * 2
+# f = lambda x: x * 2; x + 1 #SYNTAX ERROR - multiple expressions
+
+#lambda args
+# f0 = lambda x, y: x + y #(2 args, 1 expression - alright)
+# f1 = lambda x, y, z, c: sum([x, y, z, c]) #4 args, 1 expression, alright
+
+# print(f1(5, 52, 12, 5.3))
+
+# with open('file.txt', 'a') as w:
+#     w.write('xdas32')
+    
+
+# for x in open('file.txt', 'rt'):
+#     print(x)
+
+# import math
+# print(dir(math))
+
+# import random
+# a = random.randint(0, 100)
+# a = random.randrange(10, 100, 3)
+# c = random.choice((0, 100, 3))
+# print(c)
+
+#0, 1, 4, 9, 16
+
+# numbers = [i*i for i in range(5)]
+# foo = list(filter(lambda x: x % 2, numbers))
+# print(foo)
+
+# from datetime import datetime
+# dt1 = datetime(2019, 11, 27, 11, 27, 22)
+# dt2 = datetime(2019, 11, 27, 0, 0, 0)
+
+# print(dt1 - dt2)
+
+# print(float('1.3'))
+
+
+# import os
+# print(os.uname)
+
+
+#Test - 70%...
+
+
+#If there are more than one except branches after the try clause, we can say that:
+#one or more except blocks will be executed,
+#none of the except blocks will be executed
+#not more than one except block will be executed
+
+
+#the following line of code:
+# for line in open('text.txt', 'rt'):
+#     pass
+# #is invalid because open returns nothing
+# #is valid because open retursn an interable object
+# #is invalid because open returns a non-tireable object
+
+
+# #Aassuming invo that the open() invocation was successful, te following snippet:
+# for x in open('file', 'rt'):
+#     print(x)
+    
+#will read the file line by line
+#cause an exception
+#read the whole character by character
+
+
+#which lines of code would you insert so that it's possible for the program to output the following result:
+
+#6 82 0
+
+#A
+#import random
+#a = random.randrange(10, 100, 3) #won't work because of that
+#b = random.randint(0, 100)
+#c = random.choice((0, 100, 3))
+
+#b
+#import random
+#a = random.randint(0, 100)
+#b = random.choice(0, 100, 3) - won't work because of that
+#c = random.randrange((10, 100, 3))
+
+#c - seems ok
+#import random
+#a = random.randint(0, 100)
+#b = random.randrange(10, 100, 3)
+#c = random.choice((0, 100, 3))
+
+#d - this is the answer I chose, what's wrong here?
+#import random
+#a = random.choice((0, 100, 3))
+#b = random.randrange(10, 100, 3)
+#c = random.randint(0, 100)\
+    
+# x = '\\\'
+# print(len(x)) #SyntaxError, unterminated string literal
+
+
+# print(chr(ord('p') + 2)) #r
+
+
+#The sys.stderr stream is normally associated weith
+#the keyboard
+#a null device
+#the screen
+
+
+# try:
+#     raise Exception
+# except:
+#     print('c')
+# except BaseException:
+#     print('a')
+# except Exception:
+#     print('b')
+#This causes a Syntax error, as the default except must be last. This is weird and unexpected, I don't remember us handling that.
+
+
+# class A:    
+#     A = 1
+#     def __init__(self):
+#         self.a = 0
+        
+# print(hasattr(A, 'a')) #False,
+
+
+# numbers = [0, 2, 7, 9, 10]
+# foo = map(lambda num : num ** 2, numbers) #numbers printed out properly with map as we put them in a list
+# print(list(foo))
+
+# #what will be the output of the following code, located in the p.py file?
+# print(__name__)
+
+#__p.py
+#main
+#__main__
+
+
+#CD Python t1
+
+# students = ["Anna Kowalska", "Roman Nowak", "Aleksandra Buch"]
+
+# def create_students_id(students=students):
+#     ### wpisz kod poniżej
+
+#     id = 0
+#     students_sorted = sorted([f'{student.split()[1]} {student.split()[0]}' for student in students])
+#     student_ids = {}
+#     for student in students_sorted:
+#         id += 1
+#         student_ids[id] = student
+    
+
+#     #### wpisz kod powyżej
+#     return student_ids
+
+
+# print(create_students_id(students))
+
+#CD Python t2
+
+
+# words = ["kot", "pies", "rower", "noc", "okno"]
+
+# def create_word_length(words=words):
+#     ### wpisz kod poniżej
+
+#     unique_words = set(word for word in words)
+#     word_lengths = {word : len(word) for word in unique_words}
+#     final_dict = {}
+
+#     for length in word_lengths.values():
+#         counter = sum([1 for item in word_lengths.items() if item[1] == length])
+#         final_dict[length] = counter
+
+    
+#     return final_dict
+
+
+# print(create_word_length(words))
+
+
+#CD Python t3 
+
+'''
+Zadanie
+Istnieją różne algorytmy sortowania, jeden z nich to tzw. sortowanie przez wybieranie (ang. selection sort).
+
+Jego poszczególne kroki to:
+
+Znajdź najmniejszą liczbę w liście.
+Dodaj ją do nowej listy.
+Usuń ją z oryginalnej listy.
+Powtarzaj, aż lista będzie pusta
+Spróbuj zaimplementować ten algorytm i posortować listę numbers, zapisując wynik w liście sorted_numbers.
+'''
+
+# numbers = [57, 12, 98, 34, 76, 5, 63, 41, 89, 23, 67, 14, 92, 38, 71, 6, 54, 83, 29, 47, 95, 18, 72, 31, 64, 9, 87, 26, 53, 44, 79, 3, 68, 21, 90, 36, 58, 11, 74, 49, 82, 7, 61, 28, 93]
+
+# sorted_numbers = []
+# while len(numbers) > 0:
+#     lowest_num = min(numbers)
+#     sorted_numbers.append(lowest_num)
+#     numbers.remove(lowest_num)
+    
+# print(numbers)
+# print(sorted_numbers)
+
+#W10 D3 T1
+# try:
+#     raise ValueError("v")
+# except Exception:
+#     print("Exception")
+# except ValueError:
+#     print("ValueError")
+
+
+#W10 D3 T2
+# with open('test.txt', 'w') as f:
+#     f.write('hello\nworld\n')
+
+# with open('test.txt', 'r') as f:
+#     lines = f.readlines()
+
+# print(len(lines)) #2
+# print(repr(lines[0])) #'hello\n'
+
+
+# with open('test.txt', 'w') as f:
+#     f.writelines(['a', 'b', 'c'])
+
+# with open('test.txt', 'r') as f:
+#     print(f.read()) #abc
+
+# with open('test.txt', 'w') as f:
+#     f.write('hello world')
+
+# with open('test.txt', 'r') as f:
+#     print(f.read())
+#     print(f.read())
+
+#W10 D3 T3
+# import os
+# print(type(os.environ)) #
+# print(os.environ.get('NONEXISTENT_KEY_XYZ', 'default')) #default
+
+
+# import os
+# print(os.path.basename('/home/user/project/main.py')) #main.py
+# print(os.path.dirname('/home/user/project/main.py')) #/home/user/project/
+# print(os.path.splitext('data.csv')) #('data', '.csv')
+
+# import os
+# print(os.name) #nt for Windows, posix on linux/mac
+
+
+# import os
+# path = os.path.join('algo_backtest', 'data', 'prices.csv')
+# print(path) #algo_backtest/data/prices.csv
+
+# from datetime import datetime
+# dt = datetime(2026, 3, 19, 14, 30, 0)
+# print(dt.strftime("%A, %d %B %Y")) #Thursday, 19, March, 2026
+# print(dt.strftime("%H:%M")) #14:30
+
+
+#W10 D3 T4
+# from datetime import datetime
+# s = "19/03/2026 14:30"
+# dt = datetime.strptime(s, "%d/%m/%Y %H:%M")
+# print(dt.year, dt.month, dt.day) #2026 3 19
+
+
+# from datetime import timedelta
+# delta = timedelta(days=2, hours=3, seconds=30)
+# print(delta.days)
+# print(delta.seconds)
+# print(delta.total_seconds())
+
+# import time
+# t = time.localtime()
+# print(type(t).__name__)
+# print(t.tm_wday)   # assuming today is Wednesday
+
+# import time
+# print(type(time.time())) #float
+
+
+# import calendar
+# print(calendar.weekday(2026, 3, 19)) #3
+# print(calendar.THURSDAY) #3
+# print(calendar.isleap(2026)) #False
+
+
+# import calendar
+# first_day, num_days = calendar.monthrange(2024, 2)
+# print(first_day, num_days)
+# 
+
+#W10 D3 T5
+# class A:
+#     count = 0
+#     def __init__(self):
+#         A.count += 1
+
+# a1 = A()
+# a2 = A()
+# a3 = A()
+# print(A.count)
+# print(a1.count)
+
+
+# print(bool(""))
+# print(bool("0"))
+# print(bool([]))
+# print(bool([0]))
+
+
+# x = (1, 2, 3)
+# y = x
+# y += (4,)
+# print(x)
+# print(y)
+
+
+# a, *b, c = [1, 2, 3, 4, 5]
+# print(type(b)) #list
+# print(b) [2, 3, 4]
+# print(c) #5
+
+# xs = [1, 2, 3]
+# ys = xs[:]
+# ys[0] = 99
+# print(xs[0])
+# print(ys[0])
+
+
+
+#CD Python - task 1
+
+'''Na podstawie listy studentów students oraz 3 list z wynikami kartkówek, 
+stwórz słownik results, w którym:
+
+kluczem będzie imię i nazwisko studenta
+wartością będzie lista wyników z trzech kartkówek'''
+
+
+# students = ["Anna Kowalska", "Roman Nowak", "Aleksandra Buch", "Marek Zieliński"]
+
+# quiz1 = [8, 5, 9, 6]
+# quiz2 = [7, 6, 8, 7]
+# quiz3 = [9, 7, 10, 8]
+
+# def organize_exams(students=students, quiz1=quiz1, quiz2=quiz2, quiz3=quiz3):
+#     ### wpisz kod poniżej
+
+#         results = {student : [] for student in students}
+#         index = 0
+#         for result in results:
+#             results[result].append(quiz1[index])
+#             results[result].append(quiz2[index])
+#             results[result].append(quiz3[index])
+#             index += 1
+#         print(results)
+
+#     #### wpisz kod powyżej
+#         return results
+
+
+# print(organize_exams(students, quiz1, quiz2, quiz3))
+
+
+
+
+#CD Python - task 2
+'''
+Stwórz listę wszystkich lat przestępnych pomiędzy 2000 a 3000 rokiem (włącznie)
+i przypisz ją do zmiennej years.
+
+Rok jest przestępny, jeżeli dzieli się przez 4, 
+z wyłączeniem lat podzielnych przez 100, ale nie przez 400 .
+'''
+#I know the purpose of this excercise is to calculate it manually, but I'd also like to practice calendar for PCAP
+# years = []
+# import calendar
+# for year in range(2000, 3001, 4):
+#     if calendar.isleap(year):
+#         years.append(year)
+
+# print(years)
+
+
+
+
+#CD Python - task 3
+
+
+'''
+Policz ile razy sekwencja znaków short_string pojawia się w stringu long_string. 
+Wynik przypisz do zmiennej result. Jeżeli się nie pojawia, przypisz 0.
+
+Sekwencje mogą się na siebie nakładać.
+'''
+
+# short_string = "aa"
+# long_string = "aaaa"
+
+# def find_inside(short_string=short_string, long_string=long_string):
+        
+#         len_short = len(short_string)
+#         len_long = len(long_string)
+#         result = 0
+#         for i in range(0, len_long - len_short + 1):
+#             if long_string[i:i+len_short] == short_string:
+#                 result += 1
+
+        
+
+
+#         return result
+
+# print(find_inside(short_string, long_string))
+
+#Really struggled with this task btw, as this was quite unintuitive + needed to handle edge cases
+
+
+#W10 D4 - PCAP review tasks and gaps focus
+
+# t = (1, 2)
+# t += (3,)
+# print(id(t) == id((1, 2, 3)))
+
+
+# def f(t):
+#     t += (99,)
+
+# x = (1, 2)
+# f(x)
+# print(x)
+
+
+# try:
+#     raise TypeError("bad type")
+# except TypeError as e:
+#     print(e)
+    
+    
+# e = OSError(2, "No such file or directory")
+# print(str(e))
+
+# try:
+#     1 / 0
+# except ZeroDivisionError as e:
+#     print(type(e).__name__)
+#     print(str(e))
+
+
+# import os
+# print(os.path.split('/home/user/project/main.py'))
+
+# import os
+# print(os.path.exists('/this/path/does/not/exist/xyz123'))
+
+# with open('test.txt', 'w') as f:
+#     f.writelines(['line1', 'line2', 'line3']) #IT DOES NOT ADD LINE SEPARATORS BY DEFAULT!
+
+# with open('test.txt', 'r') as f:
+#     print(len(f.readlines())) #SO THAT WOULD BE 1!
+
+
+# import os
+# p = os.path.join('data', 'raw', 'prices.csv')
+# print(os.path.basename(p))
+# print(os.path.dirname(p))
+
+#W4 D4 T5
+
+# a, *b, c = [1]
+# print(a, b, c) #ValueError - expected at least 2 values, got 1
+
+# import calendar
+# print(calendar.WEDNESDAY) #Monday is 0
+# print(calendar.weekday(2026, 1, 1)) #This is Thursday
+
+# 2
+# 3
+
+
+# def f():
+#     pass
+
+# print(bool(f())) #False
+
+
+#CD Python - Task 1
+'''
+Znajdź w zmiennej text numer PESEL i przypisz go jako string do zmiennej pesel. 
+Pesel składa się dokładnie z 11 cyfr, w tekście znajduje się tylko jeden taki numer.
+'''
+
+# text = "System raportowy generuje dzienne zestawienia klientów, identyfikatory zamówień takie jak ORD88231, ORD88232, numery telefonów 501223344, 602334455, różne kody referencyjne AX9921, BX7732, CX8811 oraz losowe liczby jak 4412, 998877, 234234, 887766, identyfikatory użytkowników USER44821, USER99812, USER77123, dane archiwalne z systemu billingowego zawierające rekordy operacyjne, dodatkowe liczby jak 77221133, 44556677, 99331122, oraz różne ciągi znaków jak AB1234XY, GH8821JK, TT7732AA, 123TT773264 a także informacje o kliencie Jan Malinowski z Warszawy którego identyfikator w bazie to CL99123 oraz numer PESEL 91052734567 zapisany w systemie centralnym obok innych danych jak numer sprawy SP99211, SP99212, SP99213, identyfikatory sesji SESSION8811, SESSION9912, SESSION1112 oraz różne liczby jak 121212, 343434, 565656, 787878, 909090 i inne dane systemowe używane do raportowania."
+# entities = text.split()
+
+# for entity in entities:
+#     if len(entity) == 11 and entity.isnumeric():
+#         pesel = entity
+
+
+#CD Python - Task 2
+
+'''
+Napisz kod, który porządkuje string dirty_string i zapisuje wynik w zmiennej clean_string.
+
+Etapy przekształcenia:
+
+posortuj litery alfabetycznie
+każdą literę zapisz raz, a następnie liczbę razy, ile pojawiła się w stringu.
+Przykład
+daccdacb → a2b1c3d2
+
+
+'''
+
+# dirty_string = "daccdacb"
+
+# def clean_dirty_string(dirty_string=dirty_string):
+#     ### wpisz kod poniżej
+
+#     letters = sorted([letter for letter in dirty_string])
+#     letters_nums = {}
+#     for letter in letters:
+#         if letter not in letters_nums:
+#             letters_nums[letter] = 1
+#         else:
+#             letters_nums[letter] += 1
+
+#     clean_string = str()
+#     for letter, value in letters_nums.items():
+#         clean_string += f'{letter}{value}'
+#     #### wpisz kod powyżej
+#     return clean_string
+
+
+# print(clean_dirty_string(dirty_string))
+
+#CD Python - Task 3
+
+'''
+W liście numbers znajdź największą różnicę między dwoma kolejnymi elementami
+i przypisz ją do zmiennej result.
+'''
+
+# numbers = [4, 9, 2, 15, 6, 20]
+
+# def max_difference(numbers=numbers):
+#     ### wpisz kod poniżej
+
+#     result = 0
+#     for i in range(len(numbers) - 1):
+#         difference = abs(numbers[i] - numbers[i+1])
+#         if difference > result:
+#             result = difference
+#     #### wpisz kod powyżej
+#     return result
+
+# print(max_difference(numbers))
+
+
+#CD Python - Task 4
+
+'''
+Pomijaj sumowanie liczb podzielnych przez podzielnych przez 3.
+
+Przerwij wykonywanie pętli, gdy suma przekroczy wartość 1000.
+'''
+
+# suma = 0
+# for i in range(1000):
+#     if i % 3 == 0:
+#         continue
+#     elif suma < 1000:
+#         suma += i
+#     else:
+#         break
+
+
+#CD Python - Task 5
+
+'''
+Napisz kod, który odwraca wielkość liter w stringu letters. 
+Małe litery zamień na wielkie, a wielkie na małe. 
+Znaki, które nie są literami alfabetu, pozostaw bez zmian. 
+Wynik zapisz w zmiennej result.
+'''
+
+# letters = "aBDc"
+
+# def swap_cases(letters=letters):
+#     ### wpisz kod poniżej
+
+#     result = ''
+#     for letter in letters:
+#         if letter.isalpha():
+#             if letter.isupper():
+#                 letter = letter.lower()
+#             elif letter.islower():
+#                 letter = letter.upper()
+#         result += letter
+
+#     #### wpisz kod powyżej
+#     return result
+
+
+# print(swap_cases(letters))
+
+
+#W10 D5 T1
+'''
+Write a function `flatten(nested: list) -> list` that takes a list which may contain other lists (one level deep only) and returns a flat list of all elements.
+'''
+
+
+# def flatten(nested: list) -> list:
+    
+#     flattened_list = []
+#     for element in nested:
+#         if isinstance(element, (int, float)):
+#             flattened_list.append(element)
+#         else:
+#             for el in element:
+#                 flattened_list.append(el)
+            
+#     print(flattened_list)
+#     return flattened_list
+    
+
+# flatten([1, [2, 3], 4, [5, 6]])  # → [1, 2, 3, 4, 5, 6]
+# flatten([1, 2, 3])               # → [1, 2, 3]
+# flatten([[1], [2], [3]])  
+
+
+#W10 D5 T2
+
+'''
+Write a class `BoundedList` that behaves like a list but never exceeds a fixed max size. 
+When a new item is added and the list is full, the oldest item is removed (FIFO).
+'''
+
+# class BoundedList:
+    
+#     def __init__(self, max_size: int):
+#         self.max_size = max_size
+#         self._items: list[float] = []
+    
+#     @property
+#     def values(self) -> list:
+#         return list(self._items) #returning a copy, so there's no way to mutate the list from the outside
+    
+#     @property
+#     def average(self) -> float:
+#         if not self._items:
+#             return 0.0
+#         return sum(self._items) / len(self._items)
+    
+#     def __len__(self) -> int:
+#         return len(self._items)
+    
+#     def add(self, item: float) -> None:
+#         if self.__len__() == self.max_size:
+#             del self._items[0]
+#         self._items.append(item)
+            
+
+# bl = BoundedList(max_size=3)
+# bl.add(1)
+# bl.add(2)
+# bl.add(3)
+# bl.add(4)      # drops 1
+# print(bl.values)   # [2, 3, 4]
+# print(len(bl))     # 3
+# print(bl.average)
+
+#W10 D5 T4
+'''
+Write the corrected version of each. 
+Identify what is wrong first (one sentence), then fix it.
+'''
+
+
+# def running_average(numbers):
+#     if not numbers:
+#         return 0.0
+#     total = sum(numbers)
+#     return total / len(numbers)
+
+# print(running_average([5, 3, 2]))
+
+
+
+# class Stack:
+#     def __init__(self):
+#         self.items = []
+    
+#     def push(self, item):
+#         self.items.append(item)
+
+#     def pop(self):
+#         return self.items.pop()
+
+# s1 = Stack()
+# s2 = Stack()
+# s1.push(1)
+# print(s2.items)  # expected: []
+
+
+# import os
+
+# def find_csvs(folder: str) -> list:
+#     try:
+#         cvs = [f for f in os.listdir(folder) if f.endswith('.csv')]
+#         return cvs
+#     except FileNotFoundError as e:
+#         print(f'FileNotFoundError: {str(e)}')
+#     except Exception as e:
+#         print(f'Unhandled exception: {str(e)}')
+
+# files = find_csvs('nonexistent_folder')
+# print(files)
+
+
+#W10 D5 T5
+#Imported real OHLCV M1 data for FDAX with bid/ask volumes + vwap into data/ folder (also put it in gitignore, so it won't be visible in the repo)
+#Tested loading & verifying data in main - everything went well.
+
+#W10 D5 T6
+# I've ran the strategy on 216k rows with real FDAX data, with a very simple open/close conditions.
+# Test worked properly, I think.
+
+# The next steps would be:
+
+# 1. to implement more sophisticated strategy conditions, maybe add a datetime as one of the conditions of generating a signal.
+# 2. It would also be great to figure out a way to then simulate testing more than one strategy.
+# 3. After we're done with running two strategies (a mini stress-test of the real purpose of this and combining the logic of more than one strategy in the code to still look neat), I have an idea of how we can simulate portfolio performance. We could maybe create a new class for that, or maybe not - that depends.
+
+# We could take the datetime and R/profit performance of a given trade, and save it in a df, or wherever.
+# Then we would do that for every tested strategy, and after every strategy has been tested, we would then take these performance/profit rows with datetimes and sort them by their datetime. We could then simulate portfolio's performance, extract more things like Sharpe/Profit Factor, maybe run Montecarlo simulations etc.
+
+# And it all would work without async and complex logic - I think it's a good idea.
