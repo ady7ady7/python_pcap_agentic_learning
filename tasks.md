@@ -18,6 +18,21 @@ Requirements:
 - Type hints required
 - No imports
 
+def flatten(nested: list) -> list:
+    
+    flattened_list = []
+    for element in nested:
+        if isinstance(element, (int, float)):
+            flattened_list.append(element)
+        else:
+            for el in element:
+                flattened_list.append(el)
+            
+    return flattened_list
+
+Not sure if this is the most Pythonic way, but it works perfectly fine!
+If there's a smarter, more Pythonic way, let me know.
+
 ---
 
 ## Task 2 — Write a class from scratch: `BoundedList`
@@ -41,6 +56,30 @@ Requirements:
 - `__len__` returning current size
 - `average() -> float` returning mean of current values (return 0.0 if empty)
 - Type hints throughout
+
+class BoundedList:
+    
+    def __init__(self, max_size: int):
+        self.max_size = max_size
+        self._items: list[float] = []
+    
+    @property
+    def values(self) -> list:
+        return list(self._items)
+    
+    @property
+    def average(self) -> float:
+        return sum(self._items) / len(self._items)
+    
+    def __len__(self) -> int:
+        return len(self._items)
+    
+    def add(self, item: float) -> None:
+        if self.__len__() == self.max_size:
+            del self._items[0]
+        self._items.append(item)
+
+
 
 ---
 
@@ -78,6 +117,20 @@ def running_average(numbers):
     return total / len(numbers)
 
 print(running_average([]))
+
+
+We're correctly adding a number to total, but we're only calculating the running average as we finish
+
+
+def running_average(numbers):
+    total = 0
+    length = 0
+    for n in numbers:
+        length += 1
+        total += n
+        moving_avg = total / length
+    return moving_avg
+
 ```
 
 **Snippet B:**
@@ -95,6 +148,20 @@ s1 = Stack()
 s2 = Stack()
 s1.push(1)
 print(s2.items)  # expected: []
+
+Items should be an instance variable, not a Class variable.
+It will make every instance of this class share the same list of items.
+
+class Stack:
+    def __init__(self):
+        self.items = []
+    
+    def push(self, item):
+        self.items.append(item)
+
+    def pop(self):
+        return self.items.pop()
+
 ```
 
 **Snippet C:**
@@ -106,6 +173,27 @@ def find_csvs(folder: str) -> list:
 
 files = find_csvs('nonexistent_folder')
 print(files)
+
+Unhandled exception.
+
+import os
+
+def find_csvs(folder: str) -> list:
+    try:
+        cvs = [f for f in os.listdir(folder) if f.endswith('.csv')]
+        return cvs
+    except FileNotFoundError as e:
+        print(f'FileNotFoundError: {str(e)}')
+    except Exception as e:
+        print(f'Unhandled exception: {str(e)}')
+
+files = find_csvs('nonexistent_folder')
+print(files)
+
+We could also use try-except-else structure here, but this also works
+
+
+
 ```
 
 ---
@@ -126,6 +214,35 @@ bid_volume, ask_volume, vwap_rth, vwap_full
    - Whether `validate_data()` passes
 
 Write your output in the answers section below.
+
+DataLoader initialized.
+DataLoader(filepath = algo_backtest\data\FDAX_M1_OHLC.csv)
+Data loading succeeded
+Data loading operation ended.
+Missing values found: 10
+216932
+                 candle_open               candle_close     open     high      low    close  bid_volume  ask_volume  vwap_rth  vwap_full
+0  2025-03-10 09:00:00+01:00  2025-03-10 09:00:59+01:00  23172.0  23191.0  23164.0  23181.0         221         198  23177.51   23177.51
+1  2025-03-10 09:01:00+01:00  2025-03-10 09:01:59+01:00  23183.0  23199.0  23176.0  23192.0         149          75  23181.48   23181.48
+2  2025-03-10 09:02:00+01:00  2025-03-10 09:02:59+01:00  23189.0  23191.0  23179.0  23189.0          50          42  23181.99   23181.99
+0 23181.0
+1 23192.0
+2 23189.0
+3 23178.0
+4 23141.0
+5 23106.0
+6 23106.0
+7 23116.0
+8 23091.0
+9 23087.0
+2026-03-20 15:47:11,678 [DEBUG   ] root: Logging in main initialized.
+Starting the backtest test procedure in main.py - logging set!
+(.venv) 
+
+
+I think 10 missing values IS PERFECTLY fine for m1 candles spanning 11 months.
+
+
 
 ---
 
@@ -170,6 +287,42 @@ Logic:
 5. Return `engine`
 
 Call it from `if __name__ == '__main__'` and print `engine.strategy_report()`.
+
+
+BacktestEngine: 0 open | 206153 closed | PnL: $-18352.0
+--- VWAP Strategy (ID: 1) ---
+
+                  Trades: 206153
+                  Win Rate: 41.216960218866575%
+                  Total PnL: $-18352.00
+                  Avg R: -0.00R
+
+
+--- PORTFOLIO TOTAL  ---
+
+                  Trades: 206153
+                  Win Rate: 41.216960218866575%
+                  Total PnL: $-18352.0
+                  Avg R: -0.0R
+
+
+(.venv) 
+
+
+I've ran the strategy on 216k rows, with a very simple open/close conditions, so no wonder it worked this way hehe.
+Test worked properly, I think.
+
+The next steps would be:
+
+1. to implement more sophisticated strategy conditions, maybe add a datetime as one of the conditions of generating a signal.
+2. It would also be great to figure out a way to then simulate testing more than one strategy.
+3. After we're done with running two strategies (a mini stress-test of the real purpose of this and combining the logic of more than one strategy in the code to still look neat), I have an idea of how we can simulate portfolio performance. We could maybe create a new class for that, or maybe not - that depends.
+
+We could take the datetime and R/profit performance of a given trade, and save it in a df, or wherever.
+Then we would do that for every tested strategy, and after every strategy has been tested, we would then take these performance/profit rows with datetimes and sort them by their datetime. We could then simulate portfolio's performance, extract more things like Sharpe/Profit Factor, maybe run Montecarlo simulations etc.
+
+And it all would work without any async and complex changes - just in a kind of a simple way.
+This way the codebase will stay very clear to read, and I will be able to focus on working on data/strategies.
 
 ---
 

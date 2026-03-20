@@ -1644,6 +1644,36 @@ Task 8 expected values were wrong. Correct: 4 winners, $1050 total PnL.
 
 ---
 
+## Week 10, Day 5 - 2026-03-21
+
+**Topic:** Code writing drills + Project: VWAPStrategy + real FDAX data
+**Score:** ~82% (B)
+**Difficulty:** Not reported
+
+**Tasks Completed:**
+1. flatten() function — correct logic, missed list comprehension requirement (for loop used instead)
+2. BoundedList class — logic correct; values property returns reference not copy; average() needs empty guard; average should be method not property
+3. Timer context manager — skipped (not PCAP-relevant, agreed)
+4. Bug fixes (3 snippets) — Snippet A misdiagnosed (ZeroDivision → changed function to running avg, still crashes on empty); Snippets B and C perfect
+5. Real FDAX data load — 216k rows, 10 NaN values, pipeline confirmed working
+6. VWAPStrategy — correct inheritance and signals; missing HOLD case (close == vwap); unnecessary get_name() override
+7. run_backtest() — working end-to-end on real data; used strategy object as dict key (creative); open/close price inconsistency (open used for signal, close used for process_price)
+
+**Key notes:**
+- Project roadmap discussed: datetime RTH filtering → multi-strategy → equity curve → metrics (Sharpe, profit factor)
+- current_positions = {strategy: None} is the right architecture for multi-strategy from day one
+- 206k trades from 216k candles — no position filtering between bars (expected with VWAP on M1)
+- Trade.exit_datetime not yet stored — needed for equity curve reconstruction
+
+**Corrections:**
+- flatten: `[el for item in nested for el in ([item] if not isinstance(item, list) else item)]`
+- BoundedList.values: return `list(self._items)` not `self._items`
+- BoundedList.average: add `if not self._items: return 0.0`; make it a method not property
+- Snippet A: original bug = ZeroDivisionError on empty list; fix = guard, not rewrite to running avg
+- VWAPStrategy: add `else: signal = 'HOLD'`; remove duplicate get_name()
+
+---
+
 ## Week 10, Day 4 - 2026-03-20
 
 **Topic:** Persistent gap elimination (*b→list, tuple+=, str(e)) + module drill + PCAP simulation

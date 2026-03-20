@@ -3947,3 +3947,62 @@ Q1 ✓ ValueError. Q2-Q3 ✓ gaps closed. Q4 ✓ WEDNESDAY=2, Thursday=3. Q5-Q6 
 Trailing slash issue appeared again in simulation.
 
 **Day 5 plan:** Code-writing tasks (no ABCD), + project: load real FDAX data, implement VWAPStrategy, wire into run_backtest(), print strategy_report().
+
+---
+
+## Week 10, Day 5 - 2026-03-21
+
+**Topic:** Code writing drills + Project: VWAPStrategy + real FDAX data
+**Score: ~82% (B)**
+
+---
+
+**Task 1 — flatten() — 7/10**
+Logic correct, works for all cases. Missed the requirement: use a list comprehension (one line body). Used a for loop with .append() instead.
+Correct one-liner: `return [el for item in nested for el in ([item] if not isinstance(item, list) else item)]`
+
+**Task 2 — BoundedList — 7/10**
+Architecture correct (composition, not inheritance). Three issues:
+- `values` returns `self._items` directly (reference leak) — must return `list(self._items)` (copy)
+- `average` implemented as @property, task required `average() -> float` (method)
+- No empty guard in average — `ZeroDivisionError` on empty list
+
+**Task 3 — Timer — Skipped (agreed)**
+Context managers not on PCAP syllabus. Deferred to post-PCAP project work.
+
+**Task 4 — Bug fixes — mixed**
+- Snippet A: 4/10. Misread the bug — original crashes with ZeroDivisionError on empty input. Fix should guard for empty, not rewrite to running average. New implementation still crashes on empty (`UnboundLocalError` on `moving_avg`).
+- Snippet B: 10/10. Perfect diagnosis and fix.
+- Snippet C: 10/10. Correct. Good note on try-except-else alternative.
+
+**Task 5 — Real FDAX data — 10/10**
+216,932 rows, 10 NaN values. Pipeline confirmed working. Assessment: 10 missing in 216k M1 bars is negligible — correct call.
+
+**Task 6 — VWAPStrategy — 8/10**
+Correct inheritance, correct signals, docstrings present. Two issues:
+- Missing `else: signal = 'HOLD'` for close == vwap case → `UnboundLocalError` if triggered
+- `get_name()` override is identical to parent — delete it (dead code)
+
+**Task 7 — run_backtest() — 9/10 (execution) + strong architecture thinking**
+Working end-to-end on real 216k-row data. Using strategy object as dict key is creative and works.
+One inconsistency: signal generated on `row['open']` but `process_price` called with `data.iloc[idx]['close']` — mixing open/close. Pick one column consistently.
+
+**Roadmap analysis (honest):**
+- RTH datetime filtering: excellent, correct next step
+- Multi-strategy in parallel: architecture already correct with current_positions dict — one step away
+- Portfolio equity curve via sorted trade timestamps: sound approach, standard in backtesting
+- Sharpe/Monte Carlo: premature until equity curve is working — build foundation first
+- Needs: `exit_datetime` on Trade object for equity curve reconstruction
+
+**Week 10 Summary (all 5 days):**
+| Day | Score | Topic |
+|-----|-------|-------|
+| 1 | ~83% | Light warm-up: mutable defaults, MRO, basicConfig |
+| 2 | ~95% | Full PCAP review — exceptions, OOP, scope, generators |
+| 3 | ~84% | Mock 1 gap drill, File I/O, os, datetime/calendar |
+| 4 | ~88% | Persistent gap elimination (*b, tuple+=, str(e)) |
+| 5 | ~82% | Code writing + VWAPStrategy + real FDAX data |
+
+**Week 10 Average: ~86% (B+)**
+
+**PCAP readiness:** Strong. All major topic gaps closed across the week. Persistent triples (*b→list, tuple+=, str(e)) confirmed closed on Day 4. Exam target next weekend — achievable.

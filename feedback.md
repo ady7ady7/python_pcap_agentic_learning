@@ -1,16 +1,23 @@
-# Daily Feedback — Week 10, Day 5
+# Daily Feedback — Week 10, Day 6 (Weekend Exam Session)
 
-**Date:** 2026-03-21
+**Date:** 2026-03-22
 
-**Topic:** Code writing drills + Project: VWAPStrategy + real data run
+**Topic:** PCAP Mock Exams — Week 9 Exam A & B
 
 ---
 
-**Tasks completed:** ___ / ___
+**Exams completed:** ___ / 2
 
 **Time spent:** ___ minutes
 
 **Difficulty:** ___ / 10
+
+---
+
+## Exam Results
+
+**Exam A score:** ___ / 30
+**Exam B score:** ___ / 30
 
 ---
 
@@ -20,6 +27,9 @@
 
 
 **What tripped you up:**
+
+
+**Questions you guessed on:**
 
 
 ---
