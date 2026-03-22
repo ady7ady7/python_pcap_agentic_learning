@@ -7,6 +7,8 @@ Write your answers (letter only) in the Answers section at the bottom.
 
 ## Section 1: Modules & Packages (Q1–Q4)
 
+#sTART 18:41
+
 **Q1:** What is the output?
 ```python
 # mymod.py
@@ -23,6 +25,8 @@ print(mymod.x)
 - C) `AttributeError`
 - D) `ImportError`
 
+B
+
 **Q2:** What happens?
 ```python
 from os.path import join, exists
@@ -34,11 +38,15 @@ print(exists("/"))
 - C) `NameError`
 - D) `TypeError`
 
+B
+
 **Q3:** Which statement about `__init__.py` is TRUE?
 - A) It is required in Python 3 to make a directory a package
 - B) It is optional in Python 3 but its presence controls what `from package import *` exports
 - C) It runs only when `from package import *` is called, not on regular import
 - D) It can only contain `__all__` assignments
+
+A
 
 **Q4:** What is the output?
 ```python
@@ -49,6 +57,8 @@ print(type(sys.path))
 - B) `<class 'list'>`
 - C) `<class 'set'>`
 - D) `<class 'dict'>`
+
+B
 
 ---
 
@@ -65,6 +75,9 @@ print(s.index("xyz"))
 - C) `ValueError`, `ValueError`
 - D) `None`, `ValueError`
 
+A
+
+
 **Q6:** What is the output?
 ```python
 s = "  hello  "
@@ -76,6 +89,9 @@ print(repr(s.lstrip()))
 - C) `'hello  '`, `'hello'`
 - D) `'hello'`, `'hello'`
 
+A
+
+
 **Q7:** What is the output?
 ```python
 s = "abcabc"
@@ -85,6 +101,8 @@ print(s.replace("a", "X", 1))
 - B) `Xbcabc`
 - C) `abcXbc`
 - D) `XbcXbc` — replaces all occurrences
+
+B
 
 ---
 
@@ -106,6 +124,8 @@ finally:
 - C) `zero`, `else`, `finally`
 - D) `finally`
 
+A
+
 **Q9:** What is the output?
 ```python
 try:
@@ -120,11 +140,15 @@ print(e)
 - C) `NameError: name 'e' is not defined`
 - D) `None`
 
+A
+
 **Q10:** Which is the correct hierarchy?
 - A) `Exception` → `BaseException` → `ArithmeticError` → `ZeroDivisionError`
 - B) `BaseException` → `Exception` → `ArithmeticError` → `ZeroDivisionError`
 - C) `BaseException` → `Exception` → `ZeroDivisionError` → `ArithmeticError`
 - D) `Exception` → `ArithmeticError` → `BaseException` → `ZeroDivisionError`
+
+B
 
 **Q11:** What is the output?
 ```python
@@ -140,6 +164,8 @@ print(f())
 - B) `2`
 - C) `RuntimeError`
 - D) `1` then `2`
+
+B
 
 ---
 
@@ -164,6 +190,8 @@ print(b.x, b.y)
 - C) `None 2`
 - D) `1 None`
 
+B
+
 **Q13:** What is the output?
 ```python
 class A:
@@ -184,6 +212,8 @@ print(C().greet())
 - C) `ABC`
 - D) `AttributeError`
 
+A
+
 **Q14:** What is the output?
 ```python
 class Foo:
@@ -197,11 +227,15 @@ print(f.__x)
 - C) `AttributeError`
 - D) `NameError`
 
+C
+
 **Q15:** What does `__slots__` do?
 - A) Makes all attributes read-only
 - B) Restricts instances to only the declared attributes, saving memory
 - C) Hides attributes from `dir()`
 - D) Prevents inheritance
+
+we didn't have that, i discard that question. And it's not PCAP relevant.
 
 **Q16:** What is the output?
 ```python
@@ -226,6 +260,7 @@ print(a.x)
 - C) `AttributeError`
 - D) `1`
 
+B
 ---
 
 ## Section 5: Generators & Iterators (Q17–Q19)
@@ -248,6 +283,8 @@ print(next(g))
 - C) `1`, `2`, raises `GeneratorExit`
 - D) `1`, `2`, `None`
 
+we didn't have close, not PCAP relevant.... I discard the question
+
 **Q18:** What is the output?
 ```python
 xs = [1, 2, 3]
@@ -260,6 +297,8 @@ print(list(it))
 - B) `1`, `[2, 3, 4]`
 - C) `1`, `[1, 2, 3, 4]`
 - D) `StopIteration`
+
+B
 
 **Q19:** What is the output?
 ```python
@@ -276,6 +315,8 @@ print([next(c) for _ in range(3)])
 - C) `[0, 1, 2]`
 - D) `RuntimeError`
 
+A
+
 ---
 
 ## Section 6: Functional Programming (Q20–Q22)
@@ -290,6 +331,8 @@ print([f(10) for f in fns])
 - C) `[12, 12, 12]`
 - D) `TypeError`
 
+B
+
 **Q21:** What is the output?
 ```python
 from functools import reduce
@@ -300,6 +343,8 @@ print(result)
 - B) `24`
 - C) `[1, 2, 6, 24]`
 - D) `TypeError`
+
+B
 
 **Q22:** What is the output?
 ```python
@@ -313,6 +358,8 @@ print(doubled)
 - C) `[1, 3, 5]`
 - D) `[-4, -8]`
 
+A
+
 ---
 
 ## Section 7: Logging (Q23–Q25)
@@ -322,6 +369,8 @@ print(doubled)
 - B) `20`
 - C) `30`
 - D) `40`
+
+C
 
 **Q24:** What is the output? (Count lines printed to stderr/stdout)
 ```python
@@ -340,6 +389,9 @@ logger.warning("warn")
 - C) 2 lines — `debug`, `warn`
 - D) 1 line — `debug`
 
+B
+Do not focus on it if it's wrong - it's not even PCAP relevant and PCAP is priority now
+
 **Q25:** What is the output?
 ```python
 import logging
@@ -355,6 +407,9 @@ logging.error("error")
 - C) Only `debug`
 - D) Nothing — no handlers configured
 
+A
+Do not focus on it if it's wrong - it's not even PCAP relevant and PCAP is priority now
+
 ---
 
 ## Section 8: File I/O & errno (Q26–Q28)
@@ -365,11 +420,15 @@ logging.error("error")
 - C) `IOError` only applies to file operations, not network
 - D) `IOError` does not exist in Python 3
 
+A
+
 **Q27:** What does `readinto(buf)` return?
 - A) A new `bytes` object with the file contents
 - B) A new `bytearray` with the file contents
 - C) The number of bytes read (fills `buf` in-place)
 - D) `None` — the result is accessible only via `buf`
+
+C
 
 **Q28:** What is the output?
 ```python
@@ -382,6 +441,8 @@ print(data[0])
 - B) `[None, None, None]`, `255`
 - C) `[b'\\x00', b'\\x00', b'\\x00']`, `b'\\xff'`
 - D) `TypeError`
+
+C
 
 ---
 
@@ -405,6 +466,8 @@ print(outer())
 - C) `mutated`
 - D) `UnboundLocalError`
 
+C
+
 **Q30:** What is the output?
 ```python
 def make_adder(n):
@@ -419,6 +482,9 @@ print(add5(3), add10(3))
 - C) `13 13`
 - D) `TypeError`
 
+A
+
+#18:50 - end
 ---
 
 ## Answers

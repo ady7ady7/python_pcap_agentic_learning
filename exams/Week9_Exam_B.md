@@ -3,6 +3,8 @@
 
 Write your answers (letter only) in the Answers section at the bottom.
 
+
+#Star 19:15
 ---
 
 ## Section 1: Modules & Packages (Q1–Q4)
@@ -19,6 +21,8 @@ print(os.sep == os.sep)
 - C) `ImportError`
 - D) `AttributeError`
 
+B
+
 **Q2:** What happens when you execute:
 ```python
 from math import sqrt as s, pi as p
@@ -29,11 +33,15 @@ print(s(p))
 - C) `TypeError`
 - D) `1.0`
 
+A
+
 **Q3:** Which of these correctly defines `__all__` to export only `foo` and `bar`?
 - A) `__all__ = ("foo", "bar")`
 - B) `__all__ = {foo, bar}`
 - C) `__all__ = [foo, bar]`
 - D) `export = ["foo", "bar"]`
+
+C
 
 **Q4:** What is the output?
 ```python
@@ -45,6 +53,8 @@ print(sys.path[0])
 - B) `/tmp/mylibs`
 - C) `None`
 - D) `AttributeError`
+
+B
 
 ---
 
@@ -61,6 +71,9 @@ print(s[-6:-1])
 - C) `orld!`, `World`
 - D) `World`, `Worl`
 
+A
+
+
 **Q6:** What is the output?
 ```python
 s = "one,two,,three"
@@ -73,6 +86,8 @@ print(parts[2])
 - C) `4`, `three`
 - D) `3`, `''`
 
+B
+
 **Q7:** What is the output?
 ```python
 names = ["Alice", "Bob", "Charlie"]
@@ -82,6 +97,8 @@ print(", ".join(names))
 - B) `Alice, Bob, Charlie`
 - C) `['Alice', 'Bob', 'Charlie']`
 - D) `TypeError`
+
+B
 
 ---
 
@@ -106,23 +123,32 @@ except ValueError:
 - C) `caught`, `outer`
 - D) `ValueError: v`
 
+D
+
 **Q9:** What is the output?
 ```python
 try:
-    raise RuntimeError("r") from ValueError("v")
-except RuntimeError as e:
-    print(type(e.__cause__).__name__)
+    raise ValueError("v")
+except Exception:
+    print("Exception")
+except ValueError:
+    print("ValueError")
 ```
-- A) `NoneType`
-- B) `ValueError`
-- C) `RuntimeError`
-- D) `AttributeError`
+- A) `ValueError`
+- B) `Exception`
+- C) Both `Exception` and `ValueError`
+- D) `SyntaxError`
+
+B
+
 
 **Q10:** Which exception type is NOT a subclass of `Exception`?
 - A) `ValueError`
 - B) `SystemExit`
 - C) `RuntimeError`
 - D) `OSError`
+
+B
 
 **Q11:** What is the output?
 ```python
@@ -135,6 +161,8 @@ except (ValueError, TypeError) as e:
 - B) `TypeError — invalid literal for int() with base 10: 'abc'`
 - C) `Exception — invalid literal for int() with base 10: 'abc'`
 - D) `ValueError — abc`
+
+B
 
 ---
 
@@ -164,42 +192,40 @@ print(D().method())
 - C) `ABC`
 - D) `AB` — C is never called
 
+C
+
 **Q13:** What is the output?
 ```python
-class Counter:
-    instances = 0
-
-    def __init__(self):
-        Counter.instances += 1
-
-    def __del__(self):
-        Counter.instances -= 1
-
-c1 = Counter()
-c2 = Counter()
-del c1
-print(Counter.instances)
+import random
+a = random.randint(0, 100)
+b = random.randrange(10, 100, 3)
+c = random.choice((0, 100, 3))
 ```
+Which of the following values is **impossible** for `c`?
 - A) `0`
-- B) `1`
-- C) `2`
-- D) `AttributeError`
+- B) `3`
+- C) `6`
+- D) `100`
+
+C
 
 **Q14:** What is the output?
 ```python
 class A:
-    def __eq__(self, other):
-        return True
+    x = 1
+    def __init__(self):
+        self.y = 2
 
-a = A()
-b = A()
-print(a == b)
-print({a, b})
+print(hasattr(A, 'x'))
+print(hasattr(A, 'y'))
 ```
-- A) `True`, `{<A>, <A>}`
-- B) `True`, `{<A>}`
-- C) `True`, `TypeError`
-- D) `True`, then `TypeError: unhashable type`
+- A) `True`, `True`
+- B) `True`, `False`
+- C) `False`, `True`
+- D) `False`, `False`
+
+B
+
 
 **Q15:** What is the output?
 ```python
@@ -219,6 +245,8 @@ print([f])
 - B) `a Foo`, `Foo()`, `[Foo()]`
 - C) `Foo()`, `Foo()`, `[Foo()]`
 - D) `a Foo`, `a Foo`, `[a Foo]`
+
+B
 
 **Q16:** What is the output?
 ```python
@@ -241,6 +269,8 @@ print(c.r)
 - C) `AttributeError`
 - D) `NotImplementedError`
 
+A
+
 ---
 
 ## Section 5: Generators & Iterators (Q17–Q19)
@@ -260,6 +290,8 @@ print(list(g))
 - C) `function`, `[]`
 - D) `generator`, `[None]`
 
+C
+
 **Q18:** What is the output?
 ```python
 def gen():
@@ -273,6 +305,9 @@ print(list(gen()))
 - C) `[0, 1, 2, 3, 4, 5]`
 - D) `TypeError`
 
+
+B
+
 **Q19:** What is the output?
 ```python
 it = iter([10, 20, 30])
@@ -285,6 +320,8 @@ print(next(it, "done"))
 - B) `10`, `20`, `30`, `done`
 - C) `10`, `20`, `30`, `None`
 - D) `10`, `20`, `done`, `done`
+
+B
 
 ---
 
@@ -302,6 +339,9 @@ print([f(0) for f in fns])
 - B) `[2, 2, 2]`
 - C) `[0, 0, 0]`
 - D) `TypeError`
+
+B
+
 
 **Q21:** What is the output?
 ```python
@@ -321,6 +361,9 @@ print(c(), c(), c())
 - C) `1 1 1`
 - D) `UnboundLocalError`
 
+B
+
+
 **Q22:** What is the output?
 ```python
 result = list(map(str, filter(lambda x: x % 2 == 0, range(6))))
@@ -331,44 +374,44 @@ print(result)
 - C) `[0, 2, 4]`
 - D) `['0', '1', '2', '3', '4', '5']`
 
+A
+
 ---
 
-## Section 7: Logging (Q23–Q25)
+## Section 7: Standard Streams & chr/ord (Q23–Q25)
 
-**Q23:** A named logger `"app"` has `propagate=True` (default) and no handlers. What happens when `logger.warning("warn")` is called and `basicConfig` was called with `level=WARNING`?
-- A) Nothing — named loggers with no handlers never print
-- B) `warn` is printed by the root handler
-- C) `warn` is printed twice — once by root, once by LastResort
-- D) `AttributeError` — no handler configured
+**Q23:** What does `sys.stderr` output to by default?
+- A) A log file
+- B) `/dev/null`
+- C) The screen (terminal), same as stdout
+- D) The keyboard input buffer
+
+C
+
 
 **Q24:** What is the output?
 ```python
-import logging
-
-logger = logging.getLogger("app")
-logger.setLevel(logging.DEBUG)
-
-h1 = logging.StreamHandler()
-h1.setLevel(logging.DEBUG)
-logger.addHandler(h1)
-
-h2 = logging.StreamHandler()
-h2.setLevel(logging.ERROR)
-logger.addHandler(h2)
-
-logger.warning("warn")
+print(chr(ord('a') + 3))
 ```
-How many lines are printed?
-- A) 0
-- B) 1
-- C) 2
-- D) `AttributeError`
+- A) `'a'`
+- B) `'c'`
+- C) `'d'`
+- D) `100`
 
-**Q25:** Which formatter placeholder gives the logger name?
-- A) `%(name)s`
-- B) `%(logger)s`
-- C) `%(module)s`
-- D) `%(funcName)s`
+C
+
+**Q25:** What is the output?
+```python
+# module: utils.py
+print(__name__)
+```
+When run as `python utils.py`:
+- A) `utils`
+- B) `utils.py`
+- C) `__main__`
+- D) `__utils__`
+
+C
 
 ---
 
@@ -384,11 +427,17 @@ print(errno.ENOENT)
 - C) `13`
 - D) `9`
 
+B
+
+
 **Q27:** Which mode string opens a file for exclusive creation (fails if file exists)?
 - A) `'w'`
 - B) `'a'`
 - C) `'x'`
 - D) `'r+'`
+
+C
+
 
 **Q28:** What is the output?
 ```python
@@ -400,6 +449,8 @@ print(ba.decode())
 - B) `Hello`
 - C) `TypeError`
 - D) `ValueError`
+
+B
 
 ---
 
@@ -421,6 +472,9 @@ print([f() for f in fns])
 - C) `[0, 0, 0]`
 - D) `[None, None, None]`
 
+B
+
+
 **Q30:** What is the output?
 ```python
 def f():
@@ -438,6 +492,10 @@ f()
 - B) `10`, `20`
 - C) `5`, `10`
 - D) `10`, `10`
+
+B
+
+#19:26 - finsihed
 
 ---
 

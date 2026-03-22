@@ -1813,3 +1813,50 @@ Both exams passed comfortably above 70%. Core Week 6 content (iterators, generat
 
 **Status:** Both exams PASS (70% threshold). Exam A = strong. Exam B = gap exposure.
 
+
+---
+
+## Week 9 Exams — 2026-03-22
+
+### Exam A — Score: 22/26 answered = 84.6% (4 wrong)
+
+| Q | Topic | Your answer | Correct | Notes |
+|---|---|---|---|---|
+| Q2 | `os.path.exists("/")` | B (False) | A (True) | Root path always exists |
+| Q3 | `__init__.py` in Python 3 | A (required) | B (optional, controls `__all__`) | Python 3 = optional; namespace packages exist without it |
+| Q26 | `IOError is OSError` | A (subclass) | B (same class) | They are aliases — `IOError is OSError` evaluates to `True` |
+| Q28 | `bytearray(3)` elements | C (bytes objects) | A (integers) | `list(bytearray(3))` → `[0, 0, 0]` — elements are ints |
+
+Q15 (`__slots__`) and Q17 (`generator.close()`) discarded — non-PCAP or not covered.
+Note: Q17 `generator.close()` IS PCAP syllabus — revisit.
+
+---
+
+### Exam B — Score: 24/30 = 80% (6 wrong)
+
+| Q | Topic | Your answer | Correct | Notes |
+|---|---|---|---|---|
+| Q3 | `__all__` definition | C `[foo, bar]` | A `("foo", "bar")` | Must be strings — `[foo, bar]` without quotes = variable refs → NameError |
+| Q8 | bare `raise` + outer except | D | C | bare `raise` re-raises; outer `except` catches, both print |
+| Q11 | `int("abc")` exception type | B (TypeError) | A (ValueError) | String that can't convert → ValueError, not TypeError |
+| Q12 | MRO diamond `D(B,C)` trace | C (ABC) | B (ACB) | MRO: D→B→C→A. super() in B calls C, not A. Result: A+C+B = ACB |
+| Q16 | ABC without `area()` implemented | A (5) | B (TypeError) | Circle doesn't implement abstract `area()` → can't instantiate |
+| Q17 | `yield` with early `return` | C (function) | A (generator) | Any `yield` anywhere = generator function, even unreachable |
+
+---
+
+### Combined Weekend Average: 82%
+
+**New gaps identified:**
+- `yield` + early `return` = still a generator
+- ABC: ALL abstract methods must be implemented to instantiate
+- bare `raise` re-raises into outer handler
+- MRO trace accuracy under pressure — `ACB` not `ABC`
+- `__init__.py` optional in Python 3 (namespace packages)
+- `IOError is OSError` = True (same class, not subclass)
+
+**Carry-forward gaps (still active):**
+- `generator.close()` — PCAP relevant, not yet drilled
+- `__all__` must contain strings, not bare names
+
+**Status:** Both exams above 70% threshold. Gaps identified — target in final week before exam.
