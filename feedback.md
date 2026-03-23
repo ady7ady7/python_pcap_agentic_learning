@@ -1,23 +1,16 @@
-# Daily Feedback — Week 10, Day 6 (Weekend Exam Session)
+# Daily Feedback — Week 11, Day 2
 
-**Date:** 2026-03-22
+**Date:** 2026-03-24
 
-**Topic:** PCAP Mock Exams — Week 9 Exam A & B
+**Topic:** File I/O | os module | datetime | Generators | Gap closure
 
 ---
 
-**Exams completed:** ___ / 2
+**Tasks completed:** ___ / 15
 
 **Time spent:** ___ minutes
 
 **Difficulty:** ___ / 10
-
----
-
-## Exam Results
-
-**Exam A score:** ___ / 30
-**Exam B score:** ___ / 30
 
 ---
 
@@ -27,9 +20,6 @@
 
 
 **What tripped you up:**
-
-
-**Questions you guessed on:**
 
 
 ---

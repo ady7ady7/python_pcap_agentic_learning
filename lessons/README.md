@@ -252,4 +252,18 @@ This directory contains all theoretical lessons organized by week and topic.
 
 ---
 
+## Week 11: MRO & super() Deep Dive
+
+### [MRO & `super()` — How the Chain Actually Works](week11_mro_super.md)
+- Why `super()` means "next in MRO", not "my parent"
+- Full step-by-step trace of diamond inheritance `D(B, C)`
+- Call order vs return order — why the stack unwinds in reverse
+- append (`super().f() + "X"`) vs prepend (`"X" + super().f()`) — different outputs
+- `__init__` chain — why A runs once in a diamond (not twice)
+- What happens when one class breaks the chain (no `super()` call)
+- Linear vs diamond chain comparison
+- **PCAP Traps:** `super()` uses MRO of actual object, silent chain break, `ACB` not `ABC`
+
+---
+
 **Navigation Tip:** Use your IDE's file search (Ctrl+P / Cmd+P) to quickly jump to specific lessons!

@@ -4006,3 +4006,90 @@ One inconsistency: signal generated on `row['open']` but `process_price` called 
 **Week 10 Average: ~86% (B+)**
 
 **PCAP readiness:** Strong. All major topic gaps closed across the week. Persistent triples (*b→list, tuple+=, str(e)) confirmed closed on Day 4. Exam target next weekend — achievable.
+
+---
+
+## Week 10, Day 5 - 2026-03-21
+
+**Topic:** Code writing drills + VWAPStrategy + real FDAX data
+**Score:** ~82%
+
+### Task Assessment
+
+**Task 1 — flatten():** Correct. List comprehension approach clean and Pythonic.
+
+**Task 2 — BoundedList:** Needed hints. Initial approach tried inheriting from `list` while also managing `self.__values` — two conflicting models. Fixed to internal `_items: list[float]`. Also caught `self.remove([0])` (searches by value) vs correct `self._items.pop(0)`. Final result correct.
+
+**Task 3 — Timer context manager:** Skipped by agreement. `__enter__`/`__exit__` not on PCAP syllabus, never drilled.
+
+**Task 4 — Bug fixes:** All 3 correct.
+- Snippet A: `running_average([])` — ZeroDivisionError, guard with `if not values: return 0.0`
+- Snippet B: mutable `items = []` class attribute — moved to `__init__` as `self.items = []`
+- Snippet C: `find_csvs` unhandled `FileNotFoundError` — wrapped in try/except
+
+**Task 5 — Real FDAX data:** Full success. 216,932 rows, 10 NaN values (acceptable for 11 months of M1 data). DataLoader pipeline confirmed working with schema-agnostic column loading.
+
+**Task 6 — VWAPStrategy:** Clean implementation. Inherits BaseStrategy correctly. BUY/SELL/HOLD logic correct. Minor: added `signal = None` guard before if/elif to avoid potential `UnboundLocalError` on HOLD path — good defensive coding.
+
+**Task 7 — run_backtest():** Exceeded task spec. Used `current_positions = {vwap_strategy: None}` dict instead of simple `current_position = None` flag — correct architectural decision enabling multi-strategy support. Pipeline ran 206k trades, confirmed working. Strategy report output clean.
+
+**Roadmap confirmed:**
+1. RTH session filtering (time-of-day condition on signals)
+2. Multi-strategy parallel testing
+3. Equity curve (trade datetime + PnL → sorted df)
+4. Metrics: Sharpe, Profit Factor, Monte Carlo
+
+---
+
+## Week 9 Weekend Exam Session - 2026-03-22/23
+
+**Exam A Score: 84.6% | Exam B Score: 80% | Combined: ~82%**
+
+### Exam A Breakdown (26 counted questions, 4 discarded as non-PCAP)
+
+Discarded by user (correct call — not on PCAP syllabus): Q15 (__slots__), Q17 (generator.close()), Q24 (logging), Q25 (logging).
+
+**Wrong answers:**
+- Q2: `os.path.exists("/")` — returns True not False. exists() checks presence, not emptiness.
+- Q3: `__init__.py` is OPTIONAL in Python 3 (namespace packages). Answer B, not A.
+- Q26: `IOError is OSError` evaluates to True — they are aliases. Answer B, not A.
+- Q28: `bytearray(3)` → `[0, 0, 0]` as integers. Answer A, not C.
+
+**Strong areas:** strings, exceptions, generators, functional, closures, scope — all correct.
+
+### Exam B Breakdown (30 questions, all PCAP-relevant after swap)
+
+**Wrong answers:**
+- Q3: `__all__ = [foo, bar]` — no quotes, variable refs → NameError. Strings required. Answer A.
+- Q8: bare `raise` re-raises; outer `except ValueError` catches it. Both `caught` and `outer` print. Answer C.
+- Q11: `int("abc")` → `ValueError` not `TypeError`. Answer A.
+- Q12: MRO `D(B,C)` → `[D,B,C,A]`. String builds on unwind: A→AC→ACB. Answer B.
+- Q16: `Circle` doesn't implement `area()` → `TypeError: Can't instantiate abstract class`. Answer B.
+- Q17: `yield` anywhere in function body → always a generator function. `return` before `yield` just makes it exhaust immediately. Answer A (`generator`, `[]`).
+
+### Week 11 Gap Targets
+1. MRO string trace (ACB not ABC) — lesson created: week11_mro_super.md
+2. ABC: must implement ALL abstract methods
+3. bare `raise` behaviour — re-raises, outer handler still fires
+4. `yield` + early `return` = still a generator
+5. `__init__.py` optional in Python 3
+6. `IOError is OSError` = True (aliases)
+7. `bytearray(n)` elements are integers, not bytes repr
+
+---
+
+## Week 11, Day 1 - 2026-03-23
+
+**Topic:** MRO & super() | ABC | Exam gap closure
+**Score:** 86% (6/7)
+
+**T1 — MRO mixed trace (CAB):** Correct. Good — mixed prepend/append pattern handled properly.
+**T2 — __init__ chain:** Correct. Print order A→C→B→D and len=0 both right.
+**T3 — Chain break:** Correct. BC, A unreachable because B has no super() call.
+**T4 — ABC:** Correct (TypeError), excluded from score — user correctly identified ABC not on PCAP syllabus.
+**T5 — yield + early return:** WRONG. Answered [1,2]. Correct: []. `return` fires before any yield. The `yield` keywords make it a generator function, but the body exhausts immediately on first next() — list(g) = [].
+**T6 — bare raise:** Correct. Re-raises propagate to outer handler.
+**T7 — IOError vs OSError:** WRONG. Answered C (False). Correct: B (True). IOError is a direct alias for OSError in Python 3 — same class, same object. `except IOError` catches it, `.errno` is populated with ENOENT=2.
+**T8 — __init__.py:** Correct. Optional in Python 3 (namespace packages), B.
+
+**User feedback:** Session too short, wants heavier volume Day 2. Requested: file I/O, os module, datetime, generators + gap targets. PCAP only.

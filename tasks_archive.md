@@ -1696,3 +1696,76 @@ Task 8 expected values were wrong. Correct: 4 winners, $1050 total PnL.
 - random.choice([]) raises ValueError (not IndexError)
 - os.path.split/dirname: no trailing slash on directory component
 - repr(exception) format: ValueError('msg') with parens, not colon
+
+---
+
+## Week 10, Day 5 - 2026-03-21
+
+**Topic:** Code writing drills + Project: VWAPStrategy on real FDAX data
+**Score:** ~82%
+**Difficulty:** Medium-High
+
+**Tasks Completed:**
+1. flatten() function — correct using list comprehension
+2. BoundedList class — needed hints on internal list vs inheriting from list; got there
+3. Timer context manager — skipped (not PCAP relevant, never drilled)
+4. 3 bug fixes — all correct: ZeroDivisionError guard, mutable class attr, FileNotFoundError handler
+5. Real FDAX data load — success: 216k rows, 10 NaN, all columns correct, DataLoader pipeline confirmed
+6. VWAPStrategy — implemented cleanly, inherits BaseStrategy, BUY/SELL/HOLD logic
+7. run_backtest() — wired with dict-based multi-strategy position tracking (current_positions = {strategy: None})
+
+**Key outcomes:**
+- Full end-to-end pipeline working: real CSV → DataLoader → VWAPStrategy → BacktestEngine → strategy_report()
+- 206k trades processed, 41% win rate, -$18k PnL (expected for naive VWAP strategy)
+- Architecture correctly extended to support multiple simultaneous strategies
+- Roadmap agreed: RTH session filter → multi-strategy → equity curve → Sharpe/Profit Factor
+
+---
+
+## Week 9 Weekend — Exam A & B - 2026-03-22/23
+
+**Topic:** PCAP Mock Exams (Week 9 Exam A + Exam B)
+**Score:** Exam A: 84.6% (22/26 counted) | Exam B: 80% (24/30) | Average: ~82%
+**Difficulty:** Medium
+
+**Exam A gaps (6 wrong/skipped):**
+- Q3: __init__.py is OPTIONAL in Python 3 (B not A)
+- Q2: os.path.exists("/") returns True, not False (B was wrong)
+- Q26: IOError is OSError — True means IOError IS OSError (alias), answer B not A
+- Q28: bytearray(3) → [0,0,0] not bytes repr — answer A not C
+
+**Exam B gaps (6 wrong):**
+- Q3: __all__ needs strings — [foo, bar] uses variable refs (NameError) → correct answer A
+- Q8: bare raise re-raises, outer except still catches → C (caught + outer), not D
+- Q11: int("abc") raises ValueError not TypeError → A
+- Q12: MRO trace D(B,C) → ACB not ABC → B
+- Q16: Circle doesn't implement area() → TypeError, not 5 → B
+- Q17: yield anywhere = generator function even with early return → A (generator, [])
+
+**New gaps identified for Week 11:**
+- MRO trace: result is ACB not ABC (call order ≠ string build order)
+- ABC instantiation: must implement ALL abstract methods or TypeError
+- bare raise: re-raises original, outer handler still fires
+- yield + early return: still a generator function
+
+---
+
+## Week 11, Day 1 - 2026-03-23
+
+**Topic:** MRO & super() | ABC | Exam gap closure
+**Score:** 86% (6/7 — T4 excluded as non-PCAP)
+**Difficulty:** Light | Time: short session
+
+**Tasks Completed:**
+1. MRO mixed prepend/append trace — correct (CAB)
+2. __init__ chain order + len check — correct (A,C,B,D + len 0)
+3. Chain break explanation — correct (BC, A not reached)
+4. ABC instantiation — correct (TypeError), excluded from scoring by user (not PCAP)
+5. yield + early return — WRONG: answered [1,2], correct is []. return fires first, body exhausted.
+6. bare raise — correct (inner caught + outer caught)
+7. IOError vs OSError — WRONG: answered C (False), correct is B (True). IOError is OSError alias in Python 3.
+8. __init__.py — correct (B — optional in Python 3)
+
+**Remaining gaps:**
+- yield + early return: list is [] not [1,2]
+- IOError is OSError alias: True in Python 3, .errno works
