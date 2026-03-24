@@ -4093,3 +4093,29 @@ Discarded by user (correct call — not on PCAP syllabus): Q15 (__slots__), Q17 
 **T8 — __init__.py:** Correct. Optional in Python 3 (namespace packages), B.
 
 **User feedback:** Session too short, wants heavier volume Day 2. Requested: file I/O, os module, datetime, generators + gap targets. PCAP only.
+
+---
+
+## Week 11, Day 2 - 2026-03-24
+
+**Topic:** File I/O | os module | datetime | Generators | Gap closure
+**Score:** 82% (27/33)
+
+**T1 — yield+early return:** ✅ CLOSED. Both variants correct: `generator`/`[]` and `[None]`.
+**T2 — IOError is OSError:** ✅ CLOSED. All three `True` correct.
+**T3 — readlines() + repr():** ✗ Missing quotes and `\n` in repr output. `repr('line1\n')` = `"'line1\n'"` — repr always shows escape sequences literally.
+**T4 — read(n) cursor:** ✗ Two errors: `read(3)` twice on `"hello"` = `'hel'` then `'lo'` (not `'llo'`); exhausted stream = `''` not `' '`.
+**T5 — readline():** ✅
+**T6 — os.path functions:** ✅ partial. basename/dirname correct. split() tuple answer missing leading slash and string quotes. splitext unknown — returns `('/path/file', '.ext')`.
+**T7 — os.path.join Linux:** ✗ Answered A (Windows backslash). On Linux `os.path.join` uses `/`. It is platform-aware — this is PCAP relevant.
+**T8 — datetime arithmetic:** ✅
+**T9 — timedelta:** ✅ (total_seconds arithmetic excluded — unjustified to penalise)
+**T10 — strftime:** ✅
+**T11 — generator partial consumption:** ✅ Correctly identified remaining items after partial next() calls.
+**T12 — yield from:** ✅
+**T13 — exhausted generator:** ✅ StopIteration correct.
+**T14 — errno + FileNotFoundError:** Partial. Type (`FileNotFoundError`) correct. Missed that `e.errno` = `2` (ENOENT) prints first.
+**T15 — UnboundLocalError + nonlocal:** ✅ Correct diagnosis and clean fix.
+
+**Gaps closed this session:** yield+early return, IOError is OSError alias
+**Remaining/new gaps:** repr() shows quotes+escapes literally, read(n) cursor arithmetic, os.path.join is platform-aware (Linux=/), splitext tuple format, errno numeric value (ENOENT=2)

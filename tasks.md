@@ -18,6 +18,9 @@ print(type(g).__name__)
 print(list(g))
 ```
 
+generator, []
+
+
 And a follow-up — what does this print?
 
 ```python
@@ -27,6 +30,9 @@ def gen2():
     yield 1
 
 print(list(gen2()))
+
+[None]
+
 ```
 
 ---
@@ -40,6 +46,9 @@ print(issubclass(FileNotFoundError, IOError))
 ```
 
 What are the three outputs?
+True
+True
+True
 
 ---
 
@@ -60,6 +69,11 @@ print(repr(lines[-1]))
 
 What is the output?
 
+2
+line1
+line2
+
+
 ---
 
 ## Task 4 — File I/O: predict the output
@@ -75,6 +89,11 @@ with open("test.txt", "r") as f:
 ```
 
 What is the output?
+'hel'
+'llo' 
+' '
+
+
 
 ---
 
@@ -92,6 +111,8 @@ with open("test.txt", "r") as f:
 ```
 
 What is the output?
+'alpha\n'
+'beta\n'
 
 ---
 
@@ -108,6 +129,10 @@ print(os.path.splitext(path))
 ```
 
 What is the output?
+report.pdf
+/home/user/docs
+(home/user/docs, report.pdf)
+IDK
 
 ---
 
@@ -127,6 +152,8 @@ On Linux/POSIX, what is the output?
 - C) `/home/user/file.txt`
 - D) `TypeError`
 
+A, the slashes are to the opposite direction than on Windows/nt
+
 ---
 
 ## Task 8 — datetime: predict the output
@@ -144,6 +171,10 @@ print(result.hour)
 
 What is the output?
 
+27
+12
+
+
 ---
 
 ## Task 9 — datetime: predict the output
@@ -152,13 +183,16 @@ What is the output?
 from datetime import timedelta
 
 td = timedelta(days=1, seconds=3600)
-print(td.days)
+print(td.days) 
 print(td.seconds)
 print(td.total_seconds())
 ```
 
 What is the output?
-
+1
+3600
+3. IDK - this is weird and stupid, humans don't remember such things and this will not be checked on PCAP exam. 
+I could use a calculator for that or just print it, but what's the point here?
 ---
 
 ## Task 10 — datetime: multiple choice
@@ -174,6 +208,8 @@ print(dt.strftime("%Y-%m-%d %H:%M"))
 - B) `2026-24-03 00:00`
 - C) `2026-03-24`
 - D) `ValueError`
+
+A
 
 ---
 
@@ -193,6 +229,10 @@ print(list(gen))
 ```
 
 What is the output?
+0
+2
+[4, 6]
+
 
 ---
 
@@ -204,12 +244,13 @@ def gen():
     yield from range(3)
 
 result = list(gen())
-print(result)
-print(len(result))
+print(result) 
+print(len(result)) 
 ```
 
 What is the output?
-
+[1, 2, 3, 0, 1, 2]
+6
 ---
 
 ## Task 13 — Generators: multiple choice
@@ -229,6 +270,9 @@ print(next(g))
 - C) `StopIteration` is raised
 - D) `None`
 
+C
+
+
 ---
 
 ## Task 14 — Mixed: exception + file I/O
@@ -245,6 +289,7 @@ except OSError as e:
 
 What is the output? (Assume the file does not exist.)
 
+FileNotFoundError - the suitable errno code
 ---
 
 ## Task 15 — Scope + closure (gap reinforcement)
@@ -262,6 +307,17 @@ print(f())
 ```
 
 What happens? What is the fix?
+
+There's an error - UnboundLocal, as X doesn't exist in the inner scope - it can be read but it cannot be modified liek that.
+The fix is very simple, we'd have to use nonlocal and it works.
+
+def outer():
+    x = 10
+    def inner():
+        nonlocal x
+        x += 1
+        return x
+    return inner
 
 ---
 

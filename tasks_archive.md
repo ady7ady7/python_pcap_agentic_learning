@@ -5,6 +5,64 @@ Format: Date | Topic | Score | Difficulty | Notes
 
 ---
 
+## Week 9, Weekend Exams - 2026-03-22/23
+
+**Topic:** PCAP Mock Exams A & B — Full syllabus
+**Score:** Exam A: 84.6% | Exam B: 80% | **Average: 82%**
+
+**New gaps identified:**
+- `yield` + early `return` → still a generator function, `list()` = `[]`
+- ABC instantiation — must implement ALL abstract methods
+- bare `raise` — re-raises, outer handler still fires
+- MRO trace — `ACB` not `ABC` (append pattern unwinds in reverse)
+- `__all__` must be list/tuple of **strings**
+
+---
+
+## Week 11, Day 1 - 2026-03-23
+
+**Topic:** MRO & super() | ABC | Exam gap closure
+**Score:** ~86%
+
+**Tasks Completed:**
+1. MRO string trace (mixed append/prepend) — correct: `CAB`
+2. `__init__` chain order — correct: A→C→B→D, `len=0`
+3. Chain break — correct: `BC`, A not reached
+4. yield + early return — ✗ answered `[1, 2]` instead of `[]`
+5. bare `raise` — correct: `inner caught` + `outer caught`
+6. IOError is OSError — ✗ answered False instead of True (alias)
+
+**Gaps closed:** bare raise, MRO chain trace
+**Gaps remaining:** yield+early return, IOError is OSError alias
+
+---
+
+## Week 11, Day 2 - 2026-03-24
+
+**Topic:** File I/O | os module | datetime | Generators | Gap closure
+**Score:** 82% (27/33)
+
+**Tasks Completed:**
+1. yield+early return — ✅ CLOSED (both variants correct)
+2. IOError is OSError — ✅ CLOSED (all three True)
+3. readlines() repr output — ✗ missed quotes + `\n` in repr()
+4. read(n) cursor arithmetic — ✗ `'hel'`+`'lo'` not `'llo'`; `''` not `' '`
+5. readline() — ✅
+6. os.path split/dirname — ✅ partial (splitext unknown)
+7. os.path.join Linux — ✗ answered A (Windows slash) instead of B (Linux /)
+8. datetime arithmetic — ✅
+9. timedelta — ✅ (total_seconds arithmetic excluded as unjustified)
+10. strftime — ✅
+11. generator partial consumption — ✅
+12. yield from — ✅
+13. exhausted generator StopIteration — ✅
+14. errno + FileNotFoundError — partial (type correct, missed errno=2)
+15. UnboundLocalError + nonlocal fix — ✅
+
+**New gaps:** repr() shows quotes+escapes, os.path.join is platform-aware, splitext, errno numeric values
+
+---
+
 ## Week 10, Day 2 - 2026-03-18
 
 **Topic:** PCAP Full Review — exceptions, OOP, scope, generators, functional, strings, simulation
