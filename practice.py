@@ -11234,3 +11234,422 @@ Identify what is wrong first (one sentence), then fix it.
 # Then we would do that for every tested strategy, and after every strategy has been tested, we would then take these performance/profit rows with datetimes and sort them by their datetime. We could then simulate portfolio's performance, extract more things like Sharpe/Profit Factor, maybe run Montecarlo simulations etc.
 
 # And it all would work without async and complex logic - I think it's a good idea.
+
+# import errno
+# print(errno.ENOENT)
+
+#W11 D1 T1
+
+# class A:
+#     def f(self): return "A"
+
+# class B(A):
+#     def f(self): return super().f() + "B"
+
+# class C(A):
+#     def f(self): return "C" + super().f()
+
+# class D(B, C):
+#     pass
+
+# print(D().f())
+
+
+# MRO order: D -> B -> C -> A 
+# Output: CAB
+
+#W11 D1 T2
+
+# class A:
+#     def __init__(self):
+#         self.items = []
+#         print("A")
+
+# class B(A):
+#     def __init__(self):
+#         super().__init__()
+#         print("B")
+
+# class C(A):
+#     def __init__(self):
+#         super().__init__()
+#         print("C")
+
+# class D(B, C):
+#     def __init__(self):
+#         super().__init__()
+#         print("D")
+
+# d = D()
+# print(len(d.items)) #0
+
+#MRO ORDER: D -> B -> C -> A 
+#Output: A -> C -> B - > D
+#len 0, no items added
+
+
+#W11 D1 T3
+
+# class A:
+#     def greet(self): return "A"
+
+# class B(A):
+#     def greet(self): return "B"   # no super()
+
+# class C(B):
+#     def greet(self): return super().greet() + "C"
+
+# print(C().greet())
+
+#'BC' 
+#A is not reached, as B doesn't call super().greet() and it overwrites A's greet
+
+#W11 D1 T4
+
+# from abc import ABC, abstractmethod
+
+# class Animal(ABC):
+#     @abstractmethod
+#     def sound(self): pass
+
+#     @abstractmethod
+#     def move(self): pass
+
+# class Dog(Animal):
+#     def sound(self): return "woof"
+
+# d = Dog()
+# print(d.sound())
+
+#Error - Dog will not work - it would necessarily have to also add the move method as in the abstractmethod!
+
+#W11 D1 T5
+
+# def gen():
+#     return
+#     yield 1
+#     yield 2
+
+# g = gen()
+# print(type(g).__name__)
+# print(list(g))
+
+#generator
+#[1, 2]
+
+
+#W11 D1 T6
+# def parse(value):
+#     try:
+#         return int(value)
+#     except ValueError:
+#         print("inner caught")
+#         raise
+
+# try:
+#     result = parse("abc")
+# except ValueError:
+#     print("outer caught")
+
+
+#CD Python - task 77
+
+'''
+Stwórz funkcję split_string, która dzieli string po myślnikach - i zwraca listę fragmentów.
+
+liczby zapisz jako int
+puste "" fragmenty pomiń
+'''
+
+
+# from typing import List
+# text = "-14--abc3-08-"
+# def split_string(text_string: str) -> List:
+#     parts = text_string.split('-')
+#     parts_filtered = [part for part in parts if part.isalnum()]
+#     parts = [int(part) if part.isnumeric() else part for part in parts_filtered]
+#     return parts
+
+# # napisz kod tutaj
+# print(split_string(text))
+
+#CD Python - task 78
+
+'''
+Stwórz funkcję print_word_stats, która przyjmuje string text.
+
+Funkcja powinna:
+
+Zamienić tekst na małe litery
+Podzielić go na słowa (po spacji)
+Usunąć znaki specjalne z początku i końca słów (np. .,!?)
+Policz ile razy każde słowo występuje
+Wypisać wynik w formacie: słowo: liczba. Każde słowo w nowej linii.
+
+Funkcja nie powinna nic zwracać, tylko wyprintować wyniki.
+
+'''
+
+
+
+# text = "Python, python! Data science, python."
+
+# def print_word_stats(text):
+#     lcase = text.lower()
+#     parts = lcase.split()
+    
+#     cleaned = []
+#     for part in parts:
+#         for char in part:
+#             if not char.isalnum():
+#                 print(f'Not alnum detected: {char}')
+#                 part = part.replace(char, '')
+#         cleaned.append(part)
+#     print(cleaned)
+    
+#     summary_dict = {}
+#     for word in cleaned:
+#         if word not in summary_dict:
+#             summary_dict[word] = 1
+#         else:
+#             summary_dict[word] += 1
+#     print(summary_dict)
+    
+#     for item in summary_dict.items():
+#         print(f'{item[0]}: {item[1]}') #pozadany w zadaniu format 
+
+# print_word_stats(text)
+
+
+
+#CD Python - task 79
+
+'''
+Stwórz funkcję random_numbers, która przyjmuje argument n i zwraca listę n losowych liczb całkowitych z zakresu od 0 do 100.
+'''
+
+# import random
+
+# def random_numbers(n: int) -> list:
+#     return [random.randint(0, 100) for i in range(n)]
+
+
+#CD Python - task 80
+'''
+Napisz funkcję longest_prefix, która przyjmuje dwa argumenty a i b, a następnie zwraca najdłuższy wspólny prefiks tych dwóch wartości.
+'''
+
+# def longest_prefix(a: str, b: str) -> str:
+#     '''
+#     Accepts two string args and returns their shared prefix
+#     '''
+    
+#     shared_prefix = None
+#     for i in range(len(a)):
+#         if not a[0:i+1] == b[0:i+1]:
+#             break
+#         shared_prefix = a[0:i+1]
+    
+#     print(shared_prefix)
+#     return shared_prefix
+
+
+#CD Python - task 81
+'''
+Napisz funkcje common_words, która zwraca listę słów, które występują w obu tekstach. 
+Ignoruj wielkość liter (np. A i a traktuj jako tę samą literę).
+'''
+
+# from typing import List
+
+# def common_words(text1: str, text2: str) -> List[str]:
+#     '''
+#     Accepts two strings, finds a list of all words that are found in both of them
+#     Args:
+#     text1: str
+#     text2: str
+    
+#     Returns:
+#     a list of strings
+#     '''
+    
+#     s1 = set(text1.lower().split())
+#     s2 = set(text2.lower().split())
+    
+#     print(s1, s2)
+    
+#     return list(s1 & s2)
+    
+# text1 = "python data science machine learning"
+# text2 = "data analysis python statistics"
+
+# print(common_words(text1, text2))
+
+
+#CD Python - task 82
+
+'''
+Na podstawie słownika students stwórz słownik students_sorted, 
+w którym studenci są posortowani rosnąco (zaczynając od najmniejszej liczby) na podstawie wyników kartkówek.
+'''
+
+
+# students = {
+#     "Anna": 7,
+#     "Bartek": 5,
+#     "Staś": 8,
+#     "Michał": 3,
+#     "Ola": 6,
+#     "Tomek": 2,
+#     "Piotr": 4
+# }
+
+# students_sorted = sorted(students.items(), key = lambda x: x[1])
+# students_sorted = {student: grade for student, grade in students_sorted}
+# print(students_sorted)
+
+
+#W11 D2 #T1
+
+# def gen():
+#     return
+#     yield 1
+#     yield 2
+
+# g = gen()
+# print(type(g).__name__) #GENERATOR
+# print(list(g)) #[]
+
+
+# def gen2():
+#     yield
+#     return
+#     yield 1
+
+# print(list(gen2())) #[None]
+
+
+#W11 D2 #T2
+# print(IOError is OSError) #True
+# print(issubclass(FileNotFoundError, OSError)) #True
+# print(issubclass(FileNotFoundError, IOError)) #True
+
+
+#W11 D2 #T3
+# with open("test.txt", "w") as f:
+#     f.write("line1\n")
+#     f.write("line2\n")
+
+# with open("test.txt", "r") as f:
+#     lines = f.readlines()
+
+# print(len(lines)) #2
+# print(repr(lines[0])) #line1\n
+# print(repr(lines[-1])) #line2\n
+
+
+#W11 D2 T4
+
+# with open("test.txt", "w") as f:
+#     f.write("hello")
+
+# with open("test.txt", "r") as f:
+#     print(repr(f.read(3))) #'hel'
+#     print(repr(f.read(3))) #'lo '
+#     print(repr(f.read(3))) #'   '
+
+
+#W11 D2 T5
+
+# with open("test.txt", "w") as f:
+#     f.write("alpha\nbeta\ngamma\n")
+
+# with open("test.txt", "r") as f:
+#     line = f.readline()
+#     print(repr(line)) #'alpha\n'
+#     line = f.readline() 
+#     print(repr(line)) #'beta\n'
+    
+
+
+#W11 D2 T6
+
+# import os
+
+# path = "/home/user/docs/report.pdf"
+# print(os.path.basename(path)) #report.pdf
+# print(os.path.dirname(path)) #home/user/docs
+# print(os.path.split(path)) # ('home/user/docs', 'report.pdf')
+# print(os.path.splitext(path)) #('home/user/docs/report', 'pdf')
+
+#W11 D2 T7
+# from datetime import datetime, timedelta
+
+# dt = datetime(2026, 3, 24, 10, 30, 0)
+# delta = timedelta(days=3, hours=2)
+# result = dt + delta
+
+# print(result.day) #27
+# print(result.hour) #12
+
+#W11 D2 T9
+
+# from datetime import timedelta
+
+# td = timedelta(days=1, seconds=3600)
+# print(td.days) #1
+# print(td.seconds) #3600
+# print(td.total_seconds()) #IDK - this is weird and stupid, humans don't remember such things and this will not be checked on PCAP exam
+
+
+#W11 D2 T11
+# def evens(limit):
+#     n = 0
+#     while n <= limit:
+#         yield n
+#         n += 2
+
+# gen = evens(6)
+# print(next(gen)) #0
+# print(next(gen)) #2
+# print(list(gen)) #[4, 6]
+
+#W11 D2 T12
+# def gen():
+#     yield from [1, 2, 3]
+#     yield from range(3)
+
+# result = list(gen())
+# print(result)  #[1, 2, 3, 0, 1, 2]
+# print(len(result)) #6
+
+#W11 D2 T13
+
+# def squares():
+#     for i in range(5):
+#         yield i ** 2
+
+# g = squares()
+# list(g) 
+# print(next(g)) #StopIteration is raised
+
+#W11 D2 T14
+# import errno
+
+# try:
+#     f = open("no_such_file.txt", "r")
+# except OSError as e:
+#     print(e.errno) #2
+#     print(type(e).__name__) #FileNotFoundError
+
+
+# def outer():
+#     x = 10
+#     def inner():
+#         nonlocal x
+#         x += 1
+#         return x
+#     return inner
+
+# f = outer()
+# print(f())

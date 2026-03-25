@@ -1,8 +1,8 @@
-# Daily Feedback — Week 11, Day 3
+# Daily Feedback — Week 11, Day 4
 
-**Date:** 2026-03-25
+**Date:** 2026-03-26
 
-**Topic:** repr() | os.path | errno | Gap closure continued
+**Topic:** os.path | escape sequences | generators | gap closure
 
 ---
 

@@ -30,6 +30,16 @@ class PositionManager:
         self.positions.append(position)
         print(f'Position {position} added successfully')
         
+    def remove_position(self, position: Position) -> None:
+        '''Remove a position from a manager e.g. a forced close
+        
+        Args:
+            position: Position object to remove
+        '''
+        
+        self.positions.remove(position)
+        print(f'Position {position} removed successfully')
+        
 
     def get_total_pnl(self, current_price: float) -> float:
         """
@@ -63,8 +73,8 @@ class PositionManager:
         closed_ids = [p.position_id for p in closed_positions]
         self.positions = [p for p in self.positions if p.position_id not in closed_ids]
         
-
         return closed_positions
+    
                 
     def get_positions_by_ticker(self, ticker: str) -> List[Position]:
         '''Returns all positions that match a given ticker'''

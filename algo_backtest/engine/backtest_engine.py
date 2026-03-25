@@ -162,6 +162,30 @@ class BacktestEngine:
                 completed_trades_by_strategy[strategy] = filtered_trades
             return completed_trades_by_strategy
         
+    
+    def force_close_all(self, ticker: str, strategy_id: str, price: float) -> None:
+        '''Force close all open positions on a given ticker'''
+        filtered_positions = [position for position in self.position_manager if (ticker == position.ticker and position.strategy_id == strategy_id)]
+        for position in filtered_positions:
+            exit_reason = 'forced close'
+            trade = Trade(
+                          position.position_id,
+                          position.ticker, 
+                          position.side, 
+                          position.entry_price,
+                          price, 
+                          position.quantity,
+                          stop_loss = position.stop_loss,
+                          take_profit = position.take_profit,
+                          strategy_id = position.strategy_id,
+                          strategy_name = position.strategy_name,
+                          exit_reason = exit_reason)
+            logger.info(f'@Strategy {position.strategy_id}, {position.strategy_name} || Position {trade.position_id} @ {position.ticker} closed with {trade.pnl} as a {exit_reason}')
+            self.completed_trades.append(trade)
+            self.position_manager.remove_position(position)
+            
+    
+        
     def strategy_report(self):
         '''Method used to call trades_by_strategy method to get filtered trades and print out a report with stats for every strategy and portfolio total'''
         

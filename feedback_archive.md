@@ -4,6 +4,28 @@ This file stores all completed daily feedback entries in chronological order (ol
 
 ---
 
+## Week 11, Day 3 — 2026-03-25
+
+**Topic:** repr() | os.path | errno | random | escape sequences | generators | closures | Project
+**Score:** 80% (28/35)
+
+**Per-task breakdown:**
+- T1 repr(): ✅ All correct. Minor: f-string output is `an item` not `{an item}`
+- T2 os.path: ✅ basename/splitext correct. ✗ dirname has no trailing slash. ✗ split() needs string quotes. ✗ Linux uses `/` not `\`
+- T3 errno: ✅ All four outputs correct + MC correct
+- T4 random: ✅ All three correct
+- T5 escape: ✅ a,b,d,len correct. ✗ `'\\\''` is SyntaxError — persistent trap
+- T6 generator: ✗ Wrote regular function with return+list. Task required `yield`+`while True` infinite generator
+- T7 closures: ✅ All three parts correct
+- T8 project: ✅ Full implementation — RTH filter, force_close_all, abstract session methods, 112k trades
+
+**Persistent gaps:**
+- `os.path` exact output (trailing slash, string tuple format, slash direction)
+- `'\\\''` SyntaxError — appears repeatedly, still not solid
+- Generator infinite pattern: `while True: yield x`
+
+---
+
 ## Week 1, Day 1 - 2026-01-05
 
 **Topic:** Modules, Packages & Import Mechanisms

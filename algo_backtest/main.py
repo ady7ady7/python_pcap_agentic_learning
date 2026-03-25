@@ -12,6 +12,7 @@ import sys
 from __init__ import __version__
 import check_dependencies
 import pandas as pd
+from datetime import datetime, time
 
 from engine.backtest_engine import BacktestEngine
 from data.data_loader import DataLoader
@@ -34,40 +35,54 @@ def run_backtest(df: pd.DataFrame) -> BacktestEngine:
     vwap_strategy = VwapStrategy('FDAX')
     current_positions = {vwap_strategy: None}
     
-    for idx, row in df.iloc[1:].iterrows():
-        signal = vwap_strategy.generate_signal(row['open'], row['vwap_rth'])
-        if signal == 'BUY' and current_positions[vwap_strategy] is None:
-            backtest_engine.open_position(#data.iloc[idx]['ticker'], 
-                                          'FDAX',
-                                          'BUY', 
-                                          row['open'], 
-                                          quantity = 1,
-                                          stop_loss = row['open'] - 50,
-                                          take_profit = row['open'] + 50,
-                                          strategy_id = '1',
-                                          strategy_name = vwap_strategy.get_name())
-            current_positions[vwap_strategy] = True
-        
-        elif signal == 'SELL' and current_positions[vwap_strategy] is None:
-            backtest_engine.open_position(#data.iloc[idx]['ticker'], 
-                                          'FDAX',
-                                          'SELL', 
-                                          row['open'], 
-                                          quantity = 1,
-                                          stop_loss = row['open'] + 50,
-                                          take_profit = row['open'] - 50,
-                                          strategy_id = '1',
-                                          strategy_name = vwap_strategy.get_name())
-            current_positions[vwap_strategy] = True
-            
-            
-        newly_closed = backtest_engine.process_price(#data.iloc[idx]['ticker'],
-                                                     'FDAX',
-                                                     data.iloc[idx]['close'])
-        
-        if newly_closed:
-            current_positions[vwap_strategy] = None
+    start = vwap_strategy.session_start() #time filtering - this will have to be modularized ``
+    end = vwap_strategy.session_end()
     
+    for idx, row in df.iloc[1:].iterrows():
+        t = datetime.fromisoformat(row['candle_open']).time()
+        is_rth = (start is None) or (start <= t <= end)
+        session_ending = end is not None and t > end
+        
+        if session_ending and current_positions[vwap_strategy]:
+            backtest_engine.force_close_all('FDAX', row['open'])
+            current_positions[vwap_strategy] = None
+            continue
+        
+        if is_rth:
+            
+            signal = vwap_strategy.generate_signal(row['open'], row['vwap_rth'])
+            if signal == 'BUY' and current_positions[vwap_strategy] is None:
+                backtest_engine.open_position(#data.iloc[idx]['ticker'], 
+                                            'FDAX',
+                                            'BUY', 
+                                            row['open'], 
+                                            quantity = 1,
+                                            stop_loss = row['open'] - 50,
+                                            take_profit = row['open'] + 50,
+                                            strategy_id = '1',
+                                            strategy_name = vwap_strategy.get_name())
+                current_positions[vwap_strategy] = True
+            
+            elif signal == 'SELL' and current_positions[vwap_strategy] is None:
+                backtest_engine.open_position(#data.iloc[idx]['ticker'], 
+                                            'FDAX',
+                                            'SELL', 
+                                            row['open'], 
+                                            quantity = 1,
+                                            stop_loss = row['open'] + 50,
+                                            take_profit = row['open'] - 50,
+                                            strategy_id = '1',
+                                            strategy_name = vwap_strategy.get_name())
+                current_positions[vwap_strategy] = True
+                
+                
+            newly_closed = backtest_engine.process_price(#data.iloc[idx]['ticker'],
+                                                        'FDAX',
+                                                        data.iloc[idx]['close'])
+            
+            if newly_closed:
+                current_positions[vwap_strategy] = None
+        
     
     return backtest_engine
 

@@ -5,6 +5,44 @@ Format: Date | Topic | Score | Difficulty | Notes
 
 ---
 
+## Week 11, Day 2 — 2026-03-24
+
+**Topic:** File I/O | os module | datetime | Generators | Gap closure
+**Score:** ~79% (26/33)
+**Difficulty:** Medium | Time: ~60 min
+
+**Tasks Completed:** 15 tasks
+**Correct:** T1 ✅, T2 ✅, T5 ✅, T8 ✅, T10 ✅, T11 ✅, T12 ✅, T13 ✅, T15 ✅
+**Gaps closed:** yield+early return ✅, IOError is OSError ✅, bare raise ✅, nonlocal ✅
+
+**Remaining gaps:**
+- `repr()` — must show quotes + escaped chars (`'line1\n'` not `line1`)
+- `read(n)` cursor arithmetic — `"hello"` → `read(3)` = `'hel'`, `read(3)` = `'lo'`, `read(3)` = `''`
+- `os.path.split()` returns tuple with leading slash: `('/home/user/docs', 'report.pdf')`
+- `os.path.splitext()` = `(root, ext)` — splits at last dot
+- `os.path.join` on Linux uses `/` not `\`
+- `errno` output order: `e.errno` first (int), then `type(e).__name__`
+- `total_seconds()` returns float: `timedelta(days=1, seconds=3600)` = `90000.0`
+
+---
+
+## Week 11, Day 3 — 2026-03-25
+
+**Topic:** repr() | os.path | errno | random | escape sequences | generators | closures | Project
+**Score:** ~80% (28/35)
+**Difficulty:** Medium-High | Time: ~90 min
+
+**Correct:** T1 ✅, T3 ✅, T4 ✅, T7 ✅, T8 ✅
+**Gaps remaining:**
+- `os.path.dirname` — no trailing slash; `split()` returns tuple of strings with quotes
+- `os.path.join` — Linux=`/`, Windows=`\` (was reversed)
+- `'\\\''` — SyntaxError (string never closed); persistent trap
+- Generator `yield` + `while True` pattern — wrote regular function instead
+
+**Project milestone:** RTH time filter implemented via `session_start()`/`session_end()` abstract methods on `BaseStrategy`. `force_close_all()` added to `BacktestEngine`. Trade count dropped 206k → 112k confirming filter works. Strategy-based force close (not ticker-based) — correct architectural decision.
+
+---
+
 ## Week 9, Weekend Exams - 2026-03-22/23
 
 **Topic:** PCAP Mock Exams A & B — Full syllabus
