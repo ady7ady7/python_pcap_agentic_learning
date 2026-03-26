@@ -166,15 +166,16 @@ x = '\\\''          # SyntaxError — explained below
 ```
 '           ← open string
 \\          ← escape sequence: one literal backslash \
-\'          ← escape sequence: one literal quote ' (does NOT close the string)
-            ← string never closed — SyntaxError: unterminated string literal
+\'          ← escape sequence: one literal quote '
+'           ← closes the string
+Result: '   (one char: a single quote)   len = 1
 ```
 
-After `\'`, Python is still inside the string waiting for the closing `'`. There is none.
+`'\\\''` is **valid**. The final `'` closes the string after the `\'` escape pair.
 
-**Fix:**
+**Contrast with `"\\'"` (double-quoted):**
 ```python
-x = "\\'"   # use double quotes to wrap — no conflict
+x = "\\'"   # \\ = backslash, ' = plain quote (no escaping needed in double-quoted string)
 print(x)    # \'
 print(len(x))  # 2
 ```
@@ -307,7 +308,7 @@ This code runs only when the file is the entry point, not when imported as a lib
 | `randint(a, b)` | Both ends inclusive | `randint(1,6)` can return 6 |
 | `randrange(a, b, s)` | Stop excluded, follows `range()` | `randrange(1,7)` = 1–6 |
 | `choice(seq)` | Picks one element from the sequence | Can only return what's in the sequence |
-| `'\\\''` | SyntaxError — string never closed | `\\` = one backslash, `\'` = escaped quote, no closer left |
+| `'\\\''` | Valid — prints `'`, len=1 | `\\`=backslash, `\'`=quote, final `'` closes the string |
 | `chr(ord('p') + 2)` | `ord('p')` = 112, +2 = 114, `chr(114)` = `'r'` | Know ord values: `'a'`=97, `'A'`=65, `'0'`=48 |
 | `sys.stderr` | Goes to screen by default | Not null device, not keyboard |
 | `hasattr(Class, 'attr')` | Checks the class object, not instances | Instance attrs from `__init__` don't exist on the class |

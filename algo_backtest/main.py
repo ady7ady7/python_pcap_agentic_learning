@@ -30,58 +30,60 @@ def setup_logging():
     
     logger.debug('Logging in main initialized.')    
     
-def run_backtest(df: pd.DataFrame) -> BacktestEngine:
+def run_backtest(df: pd.DataFrame, strategies: list) -> BacktestEngine:
+    
     backtest_engine = BacktestEngine()
-    vwap_strategy = VwapStrategy('FDAX')
-    current_positions = {vwap_strategy: None}
     
-    start = vwap_strategy.session_start() #time filtering - this will have to be modularized ``
-    end = vwap_strategy.session_end()
-    
-    for idx, row in df.iloc[1:].iterrows():
-        t = datetime.fromisoformat(row['candle_open']).time()
-        is_rth = (start is None) or (start <= t <= end)
-        session_ending = end is not None and t > end
+    for strategy in strategies:
+        current_positions = {strategy: None}
         
-        if session_ending and current_positions[vwap_strategy]:
-            backtest_engine.force_close_all('FDAX', row['open'])
-            current_positions[vwap_strategy] = None
-            continue
+        start = strategy.session_start() #time filtering - this will have to be modularized ``
+        end = strategy.session_end()
         
-        if is_rth:
+        for idx, row in df.iloc[1:].iterrows():
+            t = datetime.fromisoformat(row['candle_open']).time()
+            is_rth = (start is None) or (start <= t <= end)
+            session_ending = end is not None and t > end
             
-            signal = vwap_strategy.generate_signal(row['open'], row['vwap_rth'])
-            if signal == 'BUY' and current_positions[vwap_strategy] is None:
-                backtest_engine.open_position(#data.iloc[idx]['ticker'], 
-                                            'FDAX',
-                                            'BUY', 
-                                            row['open'], 
-                                            quantity = 1,
-                                            stop_loss = row['open'] - 50,
-                                            take_profit = row['open'] + 50,
-                                            strategy_id = '1',
-                                            strategy_name = vwap_strategy.get_name())
-                current_positions[vwap_strategy] = True
+            if session_ending and current_positions[strategy]:
+                backtest_engine.force_close_all('FDAX', row['open'])
+                current_positions[strategy] = None
+                continue
             
-            elif signal == 'SELL' and current_positions[vwap_strategy] is None:
-                backtest_engine.open_position(#data.iloc[idx]['ticker'], 
-                                            'FDAX',
-                                            'SELL', 
-                                            row['open'], 
-                                            quantity = 1,
-                                            stop_loss = row['open'] + 50,
-                                            take_profit = row['open'] - 50,
-                                            strategy_id = '1',
-                                            strategy_name = vwap_strategy.get_name())
-                current_positions[vwap_strategy] = True
+            if is_rth:
                 
+                signal = strategy.generate_signal(row['open'], row['vwap_rth'])
+                if signal == 'BUY' and current_positions[strategy] is None:
+                    backtest_engine.open_position(#data.iloc[idx]['ticker'], 
+                                                'FDAX',
+                                                'BUY', 
+                                                row['open'], 
+                                                quantity = 1,
+                                                stop_loss = row['open'] - 50,
+                                                take_profit = row['open'] + 50,
+                                                strategy_id = strategy.strategy_id,
+                                                strategy_name = strategy.get_name())
+                    current_positions[strategy] = True
                 
-            newly_closed = backtest_engine.process_price(#data.iloc[idx]['ticker'],
-                                                        'FDAX',
-                                                        data.iloc[idx]['close'])
-            
-            if newly_closed:
-                current_positions[vwap_strategy] = None
+                elif signal == 'SELL' and current_positions[strategy] is None:
+                    backtest_engine.open_position(#data.iloc[idx]['ticker'], 
+                                                'FDAX',
+                                                'SELL', 
+                                                row['open'], 
+                                                quantity = 1,
+                                                stop_loss = row['open'] + 50,
+                                                take_profit = row['open'] - 50,
+                                                strategy_id = strategy.strategy_id,
+                                                strategy_name = strategy.get_name())
+                    current_positions[strategy] = True
+                    
+                    
+                newly_closed = backtest_engine.process_price(#data.iloc[idx]['ticker'],
+                                                            'FDAX',
+                                                            data.iloc[idx]['close'])
+                
+                if newly_closed:
+                    current_positions[strategy] = None
         
     
     return backtest_engine
@@ -99,7 +101,8 @@ if __name__ == '__main__':
     setup_logging()
     print('Starting the backtest test procedure in main.py - logging set!')
     
-    test_engine = run_backtest(data)
+    strategies = [VwapStrategy('FDAX')]
+    test_engine = run_backtest(data, strategies)
     print(test_engine)
     test_engine.strategy_report()
     

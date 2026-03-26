@@ -26,6 +26,21 @@ Format: Date | Topic | Score | Difficulty | Notes
 
 ---
 
+## Week 11, Day 4 — 2026-03-26
+
+**Topic:** os.path | escape sequences | generators | closures | MRO | Project: multi-strategy run_backtest
+**Score:** ~89% (31/35)
+**Difficulty:** Medium | Time: ~90 min
+
+**Correct:** T1 ✅, T2 ✅ (all), T3 ✅, T4 ✅, T5 ✅, T6 ✅, T7 ✅, T8 ✅
+**Gaps closed:** os.path exact output ✅, escape sequences ✅, infinite generator ✅, MRO prepend ✅
+
+**Project milestone:** run_backtest() now accepts list of strategies. Per-strategy session filter and force_close_all with strategy_id. uuid4 added to BaseStrategy. Tested with single strategy — confirmed working.
+
+**Note:** `'\\\''` confirmed valid (prints `'`, len=1) — was incorrectly flagged as SyntaxError in prior sessions. Fixed in gaps_pcap_mock1.md and lesson material.
+
+---
+
 ## Week 11, Day 3 — 2026-03-25
 
 **Topic:** repr() | os.path | errno | random | escape sequences | generators | closures | Project

@@ -3,12 +3,14 @@
 
 from abc import ABC, abstractmethod
 from datetime import time
+import uuid
     
 
 class BaseStrategy(ABC):
     '''A class with abstract method used to generate trading signal'''
     def __init__(self, name: str):
         self.name = name
+        self.strategy_id = str(uuid.uuid4())
         
     @abstractmethod
     def generate_signal(self, price: float) -> str:

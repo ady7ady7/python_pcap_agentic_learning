@@ -4,6 +4,25 @@ This file stores all completed daily feedback entries in chronological order (ol
 
 ---
 
+## Week 11, Day 4 — 2026-03-26
+
+**Topic:** os.path | escape sequences | generators | closures | MRO | Project
+**Score:** 100%
+
+**Per-task breakdown:**
+- T1 os.path: ✅ All correct including no trailing slash rule
+- T2 escape sequences: ✅ All correct — `'\\\''` valid (prints `'`, len=1) confirmed
+- T3 generators: ✅ Infinite fibonacci with while True + yield, squares with next/list/StopIteration
+- T4 mixed gaps: ✅ parent-before-child, else/finally, randrange impossible value
+- T5 closures: ✅ All three correct
+- T6 generators: ✅ All three correct including exhausted generator returns []
+- T7 MRO + closures: ✅ BCA prepend pattern correct, mutable list closure correct
+- T8 project: ✅ Multi-strategy run_backtest, uuid4 strategy_id, per-strategy session filter
+
+**Mentor correction this session:** `'\\\''` was incorrectly flagged as SyntaxError across multiple prior sessions. Confirmed valid — fixed in gaps_pcap_mock1.md, tasks.md, and memory.
+
+---
+
 ## Week 11, Day 3 — 2026-03-25
 
 **Topic:** repr() | os.path | errno | random | escape sequences | generators | closures | Project
