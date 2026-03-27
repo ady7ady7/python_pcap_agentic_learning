@@ -3,6 +3,7 @@
 
 from abc import ABC, abstractmethod
 from datetime import time
+import pandas as pd
 import uuid
     
 
@@ -22,7 +23,20 @@ class BaseStrategy(ABC):
     @abstractmethod  
     def session_end(self) -> time | None: ...
     
+    def get_sl(self, row: pd.Series, current_date) -> float:
+        '''Override to give dynamic SL. This is just default.'''
+        return row['open'] - 50
+
+
+    def get_tp(self, row: pd.Series, current_date) -> float:
+        '''Override to provide dynamic TP. This is just default.'''
+        return row['open'] + 50
+        
 
     def get_name(self) -> str:
         '''inherited method to fetch a given strategy name'''
         return self.name
+    
+    def prepare(self, df: pd.DataFrame) -> None:
+        '''Optionally pre-calculate daily values for relevant levels for a given strategy. Default is None'''
+        pass

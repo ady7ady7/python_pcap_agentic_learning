@@ -26,6 +26,23 @@ Format: Date | Topic | Score | Difficulty | Notes
 
 ---
 
+## Week 11, Day 5 — 2026-03-27
+
+**Topic:** datetime | exceptions | OOP/MRO | generators | closures | modules | Project: LPP Strategy
+**Score:** 96% (27/28) PCAP | Project: partial
+**Difficulty:** 9/10 — hardest session to date | Time: ~2.5 hrs
+
+**PCAP correct:** T1-T6 ✅, T7 Q1-Q2 ✅
+**PCAP gap:** T7 Q3 — `import` caching: re-importing does NOT reset module state, `mymodule.x = 99` persists → answer is B not A
+
+**Project milestone:** LPPStrategy skeleton built — `prepare()` computes all LPP levels + sub-levels per day into `levels_by_date` dict. `run_backtest()` restructured: prep pass then single row loop.
+**Project blockers remaining:**
+- Universal SL/TP contract: `get_sl()`/`get_tp()` methods on BaseStrategy not yet implemented
+- `generate_signal()` signature mismatch between VwapStrategy and LPPStrategy not fully resolved
+- Architecture was too chaotic this session — needs a clean, focused fix next session before running
+
+---
+
 ## Week 11, Day 4 — 2026-03-26
 
 **Topic:** os.path | escape sequences | generators | closures | MRO | Project: multi-strategy run_backtest

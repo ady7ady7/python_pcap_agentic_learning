@@ -4,6 +4,25 @@ This file stores all completed daily feedback entries in chronological order (ol
 
 ---
 
+## Week 11, Day 5 — 2026-03-27
+
+**Topic:** datetime | exceptions | OOP/MRO | generators | closures | modules | LPP Strategy
+**Score:** 96% (27/28)
+
+**Per-task breakdown:**
+- T1 datetime: ✅ All correct
+- T2 strptime/comparisons: ✅ All correct, strptime/strftime definitions clean
+- T3 exceptions: ✅ All four correct — finally always runs, SpecificError caught by parent handler
+- T4 OOP/MRO: ✅ All three correct — D→B→C→A trace, class variable shared correctly
+- T5 generators: ✅ All four correct
+- T6 closures/lambdas: ✅ All four correct — late binding, default arg fix, reduce, sorted key
+- T7 modules: ✅ Q1-Q2. ✗ Q3 — answered A(10), correct is B(99). Python caches modules in sys.modules — re-import returns same object, mutations persist
+- T8 project: Partial — LPPStrategy.prepare() complete and correct. run_backtest() restructured. Blocked on SL/TP universal contract and generate_signal() signature.
+
+**Mentor note:** Session was too architecturally chaotic. Too many design pivots mid-session caused confusion. Next session: fix get_sl()/get_tp() contract on BaseStrategy first, nothing else until that's clean.
+
+---
+
 ## Week 11, Day 4 — 2026-03-26
 
 **Topic:** os.path | escape sequences | generators | closures | MRO | Project
