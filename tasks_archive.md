@@ -26,6 +26,28 @@ Format: Date | Topic | Score | Difficulty | Notes
 
 ---
 
+## Week 11, Weekend Exams — 2026-03-28
+
+**Topic:** PCAP Mock Exams A & B — Full syllabus pre-exam rehearsal
+**Score:** Exam A: 80% (24/30) | Exam B: 93% (28/30) | **Average: 86.5%**
+
+**Exam A gaps:**
+- Module caching — re-import does not reset state (persistent gap)
+- `math.ceil(3.1)` = 4, went too fast
+- `.zip` files are valid Python packages
+- `read(n)` returns what's left, no padding
+- `return` before `yield` → still generator, `list()` = `[]`
+- `sum(g)` after `next()` calls — only sums remaining values
+- bare `yield` → yields `None`
+
+**Exam B gaps:**
+- `str(e)` returns just the message string, not `ClassName: message`
+- `raise` inside `except` — propagates out, same `try` block's other handlers can't catch it
+
+**Verdict:** Ready for real PCAP exam. 86.5% average well above 70% threshold.
+
+---
+
 ## Week 11, Day 5 — 2026-03-27
 
 **Topic:** datetime | exceptions | OOP/MRO | generators | closures | modules | Project: LPP Strategy

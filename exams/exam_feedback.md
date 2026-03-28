@@ -1860,3 +1860,24 @@ Note: Q17 `generator.close()` IS PCAP syllabus — revisit.
 - `__all__` must contain strings, not bare names
 
 **Status:** Both exams above 70% threshold. Gaps identified — target in final week before exam.
+
+---
+
+## Week 11 Exams — 2026-03-28
+
+**Exam A: 80% (24/30)** | **Exam B: 93% (28/30)** | **Average: 86.5%**
+
+**Exam A wrong:**
+- Q1: Module caching — `mymod.x = 99` persists on re-import (sys.modules cache)
+- Q3: `math.ceil(3.1)` = 4, not 3 — went too fast
+- Q5: `.zip` archives are valid Python packages alongside `__init__.py` dirs
+- Q10: `read(n)` returns remaining chars up to n, never pads
+- Q17: `return` before `yield` → generator, `list()` = `[]` not `[1,2]`
+- Q19: `sum(g)` after two `next()` calls sums only remaining values
+- Q21: bare `yield` → `[None]` not `[1]`
+
+**Exam B wrong:**
+- Q8: `str(exception)` = just the message, not `ClassName: message`
+- Q10: `raise X` inside `except Y` — X propagates out, same `try` block's other handlers don't apply
+
+**Verdict:** Well above 70% passing threshold. Ready for real PCAP exam.
