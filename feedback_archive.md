@@ -4179,3 +4179,34 @@ Discarded by user (correct call — not on PCAP syllabus): Q15 (__slots__), Q17 
 
 **Gaps closed this session:** yield+early return, IOError is OSError alias
 **Remaining/new gaps:** repr() shows quotes+escapes literally, read(n) cursor arithmetic, os.path.join is platform-aware (Linux=/), splitext tuple format, errno numeric value (ENOENT=2)
+
+## Week 12, Day 1 — 2026-03-30
+
+**Topic:** Exceptions + ALL real exam gaps (type(e), bare except, custom __str__, __bases__/__mro__/__dict__, lambdas, list comp order, open() modes, 2. float, name mangling)
+**Score:** 88% (7/8)
+
+**Mentor Assessment:**
+
+T1 — Perfect. `type(e)` trap fully understood. Dog-in-animal-cage model is solid.
+
+T2 — Part A correct. Part B incomplete — student stated confusion rather than tracing. The key insight missed: `assert m != 0` fires BEFORE the inner try, AssertionError is NOT ArithmeticError, so bare `except` catches it → m=1. This exact mechanism needs more drills.
+
+T3 — A correct. C correct (valid code, correct output). B: good question from student — the difference is `e.args`: WITH super().__init__() args is populated, WITHOUT it's empty tuple. `__str__` output looks identical, but args is the hidden difference.
+
+T4 — B correct. One error in A: `'y' in A.__dict__` is False — y is an instance attribute set in __init__, lives on instances not the class. This is a critical distinction that WILL appear on the retake.
+
+T5 — All correct. Student confused about parameter vs argument terminology — clarified. Lambda-as-argument naming trap now understood.
+
+T6 — All correct. List comp order and open() modes both solid.
+
+T7 — B and C correct. Student correctly flagged that octal/hex validity drills are overkill for PCAP. Adjusted scope for future: float trap + underscore sep + bytes/bytearray.
+
+T8 — Perfect. Name mangling inheritance fully understood including accessing _C__VarA directly.
+
+**Code quality note:** `InvalidPriceError` implementation is correct. Minor: no need for redundant parentheses around `(a)`.
+
+**Patterns to address in upcoming days:**
+1. assert/propagation chains — needs more drills (T2B gap)
+2. class `__dict__` vs instance `__dict__` — one more drill needed
+3. platform + os module functions — expand coverage
+4. bytes/bytearray — add to T7-style tasks

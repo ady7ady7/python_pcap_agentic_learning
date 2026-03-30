@@ -1,825 +1,575 @@
-# Week 11, Day 5 — 2026-03-27
-
-**Topic:** datetime deep dive | gap closure | PCAP simulation | Project: Opening Range strategy
-**Mode:** High volume — exam prep + project
+# Week 12 Day 1 — Exceptions Deep Dive + All Gap Scaffolding
+**Date:** 2026-03-30 | **Focus:** Exceptions (36% on real exam) + ALL identified gaps touched daily
 
 ---
 
-## Task 1 — datetime: predict the output (volume drill)
+## Task 1 — `type(e)` trap [Real exam Q11]
 
+**TEACH:** `type(e)` returns the **actual class the object was raised as** — not the handler's label.
+Catching with `BaseException` does NOT change what `type(e)` returns.
 ```python
-from datetime import datetime, date, time, timedelta
-
-# Part A
-dt = datetime(2026, 3, 27, 14, 45, 30)
-print(dt.year)
-print(dt.hour)
-print(dt.minute)
-print(dt.date())
-print(dt.time())
+# Mental model: cage labelled "Animal" still contains a dog.
+# type() tells you what's IN the cage, not the cage label.
 ```
 
+**A)** Predict the output of each:
 ```python
-# Part B
-dt = datetime(2026, 3, 27, 9, 0, 0)
-delta = timedelta(days=2, hours=3, minutes=30)
-result = dt + delta
-print(result.day)
-print(result.hour)
-print(result.minute)
-```
-
-```python
-# Part C
-td1 = timedelta(hours=2, minutes=30)
-td2 = timedelta(hours=1, minutes=45)
-diff = td1 - td2
-print(diff.seconds)
-print(diff.total_seconds())
-```
-
-```python
-# Part D
-dt = datetime(2026, 3, 27, 9, 30, 0)
-print(dt.strftime("%Y-%m-%d"))
-print(dt.strftime("%H:%M:%S"))
-print(dt.strftime("%d/%m/%Y %H:%M"))
-```
-
-
-from datetime import datetime, timedelta
-
-dt = datetime(2026, 3, 27, 14, 45, 30)
-print(dt.year) #2026
-print(dt.hour) #14
-print(dt.minute) #45
-print(dt.date()) #2026-03-27
-print(dt.time()) #14:45:30
-
-
-dt = datetime(2026, 3, 27, 9, 0, 0)
-delta = timedelta(days=2, hours=3, minutes=30)
-result = dt + delta #2026-03-29 12:30
-print(result.day) #29
-print(result.hour) #12
-print(result.minute) #30
-
-
-td1 = timedelta(hours=2, minutes=30)
-td2 = timedelta(hours=1, minutes=45)
-diff = td1 - td2 #
-print(diff.seconds) #45 mins * 60 - WHAT THE FUCK, WHY WOULD I EVEN REMEMBER THAT?
-print(diff.total_seconds()) #same, stupid, retarded question - humans are not meant to be living calculators
-
-
-dt = datetime(2026, 3, 27, 9, 30, 0)
-print(dt.strftime("%Y-%m-%d")) #2026-03-27
-print(dt.strftime("%H:%M:%S")) #09:30:00
-print(dt.strftime("%d/%m/%Y %H:%M")) #27/03/2026 9:30
-
----
-
-## Task 2 — datetime: strptime + comparisons
-
-```python
-# Part A — strptime
-from datetime import datetime
-
-from datetime import datetime, time
-
-s = "2026-03-27 09:30:00"
-dt = datetime.strptime(s, "%Y-%m-%d %H:%M:%S")
-print(dt.year) #2026
-print(dt.minute) #30
-print(type(dt).__name__) #datetime
-```
-
-
-
-```python
-# Part B — time comparisons
-from datetime import time
-
-t1 = time(9, 0)
-t2 = time(17, 30)
-t3 = time(10, 15)
-
-print(t1 < t3 < t2) #True
-print(t3 > t2) #False
-print(t1 == time(9, 0, 0)) #True
-```
-
-```python
-# Part C — date arithmetic
-from datetime import date
-
-d1 = date(2026, 3, 27)
-d2 = date(2026, 3, 1)
-delta = d1 - d2
-print(delta.days) #26
-print(type(delta).__name__) #timedelta
-```
-
-Also answer:
-- What is the difference between `strptime()` and `strftime()`? (one-liner each)
-- What does `datetime.now()` return vs `datetime.today()`?
-
-1. strptime converts a given string into a datetime (with a specified format)
-strftime does the same, but in the opposite direction (from datetime to string)
-
-2. They return the same results
-
----
-
-## Task 3 — PCAP simulation: exceptions
-
-**Q1:**
-```python
+# Snippet 1
 try:
-    x = int("abc")
-except TypeError:
-    print("TypeError")
-except ValueError:
-    print("ValueError")
-except Exception:
-    print("Exception")
-
-ValueError
-```
-
-**Q2:**
-```python
-def f():
-    try:
-        return 1
-    finally:
-        return 2
-
-print(f())
-
-#2
-```
-
-**Q3:**
-```python
-x = 0
-try:
-    x = 1
-    raise RuntimeError
-    x = 2
-except RuntimeError:
-    x += 10
-else:
-    x += 100
-finally:
-    x += 1000
-
-print(x) #1011
-```
-
-**Q4:**
-```python
-class MyError(Exception):
-    pass
-
-class SpecificError(MyError):
-    pass
-
-try:
-    raise SpecificError("oops")
-except MyError as e:
+    {}['missing']
+except BaseException as e:
     print(type(e).__name__)
 
-#SpecificError
+#KeyError
+#if we printed e, it would be 'missing'
+
+# Snippet 2
+try:
+    raise FileNotFoundError("gone")
+except OSError as e:
+    print(type(e).__name__) #FileNotFoundError
+    print(isinstance(e, OSError)) #True
+    print(isinstance(e, FileNotFoundError)) #True
+
+#if we printed e, it would be 'gone'
+
+# Snippet 3
+try:
+    int("abc")
+except Exception as e:
+    print(type(e) is ValueError) #True
+    print(type(e) is Exception) #False
+```
+
+**B)** Which expression evaluates to `True` after this runs?
+```python
+try:
+    1 / 0
+except ArithmeticError as err:
+    pass
+```
+- `type(err) is ArithmeticError` #False
+- `type(err) is ZeroDivisionError` #True
+- `type(err).__name__ == 'ArithmeticError'` #False
+- `isinstance(err, ZeroDivisionError)` #True
+
+
+
+Write your answers here:
+```
+A) Snippet 1: KeyError
+   Snippet 2: FileNotFoundError, True, True
+   Snippet 3: True, False
+
+B) True expressions:
+False, True, False, True (2, 4)
+
 ```
 
 ---
 
-## Task 4 — PCAP simulation: OOP + MRO
+## Task 2 — `raise` inside `except` + bare `except` position [Real exam Q8, Q10]
 
-**Q1:**
+**TEACH — `raiseX` no space:**
+```python
+raise ValueError    # statement — raises ValueError
+raiseValueError     # name lookup — NameError if undefined (NOT SyntaxError!)
+```
+This looks syntactically valid — Python discovers the bug at RUNTIME.
+
+**TEACH — bare `except` position:**
+```python
+# ILLEGAL — SyntaxError:
+try: ...
+except:    # bare except MUST be last
+    pass
+except ValueError:
+    pass
+
+# LEGAL — bare except last:
+try: ...
+except ValueError:
+    pass
+except:
+    pass
+```
+
+**A)** Will each snippet raise an exception? If yes, which one and when (parse time vs runtime)?
+```python
+# Snippet 1
+try:
+    x = 1
+except:
+    pass
+except ValueError:
+    pass
+
+#Yes, I think it's parse time error - a SyntaxError, as the bare except is first.
+
+
+# Snippet 2
+def foo():
+    raiseRuntimeError
+
+foo()
+
+#NameError, undefined.
+#But next time, I think it's a typo on my end and the gap is NOT connected with a lack of space - the space probably was there in the original.
+
+# Snippet 3
+try:
+    raise IndexError
+except TypeError:
+    raiseValueError
+except:
+    print("caught")
+```
+
+**B)** What does this print? (This is Q10 from your real exam — trace it step by step)
+```python
+m = 0
+
+def foo(n):
+    global m
+    assert m != 0 #I assumed THIS WOULD CAUSE AN AssertionError, as it's not even put in the try/except block. For some reason it doesn't trigger an assertion error or crash the code. Why?
+    try:
+        return 1/n
+    except ArithmeticError:
+        raise ValueError #This is MY TYPO - the original was with space, and I fixed that accordingly! The gap is not about space. Adjust that for every next time we address this and similar examples.
+
+try:
+    foo(0)
+except ArithmeticError:
+    m += 2
+except:
+    m += 1
+print(m) #It returns 1, but I'm really not sure why.
+#From my information, ZeroDivisonError is an ArithmethicError, so it should add 2 to m, and make it 2?
+#What am I missing here? Why is that the case? How to avoid getting trapped in similar scenarios?
+```
+
+Write your answers here:
+```
+A) Snippet 1: SyntaxError 
+   Snippet 2: NameError, but honestly THIS IS NOT THE REAL ISSUE. The space was in the original, I just made a typo there.
+   Snippet 3: It prints caught - if we assume it's written correctly. It's weird for me though.
+
+B) Output:
+   Trace (step by step):
+
+#It returns 1, but I'm really not sure why.
+#First of all, I'd exdpect the AssertionError to trigger at assert m != 0, as it's literally 0
+#From my information, ZeroDivisonError is an ArithmethicError, so it should add 2 to m, and make it 2?
+#What am I missing here? Why is that the case? How to avoid getting trapped in similar scenarios?
+
+```
+
+---
+
+## Task 3 — Custom exception class + `print(e)` vs `str(e)` vs `repr(e)` [Real exam Q7]
+
+**TEACH:** When you define `__str__` on a custom exception:
+- `print(e)` calls `__str__`
+- `str(e)` calls `__str__`
+- `repr(e)` calls `__repr__` (default: `ClassName(args)`)
+- `print(type(e).__name__)` → class name string
+
+**TEACH — Q7 from your real exam:**
+```python
+class E(Exception):
+    def __init__(self, message):
+        self.message = message     # NOT passed to super().__init__()!
+    def __str__(self):
+        return "it's nice to see you"
+```
+Notice: `super().__init__()` is NOT called with `message`. So `str(e)` uses your `__str__`, which returns the hardcoded string — NOT the message.
+
+**A)** Predict the output:
+```python
+class AppError(Exception):
+    def __init__(self, msg):
+        super().__init__(msg)
+        self.code = 500
+
+    def __str__(self):
+        return f"AppError[{self.code}]"
+
+try:
+    raise AppError("server down")
+except AppError as e:
+    print(e) #AppError[500]
+    print(str(e)) #AppError[500]
+    print(e.args[0]) #server down - this is very unintuitive
+    print(type(e).__name__) #AppError
+```
+
+**B)** Now WITHOUT calling `super().__init__(msg)` — what changes?
+```python
+class AppError(Exception):
+    def __init__(self, msg):
+        self.code = 500          # no super().__init__()
+    def __str__(self):
+        return f"AppError[{self.code}]"
+
+try:
+    raise AppError("server down")
+except AppError as e:
+    print(e) #AppError[500] - it's literally the same, so what's the point in showing a difference here?
+    print(e.args) #('server down',) - BUT WHAT ARE YOU TRYING TO SHOW HERE? Above example would print the same if we printed e.args - What's the fucking difference, as I see none...
+```
+
+**C)** Write a custom exception `InvalidPriceError` that:
+- Takes `price` (float) and `reason` (str) in `__init__`
+- Stores them as attributes
+- `__str__` returns: `f"Invalid price {price}: {reason}"`
+- Raise it with a negative price and catch it, printing the exception
+
+Write your answers here:
+```
+A) Output:
+
+B) Output + args:
+
+C) Code:
+
+
+
+class InvalidPriceError(Exception):
+    def __init__(self, price: float, reason: str):
+        self.reason = reason
+        self.price = price
+    
+    def __str__(self):
+        return f'Invalid price {self.price}: {self.reason}'
+    
+
+def mock_func(a, b):
+    if a < 0 or b < 0:
+        raise InvalidPriceError((a), 'Lol')
+
+mock_func(-1, 5)
+
+$ python practice.py
+Traceback (most recent call last):
+  File "C:\Users\HARDPC\Desktop\AL\projekty\python_pcap_agentic_learning\practice.py", line 12960, in <module>
+    mock_func(-1, 5)
+    ~~~~~~~~~^^^^^^^
+  File "C:\Users\HARDPC\Desktop\AL\projekty\python_pcap_agentic_learning\practice.py", line 12958, in mock_func
+    raise InvalidPriceError((a), 'Lol')
+InvalidPriceError: Invalid price -1: Lol
+(.venv) 
+
+```
+
+---
+
+## Task 4 — `__bases__`, `__mro__`, `__dict__` [Real exam Q29]
+
+**TEACH:**
+```
+__bases__  → tuple of DIRECT parents only
+__mro__    → tuple of full resolution chain (includes object at end)
+__dict__   → namespace dict — class attrs on class, instance attrs on instance
+```
+Real exam Q29 asked for the attribute storing superclasses → answer is `__bases__`, not `__super__` or `__ancestors__`.
+
+**A)** Given:
 ```python
 class A:
+    x = 10
     def __init__(self):
-        self.x = 1
+        self.y = 20
 
 class B(A):
-    def __init__(self):
-        super().__init__()
-        self.x += 10
+    pass
 
 class C(A):
-    def __init__(self):
-        super().__init__()
-        self.x += 100
+    pass
 
 class D(B, C):
     pass
 
 d = D()
-print(d.x)
-
-D -> B -> C -> A
-Output: 111
-
 ```
-
-**Q2:**
+Predict True or False for each:
 ```python
-class Counter:
-    count = 0
-    def __init__(self):
-        Counter.count += 1
-
-a = Counter()
-b = Counter()
-c = Counter()
-print(Counter.count) #3
-print(a.count) #3
+print(A in D.__bases__)         #False
+print(A in D.__mro__)           #True
+print(len(D.__bases__))         # 2
+print(len(D.__mro__))           # 5 (D - B - C - A - OBJECT)
+print('x' in D.__dict__)        # False
+print('x' in A.__dict__)        # True
+print('y' in A.__dict__)        # #True - it's seen in static_attributes, not sure if this is meant
+print('y' in d.__dict__)        # #True, clearly seen in a dict
 ```
 
-**Q3:**
+**B)** Multiple choice (real exam style): Which expression evaluates to True?
+- `B in D.__bases__` #True
+- `C in D.__bases__` #True
+- `A in D.__bases__` #False
+- `object in D.__bases__`  #False
+
+Write answers here:
+```
+A) Results:
+
+B) True expressions:
+
+Already answered above.
+```
+
+---
+
+## Task 5 — Lambda edge cases [Real exam Q34, Q36]
+
+**TEACH — Q34 traps:**
+```
+"Cannot return None"              → FALSE — lambdas CAN return None
+"Cannot be defined without params"→ FALSE — lambda: 42 is valid
+"Must contain return keyword"     → FALSE — return is implicit
+"Are anonymous functions"         → TRUE
+"Can be defined without params"   → TRUE
+```
+
+**TEACH — Q36 naming trap:**
+When a lambda is passed as an argument AND has the same param name as the outer function param, rename mentally:
+```python
+def foo(x, y, z):          # x here is the FUNCTION
+    return x(y) - x(z)     # x(y) = call that function with y
+
+print(foo(lambda x: x % 2, 2, 1))
+# Rename: fn = lambda n: n%2, a=2, b=1
+# fn(2) - fn(1) = 0 - 1 = -1
+```
+
+**A)** True or False:
+```
+1. lambda: 42               — valid Python? #Yes
+2. lambda x: print(x)      — can this return None? #Supposedly, but I don't see it printing None
+3. f = lambda: None; f()   — what does f() return? #It returns None
+4. lambda x, y: x + y      — valid (multi-param)? #Yes
+5. lambda x: return x + 1  — valid Python? #NO, THIS IS A SYNTAX ERROR!
+6. result = (lambda x: x**2)(5) — what is result? #25
+
+Although I'm still kinda puzzled in terms of what is an argument, waht is a parameter, what's the differene and how to remember that.
+```
+
+**B)** Predict the output:
+```python
+def apply(fn, a, b):
+    return fn(a) + fn(b)
+
+print(apply(lambda x: x ** 2, 3, 4)) #fn(3) + fn(4) = 9 + 16 = 25
+print(apply(lambda x: x % 2, 7, 4)) #fn(7) + fn(4) = 1 + 0 = 1
+
+#Now it looks much more clear, definitely we still need to practice this pattern
+```
+
+**C)** Predict the output (harder — Q36 exact pattern):
+```python
+def foo(x, y, z):
+    return x(y) - x(z)
+
+print(foo(lambda x: x % 2, 2, 1)) # foo(2) - foo(1) = 0 - 1 = -1
+print(foo(lambda x: x * 3, 5, 2)) # foo(5) - foo(2) = 15 - 6 = 9
+```
+
+Write answers here:
+```
+A) 1-6:
+
+B) Output:
+
+C) Output:
+
+Answers already given above
+```
+
+---
+
+## Task 6 — List comprehension order + `open()` modes [Real exam Q35, Q39]
+
+**TEACH — Q39 order trap:**
+```python
+range(4, 0, -1) → iterates: 4, 3, 2, 1 (DESCENDING)
+# Result preserves ITERATION ORDER, not sorted order
+# If you iterate 4→3→2→1 and pick odds: 3, 1 → output [3, 1] not [1, 3]
+```
+
+**TEACH — Q35 open() traps:**
+```
+Default mode    → 'r' (NOT 'w'!)
+'w' mode        → truncates all previous content
+'a' mode        → appends (safe for logs)
+'x' mode        → fails if file already exists
+'r+' mode       → read+write, file MUST exist
+```
+
+**A)** Predict the output:
+```python
+my_list = [0, 1, 2, 3, 4]
+m = [my_list[i] for i in range(4, 0, -1) if my_list[i] % 2 != 0]
+print(m) #[3, 1]
+```
+
+**B)** What does each print?
+```python
+evens = [x for x in range(10, 0, -2)]
+print(evens) #[10, 8, 6, 4, 2]
+
+squares = [x**2 for x in range(5, 0, -1) if x % 2 == 0]
+print(squares) #[16, 4]
+```
+
+**C)** True or False about `open()`:
+```
+1. open('f.txt') is equivalent to open('f.txt', 'r') #Yes, because 'r' is the default mode
+2. The default mode is 'w' #No!
+3. open('f.txt', 'w') loses previous file contents #Yes
+4. open('f.txt', 'a') creates the file if it doesn't exist #Yes
+5. open('f.txt', 'x') fails if the file already exists #Yes
+6. open('f.txt', 'r') raises FileNotFoundError if file missing #Yes
+```
+
+Write answers here:
+```
+A) Output: [3, 1]
+
+B) evens: [10, 8, 6, 4, 2]
+   squares: [16, 4]
+
+C) 1-6:
+True, False, True, True, True, True
+
+
+```
+
+---
+
+## Task 7 — `2.` float syntax + numeric literals + `platform` [Real exam Q1, Q32]
+
+**TEACH — Q32 trap:**
+`2.` is VALID Python — same as `2.0`. The exam uses it to make you think it's a SyntaxError.
+
+**TEACH — All valid numeric literals:**
+```python
+2.          # float: 2.0       ← real exam trap
+1_000_000   # int with underscores
+0xFF        # hex int: 255
+0o77        # octal int: 63
+0b1010      # binary int: 10
+3+2j        # complex number
+```
+
+**TEACH — Q1 platform trap:**
+```python
+platform.platform()      # full platform string: 'Windows-10-...'
+platform.system()        # just OS name: 'Windows'
+platform.uname()         # namedtuple with ALL info — NOT just platform name
+platform.python_version()# Python version: '3.11.4'
+```
+Q1 asked "underlying platform name" → `platform.platform()`, NOT `platform.uname()`
+
+**A)** Valid or SyntaxError?
+```python
+x = 2.          # ?
+y = .5          # ?
+z = 1_000_000   # ?
+a = 0xFF        # ?
+b = 0o79        # ?  ← careful #This is False, but I had to check it. Honestly I doubt this will be at REAL PCAP exam. The float trap and maybe bytes is maximum we can get.
+c = 0b1020      # ?  ← careful
+d = 3+2j        # ?
+
+This is a bit too much.
+We need to know the float trap + bytes potentially, with bytearray and potential traps there though.
+
+```
+
+**B)** Predict the output:
+```python
+x = 8 ** (1/3)
+y = 2. if x < 2.3 else 3.
+print(y)
+print(type(y))
+```
+
+**C)** Multiple choice — which platform function returns the platform name string (not a tuple/namedtuple)?
+- `platform.platform()`
+- `platform.uname()`
+- `platform.system()`
+- `platform.processor()`
+
+Write answers here:
+```
+A) x, y, z, a, b, c, d: This is a bit too much - an overkill. We need to know the FLOAT trap, maybe also the 1_000_00 trap, as it's a bit sneaky + bytes (with bytearray), as they are included in the file I/O seciton. Make sure we adapt to that next time. But do not take away points for this 
+
+B) Output: 2.0, float
+
+C) Answer: #platform.platform()
+But we still definitely need to practice all of these, not just platform.platform(), with information and same about os. There might be questions about different commands, functions etc.
+```
+
+---
+
+## Task 8 — Name mangling + inheritance [Real exam Q24]
+
+**TEACH — this was Q24 on your real exam:**
+Name mangling is resolved at **compile time** based on where the **method is defined**, NOT where the instance is created.
+
 ```python
 class A:
-    def hello(self):
-        return "A"
+    __x = 1           # stored as _A__x
+    def get(self): return self.__x   # compiled: self._A__x
 
 class B(A):
-    pass
+    __x = 2           # stored as _B__x
+    def get(self): return self.__x   # compiled: self._B__x
 
-class C(A):
-    def hello(self):
-        return "C"
-
-class D(B, C):
-    pass
-
-print(D().hello())
+class C(B):
+    __x = 3           # stored as _C__x
+    # NO get() method defined here!
 ```
 
+`C` has no `get()`. MRO: C → B → A. `obj_c.get()` resolves to `B.get()`.
+Inside `B.get()`, `self.__x` was compiled as `self._B__x` = **2**.
+Python does NOT re-mangle at runtime based on the instance's class.
 
-#MRO: D -> B -> C -> A
-#Output: C
-
----
-
-## Task 5 — PCAP simulation: generators + iterators
-
-**Q1:**
+**A)** Predict output:
 ```python
-def gen(n):
-    for i in range(n):
-        yield i * 2
+class A:
+    __VarA = 1
+    def get(self): return self.__VarA
 
-g = gen(4)
-print(next(g))
-print(next(g))
-print(list(g))
-print(list(g))
+class B(A):
+    __VarA = 2
+    def get(self): return self.__VarA
 
-0
-2
-[4, 6]
-[]
+class C(B):
+    __VarA = 3
 
+obj_a = A()
+obj_b = B()
+obj_c = C()
+
+print(obj_a.get())
+print(obj_b.get())
+print(obj_c.get())       # KEY QUESTION — what is this?
+print(obj_c._C__VarA)
+print(obj_c._B__VarA)
 ```
 
-**Q2:**
-```python
-def gen():
-    yield 1
-    yield from range(2, 5)
-    yield 5
-
-print(list(gen()))
-
-#[1, 2, 3, 4, 5]
+**B)** True or False (real exam Q24 options):
+```
+1. hasattr(B, 'get')                  # True
+2. obj_c.get() == 2                   # True
+3. isinstance(obj_b, C)               # False
+4. C._C__VarA == 3                    # True
+5. obj_c._A__VarA == 1                # True
 ```
 
-**Q3:**
-```python
-class Counter:
-    def __init__(self, stop):
-        self.current = 0
-        self.stop = stop
-
-    def __iter__(self):
-        return self
-
-    def __next__(self):
-        if self.current >= self.stop:
-            raise StopIteration
-        self.current += 1
-        return self.current
-
-print(list(Counter(4)))
-
-#[1, 2, 3, 4]
+Write answers here:
 ```
-
-**Q4:**
-```python
-g = (x for x in range(10) if x % 3 == 0)
-print(next(g))
-print(next(g))
-print(list(g))
-
-#0
-#3
-#[6, 9]
-
-```
-
----
-
-## Task 6 — PCAP simulation: closures + lambdas
-
-**Q1:**
-```python
-fns = []
-for i in range(3):
-    fns.append(lambda: i * 2)
-
-print([f() for f in fns])
-
-#[4, 4, 4]
-
-```
-
-**Q2:**
-```python
-fns = [lambda i=i: i * 2 for i in range(3)]
-print([f() for f in fns])
-
-#[0, 2, 4]
-```
-
-**Q3:**
-```python
-from functools import reduce
-
-nums = [1, 2, 3, 4, 5]
-result = reduce(lambda acc, x: acc + x, nums, 10)
-print(result)
-
-#25
-```
-
-**Q4:**
-```python
-data = [3, 1, 4, 1, 5, 9]
-result = sorted(data, key=lambda x: -x)
-print(result[:3])
-
-#[9, 5, 4]
-
-```
-
----
-
-## Task 7 — PCAP simulation: modules + packages
-
-**Q1:** Which correctly imports only `sqrt` from `math`?
-- A) `import math.sqrt`
-- B) `from math import sqrt`
-- C) `import sqrt from math`
-- D) `from math import *`
-
-B
-
-**Q2:** What does `__all__` control?
-- A) Which names are loaded when the module is first imported
-- B) Which names are exported when `from module import *` is used
-- C) Which names are private and cannot be accessed externally
-- D) Which names are automatically deleted after import
-
-B
-
-
-**Q3:** What is printed?
-```python
-import mymodule       # mymodule.x = 10
-import mymodule       # second import
-mymodule.x = 99
-import mymodule       # third import
-print(mymodule.x)
-```
-- A) `10`  B) `99`  C) `ImportError`  D) `None`
-
-A
-
----
-
-## Task 8 — PROJECT: Local Pivot Point Strategy
-
-### Concept
-
-From the 09:00–10:00 candle window each day, calculate:
-- `H` = highest high, `L` = lowest low, `C` = close of last candle (09:59)
-
-Then compute **Local Pivot Point levels**:
-```
-LPP = (H + L + C) / 3
-LR1 = (2 * LPP) - L
-LS1 = (2 * LPP) - H
-LR2 = LPP + (H - L)
-LS2 = LPP - (H - L)
-LR3 = H + 2 * (LPP - L)
-LS3 = L - 2 * (H - LPP)
-```
-Plus sub-levels between each pair (025/050/075 divisions).
-
-Each strategy **instance** is configured at construction with a `side`, `entry` level, `sl` level, and `tp` level — all as string keys referencing the computed levels:
-
-```python
-LPPStrategy('FDAX', side='BUY',  entry='LR1', sl='LS1', tp='LR2')
-LPPStrategy('FDAX', side='SELL', entry='LS2', sl='LR1', tp='LS3')
-```
-
-Both instances can run simultaneously in the same backtest — each has independent state.
-
----
-
-### Infrastructure: prepare_day() hook on BaseStrategy
-
-Add to `BaseStrategy` — **not abstract**, default is a no-op:
-
-```python
-def prepare_day(self, day_df: pd.DataFrame) -> None:
-    """Override to pre-compute daily values. Default is no-op."""
-    pass
-```
-
-`VwapStrategy` ignores it. `LPPStrategy` overrides it to compute all levels.
-
----
-
-### Updated run_backtest() structure
-
-Group by day before the loop. For each day, call `prepare_day()` on all strategies first, then run the signal loop:
-
-```python
-days = df.groupby(df['candle_open'].apply(
-    lambda x: datetime.fromisoformat(x).date()
-))
-
-for day_date, day_df in days:
-    for strategy in strategies:
-        strategy.prepare_day(day_df)
-
-    for _, row in day_df.iterrows():
-        # RTH filter + signal loop unchanged
-```
-
----
-
-### generate_signal() signature fix
-
-`run_backtest()` must call `strategy.generate_signal(row['open'])` universally — just price. Fix `VwapStrategy` so it no longer needs `vwap` passed in — instead, `prepare_day()` or a per-row setter stores `self.current_vwap` and `generate_signal()` reads it internally. Your call on the cleanest approach.
-
----
-
-### What to build
-
-**A) `BaseStrategy`** — add `prepare_day()`.
-
-**B) `algo_backtest/strategies/lpp_strategy.py`**
-
-```python
-class LPPStrategy(BaseStrategy):
-    def __init__(self, ticker: str, side: str,
-                 entry: str, sl: str, tp: str): ...
-    # side: 'BUY' or 'SELL'
-    # entry/sl/tp: string keys e.g. 'LR1', 'LS2', 'LPP'
-
-    def session_start(self) -> time: ...   # 10:00 — no signals during calc window
-    def session_end(self) -> time: ...     # 17:30
-
-    def prepare_day(self, day_df: pd.DataFrame) -> None:
-        # 1. Reset self.levels = {} first — prevents stale data from previous day leaking in
-        # 2. Filter day_df to 09:00-10:00
-        # 3. Compute H, L, C
-        # 4. Compute all LPP levels + sub-levels
-        # 5. Store as self.levels dict: {'LR1': 12345.0, 'LS1': 12300.0, ...}
-        ...
-
-    def generate_signal(self, price: float) -> str:
-        # If self.levels is empty (prepare_day hasn't run yet) → HOLD
-        # BUY side: price > self.levels[self.entry] → 'BUY', else 'HOLD'
-        # SELL side: price < self.levels[self.entry] → 'SELL', else 'HOLD'
-        ...
-```
-
-**C) `run_backtest()` in `main.py`** — update with day-grouping structure above. When opening a position, SL and TP come from the strategy's levels:
-
-```python
-stop_loss = strategy.levels[strategy.sl]
-take_profit = strategy.levels[strategy.tp]
-```
-
-**D) `main.py` strategies list:**
-```python
-strategies = [
-    VwapStrategy('FDAX'),
-    LPPStrategy('FDAX', side='BUY',  entry='LR1', sl='LS1', tp='LR2'),
-    LPPStrategy('FDAX', side='SELL', entry='LS2', sl='LR1', tp='LS3'),
-]
-```
-
-Run it. Report trade counts per strategy from `strategy_report()`.
-
-
-The struggle is real...
-
----
-
-### Answer template
-```python
-# A) BaseStrategy.prepare_day():
-
-'''Abstract Method Class - base strategy'''
-
-from abc import ABC, abstractmethod
-from datetime import time
-import pandas as pd
-import uuid
-    
-
-class BaseStrategy(ABC):
-    '''A class with abstract method used to generate trading signal'''
-    def __init__(self, name: str):
-        self.name = name
-        self.strategy_id = str(uuid.uuid4())
-        
-    @abstractmethod
-    def generate_signal(self, price: float) -> str:
-        pass
-    
-    @abstractmethod
-    def session_start(self) -> time | None: ...
-
-    @abstractmethod  
-    def session_end(self) -> time | None: ...
-    
-    def get_sl(self, row: pd.Series, current_date) -> float:
-        '''Override to give dynamic SL. This is just default.'''
-        return row['open'] - 50
-
-
-    def get_tp(self, row: pd.Series, current_date) -> float:
-        '''Override to provide dynamic TP. This is just default.'''
-        return row['open'] + 50
-        
-
-    def get_name(self) -> str:
-        '''inherited method to fetch a given strategy name'''
-        return self.name
-    
-    def prepare(self, df: pd.DataFrame) -> None:
-        '''Optionally pre-calculate daily values for relevant levels for a given strategy. Default is None'''
-        pass
-
-In the end i've also added get_tp + get_sl
-
-# B) lpp_strategy.py:
-
-from .base_strategy import BaseStrategy
-from datetime import datetime, time
-import pandas as pd
-
-class LPPStrategy(BaseStrategy):
-    '''A class with abstract method used to generate trading signal'''
-    def __init__(self, ticker, side: str = None, entry: str = None, sl: str = None, tp: str = None):
-        super().__init__(f'LPP Strategy')
-        self.ticker = ticker
-        self.side = side
-        self.entry = entry
-        self.sl = sl
-        self.tp = tp
-        self.levels_by_date: dict = {}
-        
-    def generate_signal(self, price: float, current_date) -> str:
-        '''Generates trade signals based on specified levels and direction set in init'''
-        levels = self.levels_by_date.get(current_date)
-        if not levels:
-            return 'HOLD'
-        entry_level = levels[self.entry]
-        if self.side == 'BUY':
-            return 'BUY' if price > entry_level else 'HOLD'
-        return 'SELL' if price < entry_level else 'HOLD'
-    
-    def get_sl(self, row: pd.Series, current_date) -> float:
-        return self.levels_by_date[current_date][self.sl]
-
-    def get_tp(self, row: pd.Series, current_date) -> float:
-        return self.levels_by_date[current_date][self.tp]
-    
-    def session_start(self) -> time:
-        return time(10, 0)
-
-    def session_end(self) -> time:
-        return time(17, 30)
-
-    def prepare(self, df: pd.DataFrame) -> None:
-        '''Run once before backtest. Computes LPP levels for every trading day.'''
-        times = df['candle_open'].apply(lambda x: datetime.fromisoformat(x).time())
-        dates = df['candle_open'].apply(lambda x: datetime.fromisoformat(x).date())
-
-        window_mask = (times >= time(9, 0)) & (times < time(10, 0))
-        window_df = df[window_mask]
-
-        for day_date, day_df in window_df.groupby(dates[window_df.index]):
-            high = day_df['high'].max()
-            low = day_df['low'].min()
-            close = day_df['close'].iloc[-1]
-
-            lpp = (high + low + close) / 3
-            lr1 = (2 * lpp) - low
-            ls1 = (2 * lpp) - high
-            lr2 = lpp + (high - low)
-            ls2 = lpp - (high - low)
-            lr3 = high + 2 * (lpp - low)
-            ls3 = low - 2 * (high - lpp)
-
-            levels = {
-                'LPP': lpp,
-                'LR1': lr1, 'LR2': lr2, 'LR3': lr3,
-                'LS1': ls1, 'LS2': ls2, 'LS3': ls3,
-            }
-
-            # Sub-levels between each adjacent pair
-            pairs = [
-                ('LS3', 'LS2'), ('LS2', 'LS1'), ('LS1', 'LPP'),
-                ('LPP', 'LR1'), ('LR1', 'LR2'), ('LR2', 'LR3'),
-            ]
-            for lo_key, hi_key in pairs:
-                lo = levels[lo_key]
-                dist = levels[hi_key] - lo
-                levels[f'{lo_key}_{hi_key}_025'] = lo + 0.25 * dist
-                levels[f'{lo_key}_{hi_key}_050'] = lo + 0.50 * dist
-                levels[f'{lo_key}_{hi_key}_075'] = lo + 0.75 * dist
-
-            self.levels_by_date[day_date] = levels
-
-
-It seems to look very well
-
-# C) run_backtest() updated loop:
-
-def run_backtest(df: pd.DataFrame, strategies: list) -> BacktestEngine:
-    backtest_engine = BacktestEngine()
-    current_positions = {strategy: None for strategy in strategies}
-
-    # Step 1: preparation — each strategy pre-computes what it needs once
-    for strategy in strategies:
-        strategy.prepare(df)
-
-    # Step 2: backtest — single pass through all rows
-    for _, row in df.iterrows():
-        t = datetime.fromisoformat(row['candle_open']).time()
-        current_date = datetime.fromisoformat(row['candle_open']).date()
-
-        for strategy in strategies:
-            start = strategy.session_start()
-            end = strategy.session_end()
-            is_rth = (start is None) or (start <= t <= end)
-            session_ending = end is not None and t > end
-
-            if session_ending and current_positions[strategy] is not None:
-                backtest_engine.force_close_all('FDAX', strategy.strategy_id, row['open'])
-                current_positions[strategy] = None
-                continue
-
-            if is_rth:
-                signal = strategy.generate_signal(row['open'], current_date)
-
-                if signal == 'BUY' and current_positions[strategy] is None:
-                    backtest_engine.open_position(
-                        'FDAX', 'BUY', row['open'],
-                        quantity=1,
-                        stop_loss=strategy.get_sl(row, current_date),
-                        take_profit=strategy.get_tp(row, current_date),
-                        strategy_id=strategy.strategy_id,
-                        strategy_name=strategy.get_name()
-                    )
-                    current_positions[strategy] = True
-
-                elif signal == 'SELL' and current_positions[strategy] is None:
-                    backtest_engine.open_position(
-                        'FDAX', 'SELL', row['open'],
-                        quantity=1,
-                        stop_loss=strategy.get_sl(row, current_date),
-                        take_profit=strategy.get_tp(row, current_date),
-                        strategy_id=strategy.strategy_id,
-                        strategy_name=strategy.get_name()
-                    )
-                    current_positions[strategy] = True
-
-            newly_closed = backtest_engine.process_price('FDAX', row['close'])
-            if newly_closed:
-                current_positions[strategy] = None
-
-    return backtest_engine
-
-
-I needed to use Claude for this - this is still a nuisance to me.
-IMO it looks just too complicated and it's not how I want to build. 
-I'm honestly getting lost in it, plus I have a feeling that THERE might be some flaws, that I didn't yet discovered.
-
-
-
-# D) strategy_report() output:
-
-
-BacktestEngine: 0 open | 11862 closed | PnL: $-3424.0
---- LPP Strategy (ID: 48ad2eec-e818-4e2a-b836-11e2f6ead483) ---
-
-                  Trades: 11862
-                  Win Rate: 45.557241611869834%
-                  Total PnL: $-3424.00
-                  Avg R: -0.00R
-
-
---- PORTFOLIO TOTAL  ---
-
-                  Trades: 11862
-                  Win Rate: 45.557241611869834%
-                  Total PnL: $-3424.0
-                  Avg R: -0.0R
-
-
-Here, this is a red flag - there's no way we'd make 11800 trades in 11 months, AND also there's no AVG R. I'm not sure what's the case, but this has to be studied thoroughly.
-
-For this particular strategy I'm aiming for just 1 trade for a day by the way, if the conditions are met - TP/SL or force close, as we've settled it.
-
-```
-
----
-
-## Answers
-
-### Task 1
-```
-Part A:
-Part B:
-Part C:
-Part D:
-```
-
-### Task 2
-```
-Part A:
-Part B:
-Part C:
-strptime vs strftime:
-now() vs today():
-```
-
-### Task 3
-```
-Q1:
-Q2:
-Q3:
-Q4:
-```
-
-### Task 4
-```
-Q1:
-Q2:
-Q3:
-```
-
-### Task 5
-```
-Q1:
-Q2:
-Q3:
-Q4:
-```
-
-### Task 6
-```
-Q1:
-Q2:
-Q3:
-Q4:
-```
-
-### Task 7
-```
-Q1:
-Q2:
-Q3:
-```
-
-### Task 8
-```python
-# A) BaseStrategy.prepare_day():
-
-# B) lpp_strategy.py:
-
-# C) run_backtest() updated loop:
-
-# D) strategy_report() output:
+A) Output: 1, 2, 2, 3, 2
+ 
+B) 1-5: True, True, False, True, True
 ```

@@ -1919,3 +1919,32 @@ Task 8 expected values were wrong. Correct: 4 winners, $1050 total PnL.
 **Remaining gaps:**
 - yield + early return: list is [] not [1,2]
 - IOError is OSError alias: True in Python 3, .errno works
+
+## Week 12, Day 1 — 2026-03-30
+
+**Topic:** Exceptions deep dive + ALL real exam gaps scaffolded
+**Score:** 88% (7/8 tasks — T2B trace incomplete)
+**Difficulty:** Hard | Time: ~90 min
+
+**Tasks Completed:** 8 tasks
+**Correct:** T1 ✅, T2-A ✅ (B incomplete), T3-A ✅, T3-C ✅, T4-B ✅, T5 ✅, T6 ✅, T7-B/C ✅, T8 ✅
+**T4-A:** One error — `'y' in A.__dict__` is False (instance attr, not class attr)
+
+**Key gaps addressed and status:**
+- `type(e)` trap → locked in ✅
+- bare `except` position → correct ✅
+- `AssertionError` propagation trace (Q10) → explained, needs more repetition
+- Custom exception `__str__` vs `args` → understood ✅
+- `__bases__` vs `__mro__` vs `__dict__` → mostly correct, one miss on instance vs class dict
+- Lambda zero params / returns None → correct ✅
+- Lambda-as-argument naming trap → correct ✅
+- List comp iteration order → correct ✅
+- `open()` modes → correct ✅
+- `2.` float syntax → correct ✅
+- Name mangling + inheritance → correct ✅
+
+**User feedback for next sessions:**
+- Numeric literal drills: focus on float trap + underscore sep + bytes/bytearray only
+- `platform` module: expand to include `os` module functions too
+- More practice on assert/propagation chains
+- More lambda-as-argument patterns
