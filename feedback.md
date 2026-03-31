@@ -1,12 +1,12 @@
-# Daily Feedback — Week 12, Day 1
+# Daily Feedback — Week 12, Day 2
 
-**Date:** 2026-03-30
+**Date:** 2026-03-31
 
-**Topic:** TBD
+**Topic:** OOP internals, assert propagation, __dict__ class vs instance, isinstance vs type, name mangling 3-level, MRO/bases, platform/os, bytes/bytearray, LPP project debug
 
 ---
 
-**Tasks completed:** ___ / ___
+**Tasks completed:** ___ / 8
 
 **Time spent:** ___ minutes
 

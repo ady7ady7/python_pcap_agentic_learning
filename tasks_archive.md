@@ -1948,3 +1948,29 @@ Task 8 expected values were wrong. Correct: 4 winners, $1050 total PnL.
 - `platform` module: expand to include `os` module functions too
 - More practice on assert/propagation chains
 - More lambda-as-argument patterns
+
+## Week 12, Day 2 — 2026-03-31
+
+**Topic:** OOP internals — __dict__ class vs instance, isinstance vs type, name mangling 3-level, MRO/bases, assert propagation, platform/os, bytes/bytearray
+**Score:** 90% (T1-T7 assessed; T8 project — deferred to Day 3)
+**Difficulty:** Hard | Time: ~90 min
+
+**Tasks Completed:** 7 PCAP tasks + T8 partial (diagnosed, not fixed)
+**Correct:** T1 ✅, T2 ✅, T3 ✅, T5 ✅, T6 ✅, T7 mostly ✅
+**One error:** T4 — hasattr(Top, 'reveal') is True (inherited via MRO, not just in __dict__)
+
+**Key gaps status:**
+- Assert propagation chains → solid ✅
+- class __dict__ vs instance __dict__ → solid ✅
+- isinstance vs type → solid ✅, bool/int subclass trap understood
+- Name mangling 3-level → correct answers, one hasattr confusion
+- __mro__ / __bases__ → solid ✅
+- platform/os module → solid ✅
+- bytes/bytearray → mostly solid; b[0] type=int understood; b==bytearray is True (by value)
+
+**T8 Project diagnosis:**
+3 bugs identified in run_backtest:
+1. break before inner strategy loop → dead code, nothing runs after first row
+2. No one-trade-per-day constraint → re-entry fires on every candle above entry level
+3. newly_closed uses wrong strategy reference (last loop var, not the one that closed)
+Fix plan queued for Day 3 T8.

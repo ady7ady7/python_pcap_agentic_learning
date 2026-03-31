@@ -4210,3 +4210,35 @@ T8 — Perfect. Name mangling inheritance fully understood including accessing _
 2. class `__dict__` vs instance `__dict__` — one more drill needed
 3. platform + os module functions — expand coverage
 4. bytes/bytearray — add to T7-style tasks
+
+## Week 12, Day 2 — 2026-03-31
+
+**Topic:** OOP internals, assert propagation, __dict__, isinstance/type, name mangling, MRO, platform/os, bytes/bytearray
+**Score:** 90% (7 PCAP tasks)
+
+**Mentor Assessment:**
+
+T1 — Perfect. Propagation chain rule locked in across all 3 patterns.
+
+T2 — Perfect. Shadow case (a.x=2, A.x=1) correct. __dict__ class vs instance now solid.
+
+T3 — Perfect. isinstance(True, int)=True and type(True) is int=False both correct. Bool/int subclass trap understood.
+
+T4 — One error: hasattr(Top, 'reveal') is True, not False. hasattr checks the full MRO. To check only the class's own namespace use 'reveal' in Top.__dict__. Worth drilling once more.
+
+T5 — Perfect. MRO trace correct. TypeError explanation correct.
+
+T6 — Perfect. All platform and os functions identified correctly.
+
+T7 — Mostly correct. b"hello"[0] returns integer 104 (correct). b"abc" == bytearray(b"abc") is True (compare by value) — not False as answered. Noted: ASCII value questions dropped from future drills; focus on TYPE returned (int) and mutability distinction only. list(bytearray) = list of ints, not chars — correctly understood.
+
+T8 — Project not completed (debugging session). Three bugs diagnosed:
+(1) break before inner loop = dead code
+(2) no one-trade-per-day constraint = unlimited re-entry
+(3) newly_closed references wrong strategy variable
+Fix planned for Day 3.
+
+**Patterns to continue drilling:**
+- hasattr vs __dict__ membership distinction
+- bytes == bytearray value equality
+- One more lambda-as-argument pattern
