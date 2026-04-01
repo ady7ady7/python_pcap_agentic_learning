@@ -1,8 +1,8 @@
-# Daily Feedback — Week 12, Day 2
+# Daily Feedback — Week 12, Day 3
 
-**Date:** 2026-03-31
+**Date:** 2026-04-01
 
-**Topic:** OOP internals, assert propagation, __dict__ class vs instance, isinstance vs type, name mangling 3-level, MRO/bases, platform/os, bytes/bytearray, LPP project debug
+**Topic:** Strings, closures/nonlocal, generators, hasattr vs __dict__, finally/return, run_backtest fixes
 
 ---
 

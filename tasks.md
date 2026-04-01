@@ -1,637 +1,658 @@
-# Week 12 Day 2 — OOP Internals + Exception Propagation Chains
-**Date:** 2026-03-31 | **Focus:** `__dict__`/`__bases__`/`__mro__` drills, assert propagation, name mangling, `isinstance` vs `type`, platform/os module, bytes/bytearray
+# Week 12 Day 3 — Strings, Closures, Generators + run_backtest Fix
+**Date:** 2026-04-01 | **Focus:** Strings deep dive, closures/nonlocal, generators, + 3 run_backtest bugs fixed
 
 ---
 
-## Task 1 — Assert propagation chains [Day 1 gap — T2B]
+## Task 1 — String methods trap shoot [PCAP string section]
 
-**TEACH — The propagation chain rule:**
-Every exception, when raised, travels UP the call stack looking for a matching `except`.
-If the `assert` is OUTSIDE the inner `try/except`, it bypasses it entirely.
-
-```
-foo() called
-  → assert fires → AssertionError raised
-  → NOT inside inner try → propagates OUT of foo()
-  → outer try catches it
-  → ArithmeticError? No. bare except? Yes → m += 1
-```
-
-**A)** Trace and predict the output of each — show step-by-step:
-
+**TEACH — The methods that trip people up:**
 ```python
-# Snippet 1
-x = 0
-
-def bar(n):
-    assert n > 0, "must be positive"
-    try:
-        return 100 / n
-    except ZeroDivisionError:
-        return -1
-
-try:
-    result = bar(0)
-except AssertionError:
-    x = 1
-except:
-    x = 2
-print(x)
+str.find(sub)      → returns index or -1  (no exception)
+str.index(sub)     → returns index or raises ValueError
+str.count(sub)     → non-overlapping occurrences
+str.split(sep)     → default sep=None splits on ANY whitespace, strips leading/trailing
+str.split(' ')     → splits on single space only — '' entries for multiple spaces!
+str.strip()        → removes BOTH ends
+str.lstrip()       → left only
+str.rstrip()       → right only
+str.replace(a, b)  → replaces ALL occurrences by default
+str.replace(a, b, n) → replaces at most n occurrences
 ```
 
+**A)** Predict the output:
 ```python
-# Snippet 2
-count = 0
-
-def process(val):
-    assert isinstance(val, int), "not int"
-    try:
-        return val * 2
-    except TypeError:
-        return 0
-
-try:
-    process("hello")
-except TypeError:
-    count = 10
-except AssertionError:
-    count = 20
-except:
-    count = 30
-print(count)
+s = "  hello world  "
+print(s.strip())
+print(s.lstrip())
+print(s.rstrip())
+print(len(s))
+print(len(s.strip()))
 ```
 
+**B)** Predict each — watch the split trap:
 ```python
-# Snippet 3 — nested propagation
-def inner(x):
-    if x < 0:
-        raise ValueError("negative")
+s = "a  b  c"
+print(s.split())      # default — splits on any whitespace
+print(s.split(' '))   # explicit space — different result!
+print(s.count('a'))
+print(s.find('z'))
+print(s.index('b'))
+```
+
+**C)** Predict:
+```python
+s = "banana"
+print(s.replace('a', 'o'))
+print(s.replace('a', 'o', 2))
+print(s.count('a'))
+print(s.count('an'))
+```
+
+Write answers here:
+```
+A)
+
+s = "  hello world  "
+print(s.strip()) #"hello world"
+print(s.lstrip()) #"hello world  "
+print(s.rstrip()) #"  hello world"
+print(len(s))  #15
+print(len(s.strip())) #11
+B)
+print(s.split())    #['a', 'b', 'c']
+print(s.split(' '))   #['a', '', 'b', '', 'c']
+print(s.count('a')) #1
+print(s.find('z')) #-1
+print(s.index('b')) #3
+C)
+print(s.replace('a', 'o'))  #bonono
+print(s.replace('a', 'o', 2)) #bonona
+print(s.count('a')) #3
+print(s.count('an')) #2
+
+But it doesn't clear our the sexamples from the PCAP exam - there was also something as rindex, or something like that.
+
+```
+
+---
+
+## Task 2 — String formatting + escape sequences [PCAP trap zone]
+
+**TEACH — Escape sequences to know:**
+```
+\n   → newline
+\t   → tab
+\\   → literal backslash
+\'   → literal single quote (inside single-quoted string)
+\"   → literal double quote
+\r   → carriage return (cursor to start of line, does NOT add newline)
+```
+
+**TEACH — `\r` trap:**
+```python
+print("hello\rworld")   # 'world' overwrites 'hello' from position 0
+# Output on most terminals: 'world'
+# But len("hello\rworld") = 11  — \r is ONE character
+```
+
+**A)** Predict the output:
+```python
+print("line1\nline2")
+print("col1\tcol2")
+print("back\\slash")
+print(len("a\tb"))
+print(len("a\\b"))
+print(len("\n"))
+```
+
+**B)** What is the length and value printed?
+```python
+s1 = '\''
+s2 = "\""
+s3 = '\\\''
+s4 = "\\\""
+
+print(len(s1), s1)
+print(len(s2), s2)
+print(len(s3), s3)
+print(len(s4), s4)
+```
+
+**C)** Predict — the `\r` trap:
+```python
+print("AAAA\rBB")
+print(len("AAAA\rBB"))
+```
+
+Write answers here:
+```
+A)
+print("line1\nline2") #line1(new line)line2
+print("col1\tcol2") #col1   col2
+print("back\\slash") #back\slash
+print(len("a\tb")) #a   b
+print(len("a\\b")) #a\b
+print(len("\n")) # '(new line)'
+
+B)
+s1 = '\'' #"'"", 1
+s2 = "\"" # """, 1
+s3 = '\\\'' # "\'" 2
+s4 = "\\\"" # "\""2
+
+
+C)
+print("AAAA\rBB") #BBAA - this is a bit weird
+print(len("AAAA\rBB")) #7 -- also werid, we count all characters + /r as 1
+
+
+
+
+```
+
+---
+
+## Task 3 — Closures and `nonlocal` [PCAP closures section]
+
+**TEACH — closure captures the VARIABLE, not the value:**
+```python
+def make_adder(n):
+    def add(x):
+        return x + n    # n is captured by reference
+    return add
+
+add5 = make_adder(5)
+print(add5(3))    # 8 — n=5 is still alive in the closure
+```
+
+**TEACH — the classic loop-closure trap:**
+```python
+funcs = [lambda: i for i in range(3)]
+print(funcs[0]())   # 2 — NOT 0! All lambdas share the SAME i variable
+print(funcs[1]())   # 2
+print(funcs[2]())   # 2
+# Fix: lambda i=i: i  (default arg captures the VALUE at creation time)
+
+#I KNOW THAT NIGGA, NO NEED TO REPEAT THIS PARTICULAR PATTENR
+```
+
+**TEACH — `nonlocal`:**
+- `nonlocal x` lets you WRITE to an enclosing (non-global) scope variable
+- Without it, assigning `x = ...` creates a LOCAL variable, shadowing the outer one
+- Reading without assignment doesn't need `nonlocal`
+
+**A)** Predict the output:
+```python
+def outer():
+    count = 0
+    def increment():
+        nonlocal count
+        count += 1
+        return count
+    return increment
+
+f = outer()
+print(f())
+print(f())
+print(f())
+
+
+
+```
+
+**B)** Predict — WITHOUT nonlocal (common exam trap):
+```python
+def outer():
+    x = 10
+    def inner():
+        x = 20        # creates LOCAL x, does NOT modify outer x
+        return x
+    inner()
     return x
 
-def outer(x):
-    try:
-        return inner(x) * 2
-    except TypeError:
-        return -1
-
-try:
-    outer(-5)
-except ValueError as e:
-    print("caught:", e)
-except:
-    print("bare caught")
+print(outer())
 ```
 
-**B)** This is Q10 variant — same pattern, different exception. Trace it:
+**C)** Predict — the loop closure trap:
 ```python
-m = 0
+funcs = []
+for i in range(4):
+    funcs.append(lambda: i)
 
-def foo(n):
-    global m
-    assert n > 0          # guard — fires if n <= 0
-    try:
-        return 10 / n
-    except ArithmeticError:
-        raise RuntimeError("math fail")
-
-try:
-    foo(-1)
-except RuntimeError:
-    m += 10
-except AssertionError:
-    m += 5
-except:
-    m += 1
-print(m)
+print(funcs[0]())
+print(funcs[2]())
+print(funcs[3]())
 ```
 
-Write your answers here:
+**D)** Fix the loop closure — use default arg to capture value:
+```python
+funcs = []
+for i in range(4):
+    funcs.append(lambda i=i: i)   # i=i captures current value
+
+print(funcs[0]())
+print(funcs[2]())
+print(funcs[3]())
 ```
-A) Snippet 1: step-by-step trace + output: #bar() is called with 0 as an argument.
-1. assertion fails, but it's not handled in the function, so it's propagated outside to the outer try.
-2. it's handled there and x is set to 1
 
-Snippet 2: step-by-step trace + output: #process is called with 'hello' string as an argument
-#the assertion fails, and it's not handled in the process function, so it would normally crash the code, but it's in the outer try block instead
-#TypeError is ignored, as it's not the error type raised here
-#It's handled by the except with AssertionError, setting the count to 20
+Write answers here:
+```
+A) 1, 2, 3
 
+B) 10
 
-Snippet 3: step-by-step trace + output: #outer is called with -5 as an argument
-#outer calls inner with -5 as an argument in a try block
-#inner does a check and since -5 is lower than 0, it raises ValueError with 'negative'
-#since everything is put in a try/except block with ValueError handling, it prints caught: nagative
+C) 3, 3, 3 - but I know this pattern well already, no need to focus on it - focus on PCAP gaps and problems we've mentioned and shown - patterns that actually appeared on the exam and possible difficulties/traps, as this is what builds the PCAP exam
 
-This example is very tricky and difficult to me at this point. I've got it right,but I still don't feel that confident when two different ValueError raises/handles coexist - it's very confusing.
-
-B) trace + output: #foo is called with -1 as an argument
-#foo properly grabs the value of m with global keyword
-#foo runs an assertion for the argument, which fails, as -1 is lower than 0 
-#It's NOT handled by the foo function , as it's put outside the try/except block there, so it propagates to the outside
-#Since the whole foo call is put into a try/except block - there is a chance it will handle that exception
-#It's handled by the except AssertionError handle, putting m at 5
-
-5
+D) 0, 2, 3
 ```
 
 ---
 
-## Task 2 — class `__dict__` vs instance `__dict__` [Day 1 gap — T4A]
+## Task 4 — Generators: `yield`, `next()`, `StopIteration` [PCAP generators section]
 
-**TEACH — The rule:**
-```
-class.__dict__    → contains: class variables, methods, class-level defs
-instance.__dict__ → contains: instance variables (set via self.x = ...)
-```
-Instance attributes set in `__init__` via `self.x = ...` are ONLY in the instance's `__dict__`.
-They do NOT appear in the class's `__dict__` — even though the class defined `__init__`.
-
+**TEACH:**
 ```python
-class Dog:
-    species = "Canis lupus"    # class attr → in Dog.__dict__
-    def __init__(self, name):
-        self.name = name       # instance attr → in d.__dict__, NOT Dog.__dict__
+def gen():
+    yield 1
+    yield 2
+    yield 3
 
-d = Dog("Rex")
-'species' in Dog.__dict__   # True
-'name' in Dog.__dict__      # False  ← defined in __init__ but it's an INSTANCE attr
-'name' in d.__dict__        # True
+g = gen()
+next(g)   # 1
+next(g)   # 2
+next(g)   # 3
+next(g)   # StopIteration raised
+
+# A generator PAUSES at each yield and resumes on next()
+# The function frame stays alive between calls
 ```
 
-**A)** Given:
+**TEACH — `yield` with early return:**
 ```python
-class Vehicle:
-    wheels = 4
-    engine = "V6"
+def gen():
+    yield 1
+    return          # legal — causes StopIteration immediately
+    yield 2         # NEVER reached
 
-    def __init__(self, brand, year):
-        self.brand = brand
-        self.year = year
-        self._speed = 0
-
-    def accelerate(self):
-        self._speed += 10
-```
-Predict True or False:
-```python
-v = Vehicle("Toyota", 2020)
-
-print('wheels' in Vehicle.__dict__)      # ?
-print('engine' in Vehicle.__dict__)      # ?
-print('accelerate' in Vehicle.__dict__)  # ?
-print('brand' in Vehicle.__dict__)       # ?
-print('brand' in v.__dict__)             # ?
-print('_speed' in v.__dict__)            # ?
-print('wheels' in v.__dict__)            # ?  ← careful
-print('__init__' in Vehicle.__dict__)    # ?
+list(gen())    # [1]
 ```
 
-**B)** After calling `v.accelerate()` — what changes in `v.__dict__`?
+**TEACH — `yield` in a loop:**
 ```python
-v.accelerate()
-v.accelerate()
-print(v.__dict__)    # predict the full output
+def countdown(n):
+    while n > 0:
+        yield n
+        n -= 1
+
+list(countdown(3))   # [3, 2, 1]
 ```
 
-**C)** True or False:
+**A)** Predict the output:
 ```python
+def gen():
+    print("start")
+    yield 1
+    print("middle")
+    yield 2
+    print("end")
+
+g = gen()
+print(next(g))
+print(next(g))
+print("done")
+```
+
+**B)** Predict — early return:
+```python
+def gen(flag):
+    yield 1
+    if flag:
+        return
+    yield 2
+    yield 3
+
+print(list(gen(True)))
+print(list(gen(False)))
+```
+
+**C)** Predict — generator with loop:
+```python
+def evens_up_to(n):
+    i = 0
+    while i <= n:
+        if i % 2 == 0:
+            yield i
+        i += 1
+
+result = list(evens_up_to(8))
+print(result)
+print(sum(evens_up_to(6)))
+```
+
+Write answers here:
+```
+A) 
+# g = gen() #start
+# print(next(g)) #1
+# print(next(g)) #middle\n2
+# print("done") #done
+
+B)
+print(list(gen(True))) #[1]
+print(list(gen(False))) #[1, 2, 3]
+
+
+C)
+print(result) #[0, 2, 4, 6, 8]
+print(sum(evens_up_to(6))) #12
+```
+
+---
+
+## Task 5 — `hasattr` vs `__dict__` — the Day 2 gap
+
+**TEACH — exactly what tripped you up yesterday:**
+```python
+hasattr(obj, 'name')          # checks the full MRO chain — inherited counts!
+'name' in SomeClass.__dict__  # checks ONLY this class's own namespace
+
+# They are NOT the same:
 class A:
-    x = 1
-    def __init__(self):
-        self.x = 2       # shadows the class attr
+    def foo(self): pass
 
-a = A()
-print('x' in A.__dict__)    # ?
-print('x' in a.__dict__)    # ?
-print(a.x)                  # ?  ← which x wins?
-print(A.x)                  # ?
+class B(A): pass
+
+hasattr(B, 'foo')        # True — inherited from A
+'foo' in B.__dict__      # False — not defined IN B
+'foo' in A.__dict__      # True — defined IN A
 ```
-
-Write answers here:
-```
-A) wheels, engine, accelerate, brand(class), brand(instance), _speed, wheels(instance), __init__:
-
-print('wheels' in Vehicle.__dict__)      #True
-print('engine' in Vehicle.__dict__)      #True
-print('accelerate' in Vehicle.__dict__)  #True
-print('brand' in Vehicle.__dict__)       #False
-print('brand' in v.__dict__)             #True
-print('_speed' in v.__dict__)            #True
-print('wheels' in v.__dict__)            #False
-print('__init__' in Vehicle.__dict__)    #True
-
-B) v.__dict__ after 2 accelerates:
-
-{'brand': 'Toyota', 'year': 2020, '_speed': 20}
-
-C) in A.__dict__, in a.__dict__, a.x, A.x:
-
-print('x' in A.__dict__)    #True
-print('x' in a.__dict__)    #True
-print(a.x)                  #2
-print(A.x)                  #1
-
-```
-
----
-
-## Task 3 — `isinstance` vs `type` — the exam trap
-
-**TEACH:**
-```python
-type(obj) is SomeClass    → EXACT match only — ignores inheritance
-isinstance(obj, SomeClass) → True if obj is SomeClass OR any subclass
-```
-
-Real exam loves to give you an inheritance chain and ask which is True.
 
 **A)** Given:
 ```python
-class Animal: pass
-class Dog(Animal): pass
-class GuideDog(Dog): pass
+class Shape:
+    color = 'red'
+    def area(self): return 0
 
-g = GuideDog()
+class Circle(Shape):
+    def __init__(self, r):
+        self.radius = r
+    def area(self):
+        return 3.14 * self.radius ** 2
+
+c = Circle(5)
 ```
 Predict True or False:
 ```python
-print(type(g) is GuideDog)      # ?
-print(type(g) is Dog)           # ?
-print(type(g) is Animal)        # ?
-print(isinstance(g, GuideDog))  # ?
-print(isinstance(g, Dog))       # ?
-print(isinstance(g, Animal))    # ?
-print(isinstance(g, object))    # ?
+print(hasattr(c, 'color'))           # ?
+print(hasattr(c, 'area'))            # ?
+print(hasattr(c, 'radius'))          # ?
+print('color' in Circle.__dict__)    # ?
+print('area' in Circle.__dict__)     # ?
+print('area' in Shape.__dict__)      # ?
+print('radius' in Circle.__dict__)   # ?
+print('radius' in c.__dict__)        # ?
 ```
 
-**B)** Multiple choice (PCAP style) — which TWO are True?
+**B)** True or False — which expressions return True?
 ```python
-class X: pass
-class Y(X): pass
-obj = Y()
-```
-- A: `type(obj) is X`
-- B: `type(obj) is Y`
-- C: `isinstance(obj, X)`
-- D: `type(obj) == isinstance(obj, Y)`
-
-**C)** Predict — what does this print?
-```python
-print(type(42) is int)
-print(type(42) is float)
-print(isinstance(42, (int, float)))    # tuple of types!
-print(isinstance(True, int))           # ← tricky
-print(type(True) is int)               # ← also tricky
+print('color' in c.__dict__)         # ?
+print('color' in Shape.__dict__)     # ?
+print(hasattr(Shape, 'area'))        # ?
+print(hasattr(Circle, 'color'))      # ?
 ```
 
 Write answers here:
 ```
-A) 7 results: 
-print(type(g) is GuideDog)      # True
-print(type(g) is Dog)           # False
-print(type(g) is Animal)        # False
-print(isinstance(g, GuideDog))  # True
-print(isinstance(g, Dog))       # True
-print(isinstance(g, Animal))    # True
-print(isinstance(g, object))    # True
+A) 8 results:
 
-B) Two True options:
-
-print(type(obj) is X) #False
-print(type(obj) is Y) #True
-print(isinstance(obj, X)) #True
-print(type(obj) == isinstance(obj, Y)) #False
-
-
-
-C) 5 results:
-
-print(type(42) is int) #True
-print(type(42) is float) #False
-print(isinstance(42, (int, float)))  #True
-print(isinstance(True, int))        #True
-print(type(True) is int)        #False
-
-```
-
----
-
-## Task 4 — Name mangling: 3-level inheritance drill
-
-**TEACH — recap:**
-- `__x` in class `Foo` → stored as `_Foo__x`
-- Every method is compiled where it's **defined** — the mangling is baked in at that point
-- When you call `obj.method()`, Python resolves WHICH method via MRO, then runs that method's pre-compiled bytecode
-
-**A)** Trace and predict ALL outputs:
-```python
-class Base:
-    __secret = "base"
-    def reveal(self):
-        return self.__secret          # compiled: self._Base__secret
-
-class Middle(Base):
-    __secret = "middle"
-    def reveal(self):
-        return self.__secret          # compiled: self._Middle__secret
-
-class Top(Middle):
-    __secret = "top"
-    # No reveal() defined
-
-b = Base()
-m = Middle()
-t = Top()
-
-print(b.reveal())           # ?
-print(m.reveal())           # ?
-print(t.reveal())           # ? ← KEY — which reveal() runs?
-print(t._Top__secret)       # ?
-print(t._Middle__secret)    # ?
-print(t._Base__secret)      # ?
-```
-
-**B)** True or False:
-```python
-print(hasattr(Top, 'reveal'))         # ?
-print(hasattr(Top, '_Top__secret'))   # ?
-print(Top.__bases__ == (Middle,))     # ?
-print(Middle in Top.__mro__)          # ?
-print(Base in Top.__mro__)            # ?
-print(len(Top.__mro__))               # ? (count: Top, Middle, Base, object)
-```
-
-Write answers here:
-```
-A) b.reveal(), m.reveal(), t.reveal(), t._Top__secret, t._Middle__secret, t._Base__secret:
-
-print(b.reveal())           # 'base'
-print(m.reveal())           # 'middle'
-print(t.reveal())           # 'middle' - there's no reveal in Top, so Middle's reveal() runs
-print(t._Top__secret)       # top
-print(t._Middle__secret)    # middle
-print(t._Base__secret)      # base
-
-
-
-B) 6 results:
-
-print(hasattr(Top, 'reveal'))         # False
-print(hasattr(Top, '_Top__secret'))   # True
-print(Top.__bases__ == (Middle,))     # True
-print(Middle in Top.__mro__)          # True
-print(Base in Top.__mro__)            # True
-print(len(Top.__mro__))               # 4
-```
-
----
-
-## Task 5 — `__mro__` and `__bases__` combined drill
-
-**A)** Given:
-```python
-class A: pass
-class B(A): pass
-class C(A): pass
-class D(B): pass
-class E(C, D): pass
-```
-
-Without running the code, draw the MRO for `E` using C3 linearization.
-Then predict:
-```python
-print(E.__bases__)          # ?
-print(E.__mro__)            # ? (list all classes in order)
-print(len(E.__mro__))       # ?
-print(A in E.__bases__)     # ?
-print(A in E.__mro__)       # ?
-print(B in E.__bases__)     # ?  ← careful
-```
-
-**B)** MRO conflict — will this raise a TypeError?
-```python
-class X: pass
-class Y(X): pass
-class Z(X, Y): pass    # ← is this valid?
-```
-Explain WHY — don't just say yes/no.
-
-Write answers here:
-```
-A) __bases__, __mro__ (full list), len, A in bases, A in mro, B in bases:
-
-print(E.__bases__)          #C, D
-print(E.__mro__)            #E -> C -> D -> B -> A -> object
-print(len(E.__mro__))       # 6
-print(A in E.__bases__)     # False
-print(A in E.__mro__)       # True
-print(B in E.__bases__)     # False
-
-B) Valid or TypeError? Explain:
-
-TypeError, inheritance cannot go in reverse, e.g if X inherits from Y, Y cannot inherit from X later.
-```
-
----
-
-## Task 6 — `platform` and `os` module functions [Real exam Q1 + expansion]
-
-**TEACH:**
-```python
-import platform
-platform.platform()       # 'Windows-10-10.0.19041-SP0' — full string
-platform.system()         # 'Windows' — just OS name
-platform.node()           # hostname of machine
-platform.python_version() # '3.11.4'
-platform.uname()          # named tuple with ALL: system, node, release, version...
-
-import os
-os.getcwd()               # current working directory string
-os.listdir(path)          # list of filenames in directory
-os.path.exists(path)      # True/False
-os.path.join(a, b)        # safe path joining (handles slashes)
-os.path.basename(path)    # last component: '/foo/bar.txt' → 'bar.txt'
-os.path.dirname(path)     # directory part: '/foo/bar.txt' → '/foo'
-os.sep                    # path separator: '\\' on Windows, '/' on Unix
-os.name                   # 'nt' on Windows, 'posix' on Unix/Mac
-```
-
-**A)** Multiple choice — which function returns EACH of these:
-
-1. The string `'Windows'` (OS name only, no version)
-2. A namedtuple with system, node, release, version, machine, processor
-3. The Python version as a string like `'3.11.4'`
-4. The full platform description string including version numbers
-
-1 - platform.system()
-2 - platform.uname()
-3 - platform.python_version()
-4 - platform.platform()
-
-**B)** True or False about `os`:
-```python
-import os
-# assume running on Windows
-print(os.name == 'nt')           # True
-print(os.sep == '\\')            # True
-print(os.sep == '/')             # False
-print(type(os.getcwd()) is str)  # True
-```
-
-**C)** Predict the output:
-```python
-import os
-path = '/home/user/projects/algo/data/prices.csv'
-print(os.path.basename(path))   # prices.csv
-print(os.path.dirname(path))    # /home/user/projects/algo/data
-print(os.path.exists(path))     # False
-```
-
-Write answers here:
-```
-A) 1-4: 1 - platform.system()
-2 - platform.uname()
-3 - platform.python_version()
-4 - platform.platform()
+print(hasattr(c, 'color'))           # True
+print(hasattr(c, 'area'))            # True
+print(hasattr(c, 'radius'))          # True
+print('color' in Circle.__dict__)    # False
+print('area' in Circle.__dict__)     # True
+print('area' in Shape.__dict__)      # True
+print('radius' in Circle.__dict__)   # False - this is very tricky! It's not instantiated so it's not present there
+print('radius' in c.__dict__)        # True
 
 B) 4 results:
-print(os.name == 'nt')           # True
-print(os.sep == '\\')            # True
-print(os.sep == '/')             # False
-print(type(os.getcwd()) is str)  # True
 
-C) basename, dirname, exists:
-print(os.path.basename(path))   # prices.csv
-print(os.path.dirname(path))    # /home/user/projects/algo/data
-print(os.path.exists(path))     # False
+print('color' in c.__dict__)         # False
+print('color' in Shape.__dict__)     # True
+print(hasattr(Shape, 'area'))        # True
+print(hasattr(Circle, 'color'))      # True
 
 ```
 
 ---
 
-## Task 7 — bytes and bytearray [Real exam file I/O section]
+## Task 6 — PCAP simulation: mixed multi-topic [Exam style]
+
+Answer A/B/C/D — no code needed, reason through each.
+
+**Q1.** What is the output?
+```python
+def f(x=[]):
+    x.append(1)
+    return x
+
+print(f())
+print(f())
+print(f())
+```
+- A: `[1]`, `[1]`, `[1]`
+- B: `[1]`, `[1, 1]`, `[1, 1, 1]`
+- C: `[]`, `[]`, `[]`
+- D: `TypeError`
+
+B - it's a mutable default parameter which adds an extra 1 with each function call.
+
+**Q2.** Which is True about generators?
+- A: A generator function must contain a `return` statement #Not true - return kinda crashes generator from normal working
+- B: Calling a generator function immediately executes its body #Not true, we have to call next()
+- C: `next()` on an exhausted generator raises `StopIteration` #True
+- D: Generator objects can be iterated multiple times #Not True, in their simple form they're only iterable once and then exhausted
+
+C
+
+**Q3.** What does this print?
+```python
+x = 5
+def foo():
+    x = 10
+    def bar():
+        return x
+    return bar()
+
+print(foo())
+print(x)
+```
+- A: `10`, `5`
+- B: `5`, `5`
+- C: `10`, `10`
+- D: `NameError`
+
+A
+
+
+**Q4.** What is the output?
+```python
+s = "abcde"
+print(s[1:4])
+print(s[::-1])
+print(s[::2])
+print(s[-2:])
+```
+- A: `bcd`, `edcba`, `ace`, `de`
+- B: `bcd`, `edcba`, `bd`, `de`
+- C: `bcde`, `edcba`, `ace`, `de`
+- D: `bcd`, `abcde`, `ace`, `cd`
+
+A
+
+
+**Q5.** What is the output?
+```python
+try:
+    raise ValueError("oops")
+except ValueError as e:
+    result = str(e)
+except:
+    result = "other"
+finally:
+    result += "!"
+
+print(result)
+```
+- A: `oops!`
+- B: `ValueError: oops!`
+- C: `oops`
+- D: `other!`
+
+
+
+Write answers here:
+```
+Q1: B
+Q2: C
+Q3: A 
+Q4: A
+Q5: A
+```
+
+---
+
+## Task 7 — `finally` + `return` interaction [PCAP trap]
 
 **TEACH:**
 ```python
-# bytes — IMMUTABLE sequence of integers 0-255
-b = b"hello"
-b[0]          # 104 (ASCII code of 'h')
-b[0] = 65     # TypeError! bytes is immutable
+# finally ALWAYS runs — even if return or raise happened
+# If finally has its own return, it OVERRIDES the try/except return
 
-# bytearray — MUTABLE bytes
-ba = bytearray(b"hello")
-ba[0] = 72    # OK → bytearray(b'Hello')
-ba[0]         # 72
+def foo():
+    try:
+        return 1
+    finally:
+        return 2    # ← this return wins
 
-# Creating:
-bytes(5)              # b'\x00\x00\x00\x00\x00' — 5 zero bytes
-bytes([72, 101, 108]) # b'Hel' — from int list
-bytearray(b"abc")     # mutable copy of bytes literal
-
-# Encoding / decoding:
-"hello".encode('utf-8')        # b'hello'
-b"hello".decode('utf-8')       # 'hello'
+print(foo())   # 2
 ```
 
-**A)** Predict the output or error:
+**A)** Predict the output:
 ```python
-b = b"Python"
-print(b[0])                  # ?
-print(type(b[0]))            # ?
-print(len(b))                # ?
-b[0] = 80                    # ?  ← error or not?
+def f():
+    try:
+        return "try"
+    except:
+        return "except"
+    finally:
+        return "finally"
+
+print(f())
 ```
 
+**B)** Predict — finally runs but doesn't return:
 ```python
-ba = bytearray(b"Python")
-ba[0] = 112                  # lowercase 'p' = 112
-print(ba)                    # ?
-print(ba.decode('utf-8'))    # ?
+def g():
+    try:
+        return 10
+    finally:
+        print("cleanup")
+
+print(g())
 ```
 
-**B)** True or False:
-```
-1. bytes objects support item assignment #False
-2. bytearray objects support item assignment #True
-3. b"hello"[0] returns the integer 104 #WTF - DON'T ASK ME SUCH QUESTIONS..
-4. bytearray(3) creates bytearray(b'\x00\x00\x00') #True
-5. "abc".encode() returns b'abc' (default encoding is utf-8) #True
-6. b"abc" == bytearray(b"abc")    ← careful #False
-```
-
-**C)** Predict output:
+**C)** Predict — exception + finally:
 ```python
-data = bytearray(b"hello")
-data.append(33)         # 33 = '!'
-print(data.decode())    # 'hello!'
-print(list(data))       # 'h', 'e', 'l', 'l', 'o', '!'
+def h():
+    try:
+        raise RuntimeError("boom")
+    except RuntimeError:
+        return "caught"
+    finally:
+        print("always")
+
+print(h())
 ```
 
 Write answers here:
 ```
-A) b[0], type, len, b[0]=80 result:
-   ba after assignment, decoded:
+A) finally
 
-# print(b[0])                  # 80 - but I had to check that  - I won't remember it by heart, this shouldn't be the goal of this
-# print(type(b[0]))            # int
-# print(len(b))                # 6
-# b[0] = 80                    # Error!
-print(ba)                    # #bytearray(b'python')
-print(ba.decode('utf-8'))    # python
-   
+B) cleanup, 10
 
-B) 1-6:
-
-1. bytes objects support item assignment #False
-2. bytearray objects support item assignment #True
-3. b"hello"[0] returns the integer 104 #WTF - DON'T ASK ME SUCH QUESTIONS..
-4. bytearray(3) creates bytearray(b'\x00\x00\x00') #True
-5. "abc".encode() returns b'abc' (default encoding is utf-8) #True
-6. b"abc" == bytearray(b"abc")    ← careful #False
-
-
-C) decoded, list:
-print(data.decode())    # 'hello!'
-print(list(data))       # 'h', 'e', 'l', 'l', 'o', '!' #in byte codes, which I don't know and DON'T EXPECT ME TO KNOW THEM BY HEART
+C) always, caught
 ```
 
 ---
 
-## Task 8 — PROJECT: Verify LPPStrategy + debug run_backtest [Next project step]
+## Task 8 — PROJECT: Fix run_backtest — 3 bugs [Diagnosed in Day 2]
 
-The LPPStrategy was built last week but never fully tested end-to-end. Today: run it, fix what's broken.
+Three bugs were identified. Fix them one at a time in [algo_backtest/main.py](algo_backtest/main.py).
 
-**Step A — Read and check** [algo_backtest/strategies/lpp_strategy.py](algo_backtest/strategies/lpp_strategy.py):
-- Does `prepare(df)` correctly filter the 09:00–10:00 window?
-- Is `candle_open` being parsed as datetime (not string) before comparison?
-- Are the sub-levels being computed (LR1_LR2_025, etc.)?
-
-**Step B — Run it** from [algo_backtest/main.py](algo_backtest/main.py):
-```bash
-python -m algo_backtest.main
+**Fix 1 — Remove the diagnostic `break` and debug `print`**
+Lines 46-47 in current main.py:
+```python
+print(strategy.levels_by_date[current_date])
+break
 ```
-Note any errors or unexpected output.
+Delete both lines. The inner loop is currently unreachable dead code because of this `break`.
 
-**Step C — Fix one issue at a time.** Common suspects:
-1. `candle_open` not parsed as datetime → `pd.to_datetime(data['candle_open'], utc=True)` at load time in DataLoader
-2. `levels_by_date` empty because filter produces no rows → print a sample date key to verify
-3. `generate_signal` key lookup fails → print available keys vs what's being looked up
 
-Paste:
-- The error or output you get
-- What you identified as the root cause
-- The fix you applied
-- Confirmed output after fix
+
+**Fix 2 — One-trade-per-day constraint**
+After the prep pass, add a `traded_today` dict:
+```python
+traded_today = {strategy: None for strategy in strategies}
+```
+Then inside the per-row loop, after computing `current_date`:
+- If `traded_today[strategy] == current_date` → skip signal generation (already traded today)
+- When a position opens → set `traded_today[strategy] = current_date`
+
+**Fix 3 — `newly_closed` references wrong strategy variable**
+Current (buggy):
+```python
+newly_closed = backtest_engine.process_price('FDAX', row['close'])
+if newly_closed:
+    current_positions[strategy] = None   # ← `strategy` = last loop var
+
+I've used shift tab to change the scope here.
+```
+This must be INSIDE the `for strategy in strategies` loop, using the correct `strategy` reference.
+
+After all 3 fixes, run `python algo_backtest/main.py` and paste the output.
+
+BacktestEngine: 0 open | 93 closed | PnL: $137.0
+--- LPP Strategy (ID: 7b70378f-58c3-4a0d-9e4d-da884bc3c0f7) ---
+
+                  Trades: 93
+                  Win Rate: 48.38709677419355%
+                  Total PnL: $137.00
+                  Avg R: 0.02R
+
+
+--- PORTFOLIO TOTAL  ---
+
+                  Trades: 93
+                  Win Rate: 48.38709677419355%
+                  Total PnL: $137.0
+                  Avg R: 0.02R
+
 
 ```
-Output / error:
+Fix 1 applied: yes/no
+Dude, I told you already that 'break' WAS ADDED ON PURPOSE to diagnose if the prepare works properly. You didn't register that for some reason.
+It's removed now.
 
-As for step A, I tried print out to debug the code and see what happens, and this is what I've got in run_backtest, at the beginning:
+Fix 2 code:
+
+Fix 3 — where did you move process_price?
+
+You can see the current run_backtest code properly fixed:
 
 def run_backtest(df: pd.DataFrame, strategies: list) -> BacktestEngine:
     backtest_engine = BacktestEngine()
     current_positions = {strategy: None for strategy in strategies}
-
+    traded_today = {strategy: None for strategy in strategies}
 
     for strategy in strategies:
         strategy.prepare(df)
@@ -639,66 +660,7 @@ def run_backtest(df: pd.DataFrame, strategies: list) -> BacktestEngine:
     for _, row in df.iterrows():
         t = datetime.fromisoformat(row['candle_open']).time()
         current_date = datetime.fromisoformat(row['candle_open']).date()
-        print(strategy.levels_by_date[current_date])
-        break
-
-Now for the testing code:
-
-if __name__ == '__main__':
-    
-    x = DataLoader('algo_backtest\data\FDAX_M1_OHLC.csv')
-    print(x)
-    data = x.load_data()
-    x.validate_data(data)
-    print(len(data))
-    print(data.head(3))
-    
-    setup_logging()
-    print('Starting the backtest test procedure in main.py - logging set!')
-    
-    strategies = [LPPStrategy('FDAX', 'BUY', 'LR1_LR2_075', 'LPP_LR1_050', 'LR2_LR3_050')]
-    test_engine = run_backtest(data, strategies)
-    print(test_engine)
-    test_engine.strategy_report()
-    
-
-And finally, the output:
-
-$ python algo_backtest/main.py
-C:\Users\HARDPC\Desktop\AL\projekty\python_pcap_agentic_learning\algo_backtest\main.py:96: SyntaxWarning: invalid escape sequence '\d'
-  x = DataLoader('algo_backtest\data\FDAX_M1_OHLC.csv')
-DataLoader initialized.
-DataLoader(filepath = algo_backtest\data\FDAX_M1_OHLC.csv)
-Data loading succeeded
-Data loading operation ended.
-Missing values found: 10
-216932
-                 candle_open               candle_close     open     high      low    close  bid_volume  ask_volume  vwap_rth  vwap_full
-0  2025-03-10 09:00:00+01:00  2025-03-10 09:00:59+01:00  23172.0  23191.0  23164.0  23181.0         221         198  23177.51   23177.51
-1  2025-03-10 09:01:00+01:00  2025-03-10 09:01:59+01:00  23183.0  23199.0  23176.0  23192.0         149          75  23181.48   23181.48
-2  2025-03-10 09:02:00+01:00  2025-03-10 09:02:59+01:00  23189.0  23191.0  23179.0  23189.0          50          42  23181.99   23181.99
-2026-03-31 14:52:24,223 [DEBUG   ] root: Logging in main initialized.
-Starting the backtest test procedure in main.py - logging set!
-{'LPP': np.float64(22917.0), 'LR1': np.float64(23070.0), 'LR2': np.float64(23352.0), 'LR3': np.float64(23505.0), 'LS1': np.float64(22635.0), 'LS2': np.float64(22482.0), 'LS3': np.float64(22200.0), 'LS3_LS2_025': np.float64(22270.5), 'LS3_LS2_050': np.float64(22341.0), 'LS3_LS2_075': np.float64(22411.5), 'LS2_LS1_025': np.float64(22520.25), 'LS2_LS1_050': np.float64(22558.5), 'LS2_LS1_075': np.float64(22596.75), 'LS1_LPP_025': np.float64(22705.5), 'LS1_LPP_050': np.float64(22776.0), 'LS1_LPP_075': np.float64(22846.5), 'LPP_LR1_025': np.float64(22955.25), 'LPP_LR1_050': np.float64(22993.5), 'LPP_LR1_075': np.float64(23031.75), 'LR1_LR2_025': np.float64(23140.5), 'LR1_LR2_050': np.float64(23211.0), 'LR1_LR2_075': np.float64(23281.5), 'LR2_LR3_025': np.float64(23390.25), 'LR2_LR3_050': np.float64(23428.5), 'LR2_LR3_075': np.float64(23466.75)}
-
-The values seem to be calculated, but I'm not entirely sure they are then read properly, for whatever reason.
-I'm also not sure the current logic allows to properly determine there's a position open and prevent from another positions opening.
-
-This is the current logic - you can ignore the break part, as it's simply for diagnostics' sake, so that I won't trigger a massive iteration over all the rows for no reason. We're going step by step here.
-
-def run_backtest(df: pd.DataFrame, strategies: list) -> BacktestEngine:
-    backtest_engine = BacktestEngine()
-    current_positions = {strategy: None for strategy in strategies}
-
-
-    for strategy in strategies:
-        strategy.prepare(df)
-
-    for _, row in df.iterrows():
-        t = datetime.fromisoformat(row['candle_open']).time()
-        current_date = datetime.fromisoformat(row['candle_open']).date()
-        print(strategy.levels_by_date[current_date])
-        break
+        #print(strategy.levels_by_date[current_date])
     
         for strategy in strategies:
             start = strategy.session_start()
@@ -711,7 +673,7 @@ def run_backtest(df: pd.DataFrame, strategies: list) -> BacktestEngine:
                 current_positions[strategy] = None
                 continue
 
-            if is_rth:
+            if is_rth and traded_today[strategy] != current_date:
                 signal = strategy.generate_signal(row['open'], current_date)
                 
                 if signal == 'HOLD':
@@ -726,6 +688,7 @@ def run_backtest(df: pd.DataFrame, strategies: list) -> BacktestEngine:
                         strategy_name=strategy.get_name()
                     )
                     current_positions[strategy] = True
+                    traded_today[strategy] = current_date
 
                 elif signal == 'SELL' and current_positions[strategy] is None:
                     backtest_engine.open_position(
@@ -737,18 +700,57 @@ def run_backtest(df: pd.DataFrame, strategies: list) -> BacktestEngine:
                         strategy_name=strategy.get_name()
                     )
                     current_positions[strategy] = True
+                    traded_today[strategy] = current_date
 
-            newly_closed = backtest_engine.process_price('FDAX', row['close'])
-            if newly_closed:
-                current_positions[strategy] = None
+        newly_closed = backtest_engine.process_price('FDAX', row['close'])
+        if newly_closed:
+            current_positions[strategy] = None
 
     return backtest_engine
 
 
+Output after all fixes:
 
-Root cause: I wasn't able to diagnose the root cause this time - the structure of run_backtest is a bit complex and I'm not sure what exactly happens or why there's so many positions opening. There clearly should be just one position that hits TP/SL and then doesn't open for that given day. Perhaps this constraint is not met. I can imagine a position opening once, hitting a TP/SL and opening again (since it's still above/below the desired level), and hitting a fake TP/SL again, something like that. Not sure if that could be the case, but perhaps IT IS.
+Backtest 1 (First set of parameters using the LPP strategy)
 
-Fix:
+2026-04-01 13:40:14,356 [DEBUG   ] engine.backtest_engine: Processing price for FDAX at $24981.0
+BacktestEngine: 0 open | 93 closed | PnL: $137.0
+--- LPP Strategy (ID: b6179065-c5e0-425a-941c-1aef1f346bc2) ---
 
-Output after fix:
+                  Trades: 93
+                  Win Rate: 48.38709677419355%
+                  Total PnL: $137.00
+                  Avg R: 0.02R
+
+
+--- PORTFOLIO TOTAL  ---
+
+                  Trades: 93
+                  Win Rate: 48.38709677419355%
+                  Total PnL: $137.0
+                  Avg R: 0.02R
+
+Backtest 2 (Different parameters):
+
+--- LPP Strategy (ID: 38ba73c9-5e93-46ed-bc0b-4d4d5183f88c) ---
+
+                  Trades: 116
+                  Win Rate: 38.793103448275865%
+                  Total PnL: $-231.00
+                  Avg R: -0.04R
+
+
+--- PORTFOLIO TOTAL  ---
+
+                  Trades: 116
+                  Win Rate: 38.793103448275865%
+                  Total PnL: $-231.0
+                  Avg R: -0.04R
+
+Problems noticed: If I try to add the second strategy, we receive a TypeError informing that 
+TypeError: 'PositionManager' object is not iterable.
+
+We dfeinitely need to fix that next time.
+Also, we could add a return of a list/dict of trades with all the relevant information somehow, so we could verify their relevance manually to test it properly.
+Or at least a few of them
 ```

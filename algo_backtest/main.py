@@ -35,16 +35,16 @@ def setup_logging():
 def run_backtest(df: pd.DataFrame, strategies: list) -> BacktestEngine:
     backtest_engine = BacktestEngine()
     current_positions = {strategy: None for strategy in strategies}
+    traded_today = {strategy: None for strategy in strategies}
 
-    # Step 1: preparation — each strategy pre-computes what it needs once
     for strategy in strategies:
         strategy.prepare(df)
 
-    # Step 2: backtest — single pass through all rows
     for _, row in df.iterrows():
         t = datetime.fromisoformat(row['candle_open']).time()
         current_date = datetime.fromisoformat(row['candle_open']).date()
-
+        #print(strategy.levels_by_date[current_date])
+    
         for strategy in strategies:
             start = strategy.session_start()
             end = strategy.session_end()
@@ -56,9 +56,11 @@ def run_backtest(df: pd.DataFrame, strategies: list) -> BacktestEngine:
                 current_positions[strategy] = None
                 continue
 
-            if is_rth:
+            if is_rth and traded_today[strategy] != current_date:
                 signal = strategy.generate_signal(row['open'], current_date)
-
+                
+                if signal == 'HOLD':
+                    pass
                 if signal == 'BUY' and current_positions[strategy] is None:
                     backtest_engine.open_position(
                         'FDAX', 'BUY', row['open'],
@@ -69,6 +71,7 @@ def run_backtest(df: pd.DataFrame, strategies: list) -> BacktestEngine:
                         strategy_name=strategy.get_name()
                     )
                     current_positions[strategy] = True
+                    traded_today[strategy] = current_date
 
                 elif signal == 'SELL' and current_positions[strategy] is None:
                     backtest_engine.open_position(
@@ -80,10 +83,11 @@ def run_backtest(df: pd.DataFrame, strategies: list) -> BacktestEngine:
                         strategy_name=strategy.get_name()
                     )
                     current_positions[strategy] = True
+                    traded_today[strategy] = current_date
 
-            newly_closed = backtest_engine.process_price('FDAX', row['close'])
-            if newly_closed:
-                current_positions[strategy] = None
+        newly_closed = backtest_engine.process_price('FDAX', row['close'])
+        if newly_closed:
+            current_positions[strategy] = None
 
     return backtest_engine
 
@@ -100,8 +104,11 @@ if __name__ == '__main__':
     setup_logging()
     print('Starting the backtest test procedure in main.py - logging set!')
     
-    strategies = [LPPStrategy('FDAX', 'BUY', 'LR1_LR2_075', 'LPP_LR1_050', 'LR2_LR3_050')]
+    strategies = [LPPStrategy('FDAX', 'BUY', 'LR1_LR2_075', 'LPP_LR1_050', 'LR2_LR3_050'),
+                  ]
     test_engine = run_backtest(data, strategies)
     print(test_engine)
     test_engine.strategy_report()
     
+
+

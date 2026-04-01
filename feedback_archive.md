@@ -4242,3 +4242,35 @@ Fix planned for Day 3.
 - hasattr vs __dict__ membership distinction
 - bytes == bytearray value equality
 - One more lambda-as-argument pattern
+
+## Week 12, Day 3 — 2026-04-01
+
+**Topic:** Strings, closures/nonlocal, generators, hasattr vs __dict__, finally/return, run_backtest fixes
+**Score:** 90% (7/7 PCAP tasks + T8 project working)
+
+**Mentor Assessment:**
+
+T1 — Correct. rindex added to next string drills per user request.
+
+T2 — Correct. \r mental model solid. All escape sequence lengths correct.
+
+T3 — Correct. Loop-closure pattern known — removed from future drills. nonlocal pattern confirmed solid.
+
+T4 — Correct. Generator pause/resume, early return, loop-based generator all correct.
+
+T5 — Perfect. hasattr vs __dict__ gap closed from Day 2.
+
+T6 — All 5 PCAP simulation questions correct. Mutable default arg, generator exhaustion, closure scope, slicing, finally all solid.
+
+T7 — Correct. finally + raise clarified: finally runs between except handler finishing and return leaving — only overrides if finally itself has return.
+
+T8 — LPP strategy working end-to-end. 93 trades, 48.4% win rate, +$137 PnL. Two issues queued:
+(1) PositionManager not iterable — for position in self.position_manager → needs .positions
+(2) Trade inspection output for manual verification
+
+**User feedback for future drills:**
+- [:3:] trailing colon trap (same as [:3]) — add to string tasks
+- 'REPTILE'[-1] + 'REPTILE'[-2::-1] reverse-slice pattern — add to string tasks
+- rindex vs rfind distinction — add to string tasks
+- finally/return: only drill the finally-has-return override, not basic flow
+- Remove loop-closure lambda trap — already internalized

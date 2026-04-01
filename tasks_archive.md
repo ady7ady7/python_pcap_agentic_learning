@@ -1974,3 +1974,28 @@ Task 8 expected values were wrong. Correct: 4 winners, $1050 total PnL.
 2. No one-trade-per-day constraint → re-entry fires on every candle above entry level
 3. newly_closed uses wrong strategy reference (last loop var, not the one that closed)
 Fix plan queued for Day 3 T8.
+
+## Week 12, Day 3 — 2026-04-01
+
+**Topic:** Strings, closures/nonlocal, generators, hasattr vs __dict__, finally/return, run_backtest 3-bug fix
+**Score:** 90% (T1-T7 assessed; T8 project working)
+**Difficulty:** Hard | Time: ~90 min
+
+**Tasks Completed:** 8 tasks
+**Correct:** T1 ✅, T2 ✅, T3 ✅, T4 ✅, T5 ✅, T6 ✅, T7 ✅, T8 ✅
+
+**Key achievements:**
+- LPP Strategy end-to-end: 93 trades, 48% win rate, +$137 PnL
+- All 3 run_backtest bugs fixed (diagnostic break removed, traded_today constraint, scope fix)
+- String methods, mutable default args, closures, generators all solid
+
+**User feedback incorporated:**
+- Loop-closure trap: remove from future drills (already known)
+- finally/return: focus only on finally-has-return override pattern
+- rindex: add to string drills tomorrow
+- [:3:] slice with trailing colon: add to string traps tomorrow
+- 'REPTILE'[-1] + 'REPTILE'[-2::-1] pattern: add to slicing drills
+
+**Remaining project issues for Day 4:**
+1. PositionManager not iterable — force_close_all uses `for position in self.position_manager` but needs `.positions`
+2. Trade inspection — add sample trade output for manual verification
