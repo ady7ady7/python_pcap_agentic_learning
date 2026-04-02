@@ -1999,3 +1999,32 @@ Fix plan queued for Day 3 T8.
 **Remaining project issues for Day 4:**
 1. PositionManager not iterable — force_close_all uses `for position in self.position_manager` but needs `.positions`
 2. Trade inspection — add sample trade output for manual verification
+
+## Week 12, Day 4 — 2026-04-02
+
+**Topic:** String slicing traps, rindex/rfind, sys/os modules, exception propagation chains, str.join/startswith/endswith, PositionManager fix + 2-strategy run
+**Score:** 85% (6.83/8)
+**Difficulty:** Hard | Time: ~90 min
+
+**Tasks Completed:** 8 tasks
+**Correct:** T1 ✅, T2 ✅, T3 (partial 0.5), T4 ✅, T5 (partial 0.33), T6 ✅, T7 ✅, T8 ✅
+
+**Errors:**
+- T3B: Applied answers to own environment instead of given scenario (argv[0]='script.py', argv[1]='foo', len=3)
+- T5B: Correct answer after testing, but initial finally/outer-handler order reasoning was wrong
+- T5C: raise X from Y answered ZeroDivisionError twice. Correct: type(e)=ValueError, type(e.__cause__)=ZeroDivisionError
+
+**Key achievements:**
+- 2-strategy LPP backtest running: 93 + 116 trades, portfolio -$94
+- PositionManager iterator bug fixed
+- String methods, os/sys modules solid
+
+**Gaps to drill tomorrow:**
+- raise X from Y (__cause__) — needs dedicated drill
+- finally execution order vs outer handlers
+- sys.argv scenario-based questions
+- String comparison: 'aa' > 'aaa', lowercase vs uppercase (user request)
+- Harder slice traps (user request)
+
+**Remaining project issue:**
+- Trade exit_reason shows "still open" — should_close() called after position already removed from manager. Minor display bug.

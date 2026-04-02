@@ -1,8 +1,8 @@
-# Daily Feedback — Week 12, Day 3
+# Daily Feedback — Week 12, Day 4
 
-**Date:** 2026-04-01
+**Date:** 2026-04-02
 
-**Topic:** Strings, closures/nonlocal, generators, hasattr vs __dict__, finally/return, run_backtest fixes
+**Topic:** String slicing traps, rindex/rfind, sys module, os module deep cut, exception propagation chains, str.join/startswith/endswith, PositionManager fix + 2-strategy run
 
 ---
 

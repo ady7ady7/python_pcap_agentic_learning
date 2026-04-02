@@ -165,7 +165,7 @@ class BacktestEngine:
     
     def force_close_all(self, ticker: str, strategy_id: str, price: float) -> None:
         '''Force close all open positions on a given ticker'''
-        filtered_positions = [position for position in self.position_manager if (ticker == position.ticker and position.strategy_id == strategy_id)]
+        filtered_positions = [position for position in self.position_manager.positions if (ticker == position.ticker and position.strategy_id == strategy_id)]
         for position in filtered_positions:
             exit_reason = 'forced close'
             trade = Trade(

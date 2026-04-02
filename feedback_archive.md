@@ -4274,3 +4274,33 @@ T8 — LPP strategy working end-to-end. 93 trades, 48.4% win rate, +$137 PnL. Tw
 - rindex vs rfind distinction — add to string tasks
 - finally/return: only drill the finally-has-return override, not basic flow
 - Remove loop-closure lambda trap — already internalized
+
+## Week 12, Day 4 — 2026-04-02
+
+**Topic:** String slicing traps, rindex/rfind, sys/os modules, exception propagation chains, str.join/startswith/endswith, PositionManager fix + 2-strategy run
+**Score:** 85% (6.83/8)
+
+**Mentor Assessment:**
+
+T1 — Perfect. All slice patterns correct including reverse-slice construction.
+
+T2 — Perfect. All 4 methods (find/rfind/index/rindex) correct. rfind('b') on "abcabc" = 4 correct.
+
+T3 — A correct. B wrong: answered for own environment instead of the given scenario (script.py foo bar) — argv[0]='script.py', argv[1]='foo', len=3. C: plausible but the number of 'os'-containing module keys in sys.modules is greater than 2 in practice (posixpath, genericpath, etc.). Partial.
+
+T4 — Perfect. All os.path functions, remove vs rmdir, linesep correct.
+
+T5 — A correct. B: got right answer after testing but initial reasoning had wrong order. Rule: finally runs INSIDE the function before exception propagates out → inner finally always before outer handler. C wrong: raise X from Y — outer handler catches X (ValueError), __cause__ holds Y (ZeroDivisionError). Answered both as ZeroDivisionError.
+
+T6 — All 5 MC correct.
+
+T7 — Perfect. join, startswith/endswith including tuple form all correct.
+
+T8 — Two-strategy run working. PositionManager fix applied. exit_reason "still open" is a minor display bug — should_close() called after position already removed from manager. Doesn't affect PnL. Queue for tomorrow.
+
+**For tomorrow:**
+- raise X from Y + __cause__ dedicated drill
+- String comparison (user request): 'aa' vs 'aaa', upper vs lower
+- Harder slice patterns
+- sys.argv scenario-based (not "what does YOUR script print")
+- Trade exit_reason bug fix
