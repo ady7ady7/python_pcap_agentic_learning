@@ -4304,3 +4304,34 @@ T8 — Two-strategy run working. PositionManager fix applied. exit_reason "still
 - Harder slice patterns
 - sys.argv scenario-based (not "what does YOUR script print")
 - Trade exit_reason bug fix
+
+## Week 12, Day 5 — 2026-04-03
+
+**Topic:** String comparisons, raise X from Y, finally execution order, 20Q gap sweep, PCAP simulation
+**Score:** 92% (6 tasks, T6 excluded)
+
+**Mentor Assessment:**
+
+T1 — Perfect. All 9 comparison results correct. Sort order and sorted() output correct.
+
+T2 — Perfect. raise X from Y now understood. __cause__ vs __context__ distinction noted — low probability on PCAP exam, not worth drilling further.
+
+T3 — Perfect. All 3 snippets traced correctly. B (two-function call stack) traced correctly. finally execution order fully solid.
+
+T4 — 19/20. One error: Q12 — hasattr checks the full MRO chain, so hasattr(Child, 'method') is True even if method is only defined in Parent. This is the same pattern from Day 2. Needs one more exposure.
+
+T5 — Perfect. All comparisons, sorted() on mixed-case list, min/max all correct.
+
+T6 — Excluded. Approach chosen was correct (return (pos, reason) tuples). position_manager.py updated. backtest_engine.py process_price loop not updated to unpack — fix is: `for position, exit_reason in closed_positions` + remove should_close call.
+
+T7 — All 5 PCAP sim questions correct.
+
+**Week 12 summary:**
+- D1: 88% — type(e), bare except, custom __str__, __bases__/__mro__
+- D2: 90% — assert propagation, class vs instance __dict__, isinstance vs type, name mangling
+- D3: 90% — strings, closures, generators, run_backtest 3-bug fix
+- D4: 85% — slice traps, rindex/rfind, sys/os, exception chains, 2-strategy backtest
+- D5: 92% — string comparison, raise-from, finally order, full gap sweep
+- Average: 89%
+
+Student is ready for retake. Main remaining gap: hasattr vs __dict__ membership (appears twice across sessions).

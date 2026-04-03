@@ -2028,3 +2028,27 @@ Fix plan queued for Day 3 T8.
 
 **Remaining project issue:**
 - Trade exit_reason shows "still open" — should_close() called after position already removed from manager. Minor display bug.
+
+## Week 12, Day 5 — 2026-04-03
+
+**Topic:** String comparisons, raise X from Y, finally order drill, 20Q gap sweep, string harder patterns, PCAP simulation
+**Score:** 92% (T1-T5, T7 assessed; T6 excluded — project debug deferred)
+**Difficulty:** Medium-Hard | Time: ~90 min
+
+**Tasks Completed:** 7 tasks (T6 excluded from scoring)
+**Correct:** T1 ✅, T2 ✅, T3 ✅, T4 (19/20) ✅, T5 ✅, T7 ✅
+**One error:** T4 Q12 — hasattr(Child, 'method') where method only in Parent → True (inherited), not False
+
+**Key achievements:**
+- String comparison ordering fully locked in (digits < uppercase < lowercase)
+- raise X from Y / __cause__ vs __context__ understood
+- finally execution order solid across all patterns
+- 19/20 on full gap sweep — only hasattr inheritance confusion remains
+
+**T6 project status:**
+- Approach B chosen (return (position, reason) tuples) — correct approach
+- position_manager.py updated correctly
+- backtest_engine.py process_price NOT updated to unpack tuples → still broken
+- Fix: change `for position in closed_positions` to `for position, exit_reason in closed_positions` and remove should_close call
+
+**Weekend:** Week12_PCAP_EXAM_1 and Week12_PCAP_EXAM_2 (40Q each, real exam format)

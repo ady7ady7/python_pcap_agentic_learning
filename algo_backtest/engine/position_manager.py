@@ -18,7 +18,8 @@ class PositionManager:
     def __init__(self) -> None:
         """Initialize empty position manager."""
         self.positions: List[Position] = []
-
+    
+        
     def add_position(self, position: Position) -> None:
         """
         Add a new position to the manager.
@@ -68,9 +69,9 @@ class PositionManager:
         Returns:
             List of positions that should be closed.
         """
-        closed_positions = [p for p in self.positions if p.ticker == ticker and p.should_close(current_price)]
+        closed_positions = [(p, p.should_close(current_price)[1]) for p in self.positions if p.ticker == ticker and p.should_close(current_price)]
         
-        closed_ids = [p.position_id for p in closed_positions]
+        closed_ids = [p[0].position_id for p in closed_positions]
         self.positions = [p for p in self.positions if p.position_id not in closed_ids]
         
         return closed_positions

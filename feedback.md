@@ -1,12 +1,12 @@
-# Daily Feedback — Week 12, Day 4
+# Daily Feedback — Week 12, Day 5
 
-**Date:** 2026-04-02
+**Date:** 2026-04-03
 
-**Topic:** String slicing traps, rindex/rfind, sys module, os module deep cut, exception propagation chains, str.join/startswith/endswith, PositionManager fix + 2-strategy run
+**Topic:** String comparison, raise X from Y, finally order, full gap sweep (20 MC), Trade exit_reason fix, PCAP simulation
 
 ---
 
-**Tasks completed:** ___ / 8
+**Tasks completed:** ___ / 7 (T8 = exams, handled by mentor)
 
 **Time spent:** ___ minutes
 
