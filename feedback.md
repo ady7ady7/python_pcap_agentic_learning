@@ -1,12 +1,12 @@
-# Daily Feedback — Week 12, Day 5
+# Daily Feedback — Week 13, Day 1
 
-**Date:** 2026-04-03
+**Date:** 2026-04-07
 
-**Topic:** String comparison, raise X from Y, finally order, full gap sweep (20 MC), Trade exit_reason fix, PCAP simulation
+**Topic:** Custom __str__ trap, open() modes, random module, select-two sim, hasattr vs __dict__
 
 ---
 
-**Tasks completed:** ___ / 7 (T8 = exams, handled by mentor)
+**Tasks completed:** ___ / 5
 
 **Time spent:** ___ minutes
 

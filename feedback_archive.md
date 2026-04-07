@@ -4335,3 +4335,14 @@ T7 — All 5 PCAP sim questions correct.
 - Average: 89%
 
 Student is ready for retake. Main remaining gap: hasattr vs __dict__ membership (appears twice across sessions).
+
+## Week 13, Day 1 — 2026-04-07
+
+**Topic:** Custom __str__, open() modes, random module, select-two, hasattr vs __dict__
+**Score:** 74% (3.7/5)
+
+T1 partial: repr(e) is ClassName(args) regardless of __str__. e.args is populated from super().__init__() — not empty. C wrong: e.args != ().
+T2 perfect.
+T3 partial: random.random() < 1 is ALWAYS True — student answered False.
+T4 partial: Q2 wrong — rfind returns -1 not raises (mirror of find, not index).
+T5 partial: X.__dict__ is the class's own namespace, not the instance's. Correct phrasing: "defined directly in X's own namespace (not inherited)".

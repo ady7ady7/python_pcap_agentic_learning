@@ -2052,3 +2052,28 @@ Fix plan queued for Day 3 T8.
 - Fix: change `for position in closed_positions` to `for position, exit_reason in closed_positions` and remove should_close call
 
 **Weekend:** Week12_PCAP_EXAM_1 and Week12_PCAP_EXAM_2 (40Q each, real exam format)
+
+## Week 12 Exam A (Weekend) — 2026-04-06
+
+**Score:** 26/30 = 87% — PASS
+**Errors:** Q4 (custom __str__ wins over arg), Q7 (raise X from Y shows both), Q19 ('r+' not 'a+'), Q27 (nonlocal counter called 3 times)
+**Notes:** Student flagged Q4 and Q5 as confusing — __str__ override pattern needs one more drill.
+
+## Week 13, Day 1 — 2026-04-07
+
+**Topic:** Custom __str__ trap, open() modes, random module, select-two sim, hasattr vs __dict__
+**Score:** 74% (3.7/5) — medium volume session after Easter break
+**Difficulty:** Medium | Time: ~30 min
+
+**Correct:** T2 ✅, T4 (partial — Q2 wrong: rfind returns -1 not raises) ✅
+**Errors:**
+- T1: repr(e) = ClassName(args) not str, e.args is tuple from super().__init__(); C wrong (e.args is NOT empty)
+- T3: random.random() < 1 is ALWAYS True (not False) — always in [0.0, 1.0)
+- T4 Q2: rfind returns -1 (no raise), rindex raises ValueError — same as find/index mirror
+- T5: X.__dict__ = class's OWN namespace, not instance, not inherited
+
+**Gaps still active:**
+- repr(e) format — ClassName(args), unaffected by __str__
+- e.args when __str__ defined — still populated from super().__init__()
+- random.random() upper bound (always < 1)
+- rfind vs rindex raise behaviour
