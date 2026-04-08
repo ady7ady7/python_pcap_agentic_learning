@@ -1,334 +1,552 @@
-# Week 13 Day 1 — Medium Volume: Gap Revisit
-**Date:** 2026-04-07 | **Focus:** Custom __str__ trap, open() modes, raise-from, hasattr vs __dict__, random module, select-two patterns
+# Week 13 Day 2 — Heavy Gap Review
+**Date:** 2026-04-08 | **Focus:** repr(e)/e.args deep drill, then all active gaps
 
 ---
 
-## Task 1 — Custom `__str__` on exceptions: locked for good [Exam A Q4/Q5 gap]
+## Task 1 — `repr(e)`, `e.args`, `str(e)`: heavy volume until it clicks
 
-**TEACH — the rule, once and for all:**
+**TEACH — the three separate things, once and for all:**
+
 ```
-print(e)  →  calls e.__str__()
-str(e)    →  calls e.__str__()
-repr(e)   →  calls e.__repr__() — default is ClassName(args)
-e.args    →  tuple from super().__init__() — unaffected by __str__
+e.args     → a TUPLE. Set by Exception.__init__() via super().__init__(*stuff).
+             Whatever you pass to super().__init__() becomes e.args.
+             If you don't call super().__init__(), e.args = ().
+
+str(e)     → calls __str__. If you defined __str__, that runs.
+print(e)   → same as str(e).
+             If NO __str__ defined, Python falls back to str(e.args[0]) if len==1,
+             or str(e.args) if multiple.
+
+repr(e)    → calls __repr__. Default is: ClassName(arg1, arg2, ...)
+             where the args come from e.args — NOT from __str__.
+             __str__ has ZERO effect on repr().
 ```
 
-If `__str__` is defined, it **completely replaces** what `print(e)` shows.
-The constructor argument (`"ignored arg"`) only affects `e.args` — NOT `print(e)`.
-
-**Why Q4 confused you:** You saw `raise MyError("ignored arg")` and assumed `print(e)` would show that arg. It doesn't — `__str__` intercepts it entirely.
-
-**A)** Predict ALL outputs — no shortcuts, trace each line:
+**The key insight about `ClassName(args)` in repr:**
 ```python
-class AppError(Exception):
-    def __init__(self, code, msg):
+# e.args = ('not found',)
+# repr(e) → "AppError('not found')"
+#            ^^^^^^^^  ^^^^^^^^^^^
+#            class     e.args unpacked
+
+# e.args = ('not found', 404)
+# repr(e) → "AppError('not found', 404)"
+
+# e.args = ()   (no super().__init__() called)
+# repr(e) → "AppError()"
+```
+
+---
+
+**Example 1 — no `__str__`, one arg passed to super():**
+```python
+class E1(Exception):
+    def __init__(self, msg):
+        super().__init__(msg)   # msg goes into e.args
+
+e = E1("something broke")
+print(str(e))     # 'something broke'   ← e.args[0] since len==1
+print(repr(e))    # "E1('something broke')"
+print(e.args)     # ('something broke',)
+```
+
+**Example 2 — with `__str__`, one arg:**
+```python
+class E2(Exception):
+    def __init__(self, msg):
         super().__init__(msg)
-        self.code = code
-
     def __str__(self):
-        return f"[{self.code}] error occurred"
+        return "CUSTOM MESSAGE"
 
-try:
-    raise AppError(404, "not found")
-except AppError as e:
-    print(e)              # ?
-    print(str(e))         # ?
-    print(repr(e))        # ?
-    print(e.args)         # ?
-    print(e.code)         # ?
+e = E2("something broke")
+print(str(e))     # 'CUSTOM MESSAGE'        ← __str__ wins
+print(repr(e))    # "E2('something broke')" ← __str__ has NO effect on repr
+print(e.args)     # ('something broke',)    ← unaffected by __str__
 ```
 
-**B)** Now WITHOUT `__str__` — what changes?
+**Example 3 — two args passed to super():**
 ```python
-class AppError(Exception):
+class E3(Exception):
     def __init__(self, code, msg):
-        super().__init__(msg)
-        self.code = code
+        super().__init__(code, msg)   # BOTH go into e.args
 
-try:
-    raise AppError(404, "not found")
-except AppError as e:
-    print(e)              # ?
-    print(e.args)         # ?
+e = E3(404, "not found")
+print(str(e))     # '(404, \'not found\')'  ← multiple args: str(e.args)
+print(repr(e))    # "E3(404, 'not found')"  ← both args in repr
+print(e.args)     # (404, 'not found')
 ```
 
-**C)** Multiple choice — which is True?
+**Example 4 — extra attributes, only msg to super():**
 ```python
-class E(Exception):
-    def __str__(self):
-        return "custom"
+class E4(Exception):
+    def __init__(self, code, msg):
+        super().__init__(msg)   # only msg goes to super → e.args = (msg,)
+        self.code = code        # code is just an instance attr, NOT in e.args
 
-e = E("original arg")
+e = E4(404, "not found")
+print(str(e))     # 'not found'           ← e.args[0]
+print(repr(e))    # "E4('not found')"     ← only msg in args
+print(e.args)     # ('not found',)        ← code NOT here
+print(e.code)     # 404                   ← separate instance attr
 ```
-- A: `str(e) == "original arg"`
-- B: `str(e) == "custom"`
+
+**Example 5 — NO super().__init__() call:**
+```python
+class E5(Exception):
+    def __init__(self, msg):
+        self.msg = msg          # super() NOT called → e.args = ()
+
+e = E5("something broke")
+print(str(e))     # ''                    ← empty args → empty str
+print(repr(e))    # "E5()"               ← empty args
+print(e.args)     # ()
+print(e.msg)      # 'something broke'    ← only reachable as e.msg
+```
+
+---
+
+**A)** Now predict — no peeking at the examples:
+
+```python
+class PriceError(Exception):
+    def __init__(self, price, reason):
+        super().__init__(reason)    # only reason goes to super
+        self.price = price
+    def __str__(self):
+        return f"Bad price {self.price}: {self.args[0]}"
+
+e = PriceError(-5, "negative")
+print(str(e))
+print(repr(e))
+print(e.args)
+print(e.price)
+```
+
+**B)** Predict:
+```python
+class ConnError(Exception):
+    def __init__(self, host, port, msg):
+        super().__init__(host, port, msg)   # all three to super
+
+e = ConnError("localhost", 5432, "timeout")
+print(str(e))
+print(repr(e))
+print(e.args)
+print(len(e.args))
+```
+
+**C)** Predict:
+```python
+class SimpleError(Exception):
+    pass   # no __init__, no __str__
+
+e = SimpleError("oops")
+print(str(e))
+print(repr(e))
+print(e.args)
+```
+
+**D)** Multiple choice — given `class E(Exception): def __str__(self): return "hi"` and `e = E("ignored")`:
+- A: `repr(e) == "hi"`
+- B: `e.args == ("ignored",)`
 - C: `e.args == ()`
-- D: `repr(e) == "custom"`
+- D: `str(e) == "ignored"`
+
+Write answers here:
+
+
+```
+A) str, repr, args, price:
+print(str(e)) #Bad price -5: negative
+print(repr(e)) #PriceError('negative')
+print(e.args) #('negative',)
+print(e.price) #-5
+
+B) str, repr, args, len:
+print(str(e)) #('localhost', 5432, 'timeout)
+print(repr(e)) #ConnError('localhost', 5432, 'timeout)
+print(e.args) #('localhost', 5432, 'timeout)
+print(len(e.args)) #3
+
+
+
+C) str, repr, args:
+
+# class SimpleError(Exception): #this example is very unintuitive still
+#     pass   # no __init__, no __str__
+
+# e = SimpleError("oops")
+# print(str(e)) #oops
+# print(repr(e)) #SimpleError('oops')
+# print(e.args) #('oops',)
+
+
+D)
+A: False
+B: True
+C: False
+D: False
+
+```
+
+---
+
+## Task 2 — `rfind` vs `rindex` — one clean drill
+
+**Rule:** `rfind`/`rindex` are identical to `find`/`index` except they search from the RIGHT (return the last occurrence index).
+
+```
+find   → last occurrence? No. First. Returns -1 if not found.
+rfind  → last occurrence. Returns -1 if not found.    ← NO raise
+index  → first occurrence. Raises ValueError if not found.
+rindex → last occurrence. Raises ValueError if not found. ← DOES raise
+```
+
+**A)** Predict each — output or exception:
+```python
+s = "abracadabra"
+print(s.find('a'))      # first 'a'
+print(s.rfind('a'))     # last 'a'
+print(s.index('a'))     # first 'a'
+print(s.rindex('a'))    # last 'a'
+print(s.find('z'))      # not found
+print(s.rfind('z'))     # not found
+print(s.index('z'))     # not found
+print(s.rindex('z'))    # not found
+```
 
 Write answers here:
 ```
 A)
-    print(e)              #[404] error occurred
-    print(str(e))         #[404] error occurred
-    print(repr(e))        #code: 404
-    print(e.args)         #code: 404
-    print(e.code)         # 404
+print(s.find('a'))      #0
+print(s.rfind('a'))     #10
+print(s.index('a'))     #0
+print(s.rindex('a'))    #10
+print(s.find('z'))      #-1
+print(s.rfind('z'))     #-1
+print(s.index('z'))     #valueError
+print(s.rindex('z'))    #valueError
+
+```
+
+---
+
+## Task 3 — Name mangling: compile-time resolution drill [recurring gap]
+
+**A)** Predict — 3-level chain, no `get()` in C:
+```python
+class X:
+    __val = 'x'
+    def show(self): return self.__val
+
+class Y(X):
+    __val = 'y'
+    def show(self): return self.__val
+
+class Z(Y):
+    __val = 'z'
+
+obj = Z()
+print(obj.show())          # which show() runs? what does it return?
+print(obj._Z__val)
+print(obj._Y__val)
+print(obj._X__val)
+```
+
+**B)** True or False:
+```python
+print(hasattr(Z, 'show'))       # ?
+print('show' in Z.__dict__)     # ?
+print('show' in Y.__dict__)     # ?
+print(Z.__bases__ == (Y,))      # ?
+print(Y in Z.__mro__)           # ?
+```
+
+Write answers here:
+```
+A) 
+print(obj.show())   #y
+print(obj._Z__val) #'z'
+print(obj._Y__val) #'y'
+print(obj._X__val) #'x'
+
 B)
-    print(e)              #'not found'
-    print(e.args)         #('not found', ) #THIS FEELS STILL SUPER FUCKING DIFFICULT...
- 
-C) B, C
+print(hasattr(Z, 'show'))       #False
+print('show' in Z.__dict__)     #False
+print('show' in Y.__dict__)     #True
+print(Z.__bases__ == (Y,))      #True
+print(Y in Z.__mro__)           #True
+
 ```
 
 ---
 
-## Task 2 — `open()` modes: the complete map [Exam A Q19 gap]
+## Task 4 — Assert propagation + exception routing [Q10 real exam pattern]
 
-**TEACH — pointer position matters:**
-```
-Mode   | Creates? | Truncates? | Pointer start | Read? | Write?
-'r'    | No (fail)| No         | Beginning     | Yes   | No
-'w'    | Yes      | Yes        | Beginning     | No    | Yes
-'a'    | Yes      | No         | END           | No    | Yes
-'x'    | No(fail) | No         | Beginning     | No    | Yes  ← exclusive create
-'r+'   | No (fail)| No         | Beginning     | Yes   | Yes  ← read+write, no truncate
-'w+'   | Yes      | Yes        | Beginning     | Yes   | Yes  ← truncates!
-'a+'   | Yes      | No         | END (writes)  | Yes   | Yes  ← writes always at end
-```
+**A)** Trace and predict output — 3 variants:
 
-**Key distinctions:**
-- `'r+'` vs `'w+'`: both read+write, but `'w+'` TRUNCATES, `'r+'` does NOT
-- `'r+'` vs `'a+'`: both no-truncate, but `'a+'` pointer for writes is always END
-- `'x'` raises `FileExistsError` if file exists — use for "create only if new"
+```python
+# Variant 1
+result = 0
+def compute(n):
+    assert n > 0
+    try:
+        return 100 / n
+    except ZeroDivisionError:
+        raise RuntimeError("div fail")
 
-**A)** True or False:
-```
-1. open('f', 'r+') truncates the file
-2. open('f', 'w+') truncates the file
-3. open('f', 'a+') allows reading
-4. open('f', 'a') allows reading
-5. open('f', 'r+') raises an error if the file doesn't exist
-6. open('f', 'x') raises FileExistsError if file already exists
-7. open('f', 'a') always writes at the end, regardless of seek()
-8. open('f') is the same as open('f', 'r')
+try:
+    compute(0)
+except RuntimeError:
+    result = 1
+except AssertionError:
+    result = 2
+except:
+    result = 3
+print(result)
 ```
 
-**B)** Match the description to the mode:
+```python
+# Variant 2
+result = 0
+def compute(n):
+    assert n > 0
+    try:
+        return 100 / n
+    except ZeroDivisionError:
+        raise RuntimeError("div fail")
+
+try:
+    compute(-1)
+except RuntimeError:
+    result = 1
+except AssertionError:
+    result = 2
+except:
+    result = 3
+print(result)
 ```
-1. Read + write, no truncate, pointer at start, file must exist  → ?
-2. Write only, always appends, creates if missing                → ?
-3. Read + write, truncates first, creates if missing             → ?
-4. Exclusive create, fails if exists                             → ?
-5. Read + write + append, writes always go to end               → ?
+
+```python
+# Variant 3
+result = 0
+def compute(n):
+    assert n > 0
+    try:
+        return 100 / n
+    except ZeroDivisionError:
+        raise RuntimeError("div fail")
+
+try:
+    compute(5)
+except RuntimeError:
+    result = 1
+except AssertionError:
+    result = 2
+except:
+    result = 3
+print(result)
 ```
 
 Write answers here:
 ```
-A) 1-8:
-# 1. open('f', 'r+') truncates the file - NO
-# 2. open('f', 'w+') truncates the file - Yes
-# 3. open('f', 'a+') allows reading # Yes
-# 4. open('f', 'a') allows reading #No
-# 5. open('f', 'r+') raises an error if the file doesn't exist #Yes
-# 6. open('f', 'x') raises FileExistsError if file already exists #Yes
-# 7. open('f', 'a') always writes at the end, regardless of seek() #Yes
-# 8. open('f') is the same as open('f', 'r') #Yes
+Variant 1 trace + output:
+result = 0
+def compute(n):
+    assert n > 0 #1.This assertion fails inside -> raises AssertionError
+    try:
+        return 100 / n
+    except ZeroDivisionError:
+        raise RuntimeError("div fail")
+
+try:
+    compute(0) # 2. The error is unhandled inside the compute function, so it propagates to the outside
+except RuntimeError:
+    result = 1
+except AssertionError: # 3. This handle handles the AssertionError
+    result = 2
+except:
+    result = 3
+print(result) #2
 
 
+Variant 2 trace + output:
 
-B) 1-5:
-# 1. Read + write, no truncate, pointer at start, file must exist  → r+
-# 2. Write only, always appends, creates if missing                → a
-# 3. Read + write, truncates first, creates if missing             → w+
-# 4. Exclusive create, fails if exists                             → x
-# 5. Read + write + append, writes always go to end               → a+
+basically the same as above, why?
+The result is 2 again.
+
+Variant 3 trace + output:
+result = 0
+def compute(n):
+    assert n > 0 #1. this time the assertion is correct
+    try:
+        return 100 / n #This works properly, returning the result (20)
+    except ZeroDivisionError:
+        raise RuntimeError("div fail")
+
+try:
+    compute(5) 
+except RuntimeError:
+    result = 1
+except AssertionError:
+    result = 2
+except:
+    result = 3
+print(result) #0, the result is not updated with the result of compute() function
+
 ```
 
 ---
 
-## Task 3 — `random` module [Real exam Q6 pattern]
+## Task 5 — String comparison + list comp: combined PCAP patterns
 
-**TEACH:**
+**A)** Predict True or False:
 ```python
-import random
-random.seed(n)          # set seed → reproducible sequence
-random.random()         # float in [0.0, 1.0)  — NEVER >= 1
-random.randint(a, b)    # int in [a, b] inclusive — CAN return b
-random.choice(seq)      # random element from non-empty sequence
-random.sample(seq, k)   # k unique elements from seq, returns list
-random.shuffle(lst)     # shuffles list IN PLACE, returns None
+print('abc' > 'ABC')          # ?
+print('abc' == 'ABC'.lower()) # ?
+print('Z' > 'a')              # ?
+print('' < 'a')               # ?
+print('aa' == 'aa ')          # ?
+print('1abc' < 'abc')         # ?
 ```
 
-**Key traps:**
+**B)** Predict the output — real exam list comp patterns:
 ```python
-random.seed(1); v1 = random.random()
-random.seed(1); v2 = random.random()
-v1 == v2   # True — same seed → same sequence
-
-random.random() >= 1   # ALWAYS False — range is [0.0, 1.0)
-random.choice([1,2,3]) >= 1  # ALWAYS True — min value is 1
-len(random.sample([1,2,3], 2)) > 2  # ALWAYS False — len==2
+lst = [i for i in range(6)]
+result = [lst[i] for i in range(5, -1, -1) if lst[i] % 2 == 0]
+print(result)
 ```
 
-**A)** True or False — which always evaluate to True?
 ```python
-import random
-random.seed(99)
-a = random.random()
-random.seed(99)
-b = random.random()
-
-print(a == b)                           # ?
-print(a < 1)                            # ?
-print(a >= 0)                           # ?
-print(random.choice([5, 10, 15]) >= 5) # ?
-print(len(random.sample([1,2,3], 2)) == 3)  # ?
+result = [x ** 2 for x in range(4, 0, -1) if x % 2 != 0]
+print(result)
 ```
-
-**B)** Multiple choice — which TWO always evaluate to True?
-```python
-random.seed(7)
-x = random.randint(1, 6)
-```
-- A: `x == 1`
-- B: `x >= 1`
-- C: `x <= 6`
-- D: `x > 6`
 
 Write answers here:
 ```
-A) 5 results:
+A) 6 results:
+print('abc' > 'ABC')          # True
+print('abc' == 'ABC'.lower()) # True
+print('Z' > 'a')              # False
+print('' < 'a')               # True
+print('aa' == 'aa ')          # False
+print('1abc' < 'abc')         # True
 
-print(a == b)                           #True
-print(a < 1)                            #False
-print(a >= 0)                           #True
-print(random.choice([5, 10, 15]) >= 5) #True
-print(len(random.sample([1,2,3], 2)) == 3)  #False
 
-
-B) Two that are always True:
-B, C
+B) result 1: [4, 2, 0]
+   result 2: [9, 1]
 ```
 
 ---
 
-## Task 4 — PCAP select-two simulation [Real exam format]
+## Task 6 — PCAP select-two: full mixed simulation
 
-Answer exactly as on the real exam — select two answers per question.
-
-**Q1.** Which of the following expressions always evaluate to True? (Select two)
+**Q1.** Which expressions always evaluate to True? (Select two)
 ```python
 import random
-random.seed(0)
+random.seed(5)
 v = random.random()
 ```
 - A: `v >= 1`
-- B: `v == random.random()`
-- C: `v < 1`
-- D: `random.choice([1, 2, 3]) >= 1`
+- B: `v < 1`
+- C: `v >= 0`
+- D: `v == 1`
 
-D, C
+**Q2.** Which of the following are true about exception classes? (Select two)
+```python
+class AppError(Exception):
+    def __init__(self, msg):
+        super().__init__(msg)
+    def __str__(self):
+        return "app error"
 
-
-**Q2.** Which of the following are valid? (Select two)
-- A: `'hello'.find('xyz')` returns `-1`
-- B: `'hello'.index('xyz')` returns `-1`
-- C: `'hello'.rindex('l')` returns `3`
-- D: `'hello'.rfind('xyz')` raises `ValueError`
-
-A, D
+e = AppError("details")
+```
+- A: `str(e) == "app error"`
+- B: `e.args == ()`
+- C: `repr(e) == "app error"`
+- D: `e.args == ("details",)`
 
 **Q3.** Which expressions evaluate to True? (Select two)
-```python
-s = 'PCAP'[:2:]
-s = s[-1] + s[::-1] #C + CP
-```
-- A: `len(s) == 3`
-- B: `s[0] == 'A'`
-- C: `s[-1] == 'P'`
-- D: `s == 'APC'`  ← wait, trace it yourself
-
-
-A, C
-
-**Q4.** What is true about lambda functions? (Select two)
-- A: They are anonymous functions
-- B: They cannot return `None`
-- C: They can be defined without parameters
-- D: They must use the `return` keyword
-
-**Q5.** Which are true about `__bases__` and `__mro__`? (Select two)
 ```python
 class A: pass
 class B(A): pass
 class C(B): pass
 ```
-- A: `C.__bases__ == (B,)`
+- A: `B in C.__bases__`
 - B: `A in C.__bases__`
-- C: `object in C.__mro__`
-- D: `len(C.__mro__) == 2`
+- C: `A in C.__mro__`
+- D: `object in C.__bases__`
+
+**Q4.** Which are valid Python? (Select two)
+- A: `lambda: 42`
+- B: `lambda x: return x`
+- C: `lambda x, y=0: x + y`
+- D: `lambda x: x if x > 0 else -x`
+
+**Q5.** What is true about the following code? (Select two)
+```python
+class P:
+    __x = 1
+    def get(self): return self.__x
+
+class Q(P):
+    __x = 2
+
+obj = Q()
+```
+- A: `obj.get() == 1`
+- B: `obj.get() == 2`
+- C: `obj._P__x == 1`
+- D: `obj._Q__x == 1`
 
 Write answers here:
 ```
-Q1: D, C
+Q1: B, C
 Q2: A, D
 Q3: A, C
-Q4: A, C
+Q4: A, D (a bit confusing though, how about C?)
 Q5: A, C
 ```
 
 ---
 
-## Task 5 — `hasattr` vs `__dict__`: final nail [recurring gap]
+## Task 7 — `type(e)` + `isinstance` combined [real exam Q11 pattern]
 
-One more exposure — same concept, new code.
-
-**A)** Given:
+**A)** Predict each:
 ```python
-class Engine:
-    horsepower = 200
-    def start(self): pass
-
-class Car(Engine):
-    def __init__(self, brand):
-        self.brand = brand
-    def drive(self): pass
-
-c = Car('Toyota')
-```
-Answer True or False:
-```python
-hasattr(c, 'horsepower')          # ?
-hasattr(c, 'start')               # ?
-hasattr(Car, 'start')             # ?
-'start' in Car.__dict__           # ?
-'start' in Engine.__dict__        # ?
-'horsepower' in Car.__dict__      # ?
-'brand' in Car.__dict__           # ?
-'brand' in c.__dict__             # ?
-'drive' in Car.__dict__           # ?
+try:
+    {}['missing']
+except Exception as e:
+    print(type(e).__name__)           # ?
+    print(isinstance(e, KeyError))    # ?
+    print(isinstance(e, Exception))   # ?
+    print(type(e) is Exception)       # ?
+    print(type(e) is KeyError)        # ?
 ```
 
-**B)** One-line rule — complete the sentence:
-> `hasattr(X, 'name')` returns True if `'name'` exists anywhere in the mro
-> `'name' in X.__dict__` returns True only if `'name'` is defined in a given Class instance
+**B)** Multiple choice — which TWO are True after:
+```python
+try:
+    open('no_such_file_xyz.txt')
+except OSError as e:
+    pass
+```
+- A: `type(e) is OSError`
+- B: `type(e) is FileNotFoundError`
+- C: `isinstance(e, OSError)`
+- D: `isinstance(e, FileNotFoundError)`
 
 Write answers here:
 ```
-A) 9 results:
-print(hasattr(c, 'horsepower'))          #True
-print(hasattr(c, 'start'))               #True
-print(hasattr(Car, 'start'))            #True
-print('start' in Car.__dict__)           #False
-print('start' in Engine.__dict__)        #True
-print('horsepower' in Car.__dict__)      #False
-print('brand' in Car.__dict__)          #False
-print('brand' in c.__dict__)           #True
-print('drive' in Car.__dict__)          #True
+A) 5 results:
+    print(type(e).__name__)           # KeyError
+    print(isinstance(e, KeyError))    # True
+    print(isinstance(e, Exception))   # True
+    print(type(e) is Exception)       # False
+    print(type(e) is KeyError)        # True
 
 
-B)
-
-> `hasattr(X, 'name')` returns True if `'name'` exists anywhere in the mro
-> `'name' in X.__dict__` returns True only if `'name'` is defined in a given Class instance
+B) Two True:
+B, D
 ```

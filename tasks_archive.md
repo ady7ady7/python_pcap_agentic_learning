@@ -2077,3 +2077,17 @@ Fix plan queued for Day 3 T8.
 - e.args when __str__ defined — still populated from super().__init__()
 - random.random() upper bound (always < 1)
 - rfind vs rindex raise behaviour
+
+## Week 13, Day 2 — 2026-04-08
+
+**Topic:** repr(e)/e.args deep drill, rfind/rindex, name mangling, assert propagation, string comparison + list comp, select-two sim, type(e)+isinstance
+**Score:** 92% (6.4/7)
+**Difficulty:** Hard | Time: ~60 min
+
+**Correct:** T1 ✅, T2 ✅, T4 ✅, T5 ✅, T7 ✅
+**Partial:** T3 (0.5) — hasattr(Z, 'show') answered False, correct True (MRO chain). THIRD time this gap appears.
+**Partial:** T6 (0.5) — Q4: lambda default args (C) confused with no-param lambda. Both C and D are valid Python but C is the PCAP-intended answer.
+
+**Key remaining gap:**
+- hasattr(X, 'name') = True if name exists ANYWHERE in MRO — not just X.__dict__
+  This has appeared in W12 D2, W13 D1, W13 D2. Must close tomorrow.

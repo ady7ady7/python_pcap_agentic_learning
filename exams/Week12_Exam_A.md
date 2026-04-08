@@ -2,6 +2,8 @@
 **PCAP-31-03 Certification Preparation**
 Date: 2026-04-03 | Time Limit: 65 minutes | 30 Questions | Passing Score: 70% (21/30)
 
+
+#Start 12:20
 ---
 
 ## Question 1
@@ -20,6 +22,9 @@ B) `ValueError`
 C) `<class 'ValueError'>`
 D) `<type 'ValueError'>`
 
+C
+
+
 ---
 
 ## Question 2
@@ -30,6 +35,8 @@ A) The string `"TypeError"`
 B) The class object `TypeError`
 C) The instance `e` itself
 D) `<class 'Exception'>`
+
+B
 
 ---
 
@@ -50,6 +57,8 @@ B) `True` then `False`
 C) `True` then `True`
 D) `False` then `True`
 
+C
+
 ---
 
 ## Question 4
@@ -59,18 +68,21 @@ What is the output of the following code?
 ```python
 class MyError(Exception):
     def __str__(self):
-        return "custom message"
+        return "custom message" #the __str__ alwasys wins over the constructor agument!
 
 try:
     raise MyError("ignored arg")
 except MyError as e:
-    print(e)
+    print(e) #__str__ here
+    #if we had e.message, then we'd have ignored arg here.
 ```
 
 A) `ignored arg`
 B) `MyError: ignored arg`
 C) `custom message`
 D) `MyError: custom message`
+
+A - this is still confusing
 
 ---
 
@@ -94,6 +106,8 @@ A) `A:hello` then `A('hello')`
 B) `hello` then `A('hello')`
 C) `A:hello` then `Exception('hello')`
 D) `A:hello` then `A:hello`
+
+A - this is confusing
 
 ---
 
@@ -121,6 +135,8 @@ B) `ConnectionError`
 C) `connection`
 D) `DatabaseError` then `ConnectionError`
 
+B
+
 ---
 
 ## Question 7
@@ -142,6 +158,8 @@ B) Only `ValueError` is shown; `RuntimeError` replaces it silently
 C) Both exceptions are shown; the traceback says "The above exception was the direct cause"
 D) A `SyntaxError` is raised because you cannot use `from e` with a variable
 
+A
+
 ---
 
 ## Question 8
@@ -159,6 +177,8 @@ A) `TypeError: t` is shown, `ValueError` is suppressed
 B) `ValueError: v` is shown; the `TypeError` context is suppressed
 C) Both exceptions are shown with chaining
 D) `RuntimeError` is raised automatically
+
+B
 
 ---
 
@@ -179,6 +199,8 @@ B) `(<class 'B'>,)`
 C) `(<class 'A'>,)`
 D) `(<class 'object'>, <class 'A'>, <class 'B'>, <class 'C'>)`
 
+B
+
 ---
 
 ## Question 10
@@ -197,6 +219,8 @@ A) `(<class 'C'>, <class 'B'>, <class 'A'>)`
 B) `(<class 'C'>, <class 'B'>, <class 'A'>, <class 'object'>)`
 C) `(<class 'A'>, <class 'B'>, <class 'C'>, <class 'object'>)`
 D) `(<class 'C'>, <class 'object'>)`
+
+B
 
 ---
 
@@ -222,6 +246,8 @@ B) `AttributeError: 'Dog' object has no attribute '_Dog__secret'`
 C) `AttributeError: 'Dog' object has no attribute '__secret'`
 D) `AttributeError: 'Animal' object has no attribute '_Animal__secret'`
 
+B
+
 ---
 
 ## Question 12
@@ -232,6 +258,9 @@ A) `__value`
 B) `_value`
 C) `_Outer__value`
 D) `Outer__value`
+
+C
+
 
 ---
 
@@ -261,6 +290,8 @@ B) `10` then `10`
 C) `10` then `99`
 D) `AttributeError`
 
+C
+
 ---
 
 ## Question 14
@@ -277,6 +308,8 @@ A) `9` then `27`
 B) `6` then `9`
 C) `9` then `9`
 D) `TypeError`
+
+A
 
 ---
 
@@ -295,6 +328,8 @@ B) `10` then `12`
 C) `10` then `10`
 D) `TypeError`
 
+B
+
 ---
 
 ## Question 16
@@ -312,6 +347,8 @@ B) `12` then `12`
 C) `13` then `13`
 D) `11` then `13`
 
+B
+
 ---
 
 ## Question 17
@@ -327,6 +364,8 @@ A) `[2, 4, 6, 8, 10]`
 B) `[10, 8, 6, 4, 2]`
 C) `[1, 2, 3, 4, 5]`
 D) `[10, 8, 6, 4, 2, 0]`
+
+B
 
 ---
 
@@ -344,6 +383,8 @@ B) `[10, 7, 4]`
 C) `[9, 6, 3]`
 D) `[10, 7, 4, 1, -2]`
 
+A
+
 ---
 
 ## Question 19
@@ -355,6 +396,8 @@ B) `"a+"`
 C) `"r+"`
 D) `"x+"`
 
+B
+
 ---
 
 ## Question 20
@@ -365,6 +408,8 @@ A) The file is truncated and overwritten
 B) The file is opened for appending
 C) A `FileExistsError` is raised
 D) A `PermissionError` is raised
+
+C
 
 ---
 
@@ -382,6 +427,8 @@ B) `2.0` then `<class 'float'>`
 C) `2.` then `<class 'float'>`
 D) `SyntaxError`
 
+B
+
 ---
 
 ## Question 22
@@ -398,6 +445,8 @@ B) `3` then `prog.py`
 C) `2` then `prog.py`
 D) `3` then `alpha`
 
+B
+
 ---
 
 ## Question 23
@@ -408,6 +457,8 @@ A) It is a list of all installed packages
 B) It is a dictionary mapping module names to module objects for already-imported modules
 C) It is a set of module names available to import
 D) It contains only standard library modules
+
+B
 
 ---
 
@@ -426,6 +477,8 @@ B) `data/prices.csv` then `/home/user`
 C) `prices` then `/home/user/data`
 D) `prices.csv` then `/home/user/data/`
 
+A
+
 ---
 
 ## Question 25
@@ -442,6 +495,8 @@ A) `True`, `False`, `True`
 B) `False`, `True`, `False`
 C) `False`, `True`, `True`
 D) `True`, `False`, `False`
+
+B
 
 ---
 
@@ -463,6 +518,8 @@ A) `try`
 B) `finally`
 C) `try` then `finally`
 D) `RuntimeError: conflicting return`
+
+B
 
 ---
 
@@ -489,6 +546,8 @@ B) `2`
 C) `3`
 D) `0`
 
+B
+
 ---
 
 ## Question 28
@@ -514,6 +573,8 @@ B) `1`, `2`, `1`, `1`
 C) `1`, `1`, `1`, `1`
 D) `1`, `2`, `3`, `1`
 
+A
+
 ---
 
 ## Question 29
@@ -532,6 +593,9 @@ B) `b'Hello'` then `<class 'bytes'>`
 C) `bytearray(b'hello')` then `<class 'bytearray'>`
 D) `TypeError: 'bytes' object does not support item assignment`
 
+
+A
+
 ---
 
 ## Question 30
@@ -549,6 +613,8 @@ A) `7` then `-1` then `-1`
 B) `7` then `-1` then `ValueError`
 C) `7` then `0` then `ValueError`
 D) `-1` then `-1` then `ValueError`
+
+B
 
 ---
 

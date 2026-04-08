@@ -4346,3 +4346,18 @@ T2 perfect.
 T3 partial: random.random() < 1 is ALWAYS True — student answered False.
 T4 partial: Q2 wrong — rfind returns -1 not raises (mirror of find, not index).
 T5 partial: X.__dict__ is the class's own namespace, not the instance's. Correct phrasing: "defined directly in X's own namespace (not inherited)".
+
+## Week 13, Day 2 — 2026-04-08
+
+**Topic:** repr(e)/e.args deep drill, rfind/rindex, name mangling, assert propagation, string comparison + list comp, select-two sim, type(e)+isinstance
+**Score:** 92% (6.4/7)
+
+T1 — Perfect. All repr/args/str combinations correct across 4 variants.
+T2 — Perfect. rfind/rindex locked in.
+T3 — Partial. hasattr(Z, 'show') answered False — correct is True (inherited via MRO). Third consecutive session this gap appears. Must drill explicitly tomorrow.
+T4 — Perfect. All 3 assert propagation variants traced correctly including "result stays 0" insight for variant 3.
+T5 — Perfect. String comparisons and list comp order all correct.
+T6 — Partial. Q4: lambda default args (C) is valid — student confused it with no-param lambda. Both C and D are valid Python; C is PCAP-intended answer for "can be defined without parameters" knowledge.
+T7 — Perfect. type(e) vs isinstance distinction solid.
+
+**Persistent gap: hasattr vs __dict__ — appears 3 sessions in a row. One dedicated closing drill tomorrow.**

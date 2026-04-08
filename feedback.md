@@ -1,12 +1,12 @@
-# Daily Feedback — Week 13, Day 1
+# Daily Feedback — Week 13, Day 2
 
-**Date:** 2026-04-07
+**Date:** 2026-04-08
 
-**Topic:** Custom __str__ trap, open() modes, random module, select-two sim, hasattr vs __dict__
+**Topic:** repr(e)/e.args deep drill, rfind/rindex, name mangling, assert propagation, string comparison + list comp, select-two sim, type(e) + isinstance
 
 ---
 
-**Tasks completed:** ___ / 5
+**Tasks completed:** ___ / 7
 
 **Time spent:** ___ minutes
 
