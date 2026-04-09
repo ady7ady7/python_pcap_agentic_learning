@@ -2091,3 +2091,18 @@ Fix plan queued for Day 3 T8.
 **Key remaining gap:**
 - hasattr(X, 'name') = True if name exists ANYWHERE in MRO — not just X.__dict__
   This has appeared in W12 D2, W13 D1, W13 D2. Must close tomorrow.
+
+## Week 12 — PCAP Exam 1 (Weekend/Day 3 warmup) — 2026-04-09
+
+**Format:** 40Q real PCAP format | Time: ~33 min active
+**Score:** 37/40 = **92.5%** — PASS
+**Genuine errors:** 3 (Q5, Q20, Q34)
+**Exam flaws:** 5 questions with bad keys (Q13, Q14, Q16, Q17, Q19) — student correct on all
+
+**Error breakdown:**
+- Q5: `type(sys.path) is list` AND `type(sys.modules) is dict` both True → `True`, not `False`
+- Q20: `str(obj) == 'obj'` is False; `obj.var == 1` via inheritance = True
+- Q34: Lambdas CAN return None — "cannot return None" is False; B (no params allowed) is True
+
+**Student correctly flagged:** Q13 (TYP[-1]='P'), Q16 (3 True exprs), Q19 (len=3 not 4)
+

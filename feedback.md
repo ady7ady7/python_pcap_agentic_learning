@@ -1,8 +1,8 @@
-# Daily Feedback — Week 13, Day 2
+# Daily Feedback — Week 13, Day 3
 
-**Date:** 2026-04-08
+**Date:** 2026-04-09
 
-**Topic:** repr(e)/e.args deep drill, rfind/rindex, name mangling, assert propagation, string comparison + list comp, select-two sim, type(e) + isinstance
+**Topic:** hasattr/MRO closure, sys internals, str(obj) default, lambda traps, open() modes, select-two sim, project exit_reason fix
 
 ---
 

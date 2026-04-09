@@ -1881,3 +1881,39 @@ Note: Q17 `generator.close()` IS PCAP syllabus — revisit.
 - Q10: `raise X` inside `except Y` — X propagates out, same `try` block's other handlers don't apply
 
 **Verdict:** Well above 70% passing threshold. Ready for real PCAP exam.
+
+---
+
+## Week 12 — PCAP Practice Exam 1 — 2026-04-09
+
+**Time Taken:** ~33 min active (9:50–10:43 with 20 min break)
+**Score:** 37/40 = **92.5%**
+**Result:** ✅ PASS (threshold 28/40 = 70%)
+**Grade:** A
+
+---
+
+### Error Summary (3 genuine errors)
+
+| Q | Your Answer | Correct | Topic |
+|---|---|---|---|
+| Q5 | A (False) | C (True) | `sys.path is list`, `sys.modules is dict` — both True |
+| Q20 | A, D | A, C | `str(obj)` ≠ `'obj'`; `obj.var==1` via inheritance |
+| Q34 | A, C | A, B | Lambdas CAN return None; B (no params) is True |
+
+### Exam Flaws (5 questions — student was right)
+
+| Q | Your Answer | Key | Issue |
+|---|---|---|---|
+| Q13 | A only | A, C | `'TYP'[-1]='P'` not 'Y' → only A True. **Student flagged this.** |
+| Q14 | A, B | B, C | A, B, C all True — 3 valid answers |
+| Q16 | A, B, C | A, B | A, B, C all True. **Student flagged this.** |
+| Q17 | A, C | A, B | All 4 expressions True — select-two impossible |
+| Q19 | B (3) | C (4) | `'left,,right'.split(',')` = 3 items, not 4. **Student flagged this.** |
+
+### Key Gaps to Drill
+
+1. `sys.path` is a plain `list`, `sys.modules` is a plain `dict` — `type(x) is list` checks exact type
+2. Default `__str__` for objects: `<ClassName object at 0x...>` — NOT the variable name
+3. Lambdas CAN return None — "cannot return None" is False
+

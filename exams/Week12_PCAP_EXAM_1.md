@@ -4,12 +4,16 @@
 
 ---
 
+#Start 9:50
+
 **1.** Which of the platform module functions should be used to determine the underlying platform name?
 
 A. `platform.uname()`
 B. `platform.platform()`
 C. `platform.processor()`
 D. `platform.python_version()`
+
+B
 
 ---
 
@@ -20,6 +24,8 @@ B. `from mymod import myfun` / `myfun()`
 C. `import mymod` / `mymod.myfun()`
 D. `from mymod import *` / `mymod.myfun()`
 
+B, C
+
 ---
 
 **3.** What is true about Python packages? (Select two answers)
@@ -28,6 +34,8 @@ A. A package must always contain a file named `__init__.py` in Python 3.
 B. A package is a directory containing related modules.
 C. The `.pyc` extension marks a compiled Python file.
 D. The `__name__` variable always equals the package name.
+
+B, C
 
 ---
 
@@ -43,6 +51,8 @@ A. `import mypack.module_a`
 B. `from mypack import module_a`
 C. `import module_a`
 D. `import module_a from mypack`
+
+A, B
 
 ---
 
@@ -60,6 +70,8 @@ B. `None`
 C. `True`
 D. `0`
 
+A
+
 ---
 
 **6.** Assuming the code below executes successfully, which expressions always evaluate to True? (Select two answers)
@@ -76,6 +88,8 @@ A. `v1 != v2`
 B. `v1 == v2`
 C. `v1 >= 1`
 D. `random.choice([1, 2, 3]) >= 1`
+
+B, D
 
 ---
 
@@ -103,6 +117,8 @@ B. The code outputs: `what a pity`
 C. The code outputs: `I feel fine`
 D. The `else` block executes
 
+C, A
+
 ---
 
 **8.** What is the expected behavior of the following code?
@@ -124,6 +140,8 @@ A. It outputs `1`.
 B. It outputs `2`.
 C. It outputs `3`.
 D. The code is erroneous and will not execute.
+
+D - bare except as the first except handle
 
 ---
 
@@ -169,6 +187,8 @@ else:
     y = x
 ```
 
+A, B
+
 ---
 
 **10.** What is the expected behavior of the following code?
@@ -198,6 +218,8 @@ B. It outputs `1`.
 C. It outputs `3`.
 D. The code is erroneous and will not execute.
 
+B
+
 ---
 
 **11.** What is the expected behavior of the following code?
@@ -214,6 +236,8 @@ A. It outputs `<class 'KeyError'>`.
 B. It outputs `<class 'Exception'>`.
 C. It outputs `<class 'BaseException'>`.
 D. The code is erroneous and will not execute.
+
+A
 
 ---
 
@@ -232,6 +256,8 @@ B. `5`
 C. `4`
 D. `0`
 
+B
+
 ---
 
 **13.** Assuming the snippet below executes successfully, which expressions evaluate to True? (Select two answers)
@@ -246,6 +272,12 @@ B. `string[0] == 'N'`
 C. `string[-1] == 'Y'`
 D. `string is None`
 
+'T' + 'YP'
+'TYP'
+
+A, and this is the only answer that's correct here.
+You've got something wrong definitely and I'm 100% sure of that.
+
 ---
 
 **14.** Which of the following expressions evaluate to True? (Select two answers)
@@ -254,6 +286,8 @@ A. `len("""""") == 0`
 B. `len('\'') == 1`
 C. `ord('Z') - ord('A') == 25`
 D. `chr(ord('a') + 1) == 'B'`
+
+A, B
 
 ---
 
@@ -264,6 +298,9 @@ B. A code point is a number assigned to a given character.
 C. `\e` is a valid Python escape sequence.
 D. UTF-8 is backward-compatible with ASCII for the first 128 characters.
 
+
+B, D
+
 ---
 
 **16.** Which of the following expressions evaluate to True? (Select two answers)
@@ -272,6 +309,8 @@ A. `'a' * 3 > 'a' * 2`
 B. `'ABC'.lower() > 'ABC'`
 C. `'1' + '2' == '12'`
 D. `'z' < 'Z'`
+
+A, B, C - again you've fucked something up - three expressions ARE true.
 
 ---
 
@@ -282,6 +321,8 @@ B. `str(0) in '0123456789'`
 C. `'True' not in 'False'`
 D. `'abc' not in 'abcde'[::-1]`
 
+A, C
+
 ---
 
 **18.** Which of the following invocations are valid? (Select two answers)
@@ -291,12 +332,14 @@ B. `'python'.rindex('on')`
 C. `sort('python')`
 D. `'python'.sorted()`
 
+A, B
+
 ---
 
 **19.** What is the expected output of the following code?
 
 ```python
-the_string = ',,'.join(('left', 'right'))
+the_string = ',,'.join(('left', 'right')) #left, ,right
 the_list = the_string.split(',')
 print(len(the_list))
 ```
@@ -305,6 +348,8 @@ A. `2`
 B. `3`
 C. `4`
 D. An exception is raised.
+
+B
 
 ---
 
@@ -328,6 +373,8 @@ B. `ClassA.__module__ == 'ClassA'`
 C. `obj.var == 1`
 D. `str(obj) == 'obj'`
 
+A, D
+
 ---
 
 **21.** Assuming the snippet below executes successfully, which expressions evaluate to True? (Select two answers)
@@ -346,6 +393,8 @@ A. `'x' in Foo.__dict__`
 B. `'z' in Foo.__dict__`
 C. `'y' in Foo.__dict__`
 D. `len(Foo.__dict__) == 1`
+
+A, C
 
 ---
 
@@ -369,6 +418,8 @@ B. It outputs `2`.
 C. It raises an `AttributeError`.
 D. It outputs `3`.
 
+C (it should be _Box__lock)
+
 ---
 
 **23.** What is the expected output of the following code?
@@ -390,6 +441,14 @@ A. `30`
 B. `32`
 C. `2`
 D. An exception is raised.
+
+
+B
+
+
+
+#pauza - 10:11
+#powrót - 10:31
 
 ---
 
@@ -417,6 +476,8 @@ B. `obj_c.get() == 3`
 C. `hasattr(C, 'get')`
 D. `isinstance(obj_b, C)`
 
+A, C
+
 ---
 
 **25.** What is the expected output of the following code?
@@ -440,6 +501,8 @@ B. `True car`
 C. `True vehicle`
 D. `False car`
 
+C
+
 ---
 
 **26.** What is true about Object-Oriented Programming in Python? (Select two answers)
@@ -448,6 +511,9 @@ A. A class is a template for creating objects.
 B. Encapsulation means hiding a class inside a module.
 C. Each object of the same class shares the same instance attributes.
 D. Inheritance allows a child class to reuse code from a parent class.
+
+A, D
+
 
 ---
 
@@ -464,6 +530,8 @@ A. `class X(D, A): pass`
 B. `class X(B, D): pass`
 C. `class X(C, D): pass`
 D. `class X(A, C): pass`
+
+A, C 
 
 ---
 
@@ -495,6 +563,8 @@ B. `16`
 C. `6`
 D. `10`
 
+B
+
 ---
 
 **29.** What is the name of the attribute that stores a class's direct superclasses?
@@ -504,6 +574,8 @@ B. `__ancestors__`
 C. `__bases__`
 D. `__parents__`
 
+C
+
 ---
 
 **30.** What is true about Python class constructors? (Select two answers)
@@ -512,6 +584,8 @@ A. The constructor is a method named `__init__`.
 B. The constructor must return a non-None value.
 C. The constructor must have at least one parameter (`self`).
 D. A class can define more than one `__init__` method.
+
+A, C
 
 ---
 
@@ -544,6 +618,8 @@ B. `self.put(get() + val)`
 C. `self.put(self.get() + val)`
 D. `put(self.prop + val)`
 
+A, C
+
 ---
 
 **32.** What is the expected output of the following code?
@@ -558,6 +634,8 @@ A. The code is erroneous and will not execute.
 B. `3.0`
 C. `4.0`
 D. `3`
+
+B
 
 ---
 
@@ -578,6 +656,8 @@ B. `0`
 C. `1`
 D. An `errno` value
 
+C
+
 ---
 
 **34.** What is true about lambda functions? (Select two answers)
@@ -587,6 +667,8 @@ B. They can be defined without parameters.
 C. They cannot return `None`.
 D. They must contain the `return` keyword.
 
+A, C
+
 ---
 
 **35.** Which of the following statements are true? (Select two answers)
@@ -595,6 +677,8 @@ A. The default mode of `open()` is `'r'`.
 B. Opening a file with `'w'` destroys the previous contents if the file exists.
 C. `closefile()` is used to close an open file.
 D. Opening a file with `'a'` raises an error if the file does not exist.
+
+A, B
 
 ---
 
@@ -611,6 +695,8 @@ A. `0`
 B. `1`
 C. `7`
 D. An exception is raised.
+
+B
 
 ---
 
@@ -631,6 +717,8 @@ B. `double is triple`
 C. `double(5) == 10`
 D. `triple(0) == 0`
 
+A, C
+
 ---
 
 **38.** What is the expected output of the following code?
@@ -646,6 +734,8 @@ B. `3`
 C. `2`
 D. An exception is raised.
 
+B
+
 ---
 
 **39.** What is the expected output of the following code?
@@ -660,6 +750,8 @@ A. `[0, 2, 4]`
 B. `[4, 2, 0]`
 C. `[4, 2]`
 D. `[2, 4]`
+
+C
 
 ---
 
@@ -681,6 +773,10 @@ A. `1 2 3`
 B. `1 3`
 C. `2 3`
 D. `1 2`
+
+B
+
+#Koniec - 10:43
 
 ---
 
