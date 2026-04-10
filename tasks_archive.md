@@ -2106,3 +2106,26 @@ Fix plan queued for Day 3 T8.
 
 **Student correctly flagged:** Q13 (TYP[-1]='P'), Q16 (3 True exprs), Q19 (len=3 not 4)
 
+
+## Week 13, Day 3 — 2026-04-10
+
+**Topic:** hasattr/MRO final closure, sys internals, str(obj) default, lambda forms, open() modes, select-two sim, exit_reason project fix
+**Score:** 92% (5.5/6 — T7 unscored)
+**Difficulty:** Hard | Time: ~60 min
+
+**Correct:** T1 ✅ (hasattr 10/10 — gap finally closed), T3 ✅, T4 ✅
+**Partial:** T2 (D: answered C,D — D wrong: sys.modules not stdlib-only), T5 (C: answered B,C — B wrong, r+ not a+), T6 (Q3: answered B,C,D — D is SyntaxError, lambda body must be expression)
+
+**Key closures:**
+- hasattr/MRO — confirmed solid, all 10 predictions correct
+- lambda: return forbidden, None return valid, default args valid
+- open() modes table fully memorized
+- str(obj) default = '<ClassName object at 0x...>'
+
+**Remaining micro-slips:**
+- Single-answer discipline — tendency to write two answers when only one is correct (T2D, T5C)
+- lambda body = expression only (if/return/for are statements → SyntaxError)
+- sys.modules contains ALL imported modules (not stdlib-only)
+
+**Project:** exit_reason bug fixed — position_manager.py line 72: `p.should_close()` returns tuple, non-empty tuple always truthy including (False, 'Still open'). Fixed by checking `[0]`.
+

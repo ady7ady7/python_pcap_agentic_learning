@@ -1,12 +1,12 @@
-# Daily Feedback — Week 13, Day 3
+# Daily Feedback — Week 13, Day 4
 
-**Date:** 2026-04-09
+**Date:** 2026-04-10
 
-**Topic:** hasattr/MRO closure, sys internals, str(obj) default, lambda traps, open() modes, select-two sim, project exit_reason fix
+**Topic:** Lambda expressions, nonlocal, nested exceptions, __str__/__repr__, PCAP gauntlet, single-answer discipline, project verify
 
 ---
 
-**Tasks completed:** ___ / 7
+**Tasks completed:** ___ / 8
 
 **Time spent:** ___ minutes
 

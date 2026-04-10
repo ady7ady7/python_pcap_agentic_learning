@@ -1917,3 +1917,34 @@ Note: Q17 `generator.close()` IS PCAP syllabus — revisit.
 2. Default `__str__` for objects: `<ClassName object at 0x...>` — NOT the variable name
 3. Lambdas CAN return None — "cannot return None" is False
 
+
+---
+
+## Week 12 — PCAP Practice Exam 2 — 2026-04-10
+
+**Score:** 38/40 = **95%**
+**Result:** ✅ PASS
+**Grade:** A+
+
+---
+
+### Error Summary (2 genuine errors)
+
+| Q | Your Answer | Correct | Topic |
+|---|---|---|---|
+| Q18 | A, B | A, D | `rindex('z')` raises ValueError → not "valid". `sorted('hello')` = D is valid |
+| Q28 | A | B | Polymorphism: `self.area()` resolves to subclass method. `describe()` inherited but `self` is Square/Triangle |
+
+### Exam Flaws (4 questions — student credited)
+
+| Q | Your Answer | Key | Issue |
+|---|---|---|---|
+| Q13 | A,B,C | A,C | All three True: `s='BMAL'`, len=4 ✅, s[0]='B' ✅, s[-1]='L' ✅ |
+| Q21 | A,C | A,C,D | `'r' in s.__dict__` also True — 3 correct answers in select-two |
+| Q27 | A,B | A,C | X(B,C) and X(D,C) both valid — key wrong on C vs B |
+| Q38 | C(=3) | B(=4) | `filter(x>0, range(-4,4))` = [1,2,3] → len 3, not 4. Student correct. |
+
+### Key gaps to watch
+- Q18: "valid invocation" = executes without error. `rindex` with missing char raises.
+- Q28: Polymorphism — inherited method uses `self`, which carries the actual subclass type.
+
