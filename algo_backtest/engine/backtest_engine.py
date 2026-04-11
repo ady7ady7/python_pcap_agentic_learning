@@ -116,20 +116,21 @@ class BacktestEngine:
         logger.debug(f'Processing price for {ticker} at ${current_price}')
         newly_closed_trades = []
         for position in closed_positions:
-            exit_reason = position.should_close(current_price)[1]
+            #exit_reason = position.should_close(current_price)[1]
             trade = Trade(
-                          position.position_id,
-                          position.ticker, 
-                          position.side, 
-                          position.entry_price, 
+                          position[0].position_id,
+                          position[0].ticker, 
+                          position[0].side, 
+                          position[0].entry_price, 
                           current_price, 
-                          position.quantity,
-                          stop_loss = position.stop_loss,
-                          take_profit = position.take_profit,
-                          strategy_id = position.strategy_id,
-                          strategy_name = position.strategy_name,
-                          exit_reason = exit_reason)
-            logger.info(f'@Strategy {position.strategy_id}, {position.strategy_name} || Position {trade.position_id} @ {position.ticker} closed with {trade.pnl} as a {exit_reason}')
+                          position[0].quantity,
+                          stop_loss = position[0].stop_loss,
+                          take_profit = position[0].take_profit,
+                          exit_reason = position[1],
+                          strategy_id = position[0].strategy_id,
+                          strategy_name = position[0].strategy_name,
+                          )
+            logger.info(f'@Strategy {position[0].strategy_id}, {position[0].strategy_name} || Position {trade.position_id} @ {position[0].ticker} closed with {trade.pnl} as a {position[1]}')
             newly_closed_trades.append(trade)
             self.completed_trades.append(trade)
             
@@ -167,7 +168,6 @@ class BacktestEngine:
         '''Force close all open positions on a given ticker'''
         filtered_positions = [position for position in self.position_manager.positions if (ticker == position.ticker and position.strategy_id == strategy_id)]
         for position in filtered_positions:
-            exit_reason = 'forced close'
             trade = Trade(
                           position.position_id,
                           position.ticker, 
@@ -177,10 +177,11 @@ class BacktestEngine:
                           position.quantity,
                           stop_loss = position.stop_loss,
                           take_profit = position.take_profit,
+                          exit_reason = 'forced close',
                           strategy_id = position.strategy_id,
                           strategy_name = position.strategy_name,
-                          exit_reason = exit_reason)
-            logger.info(f'@Strategy {position.strategy_id}, {position.strategy_name} || Position {trade.position_id} @ {position.ticker} closed with {trade.pnl} as a {exit_reason}')
+                          )
+            logger.info(f'@Strategy {position.strategy_id}, {position.strategy_name} || Position {trade.position_id} @ {position.ticker} closed with {trade.pnl} as a forced close')
             self.completed_trades.append(trade)
             self.position_manager.remove_position(position)
             

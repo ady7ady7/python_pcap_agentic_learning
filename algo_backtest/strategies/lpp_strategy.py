@@ -23,6 +23,9 @@ class LPPStrategy(BaseStrategy):
             return 'BUY' if price > entry_level else 'HOLD'
         return 'SELL' if price < entry_level else 'HOLD'
     
+    def get_entry(self, row: pd.Series, current_date) -> float:
+        return self.levels_by_date[current_date][self.entry]
+    
     def get_sl(self, row: pd.Series, current_date) -> float:
         return self.levels_by_date[current_date][self.sl]
 

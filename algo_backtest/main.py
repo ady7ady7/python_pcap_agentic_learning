@@ -63,7 +63,9 @@ def run_backtest(df: pd.DataFrame, strategies: list) -> BacktestEngine:
                     pass
                 if signal == 'BUY' and current_positions[strategy] is None:
                     backtest_engine.open_position(
-                        'FDAX', 'BUY', row['open'],
+                        'FDAX',
+                        'BUY',
+                        entry = strategy.get_entry(row, current_date),
                         quantity=1,
                         stop_loss=strategy.get_sl(row, current_date),
                         take_profit=strategy.get_tp(row, current_date),
@@ -75,7 +77,9 @@ def run_backtest(df: pd.DataFrame, strategies: list) -> BacktestEngine:
 
                 elif signal == 'SELL' and current_positions[strategy] is None:
                     backtest_engine.open_position(
-                        'FDAX', 'SELL', row['open'],
+                        'FDAX', 
+                        'SELL', 
+                        entry = strategy.get_entry(row, current_date),
                         quantity=1,
                         stop_loss=strategy.get_sl(row, current_date),
                         take_profit=strategy.get_tp(row, current_date),
@@ -105,10 +109,12 @@ if __name__ == '__main__':
     print('Starting the backtest test procedure in main.py - logging set!')
     
     strategies = [LPPStrategy('FDAX', 'BUY', 'LR1_LR2_075', 'LPP_LR1_050', 'LR2_LR3_050'),
+                  LPPStrategy('FDAX', 'BUY', 'LR1_LR2_025', 'LPP_LR1_075', 'LR2_LR3_050')
                   ]
     test_engine = run_backtest(data, strategies)
     print(test_engine)
     test_engine.strategy_report()
     
 
-
+    for trade in test_engine.completed_trades:
+        print(trade)
