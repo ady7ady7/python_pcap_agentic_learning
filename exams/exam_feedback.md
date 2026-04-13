@@ -1948,3 +1948,98 @@ Note: Q17 `generator.close()` IS PCAP syllabus — revisit.
 - Q18: "valid invocation" = executes without error. `rindex` with missing char raises.
 - Q28: Polymorphism — inherited method uses `self`, which carries the actual subclass type.
 
+
+
+---
+
+## Week 14 Day 1 — Exam A — 2026-04-13
+
+**Time Taken:** 24 min (12:53–13:17)
+**Score:** 32/40 = **80%** ✅ PASS
+**Result:** PASS
+**Grade:** B+
+
+> Note: The answer key for this exam contained significant errors. Student credit was awarded for all questions where the student was demonstrably correct and the key was wrong.
+
+---
+
+### Genuine Student Errors (8)
+
+| Q | Your Answer | Correct | Topic |
+|---|---|---|---|
+| Q1 | C, D | A, D | `math.sqrt(4)` returns `2.0` (float), not int `2`. `math.floor()` always returns int → A True. |
+| Q2 | A, D | A, C, D | `len(sys.argv)==3` is True — missed it. B wrong (`sys.argv[2]` is str '42'). |
+| Q10 | C | A | `finally` prints before the return value is yielded. Both calls print 'cleanup' first, then the return value. Output: cleanup/-2/cleanup/-2 = A. |
+| Q26 | A, D | A, B, D | B: "a child class always inherits all methods from its parent" — True. Overriding doesn't remove, it shadows. |
+| Q27 | B, D | A, B, D | `X(B,D)` is also valid MRO. Key listed C as valid but it isn't — student was right to exclude C. Missed A. |
+| Q28 | A | B | **Polymorphism again.** `f=HexFormatter()`, `f.render()` calls `self.format(42)` — self is HexFormatter → `hex(42)='0x2a'` → `[0x2a]`. This is the same miss as Exam 2 Q28. |
+| Q30 | B, D | A, B | A: `__str__` called by print/str() → True. D: `__len__` must return float → False (must be int). Missed A, chose wrong D. |
+| Q33 | C | B | `r+` writes 'X' at position 0 in-place → file becomes 'Xello'. `seek(0)` then `read()` returns 'Xello'. You're confusing r+ with 'read then write'. |
+
+---
+
+### Exam Key Errors (student was correct)
+
+| Q | Your Answer | Key | Issue |
+|---|---|---|---|
+| Q3 | B, C | B, D | D: `from module import *` always imports everything — False (respects `__all__`). C: `dir(module)` returns attribute names — True. Student correct. |
+| Q9 | A, D | A, B, D | B: `raise NameError` inside `except IndexError` → new exception propagates, sibling `except NameError` in same try cannot catch it → unhandled. Key wrong. |
+| Q13 | B, C | A, B, C | A: `s[0]=='N'` → s='OTP', s[0]='O' ≠ 'N' → False. Student correct. |
+| Q18 | A | A, C, D | Key lists 3 answers for a select-two question. A is correct. |
+| Q19 | A | C | s='one-two-three'. startswith('one')=True, endswith('ee')=True → A. Key said C. Student correct. |
+| Q22 | C | B | 3 increments total (c1×2, c2×1) → Counter._Counter__count=3 → C. Key said 2. Student correct. |
+| Q23 | B | A | del a → __del__ → instances=1. Key said 0. Student correct. |
+| Q24 | B, C | A, C, D | Key lists 3 answers and includes wrong ones. Only B and C are True. Student correct. |
+| Q27 | — | A, B, C | Key includes C=X(A,D) as valid — it violates MRO. C is invalid. Student excluded C correctly. |
+| Q28 | — | C | Key says C='[hex(42)]' — the literal text 'hex(42)'. Correct output is '[0x2a]' (=B). Key was wrong too, so no-win question. |
+| Q31 | B (=12) | A, C | double(triple(2))=double(6)=12. Key's A=10 and C=6 are both wrong. Student correct. |
+| Q36 | A | B | filter(x%3==0,[1..6])=[3,6]. map(x**2)=[9,36]. A. Key said B=[1..36]. Student correct. |
+| Q37 | B | A, C, D | f(5)=15, f is g → False → B. Key listed wrong answers. Student correct. |
+| Q38 | A | B | filter(bool(x) and x>0): only [2,4] pass both conditions. Key said [-3,-1,2,4]. Student correct. |
+| Q39 | A | C | List comprehension flattens and filters evens → [2,4,6,8]. Key said nested list. Student correct. |
+
+---
+
+### Key Pattern: Q28 Polymorphism (3rd Miss)
+This is now the **third consecutive exam** where you missed a polymorphism dispatch question (Exam 2 Q28, Exam A Q28, noted in Week 12 too). The pattern is always: **inherited method calls `self.overridden_method()`** — `self` resolves at runtime to the actual object type. Burn this in.
+
+---
+
+## Week 14 Day 1 — Exam B — 2026-04-13
+
+**Time Taken:** 23 min (13:17–13:40)
+**Score:** 39/40 = **97.5%** ✅ PASS
+**Result:** PASS
+**Grade:** A+
+
+---
+
+### Genuine Student Errors (1)
+
+| Q | Your Answer | Correct | Topic |
+|---|---|---|---|
+| Q3 | A, B | A, C | B: "sub-packages are imported automatically when parent is imported" — False. You must import them explicitly. C: `__init__.py` is executed when package is first imported — True. |
+
+---
+
+### No Key Errors Found
+All answer key entries for Exam B are correct.
+
+---
+
+### Q11 Clarification (TypeError vs ValueError)
+You flagged confusion. The rule:
+- **TypeError** = wrong *type* of object entirely (`int(None)` — None is not a number type)
+- **ValueError** = right type but wrong *value* (`int('abc')` — str is valid input type, 'abc' is bad value)
+
+---
+
+### Day 1 Summary
+
+| Exam | Score | Grade |
+|------|-------|-------|
+| Exam A | 32/40 (80%) | B+ |
+| Exam B | 39/40 (97.5%) | A+ |
+| **Combined** | **71/80 (88.75%)** | **A** |
+
+**Top gap to drill before the real exam: Q28-style polymorphism (inherited method + self dispatch).**
