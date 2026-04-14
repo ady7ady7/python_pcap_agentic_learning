@@ -2043,3 +2043,88 @@ You flagged confusion. The rule:
 | **Combined** | **71/80 (88.75%)** | **A** |
 
 **Top gap to drill before the real exam: Q28-style polymorphism (inherited method + self dispatch).**
+
+
+---
+
+## Week 14 Day 2 — Exam A — 2026-04-14
+
+**Time Taken:** 22 min (11:10–11:32)
+**Score:** 35/40 = **87.5%** ✅ PASS
+**Grade:** A-
+
+---
+
+### Genuine Student Errors (5)
+
+| Q | Your Answer | Correct | Topic |
+|---|---|---|---|
+| Q4 | B | A | `os.path.splitext('archive.tar.gz')` splits at the LAST dot: `('archive.tar', '.gz')`. You chose B='archive'/'.tar.gz' — that would be splitting at the first dot, which is not what `splitext` does. |
+| Q10 | B | A | `finally` always prints before the function's return value is surfaced. Both calls: print 'done' first, then the print() in the caller shows the return value. Full output: done/6/done/-1 = A, not B. |
+| Q15 | B, C | A, C | B: `'hello'.find('z')` returns `-1`, does NOT raise. Only `index()` raises. find() never raises — that's the whole point of using it over index(). |
+| Q28 | A | B | **Polymorphism miss #4.** `tl=TimedLogger()`, `tl.run()` calls `self.log('started')` — self is TimedLogger → `'TIMED: started'`. You picked the parent's output again. |
+| Q37 | B | A | `make_adder(i)` is called immediately at each loop iteration — `n` is captured as a parameter at call time, not as a free variable. adders[0](10)=10+0=10, adders[2](10)=10+2=12 = A. This is the opposite of the late-binding trap: since `n` is a function parameter (not a closure over a loop variable), it's always bound correctly. |
+
+---
+
+### Exam Key Errors (student credited)
+
+| Q | Your Answer | Key | Issue |
+|---|---|---|---|
+| Q2 | A | B | `math.floor(-3.1)` = -4 (rounds toward -∞). Key said B=-3, which is `trunc`. Answer A is correct. |
+| Q5 | C, D | A, D | `len(sys.argv)==3` is also True — three correct answers in a select-two. Student's C and D are both valid. |
+
+---
+
+### Q39 Explanation (you asked)
+
+Sorted by `s[-1]`: Charlie→'e', Alice→'e', Bob→'b'. Bob comes first (b < e). Tie between Charlie and Alice — both end in 'e'. Python's sort is **stable**: ties preserve the original order. In the original list, Charlie appears before Alice, so after sorting: [Bob, Charlie, Alice]. result[0]=Bob, result[-1]=Alice = B.
+
+You expected it to compare further letters when there's a tie — but `key=lambda s: s[-1]` is a **single-value key**. Python only compares further if you provide a compound key like `key=lambda s: (s[-1], s[-2])`. With a single-value key, ties fall back to stable ordering, not deeper character comparison.
+
+---
+
+## Week 14 Day 2 — Exam B — 2026-04-14
+
+**Time Taken:** 28 min (11:32–12:00)
+**Score:** 37/40 = **92.5%** ✅ PASS
+**Grade:** A
+
+---
+
+### Genuine Student Errors (3)
+
+| Q | Your Answer | Correct | Topic |
+|---|---|---|---|
+| Q1 | B, C | A, C | B: `math.pow(2, 3)` returns `8.0` (float), not int `8`. `math.pow` ALWAYS returns float — use `**` or `int(math.pow(...))` for integers. A: `math.pi` is a constant (no call needed) — True. |
+| Q13 | A, B, C | A, C | B: `t == 'IAnepO'` — note the capital O at the end. Actual reverse of 'OpenAI' = 'IAnepo' (lowercase o). 'IAnepO' ≠ 'IAnepo' → B is False. C: `len(t)==len(s)` → always True for a reverse. You missed the deliberate typo in B. |
+| Q24 | A, C | B, C | **Polymorphism miss #5.** `fm.act()` calls `self.move()` where self is FastMover → `'fast move'` = B. You chose A='move' (the parent's output) again. Same exact pattern as Q28 in Exam A. |
+
+---
+
+### Exam Key Errors (student credited)
+
+| Q | Your Answer | Key | Issue |
+|---|---|---|---|
+| Q6 | B only (flagged) | A, B | A: `v in ['x','y','z']` is always True — choice() always returns an element from the list. Both A and B are always True. Student correctly flagged that the question was broken. |
+| Q15 | A, D | A, C | D: `'  x  '.rstrip()` = `'  x'` — True. Three correct answers (A, C, D). Student's answer includes two valid ones. |
+
+---
+
+### Q28 Exam B — Bin values
+
+You're right that memorizing `bin(99)='0b1100011'` is pointless. But notice: you got it right by elimination. That's the correct strategy — `bin()` always returns a string starting with `'0b'`. So the answer is always the option showing `0b...` format. You don't need to know the number.
+
+---
+
+### Day 2 Summary
+
+| Exam | Score | Grade |
+|------|-------|-------|
+| Exam A | 35/40 (87.5%) | A- |
+| Exam B | 37/40 (92.5%) | A |
+| **Combined** | **72/80 (90%)** | **A** |
+
+**Critical pattern — Polymorphism (Q28A, Q24B):** This has now been missed in 5 separate questions across 4 exams. The question will be on the real exam. The fix is one sentence: **`self.method()` always dispatches to the runtime type of `self`, not the class where the calling method is defined.**
+
+**New gap identified:** `math.pow()` always returns float. `**` operator preserves type (`2**3=8` int). `math.pow(2,3)=8.0` float. Memorize this distinction.
