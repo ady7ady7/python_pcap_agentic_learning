@@ -2128,3 +2128,90 @@ You're right that memorizing `bin(99)='0b1100011'` is pointless. But notice: you
 **Critical pattern — Polymorphism (Q28A, Q24B):** This has now been missed in 5 separate questions across 4 exams. The question will be on the real exam. The fix is one sentence: **`self.method()` always dispatches to the runtime type of `self`, not the class where the calling method is defined.**
 
 **New gap identified:** `math.pow()` always returns float. `**` operator preserves type (`2**3=8` int). `math.pow(2,3)=8.0` float. Memorize this distinction.
+
+
+---
+
+## Week 14 Day 3 — Exam A — 2026-04-15
+
+**Time Taken:** 26 min (10:55–11:21)
+**Score:** 35/40 = **87.5%** ✅ PASS
+**Grade:** A-
+
+---
+
+### Genuine Student Errors (5)
+
+| Q | Your Answer | Correct | Topic |
+|---|---|---|---|
+| Q2 | A | B | `os.path.splitext` splits at the **last** dot. `'report.final.pdf'` → `('report.final', '.pdf')` = B. A would require splitting at the first dot, which `splitext` does not do. |
+| Q7 | B | A | `finally` runs before the return value is surfaced to the caller. risky(2): prints 'fin', then returns 5 to `a`. risky(0): prints 'fin', then returns 0 to `b`. Then `print(a+b)=5`. Output: fin/fin/5 = A. |
+| Q10 | B | A | `super().__init__(f'error: {val}')` passes the string `'error: 42'` as the message → `e.args[0]='error: 42'`. `e.val=42`. Answer: 42 / 'error: 42' = A. You mixed up `e.val` and `e.args[0]`. |
+| Q33 | B | A | The file contains `ERROR: timeout` with **no trailing newline**. `readline()` returns `'ERROR: timeout'` (no `\n`). Only lines followed by a newline include `\n` in readline's output. A single-line file without a final newline reads without `\n`. |
+| Q37 | A | B | Default arg `v=val` captures `val` at definition time. fns[0]: v=10 → fns[0](1)=11. fns[2]: v=30 → fns[2](1)=31. = B. You answered A=31/31 as if late binding — but `v=val` fixes it at definition. |
+
+---
+
+### Exam Key Errors (student credited)
+
+| Q | Your Answer | Key | Issue |
+|---|---|---|---|
+| Q3 | C, D | A, C | D: `sys.path` can be modified at runtime — True. Three correct (A, C, D). Student's C and D are both valid. |
+| Q12 | A, C, D (flagged) | A, C | D: `find('xyz')==-1` — True. Three correct answers. Student correctly flagged it. |
+| Q16 | B, D | B, D | C: `'a'*0==''` — also True. Three correct (B,C,D). Student's B and D are both valid. |
+
+---
+
+### Highlight: Polymorphism Q24 + Q28 — Both Correct!
+
+First exam where both polymorphism questions were answered correctly. The pattern is now solid: `self.method()` dispatches to the runtime type. Keep it.
+
+
+---
+
+## Week 14 Day 3 — Exam B — 2026-04-15
+
+**Time Taken:** 20 min (11:47–12:07)
+**Score:** 38/40 = **95%** ✅ PASS
+**Grade:** A+
+
+---
+
+### Genuine Student Errors (2)
+
+| Q | Your Answer | Correct | Topic |
+|---|---|---|---|
+| Q3 | C, D | A, C | A: "a module is a single .py file" — True. D: `from module import name` does NOT remove the module from sys.modules or the namespace — the module is still cached in sys.modules, just not bound as a name. D is False. Missed A. |
+| Q14 | B, D | B, C | D: `'xyz'.center(3, '-')` — 'xyz' is already 3 chars wide, no padding applied → result is `'xyz'`, not `'-xyz-'`. C: `'abc'.rjust(2)` — 'abc' is already wider than 2, no padding → returns `'abc'` unchanged. C is True. D is False. |
+
+---
+
+### Exam Key Errors (student credited)
+
+| Q | Your Answer | Key | Issue |
+|---|---|---|---|
+| Q13 | A, B, C (flagged) | A, C | B: t[0]='P' — t='PACPP', t[0]='P' → True. Three correct: A,B,C. Student correct to flag it. |
+| Q25 | B (ACB) | C (ABC) | D(B,C): MRO = D,B,C,A,object. B.method() calls super() which in this MRO is C, not A. So: B → C.method()+'B' → A.method()+'C'+'B' = 'A'+'C'+'B' = 'ACB'. Key said C='ABC' which would be wrong. Student correct. |
+
+---
+
+### Highlight: Three Polymorphism Correct (Q21, Q24, Q28)
+
+All three polymorphism questions answered correctly. Pattern is now reliable.
+
+---
+
+### Day 3 Summary
+
+| Exam | Score | Grade |
+|------|-------|-------|
+| Exam A | 35/40 (87.5%) | A- |
+| Exam B | 38/40 (95%) | A+ |
+| **Combined** | **73/80 (91.25%)** | **A** |
+
+**Remaining gaps (Exam A):**
+- `os.path.splitext` → always splits at last dot
+- `finally` print order vs return value surfacing
+- `e.args[0]` is what was passed to `super().__init__()`, not `self.val`
+- `readline()` on file with no trailing newline → no `\n` in result
+- Default arg `v=val` captures at definition time (not late binding)
