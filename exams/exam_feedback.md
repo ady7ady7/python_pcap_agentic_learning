@@ -2215,3 +2215,144 @@ All three polymorphism questions answered correctly. Pattern is now reliable.
 - `e.args[0]` is what was passed to `super().__init__()`, not `self.val`
 - `readline()` on file with no trailing newline → no `\n` in result
 - Default arg `v=val` captures at definition time (not late binding)
+
+---
+
+## Week 14 — Day 4 Exam A Assessment
+
+**Score: 34/40 (85%)**
+*(Q26 credited — key error confirmed: 3 correct answers. Q19 counted as wrong — no answer submitted.)*
+
+### Error Table
+
+| Q | Your Answer | Correct | Type | Topic |
+|---|-------------|---------|------|-------|
+| 1 | B | A | Student error | `math.log` return type |
+| 14 | A, C | B, C | Student error | `str.encode()` — non-ASCII chars |
+| 15 | B | A | Student error | `str.split(sep, maxsplit)` |
+| 19 | (no answer) | A | Student error | f-string `!r` / `!s` conversions |
+| 26 | B, C | A, B | Key error | 3 correct answers in "select two" |
+| 27 | A only | A, B | Student error | MRO validity |
+| 30 | A, C | A, B | Student error | `__iter__` contract |
+
+### Breakdowns
+
+**Q1 — `math.log` return type**
+`math.log` and all `math` module functions **always return `float`**. `math.log(math.e) = 1.0`, not `1`. There is no integer path. You answered B which claims `int` output.
+
+**Q14 — Non-ASCII encoding**
+`'café'.encode('utf-8')` ≠ `b'cafe'`. The `é` character (U+00E9) encodes to two bytes `\xc3\xa9` in UTF-8. Result is `b'caf\xc3\xa9'`. Option A is False. B (`'hello'.encode('ascii') == b'hello'`) is True. C is True. Key = B, C.
+
+**Q15 — `split(sep, maxsplit)`**
+`s.split(' ', 1)` splits on the **first** space only and stops — result is `['one', 'two three']` (2 elements). `s.split()` (no args) splits on all whitespace → `['one', 'two', 'three']` (3 elements). You answered B which applies the 3-element split to the maxsplit version.
+
+**Q19 — f-string `!r` and `!s`**
+This is PCAP-relevant and not strange. `f'{s!r}'` applies `repr()` to `s` → `'Python'` (with quotes in the output). `f'{s!s}'` applies `str()` to `s` → `Python` (no quotes). Answer A is correct. The `!r`, `!s`, `!a` conversion flags are explicitly on the PCAP syllabus.
+
+**Q26 — Key error (your answer partially correct)**
+A=True (`__dict__` on class is `mappingproxy`), B=True (instance attrs shadow class attrs), C=False (deleting class attr does NOT affect instance `__dict__`), D=True (`vars()` raises `TypeError` on objects without `__dict__`, e.g. `__slots__`). Three correct answers — question is flawed. You correctly identified B; you incorrectly included C. Full credit given.
+
+**Q27 — MRO validity: missed B**
+Bases: `X`, `Y(X)`, `Z(X)`, `W(Y)`.
+- `V(W, Z)` — MRO: V→W→Y→Z→X→object. Valid ✓
+- `V(Z, W)` — MRO: V→Z→W→Y→X→object. Valid ✓ ← you missed this
+- `V(X, W)` — X must come AFTER W (because W→Y→X). X before W → TypeError ✗
+- `V(Y, W)` — W inherits Y, so Y must come AFTER W. Y before W → TypeError ✗
+
+Both A and B are valid. `V(Z, W)` doesn't violate MRO — Z and W both descend from X, Z has no relation to W, so ordering Z before W is fine.
+
+**Q30 — `__iter__` contract**
+C says "`__iter__` must return `self`". This is only true for **iterators** (objects that are already exhaustible). An **iterable** (like a list or your custom container) implements `__iter__` and returns a *separate* iterator object — not `self`. The statement is too strong → False. `__call__` (option B) makes an instance callable → True. Key = A, B.
+
+### Key Errors in This Exam
+- **Q26**: Three correct answers (A, B, D all True). Question design flaw.
+
+### Performance Summary
+
+| Category | Result |
+|----------|--------|
+| Genuine student errors | 6 (Q1, Q14, Q15, Q19, Q27, Q30) |
+| Key errors (credited) | 1 (Q26) |
+| Final score | **34/40 = 85%** |
+
+### Patterns
+
+- **`math` functions always return float** — first time this appeared as an error. `math.log`, `math.sqrt`, `math.pow` — all float, no exceptions.
+- **Encoding non-ASCII strings** — `café` ≠ `b'cafe'`. Multi-byte UTF-8 encoding is a real trap. ASCII only works for characters in range 0–127.
+- **`split(sep, maxsplit)` vs `split(sep)`** — maxsplit limits the number of splits performed, not the number of resulting pieces.
+- **f-string conversion flags (`!r`, `!s`, `!a`)** — these ARE on the PCAP exam. `!r` = `repr()`, `!s` = `str()`, `!a` = `ascii()`.
+- **MRO for `V(Z, W)`** — you correctly excluded C and D but wrongly excluded B. `Z` and `W` have no inheritance relationship with each other, so Z before W is fine.
+- **`__iter__` contract** — only iterators must return `self`; iterables return a separate iterator.
+
+---
+
+## Week 14 — Day 4 Exam B Assessment
+
+**Time:** 16:50–17:10 (20 minutes)
+**Score: 34/40 (85%)**
+
+### Error Table
+
+| Q | Your Answer | Correct | Type | Topic |
+|---|-------------|---------|------|-------|
+| 1 | (no answer) | A | Student error | `math.isfinite` / `math.fabs` — PCAP syllabus |
+| 2 | B | A | Student error | `os.path.basename(os.path.dirname(...))` chain |
+| 5 | A, B | A, D | Student error | `os.path.join` with absolute second arg |
+| 26 | A, C | A, D | Student error | `isinstance(1, bool)` — int is NOT bool |
+| 30 | A, D | A, B | Student error | `print(obj)` fallback path — `__repr__` vs `repr()` |
+| 35 | A, C | A, D | Student error | `f.read(n)` reads UP TO n; `f.write()` return value |
+
+### Breakdowns
+
+**Q1 — `math.isfinite` / `math.fabs`**
+These ARE in the PCAP syllabus under the `math` module. `math.isfinite(float('inf'))` → `False` (infinity is not finite). `math.isnan(float('nan'))` → `True`. `math.fabs(-7.5)` → `7.5` (absolute value, always float). Answer: A. Not memorisation — pure logic.
+
+**Q2 — `os.path.basename(os.path.dirname(path))`**
+Path: `'project/src/utils/helpers.py'`
+- `os.path.dirname(...)` strips the filename → `'project/src/utils'`
+- `os.path.basename(...)` takes the last component → `'utils'`
+- `os.path.splitext(...)[1]` → `'.py'`
+Output: `.py` / `utils` = A. You answered B (`src`), which would be `dirname` applied twice.
+
+**Q5 — `os.path.join('/a', '/b')` on Unix**
+When `os.path.join` receives an **absolute path** as a later argument, it **discards everything before it** and returns just that absolute path. `os.path.join('/a', '/b')` = `'/b'`, not `'/a/b'`. Option B is False. A and D are correct.
+
+**Q26 — `isinstance(1, bool)`**
+`1` is an `int` literal. `bool` is a subclass of `int`, NOT the other way around. `isinstance(1, bool)` → `False`. `isinstance(True, int)` → `True`. Don't confuse the direction. C is False. Key = A, D.
+
+**Q30 — `print(obj)` with no `__str__`**
+D says `print(obj)` "calls `repr(obj)`". This is subtly wrong. `print()` calls `str(obj)`. When no `__str__` is defined, `str()` falls back to `__repr__`. So `__repr__` is used, but through `str()`, not through `repr()`. D overstates it. B (interactive session uses `__repr__`) is True. Key = A, B.
+
+**Q35 — `f.read(n)` and `f.write(s)` return values**
+- C: `f.read(n)` reads **up to** n bytes — if fewer are available (e.g. near end of file), it reads fewer. NOT exactly n. → False
+- D: `f.write(s)` returns the **number of characters written** (an int). → True
+Key = A, D. You picked C instead of D.
+
+### Performance Summary
+
+| Category | Result |
+|----------|--------|
+| Genuine student errors | 6 (Q1, Q2, Q5, Q26, Q30, Q35) |
+| Key errors | 0 |
+| Final score | **34/40 = 85%** |
+
+---
+
+## Week 14 — Day 4 Summary
+
+| Exam | Score | Grade |
+|------|-------|-------|
+| Exam A | 34/40 (85%) | B+ |
+| Exam B | 34/40 (85%) | B+ |
+| **Combined** | **68/80 (85%)** | **B+** |
+
+**Day 4 recurring gaps:**
+- `math` module functions — `isfinite`, `fabs`, `log` always return float
+- `os.path` chaining — `dirname` then `basename` nesting
+- `os.path.join` with absolute second argument → discards prefix
+- `isinstance(1, bool)` → False (bool subclasses int, not vice versa)
+- `__iter__` contract (Exam A Q30) — only iterators must return `self`
+- `f.read(n)` → reads UP TO n bytes; `f.write()` → returns char count
+- f-string `!r`/`!s` conversion flags (Exam A Q19) — PCAP syllabus item
+- `split(sep, maxsplit)` (Exam A Q15) — maxsplit limits splits, not pieces
+- `str.encode()` with non-ASCII (Exam A Q14) — `café` ≠ `b'cafe'`
