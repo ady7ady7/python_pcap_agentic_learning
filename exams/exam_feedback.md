@@ -2356,3 +2356,181 @@ Key = A, D. You picked C instead of D.
 - f-string `!r`/`!s` conversion flags (Exam A Q19) — PCAP syllabus item
 - `split(sep, maxsplit)` (Exam A Q15) — maxsplit limits splits, not pieces
 - `str.encode()` with non-ASCII (Exam A Q14) — `café` ≠ `b'cafe'`
+
+---
+
+## Week 14 — Day 5 Exam A Assessment
+
+**Time:** 11:56–12:16 (20 minutes)
+**Score: 35/40 (87.5%)**
+
+### Error Table
+
+| Q | Your Answer | Correct | Type | Topic |
+|---|-------------|---------|------|-------|
+| 2 | B | A | Student error | `os.path.join` with absolute second arg (recurring) |
+| 5 | C, D | A, D | Student error | `random.choice([])` raises IndexError, not returns None |
+| 16 | (skipped) | A, B | Student error | Encoding — pure logic, not memorisation |
+| 17 | (skipped) | A | Student error | `str.partition` / `str.rpartition` |
+| 19 | (skipped) | A | Student error | f-string `!r` / `!a` — PCAP syllabus |
+
+### Breakdowns
+
+**Q2 — `os.path.join` with absolute arg (5th time)**
+`os.path.join('/a', '/b', 'c')` → `/b/c`. When any argument is an absolute path, everything before it is discarded. `/b` resets the path; `c` appends normally. This has appeared in every exam this week. It must be locked in before the real exam.
+
+**Q5 — `random.choice([])`**
+`random.choice([])` raises `IndexError`, it does NOT return `None`. You picked C=`choice([])`→None (False) and D=`random.random()∈[0,1)` (True). The correct pair was A=`randint(1,5)` can return 5 (inclusive, True) and D. You had D right but swapped A for C.
+
+**Q16, Q17, Q19 — Skipped questions**
+These are all legitimate PCAP topics, addressed below.
+
+**Q16 — String encoding (pure logic):**
+- A: `b'hello'.decode('ascii')` → you're converting bytes to str using ASCII → `'hello'`. True. No hex memorisation needed.
+- B: `'café'.encode('ascii')` → `é` is not ASCII (>127) → raises `UnicodeEncodeError`. True. You already knew this from Day 4.
+
+**Q17 — `partition` / `rpartition`:**
+`s.partition(':')` splits at the **first** occurrence → `('one', ':', 'two:three')`. `s.rpartition(':')` splits at the **last** occurrence → `('one:two', ':', 'three')`. Always returns a 3-tuple: `(before, separator, after)`.
+
+**Q19 — f-string `!r` / `!a`:**
+- `f'{s!r}'` → `repr(s)` → string with quotes, e.g. `'café'`
+- `f'{s!a}'` → `ascii(s)` → like repr but escapes non-ASCII: `'caf\u00e9'`
+These three flags (`!r`, `!s`, `!a`) are on the PCAP syllabus. `!s` = `str()`, `!r` = `repr()`, `!a` = `ascii()`.
+
+---
+
+## Week 14 — Day 5 Exam B Assessment
+
+**Time:** 12:16–12:37 (21 minutes)
+**Score: 33/40 (82.5%)**
+*(Q10 credited — key error confirmed)*
+
+### Error Table
+
+| Q | Your Answer | Correct | Type | Topic |
+|---|-------------|---------|------|-------|
+| 1 | B | A | Student error | `math.sqrt`/`math.pow` always return float |
+| 2 | B | A | Student error | `os.path.dirname` chain depth |
+| 5 | B, C | A, C | Student error | `random.randrange` with step; `random.uniform` bounds |
+| 10 | B | A (key error) | Key error | `raise NonException` → TypeError — student was RIGHT |
+| 15 | (skipped) | A | Student error | f-string format specifiers |
+| 16 | (skipped) | A, B | Student error | Encoding — logic-based, not memorisation |
+| 18 | C | A | Student error | `str.replace` — no spaces introduced |
+| 35 | A, D | A, B | Student error | `'x'` file mode is write-only, not read |
+
+### Breakdowns
+
+**Q1 — `math.sqrt` and `math.pow` always return float**
+`math.sqrt(144)` = `12.0` (float). `math.pow(2, 10)` = `1024.0` (float). `math.pow` ALWAYS returns float regardless of inputs. This is distinct from `**` which preserves type. Recurring error across Week 14.
+
+**Q2 — `dirname` chain depth**
+`dirname('reports/2024/q1/summary.csv')` = `'reports/2024/q1'`. `dirname('reports/2024/q1')` = `'reports/2024'`. You answered B=`'reports'` which would require a third `dirname` call. Count the nesting.
+
+**Q5 — `random.randrange` with step**
+`random.randrange(0, 10, 3)` generates from `range(0, 10, 3)` = [0, 3, 6, 9]. `8` is NOT in this range → B is False. `random.uniform(1, 5)` is inclusive on BOTH ends (unlike `random.random()`) → can return `1.0` → A is True. You correctly identified C but picked B instead of A.
+
+**Q10 — Key error (your answer B was correct)**
+`raise Strict()` where `Strict` doesn't inherit from `BaseException` causes Python itself to raise a `TypeError: exceptions must derive from BaseException`. That `TypeError` IS caught by `except TypeError` → prints `'type error'`. You answered B and you were right. The key had A. Full credit.
+
+**Q15 — f-string format specifiers**
+`f'{60:05d}'` → width 5, zero-padded → `'00060'`. `f'{10:#010x}'` → `#` adds `0x` prefix, total width 10, zero-padded → `'0x0000000a'`. No memorisation — apply the rules: `#` adds prefix, total width includes prefix.
+
+**Q18 — `str.replace` with count**
+`s.replace('bb', 'B', 1)` → replaces first occurrence only → `'aaBccdd'`. `s.replace('cc', '')` → removes `'cc'` → `'aabbdd'`. You answered C which had a spurious space in the second output. A was correct.
+
+**Q35 — `'x'` file mode**
+`'x'` (exclusive creation) opens for **writing only** — it does NOT allow reading. So D is False. B (`'a+'`) opens for appending and reading with read position at beginning → True. Key = A, B.
+
+---
+
+## Week 14 — Day 5 Summary
+
+| Exam | Score | Grade |
+|------|-------|-------|
+| Exam A | 35/40 (87.5%) | A- |
+| Exam B | 33/40 (82.5%) | B+ |
+| **Combined** | **68/80 (85%)** | **B+** |
+
+**Skipped questions (both exams):** Encoding questions and f-string flags were boycotted. These ARE on the real PCAP exam. Skipping them on the real exam costs points.
+
+**Recurring gaps across Day 5:**
+- `os.path.join` with absolute arg — appeared again (Q2 Exam A)
+- `math` functions always return float — Q1 Exam B
+- `dirname` chain counting — Q2 Exam B
+- `random` module edge cases — `choice([])`, `randrange` with step, `uniform` bounds
+- `'x'` file mode is write-only
+
+---
+
+## WEEK 14 — FULL RETROSPECTIVE
+
+### Score Progression
+
+| Day | Exam A | Exam B | Combined | Grade |
+|-----|--------|--------|----------|-------|
+| Day 1 | 32/40 (80%) | 39/40 (97.5%) | 71/80 (88.75%) | A- |
+| Day 2 | 35/40 (87.5%) | 37/40 (92.5%) | 72/80 (90%) | A |
+| Day 3 | 35/40 (87.5%) | 38/40 (95%) | 73/80 (91.25%) | A |
+| Day 4 | 34/40 (85%) | 34/40 (85%) | 68/80 (85%) | B+ |
+| Day 5 | 35/40 (87.5%) | 33/40 (82.5%) | 68/80 (85%) | B+ |
+| **Week Avg** | **34.2/40 (85.5%)** | **36.2/40 (90.5%)** | **352/400 (88%)** | **A-** |
+
+PCAP passing threshold: 70%. Current average: **88%**. You are well clear.
+
+### Strengths
+
+1. **Polymorphism — fully closed.** Missed 5 times in Days 1–2, answered correctly on every question from Day 3 onward. This was the biggest gap at the start of the week and is now a strength.
+2. **Exception mechanics** — `try/except/else/finally` order, nested exceptions, chained exceptions (`raise X from Y`) all handled cleanly.
+3. **Generators and closures** — `yield from`, `next()` state persistence, `k=k` default arg captures all correct throughout.
+4. **MRO reasoning** — valid/invalid combinations handled well once the C3 rule was understood.
+5. **Class mechanics** — `__dict__`, instance vs class attr shadowing, mutable class attrs (`Team.members`), `__contains__`, `__len__`, `__getitem__` all solid.
+
+### Recurring Gaps (still present at end of Week 14)
+
+1. **`os.path.join` with absolute second arg** — appeared in D4B Q5, D5A Q2. Every time. The rule: an absolute path argument resets everything before it. `join('/a', '/b', 'c')` = `'/b/c'`.
+
+2. **`math` functions always return float** — `math.sqrt`, `math.pow`, `math.log`, `math.ceil/floor/trunc` all return float. `math.pow(2,10)` = `1024.0`, not `1024`. Missed D4B Q1, D5B Q1.
+
+3. **`os.path.splitext` splits at LAST dot** — missed D2, D3, appeared in D5B Q40 (answered correctly). Pattern closing but needs reinforcement.
+
+4. **f-string flags (`!r`, `!s`, `!a`) and format specifiers** — boycotted on multiple occasions. These WILL appear on the real exam. `!r`=repr, `!s`=str, `!a`=ascii. Not negotiable.
+
+5. **Encoding (`encode`/`decode`)** — also boycotted repeatedly. Core facts: non-ASCII chars fail ASCII encoding, `b'...'` ≠ `'...'`, `len('café'.encode('utf-8'))` = 5 (not 4). No byte memorisation required — pure logic.
+
+6. **`random` module edge cases** — `choice([])` raises IndexError (not None), `randrange` step affects valid values, `uniform` is inclusive on both ends.
+
+7. **`str.partition` / `str.rpartition`** — skipped entirely. Returns 3-tuple `(before, sep, after)`. `partition` = first occurrence, `rpartition` = last.
+
+### Exam Technique
+
+- **Speed is excellent** — 20–30 minutes per 40-question exam. Real exam is 65 minutes. You have plenty of time for review.
+- **Boycotting questions costs points.** On the real exam, a skipped question is zero. Even an educated guess at 25% beats zero. These topics are drill-able before the exam.
+- **Key errors caught:** You correctly challenged the key on multiple occasions (Q25 D3B MRO, Q10 D5B raise non-exception) — good instinct. Keep questioning.
+
+### Readiness Assessment
+
+| Topic | Status |
+|-------|--------|
+| Modules, packages, imports | Solid |
+| `sys.path`, `sys.argv`, `sys.modules` | Solid |
+| `os.path` — split/basename/dirname | Solid |
+| `os.path.join` with absolute arg | **Needs drill** |
+| `math` module (always float) | **Needs drill** |
+| `random` module | **Needs drill** |
+| Exceptions — try/except/else/finally | Solid |
+| Custom exceptions | Solid |
+| Strings — slicing, methods | Solid |
+| String encoding | **Needs drill** |
+| f-string flags (!r/!s/!a) | **Needs drill** |
+| `str.partition`/`rpartition` | **Needs drill** |
+| OOP — class/instance attrs | Solid |
+| Polymorphism | Solid (closed) |
+| MRO | Solid |
+| Special methods (dunders) | Solid |
+| Closures, late binding | Solid |
+| Generators, `yield from` | Solid |
+| `filter(None, ...)` | Solid |
+| File I/O — modes, read/write | Mostly solid, `'x'` mode needs check |
+| `zip`, `map`, `filter`, `sorted` | Solid |
+
+**Verdict: Ready to pass PCAP.** The gaps above are all fixable with 2–3 hours of targeted drilling before the exam date.
