@@ -28,6 +28,7 @@ class Position:
         take_profit: Optional[float] = None,
         strategy_id: Optional[str] = None,
         strategy_name: Optional[str] = None,
+        open_time: Optional[str] = None
     ) -> None:
         
         '''Initialize a new position'''
@@ -41,6 +42,7 @@ class Position:
         self.take_profit = take_profit
         self.strategy_id = strategy_id
         self.strategy_name = strategy_name
+        self.open_time = open_time
     
         #Therefore is_long or is_short is really redundant + it's also weird.
         
@@ -88,30 +90,26 @@ class Position:
         
     
     def should_close(self, current_price: float) -> Tuple[bool, str]:
-        
         '''
         Method used to check if position should close (if it hit SL or TP).
         Handles incorrect current_price.
-        
+
         Returns:
         True if SL/TP hit, False otherwise
         '''
-        
+
         if current_price < 0:
             print('Incorrect current price, it should be above 0!')
             return (False, 'Still open')
         if self.side != 'BUY' and self.side != 'SELL':
             print('Incorrect side, it should be either BUY or SELL (case insensitive)')
             return (False, 'Still open')
-        
-        
-        if self.side == 'BUY' and current_price <= self.stop_loss: #Simple if-checks, starting from SL check
+
+        if self.side == 'BUY' and current_price <= self.stop_loss:
             print('Buy SL hit')
             return (True, 'Buy SL hit')
         elif self.side == 'BUY' and current_price >= self.take_profit:
             return (True, 'Buy TP hit')
-
-        
         elif self.side == 'SELL' and current_price >= self.stop_loss:
             return (True, 'Sell SL hit')
         elif self.side == 'SELL' and current_price <= self.take_profit:

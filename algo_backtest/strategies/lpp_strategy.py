@@ -13,15 +13,18 @@ class LPPStrategy(BaseStrategy):
         self.tp = tp
         self.levels_by_date: dict = {}
         
-    def generate_signal(self, price: float, current_date) -> str:
-        '''Generates trade signals based on specified levels and direction set in init'''
+    def generate_signal(self, row: pd.Series, current_date) -> str:
+        '''Generates trade signals based on specified levels and direction set in init.
+        Entry fires only when this candle's range actually touches the entry level,
+        regardless of which direction price approached from.
+        '''
         levels = self.levels_by_date.get(current_date)
         if not levels:
             return 'HOLD'
         entry_level = levels[self.entry]
-        if self.side == 'BUY':
-            return 'BUY' if price > entry_level else 'HOLD'
-        return 'SELL' if price < entry_level else 'HOLD'
+        if row['low'] <= entry_level <= row['high']:
+            return self.side
+        return 'HOLD'
     
     def get_entry(self, row: pd.Series, current_date) -> float:
         return self.levels_by_date[current_date][self.entry]

@@ -74,13 +74,13 @@ class Trade:
             result = '[LOSS]'
         
         strategy_tag = f'[@{self.strategy_name} | {self.strategy_id}] ' if self.strategy_name else ''
-        return (f'{strategy_tag}Trade {self._position_id}: {result} {self._side} {self._quantity} {self._ticker}: '
+        return (f'{strategy_tag} | Entry time: {self._entry_time}, Exit time: {self._exit_time} | Trade {self._position_id}: {result} {self._side} {self._quantity} {self._ticker}: '
                 f'{self._entry_price} -> {self._exit_price} ({self._exit_reason}) | P&L: ${self.pnl:.2f}, SL: {self._stop_loss}, TP: {self._take_profit}, R: {self.r_multiple}, R:R Ratio: {self.risk_reward_ratio}')
     
     def __repr__(self):
         
         
-        return (f'Trade(position_id={self._position_id!r}, ticker={self._ticker!r}, side={self._side!r}, '
+        return (f'Trade(position_id={self._position_id!r}, | Entry time: {self._entry_time!r}, Exit time: {self._exit_time!r} | ticker={self._ticker!r}, side={self._side!r}, '
                 f'entry_price={self._entry_price}, exit_price={self._exit_price}, '
                 f'quantity={self._quantity}, pnl={self.pnl:.2f}, exit_reason={self._exit_reason!r}, '
                 f'strategy_id={self.strategy_id!r}, strategy_name={self.strategy_name!r})'

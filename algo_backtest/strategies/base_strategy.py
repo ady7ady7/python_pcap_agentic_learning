@@ -14,7 +14,7 @@ class BaseStrategy(ABC):
         self.strategy_id = str(uuid.uuid4())
         
     @abstractmethod
-    def generate_signal(self, price: float) -> str:
+    def generate_signal(self, row: pd.Series, current_date) -> str:
         pass
     
     @abstractmethod

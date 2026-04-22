@@ -11653,3 +11653,4790 @@ w którym studenci są posortowani rosnąco (zaczynając od najmniejszej liczby)
 
 # f = outer()
 # print(f())
+
+
+#CD Python - task 83
+
+'''
+Znajdź sekretną wiadomość ukrytą w pliku w aktualnym folderze roboczym i przypisz ją do zmiennej message_for_you.
+'''
+
+
+# import os
+# current_path = os.getcwd()
+# all_files = os.listdir(current_path)
+# print(all_files) #teraz obczajamy pliki
+
+# #po sprawdzeniu plików znalazłem secret_message.txt
+# with open('secret_message.txt', 'r') as r:
+#     message_for_you = r.read()
+
+# print(message_for_you)
+
+
+#CD Python - task 84
+
+'''Napisz funkcję get_random_students, która losuje z listy students n unikalnych osób (bez powtórzeń) 
+i zwraca je alfabetycznie w postaci listy. Domyślnie funkcja powinna losować 2 osoby.'''
+
+# from typing import List
+# import random
+
+# def get_random_students(students: List[str], n: int = 2) -> List[str]:
+    
+#     return random.sample(students, n)
+
+# students = ["Ola", "Emil", "Radosław"]
+
+# print(get_random_students(students, n = 1))
+
+
+#CD Python - task 85
+
+'''
+Napisz funkcję longest_word, która przyjmuje string text i zwraca słowo zawierające największą liczbę unikalnych liter.
+
+Ignoruj liczby oraz znaki specjalne (analizuj tylko litery).
+Ignoruj wielkość liter (np. A i a traktuj jako tę samą literę).
+Jeśli kilka słów ma taką samą maksymalną liczbę unikalnych liter, zwróć je w postaci listy.
+
+Podpowiedź
+Aby usunąć znaki specjalne i liczby, możesz użyć funkcji findall() z biblioteki re: re.findall(r"[a-zA-Z]+", text)
+'''
+
+# import re
+
+
+# def longest_word(text: str) -> str:
+#     list_of_words = re.findall('[a-zA-Z]+', text.lower())
+#     words_dict = {}
+#     for word in list_of_words:
+#         unique_letters = set([letter for part in word for letter in part])
+#         if word not in words_dict:
+#             words_dict[word] = len(unique_letters)
+    
+#     sorted_words = sorted(words_dict.items(), key = lambda x: x[1], reverse = True)
+#     max_length = max([x[1] for x in sorted_words])
+#     longest_word = [word for word, length in sorted_words if length == max_length]
+#     if len(longest_word) == 1:
+#         longest_word = longest_word[0]
+    
+#     return longest_word
+        
+        
+# text = "Ania ma kota kota!"
+# print(longest_word(text))
+
+
+
+#CD Python - task 86
+
+'''
+Zadanie
+Napisz funkcję stats, która przyjmuje jako argument listę liczb
+i zwraca średnią (zaokrągloną do 2 miejsc po przecinku) oraz liczbę elementów z listy.
+'''
+# from typing import List, Tuple
+
+# def stats(list_of_nums: List) -> Tuple[float, int]:
+#     '''
+#     Func calculates the average number found in the list.
+    
+#     Args:
+#     - A list (of numbers - ints/floats)
+    
+#     Returns: 
+#     A tuple (x, y)
+#     - x - the average rounded to 2 decimals
+#     - y - the n of numbers in the list
+#     '''
+    
+    
+#     avg = round(sum(list_of_nums) / len(list_of_nums), 2)
+#     return avg, len(list_of_nums)
+
+# numbers = [5, 10, 8.5, 14]
+
+# avg, count = stats(numbers)
+# print(avg)
+# print(count)
+
+#W11 D3 T1 - predict the output
+
+# class Item:
+#     def __repr__(self): return "Item(42)"
+#     def __str__(self): return "an item"
+
+# x = Item()
+# print(x) #an item
+# print(repr(x)) #Item(42)
+# print([x]) #[Item(42)]
+# print(f"{x}") #{an item}
+
+# lines = ["hello\n", "world\n"]
+# print(lines[0]) #hello
+# print(repr(lines[0]))  #'hello\n'
+
+#W11 D3 T2
+
+# import os
+
+# path = "/home/user/projects/report.pdf"
+# print(os.path.basename(path)) #report.pdf
+# print(os.path.dirname(path)) #/home/user/projects/
+# print(os.path.split(path)) #(/home/user/projects, report.pdf)
+# print(os.path.splitext(path)) #('/home/user/projects/report', '.pdf') - this is weird but this is how it works
+
+
+# '''On Linux, the slashes are turned to the opposite side (\), but the rest is the same.
+# That's the reason why we use os path, as it works correctly for both Linux/Windows,
+# handling this difference and dealing with different slashes every time.
+# This wway we don't have to remember or guess it.'''
+
+
+#W11 D3 T3
+
+# import errno
+
+# try:
+#     open("missing.txt", "r")
+# except OSError as e:
+#     print(e.errno)
+#     print(errno.ENOENT)
+#     print(e.errno == errno.ENOENT)
+#     print(type(e).__name__)
+
+# print(IOError == OSError) #True
+    
+#2
+#2
+#True
+#FileNotFoundError
+
+#W11 D3 T4
+
+# import random
+
+# x = random.randint(1, 5) #can include both ends
+# y = random.randrange(0, 10, 3) #can include both ends (if the step allows it) - here we'd have 0, 3, 6, 9
+# z = random.choice((10, 20, 30)) #WE CAN ONLY RETURN a value from teh sequence - 10, 20 OR 30
+# print(x, y)
+
+#W11 D3 T5
+
+# a = '\\'
+# b = "\'"
+# c = '\\\''
+# d = "it\'s"
+
+# print(a, b, c, d)
+# print(len(a))
+# print(len(b))
+
+#W11 D3 T6 - Fibonacci
+
+
+# def fibonacci(n: int):
+#     '''
+#     This generator generates Fibonacci numbers indefinitely
+#     '''
+#     x = 0
+#     y = 1
+#     fib_numbers = []
+    
+#     for i in range(n):
+#         fib_numbers.append(x)
+#         x, y = y, x + y
+    
+#     return fib_numbers
+        
+# x = fibonacci(8)
+# print(x)
+
+
+#W11 D3 T7 - closures
+
+# funcs = []
+# for i in range(4):
+#     funcs.append(lambda: i)
+
+# print([f() for f in funcs])
+    
+# #We'd get [3, 3, 3, 3]
+# #FIX:
+
+# funcs = []
+# for i in range(4):
+#     funcs.append(lambda i=i: i)
+    
+# print([f() for f in funcs])
+
+
+# def outer():
+#     total = 0
+#     def add(n):
+#         nonlocal total
+#         total += n
+#         return total
+#     return add
+
+# f = outer()
+# print(f(5))
+# print(f(3))
+# print(f(2))
+
+
+#W11 D2 T8 - added time filtering for sessions
+# '''
+# This turned out to be quite a complex task, but it still will be extended even more in the future
+
+# To add a time filter I had to make an important architectural decisions first - consulted Claude for that, as I honestly want to use this backtester for my own purposes
+# For now I will be using filter in main.py's run_backtest method, which is getting pretty packed, BUT IMO STILL READABLE;
+
+# - I also implemented abstractmethod for each strategy class with start and end time (with None as default)
+# - I also had to add force close option (force_close_all method) to backtest_engine (which also required me to add remove_position to position_manager,
+# as I didn't expect manual position removal besides standard SL/TP closing)
+
+# Claude suggested ticker-based force close, but I opted for a strategy based close, as it makes A LOT MORE sense
+# and I could have different strategies with different start/end times for whatever reason
+
+# There's no point in me pasting all of the code excerpts here, but you can surely loop up my main.py (run_backtest)/position_manager.py/backtest_engine.py
+# Also, I am planning more modifications, so that it becomes even more modular and prepared for handling multiple strategies with multiple different time filters in run_backtest all at once
+# '''
+
+#CD Python - task 87
+
+'''
+Stwórz funkcję top_results, która przyjmuje listę studentów oraz ich wyniki egzaminów.
+
+Funkcja powinna zwrócić słownik, w którym:
+
+kluczami są imiona studentów,
+wartości to True lub False określające, czy dany student uzyskał wynik powyżej 90 percentyla.
+Percentyl możesz policzyć za pomocą funkcji percentile z biblioteki numpy.
+'''
+
+# from typing import List, Dict
+# import numpy as np
+
+# def top_results(students_list: List[str], student_exam_grades: List[int]) -> Dict[str, bool]:
+#     '''
+#     A func, which calculates the 90th percentile and checks whether a given student exceeded it
+    
+#     Args:
+#     Two lists - one with students' names (str), and another with students' exam grades (int).
+    
+#     Returns:
+#     A dict with student names as keys and bool signifying whether a given student exceeded the 90th percentile, or not
+#     '''
+    
+#     perc_90 = np.percentile(student_exam_grades, 90)
+#     students_grades = list(zip(students_list, student_exam_grades))
+#     final_dict = {student: True if grade > perc_90 else False for student, grade in students_grades}
+    
+#     return final_dict
+
+
+
+# students = [
+#     "Ola", "Ela", "Ania", "Bartek", "Tomek",
+#     "Kasia", "Marek", "Julia", "Piotr", "Zosia",
+#     "Adam", "Natalia", "Krzysztof", "Magda", "Paweł"
+# ]
+
+# exams = [
+#     55, 60, 58, 72, 65,
+#     90, 85, 88, 70, 95,
+#     40, 77, 82, 91, 68
+# ]
+
+
+# print(top_results(students, exams))
+
+
+#CD Python - task 88
+'''
+Na podstawie zmiennej orders znajdź użytkownika z największym zamówieniem i przypisz tę osobę do zmiennej top_order.
+
+Do rozwiązania zadania spróbuj użyć funkcji max() z funkcją lambda, modyfikując poniższy kod.
+
+max(orders, key = lambda x: x)
+'''
+
+# orders = [{"user": "Ola", "amount": 120}, {"user": "Ela", "amount": 80}, {"user": "Ania", "amount": 200}, {"user": "Bartek", "amount": 50}, {"user": "Tomek", "amount": 150}, {"user": "Kasia", "amount": 90}, {"user": "Marek", "amount": 300}, {"user": "Julia", "amount": 220}, {"user": "Piotr", "amount": 75}, {"user": "Zosia", "amount": 180}]
+
+# top_order = max(orders, key = lambda x: x['amount'])['user']
+# print(top_order)
+
+
+
+#CD Python - task 89
+
+'''
+Napisz funkcję change_str, która zwraca string z przesuniętymi n elementami z końca stringu do indeksu i.
+
+Przykłady
+initial_string = "abcde"
+n = 1
+i = 3
+1 ostatnia litera e zostaje przesunięta do indeksu 3, funkcja powinna zwrócić abced
+
+'''
+
+# def change_str(initial_string: str, n: int, i: int) -> str:
+#     '''
+#     A weird function, that causes the n values of the initial string to be moved from the end of the string to index i.
+#     Args:
+#     initial_string (str) - self-explanatory,
+#     n - the number of characters you want to move to the index i
+#     i - the index which is the desired place for the 'n' number of elements in the final string
+    
+#     Returns:
+#     modified string
+#     '''
+    
+#     cut_chars = initial_string[-n:]
+#     cut_list = initial_string[:-n]
+    
+#     final_string = cut_list[:i] + cut_chars + cut_list[i:]
+#     print(final_string)
+#     return final_string
+
+
+# initial_string = "abcde"
+# n = 2
+# i = 0
+
+# print(change_str(initial_string, n, i))
+
+
+#CD Python - task 90
+
+'''
+Zadanie
+Stwórz funkcję higher_than_avg, która liczy ile kolejnych elementów jest większych niż średnia poprzednich elementów.
+Pomiń liczenie dla pierwszego elementu.
+'''
+
+# from typing import List
+
+# def higher_than_avg(nums: List) -> int:
+#     '''
+#     A func that calculates how many elements of a list are higher than the avg of all the previous elements.
+#     It omits the first element of the list.
+    
+#     Args:
+#     nums - list of numbers (here ints, but floats are also fine)
+    
+#     Returns:
+#     The number of elements higher than the avg of their previous elements (int)
+#     '''
+    
+#     higher = 0
+#     for index, val in enumerate(nums, start = 1):
+#         if val > sum(nums[:index]) / len(nums[:index]):
+#             higher += 1
+#     return higher
+
+
+# numbers = [200, 500, 300, 800]
+# print(higher_than_avg(numbers))
+
+
+#W11 D4 #T1
+
+# import os
+
+# path = "/var/log/app/error.log"
+# print(os.path.basename(path)) #error.log (the file)
+# print(os.path.dirname(path)) #/var/log/app (the folder)
+# print(os.path.split(path)) #('/var/log/app', 'error.log') - tuple with folder and file split
+# print(os.path.splitext(path)) #('/var/log/app/error', '.log') - again tuple with folder and file, but this time the split fragment is the file type
+# print(os.path.join("var", "log", "app")) #var\log\app (and this is very important, that this uniquely handles both Linux/Windows paths, dpeending on the used environment)
+
+
+#W11 D4 T2
+
+# a = '\\'        # ? Valid, len = 1
+# b = "it\'s"     # ? Valid, it's, len = 4
+# c = '\\\''      # ? Valid, \' , len = 2
+# d = '\n\t'      # ? Valid, looks empty. len = 2
+# e = "\\"        # ? Valid, \, len = 1
+
+#W11 D4 T3 - InfiniteFibo generator
+
+# def fibonacci():
+#     x, y = 0, 1
+#     while True:
+#         yield x
+#         x, y = y, x + y
+
+
+# gen = fibonacci()
+# for i in range(10):
+#     print(f'Number: {i+1}, {next(gen)}')
+
+
+# def squares(n):
+#     for i in range(n-1):
+#         yield i**2
+
+
+# x = squares(5)
+# print(next(x)) #0
+# print(list(x)) #[1, 4, 9]
+# print(next(x)) #StopIteration error
+
+
+#W11 D4 T4 - output prediction
+
+# try:
+#     raise ValueError("bad input")
+# except Exception:
+#     print("Exception branch")
+# except ValueError:
+#     print("ValueError branch")
+    
+#Exception branch is printed
+
+# try:
+#     pass
+# except ValueError:
+#     print("caught")
+# else:
+#     print("else")
+# finally:
+#     print("finally")
+    
+#else - finally
+
+#W11 D4 T5 - predict the output 
+
+# x = 1
+# def f():
+#     x = 2
+#     def g():
+#         return x
+#     x = 3
+#     return g()
+
+# print(f())
+
+# #3
+
+
+
+# def make_multiplier(n):
+#     return lambda x: x * n
+
+# double = make_multiplier(2)
+# triple = make_multiplier(3)
+# print(double(5), triple(5))
+
+# #10, 15
+
+
+
+# fns = [lambda x, n=n: x + n for n in range(4)]
+# print(fns[2](10))
+
+#12
+
+
+#W11 D4 T6 - predint the output
+
+# def gen():
+#     yield 1
+#     yield 2
+#     yield 3
+
+# g = gen()
+# print(next(g))
+# print(next(g))
+# print(list(g))
+# print(list(g))
+
+# #1
+# #2
+# #[3]
+# #[]
+
+
+
+# def gen():
+#     return
+#     yield
+
+# g = gen()
+# print(type(g).__name__)
+# print(list(g))
+
+# #generator
+# #[None]
+
+
+
+
+# g = (x ** 2 for x in range(5))
+# print(next(g))
+# print(next(g))
+# print(sum(g))
+
+#0
+#1
+#29
+
+
+#W11 D4 T7 - MRO 
+
+# class A:
+#     def f(self): return "A"
+
+# class B(A):
+#     def f(self): return "B" + super().f()
+
+# class C(A):
+#     def f(self): return "C" + super().f()
+
+# class D(B, C):
+#     pass
+
+# print(D().f())
+
+# #Output: BCA
+
+
+# def outer():
+#     x = []
+#     def inner(val):
+#         x.append(val)
+#         return x
+#     return inner
+
+# f = outer()
+# f(1) #[1]
+# f(2) #[1, 2]
+# print(f(3)) #[1, 2, 3]
+
+#W11 D4 T8 - modularized run_backtest() in main.py to accept a list of strategies (each with its own defined start/end time).
+#I've also modified base_strategy to create a uuid for every strategy.
+#A next step would be to also add start/end time to each strategy instance so that we could run multiple tests of a given strategy with different start/end times
+#Anyway, the tests were successful :))
+
+#CD Python - task 91
+
+'''
+Napisz funkcję count_similar_words, która przyjmuje słowo word oraz listę słów words_list.
+
+Funkcja powinna zwracać listę słów, które:
+
+zaczynają się na tę samą literę co word
+mają tę samą długość co word
+Ignoruj wielkość liter (traktuj "Kot" i "kot" tak samo).
+'''
+
+# from typing import List
+
+
+# def count_similar_words(word: str, words_list: List[str]) -> List[str]:
+#     starting_letter = word[0]
+#     word_length = len(word)
+    
+#     matching_words = [word for word in words_list if word[0].lower() == starting_letter.lower() and len(word) == word_length]
+#     return matching_words
+
+# word = "kot"
+# words_list = ["koc", "pies", "kot", "KOT", "kto", "dom", "kog"]
+
+# print(count_similar_words(word, words_list))
+
+
+#CD Python - task 92
+'''
+Istnieją funkcje any() oraz all(), które przyjmują jako argument obiekt iterowalny i sprawdzają,
+czy przynajmniej jeden (any) lub wszystkie (all) elementy z listy są prawdziwe (True).
+
+Przykłady
+any([1>0, 1==0, 1<0]) -> True
+any([1<0, 2<1, 3<1]) -> False
+all([1>0, 1==0, 1<0]) -> False
+all([1>0, 2>1, 3>1]) -> True
+
+Napisz funkcje is_positive, która sprawdza czy wszystkie elementy z listy numbers są większe od 0. Funkcja powinna zwracać wartości True / False.
+'''
+# from typing import List
+
+# def is_positive(numbers_list: List) -> bool:
+    
+#     result = all([num > 0 for num in numbers_list])
+#     return result
+
+# numbers = [8, -10, 15, -4]
+# print(is_positive(numbers))
+
+
+#CD Python - task 93
+
+'''
+Dwa słowniki zawierają wyniki egzaminów kursantów, którzy uczestniczyli w kursie SQL i Python.
+
+Stwórz pod zmienną top_students listę 3 studentów, którzy uczestniczyli w obydwu kursach i osiągnęli najlepsze średnie wyniki z wszystkich egzaminów z obydwu kursów.
+
+'''
+
+
+# students_sql = {"anna kowalska":[8,9,10,9],"piotr nowak":[6,7,8,7],"monika mazur":[10,9,10,10],"jan zielinski":[4,5,6,5],"pawel krawczyk":[9,8,9,10],"kasia lis":[7,8,7,8],"tomasz wojcik":[5,6,7,6],"agnieszka dabrowska":[9,9,8,9],"michal lewandowski":[6,5,7,6],"karolina krupa":[10,10,9,10],"lukasz wojciechowski":[8,7,8,9],"ola kaminska":[9,8,9,9],"bartosz sikora":[5,6,5,6],"patrycja adamska":[7,8,9,8],"kamil piotrowski":[6,7,6,7]}
+
+# students_python = {"anna kowalska":[9,10,9,10],"piotr nowak":[7,8,7,8],"monika mazur":[10,10,10,9],"pawel krawczyk":[8,9,10,9],"kasia lis":[8,8,9,8],"tomasz wojcik":[6,7,8,7],"agnieszka dabrowska":[9,10,9,9],"michal lewandowski":[7,7,8,7],"karolina krupa":[10,9,10,10],"lukasz wojciechowski":[9,8,9,8],"ola kaminska":[8,9,9,8],"daniel czajka":[5,6,6,5],"natalia wrobel":[9,9,8,9],"katarzyna grabowska":[7,8,7,8],"mateusz kaczmarek":[6,7,6,7]}
+
+# keys_to_remove = []
+# for student in students_sql:
+#     if student in students_python:
+#         students_sql[student] += students_python[student]
+#     else:
+#         keys_to_remove.append(student)
+
+# for key in keys_to_remove:
+#     students_sql.pop(key)
+
+
+# top_students = sorted(students_sql.items(), key = lambda x: sum(x[1])/len(x[1]), reverse = True)[0:3]
+# top_students = [student[0] for student in top_students]
+
+
+
+#CD Python - task 94
+
+'''
+Dwa słowniki zawierają wyniki egzaminów kursantów, którzy uczestniczyli w kursie SQL i Python.
+
+W którym kursie mediana wszystkich egzaminów studentów była wyższa? Przypisz odpowiedź sql lub python do zmiennej course
+
+Do obliczenia mediany możesz użyć funkcji median z biblioteki Numpy
+'''
+
+# import numpy as np
+
+
+# students_sql = {"anna kowalska":[8,9,10,9],"piotr nowak":[6,7,8,7],"monika mazur":[10,9,10,10],"jan zielinski":[4,5,6,5],"pawel krawczyk":[9,8,9,10],"kasia lis":[7,8,7,8],"tomasz wojcik":[5,6,7,6],"agnieszka dabrowska":[9,9,8,9],"michal lewandowski":[6,5,7,6],"karolina krupa":[10,10,9,10],"lukasz wojciechowski":[8,7,8,9],"ola kaminska":[9,8,9,9],"bartosz sikora":[5,6,5,6],"patrycja adamska":[7,8,9,8],"kamil piotrowski":[6,7,6,7]}
+
+# students_python = {"anna kowalska":[9,10,9,10],"piotr nowak":[7,8,7,8],"monika mazur":[10,10,10,9],"pawel krawczyk":[8,9,10,9],"kasia lis":[8,8,9,8],"tomasz wojcik":[6,7,8,7],"agnieszka dabrowska":[9,10,9,9],"michal lewandowski":[7,7,8,7],"karolina krupa":[10,9,10,10],"lukasz wojciechowski":[9,8,9,8],"ola kaminska":[8,9,9,8],"daniel czajka":[5,6,6,5],"natalia wrobel":[9,9,8,9],"katarzyna grabowska":[7,8,7,8],"mateusz kaczmarek":[6,7,6,7]}
+
+# print(students_sql.values())
+# course = 'sql' if np.median([value for value in students_sql.values()]) > np.median([value for value in students_python.values()]) else 'python'
+# print(course)
+
+
+#CD Python - task 95
+
+
+'''
+Napisz funkcje is_anagram, która sprawdza czy 2 słowa przekazane do tej funkcji są anagramami. Funkcja powinna zwracać wartość True lub False.
+
+Anagram to wyraz powstały przez przestawienie liter innego wyrazu, przy wykorzystaniu wszystkich liter materiału wyjściowego dokładnie jeden raz.
+
+Przykłady anagramów:
+arbuz -> burza
+ekran -> nerka
+wektor -> wtorek
+'''
+
+# def is_anagram(word1: str, word2: str) -> bool:
+#     '''
+#     A func that checks if given two words are anagrams
+#     Args:
+#     word1 & word2 - strings
+    
+#     Returns:
+#     bool
+#     '''
+#     sorted1 = sorted([char.lower() for char in word1])
+#     sorted2 = sorted([char.lower() for char in word2])
+    
+#     result = sorted1 == sorted2
+#     return result
+    
+# word_1 = "arbuz"
+# word_2 = "burza"
+
+# print(is_anagram(word_1, word_2))
+
+
+
+#CD Python - task 96
+
+'''
+To pytanie jest już dużo trudniejsze, ale jest klasyką programowania, więc warto spróbować przynajmniej zrozumieć ten problem.
+
+Napisz funkcję is_valid_parentheses, która sprawdza, czy nawiasy w podanym stringu są poprawnie zamknięte.
+
+Zasady:
+
+istnieją 3 typy nawiasów: (), [], {}
+każdy otwierający nawias ma zamykający
+nawiasy są poprawnie zagnieżdżone
+Funkcja powinna zwracać True lub False.
+
+Przykłady z poprawnymi nawiasami:
+abc
+(a + b)
+[x * (y + z)]
+{a + [b * (c + d)]}
+Przykłady z niepoprawnymi nawiasami:
+abc)
+(
+{]
+[(])
+
+'''
+
+# def is_valid_parentheses(checked_string: str) -> bool:
+#     '''
+#     A function used to check whether all parentheses are correctly closed and matched
+    
+#     It checks three types of parentheses:
+#     (), [], {}
+    
+#     Args:
+#     checked_string - any string
+    
+#     Return:
+#     bool
+#     '''
+    
+#     #Valid = (, ) both in the string and ( before )
+    
+#     valid_parentheses = {')': '(',
+#                          ']': '[',
+#                          '}': '{'}
+    
+#     open_parentheses = []
+#     is_closed = False
+    
+#     for i in checked_string:
+#         if i in valid_parentheses.values():
+#             open_parentheses.append(i)
+#         elif i in valid_parentheses.keys():
+#             if len(open_parentheses) == 0:
+#                 return is_closed
+#             elif valid_parentheses[i] == open_parentheses[-1]:
+#                 open_parentheses.pop()
+#             else:
+#                 return is_closed
+    
+#     if len(open_parentheses) == 0:
+#         is_closed == True
+    
+#     return is_closed
+
+#     #difficult!
+
+    
+    
+# initial_string = "[x * (y + z)]"
+
+# print(is_valid_parentheses(initial_string))
+
+#W11 D5 T1
+# from datetime import datetime, timedelta
+
+# dt = datetime(2026, 3, 27, 14, 45, 30)
+# print(dt.year) #2026
+# print(dt.hour) #14
+# print(dt.minute) #45
+# print(dt.date()) #2026-03-27
+# print(dt.time()) #14:45:30
+
+
+# dt = datetime(2026, 3, 27, 9, 0, 0)
+# delta = timedelta(days=2, hours=3, minutes=30)
+# result = dt + delta #2026-03-29 12:30
+# print(result.day) #29
+# print(result.hour) #12
+# print(result.minute) #30
+
+
+# td1 = timedelta(hours=2, minutes=30)
+# td2 = timedelta(hours=1, minutes=45)
+# diff = td1 - td2 #
+# print(diff.seconds) #45 mins * 60 - WHAT THE FUCK, WHY WOULD I EVEN REMEMBER THAT?
+# print(diff.total_seconds()) #same, stupid, retarded question - humans are not meant to be living calculators
+
+
+# dt = datetime(2026, 3, 27, 9, 30, 0)
+# print(dt.strftime("%Y-%m-%d")) #2026-03-27
+# print(dt.strftime("%H:%M:%S")) #09:30:00
+# print(dt.strftime("%d/%m/%Y %H:%M")) #27/03/2026 9:30
+
+
+#W11 D5 T2
+
+# from datetime import datetime, time
+
+# s = "2026-03-27 09:30:00"
+# dt = datetime.strptime(s, "%Y-%m-%d %H:%M:%S")
+# print(dt.year) #2026
+# print(dt.minute) #30
+# print(type(dt).__name__) #datetime
+
+
+# from datetime import time
+
+# t1 = time(9, 0)
+# t2 = time(17, 30)
+# t3 = time(10, 15)
+
+# print(t1 < t3 < t2) #True
+# print(t3 > t2) #False
+# print(t1 == time(9, 0, 0)) #True
+
+
+# from datetime import date, datetime
+
+# d1 = date(2026, 3, 27)
+# d2 = date(2026, 3, 1)
+# delta = d1 - d2
+# print(delta.days) #26
+# print(type(delta).__name__) #timedelta
+
+
+# print(datetime.now())
+# print(datetime.today())
+
+#W11 D5 T3
+
+# try:
+#     x = int("abc")
+# except TypeError:
+#     print("TypeError")
+# except ValueError:
+#     print("ValueError")
+# except Exception:
+#     print("Exception")
+
+#ValueError
+
+# def f():
+#     try:
+#         return 1
+#     finally:
+#         return 2
+
+# print(f()) #2
+
+
+# x = 0
+# try:
+#     x = 1
+#     raise RuntimeError
+#     x = 2
+# except RuntimeError:
+#     x += 10
+# else:
+#     x += 100
+# finally:
+#     x += 1000
+
+# print(x) #1011
+
+
+
+# class MyError(Exception):
+#     pass
+
+# class SpecificError(MyError):
+#     pass
+
+# try:
+#     raise SpecificError("oops")
+# except MyError as e:
+#     print(type(e).__name__)
+
+#SpecificError
+
+
+#W11 D5 T4
+# class A:
+#     def __init__(self):
+#         self.x = 1
+
+# class B(A):
+#     def __init__(self):
+#         super().__init__()
+#         self.x += 10
+
+# class C(A):
+#     def __init__(self):
+#         super().__init__()
+#         self.x += 100
+
+# class D(B, C):
+#     pass
+
+# d = D()
+# print(d.x) #111
+
+
+
+# class Counter:
+#     count = 0
+#     def __init__(self):
+#         Counter.count += 1
+
+# a = Counter()
+# b = Counter()
+# c = Counter()
+# print(Counter.count) #3
+# print(a.count) #3
+
+
+
+# class A:
+#     def hello(self):
+#         return "A"
+
+# class B(A):
+#     pass
+
+# class C(A):
+#     def hello(self):
+#         return "C"
+
+# class D(B, C):
+#     pass
+
+# print(D().hello())
+
+#MRO: D -> B -> C -> A
+#Output: C
+
+
+#W11 D5 T5
+
+# def gen(n):
+#     for i in range(n):
+#         yield i * 2
+
+# g = gen(4)
+# print(next(g)) #0
+# print(next(g)) #2
+# print(list(g)) #[4, 6]
+# print(list(g)) #[]
+
+
+# def gen():
+#     yield 1
+#     yield from range(2, 5)
+#     yield 5
+
+# print(list(gen())) #[1, 2, 3, 4, 5]
+
+
+# class Counter:
+#     def __init__(self, stop):
+#         self.current = 0
+#         self.stop = stop
+
+#     def __iter__(self):
+#         return self
+
+#     def __next__(self):
+#         if self.current >= self.stop:
+#             raise StopIteration
+#         self.current += 1
+#         return self.current
+
+# print(list(Counter(4)))   #[1, 2, 3, 4]
+
+
+# g = (x for x in range(10) if x % 3 == 0)
+# print(next(g)) #0
+# print(next(g)) #3
+# print(list(g)) #[6, 9]
+
+
+#W11 D5 T6
+
+# fns = []
+# for i in range(3):
+#     fns.append(lambda: i * 2)
+
+# print([f() for f in fns]) #[4, 4, 4]
+
+
+# fns = [lambda i=i: i * 2 for i in range(3)]
+# print([f() for f in fns]) #[0, 2, 4]
+
+# from functools import reduce
+
+# nums = [1, 2, 3, 4, 5]
+# result = reduce(lambda acc, x: acc + x, nums, 10)
+# print(result) #25
+
+# data = [3, 1, 4, 1, 5, 9]
+# result = sorted(data, key=lambda x: -x)
+# print(result[:3]) #[9, 5, 4]
+
+
+#PCAP Exam final prep
+# g = (x ** 2 for x in range(6))
+# print(next(g))
+# print(next(g))
+# print(sum(g))
+
+# def gen():
+#     return
+#     yield 1
+#     yield 2
+
+
+# def gen():
+#     yield
+#     return
+#     yield 1
+
+
+# g = gen()
+# print(type(g).__name__)
+# print(list(g))
+
+
+
+# with open("test.txt", "w") as f:
+#     f.write("hello")
+
+# with open("test.txt", "r") as f:
+#     print(repr(f.read(3))) #hel
+#     print(repr(f.read(10)))  #lo
+
+
+# x = 'global'
+
+# def f():
+#     print(x)
+#     x = 'local'
+
+# f()
+
+
+# from datetime import date
+
+# d1 = date(2026, 1, 1)
+# d2 = date(2026, 3, 28)
+# delta = d2 - d1
+# print(delta.days)
+# print(type(delta).__name__)
+
+# import platform
+# print(platform.platform())
+# print(platform.uname())
+
+
+# import sys
+# b1 = type(dir(sys)) is str
+# b2 = type(sys.path[-1]) is str
+# print(b1 and b2)
+
+
+
+# m = 0
+
+# def foo(n):
+#     global m
+#     assert m != 0
+#     try:
+#         return 1/n
+#     except ArithmeticError:
+#         raise ValueError
+    
+# try:
+#     foo(0)
+# except ArithmeticError:
+#     m += 2
+# except:
+#     m += 1
+# print(m) #1
+
+
+# d = {'1': '1', '2': '2'}
+# try:
+#     d['1'] = d['3']
+# except BaseException as error:
+#     print(type(error))
+    
+#KeyError
+
+
+# x = 'python'.find('')
+# x = 'python'.rindex('th') #print(x) #2
+# #x = sort('python') #WRONG, NOT A STRING METHOD!
+# #x ='python'.sorted() - WRONG as well
+
+
+# the_string = ',,'.join(('alpha', 'omega'))
+# the_list = the_string.split(',')
+# print(',' in the_list) #False
+# print(the_list)
+
+
+
+
+# class A:
+#     __VarA = 1
+
+#     def get(self):
+#         return self.__VarA
+
+# class B(A):
+#     __VarA = 2
+
+#     def get(self):
+#         return self.__VarA
+
+# class C(B):
+#     __VarA = 3
+
+# obj_a = A()
+# obj_b = B()
+# obj_c = C()
+
+
+# print(hasattr(B, 'get')) #True
+# print(obj_c.get() == 2) #True
+# print(isinstance(obj_b, C)) #False
+# print(C._C__VarA == 2) #False
+
+# x = 8 ** (1 / 3)
+# y = 2. if x < 2.3 else 3.
+# print(y) #2.0
+
+
+# def foo(x, y, z):
+#     return x(y) - x(z)
+
+# print(foo(lambda x: x % 2, 2, 1))
+
+
+# my_list = [i for i in range(5)]
+# m = [my_list[i] for i in range(4, 0, -1) if my_list[i] % 2 != 0]
+# print(m)
+
+
+# import random 
+
+# a = random.random()
+# b = random.uniform(0, 10)
+# c = random.randint(0, 10)
+# d = random.randrange(0, 3)
+# e = random.choice(list(range(5)))
+# f = random.sample(list(range(5)), k=1)
+
+# print(d, type(f))
+
+#W12 D1 T1
+
+# try:
+#     {}['missing']
+# except BaseException as e:
+#     print(type(e).__name__) #KeyError - despite the handle
+#     print(str(e)) #'missing'
+    
+    
+# try:
+#     raise FileNotFoundError("gone")
+# except OSError as e:
+#     print(e) #gone
+#     print(type(e).__name__) #FileNotFoundError
+#     print(isinstance(e, OSError)) #True
+#     print(isinstance(e, FileNotFoundError)) #True
+    
+    
+# try:
+#     int("abc")
+# except Exception as e:
+#     print(e) #invalid literal for int() with base 10: 'abc'
+#     print(type(e) is ValueError) #True
+#     print(type(e) is Exception) #False
+
+
+# try:
+#     1 / 0
+# except ArithmeticError as err:
+#     print(type(err) is ArithmeticError) #False
+#     print(type(err) is ZeroDivisionError) #True
+#     print(type(err).__name__ == 'ArithmeticError') #False
+#     print(isinstance(err, ZeroDivisionError)) #True
+
+
+#W12 D1 T2
+
+
+# def foo():
+#     raiseRuntimeError
+
+# foo()
+
+#NameError, undefined
+
+
+# try:
+#     raise IndexError
+# except TypeError:
+#     raise ValueError
+# except:
+#     print("caught") #this is printed
+
+
+# m = 0
+
+# def foo(n):
+#     global m
+#     assert m != 0
+#     try:
+#         return 1/n
+#     except ArithmeticError:
+#         raise ValueError
+    
+# try:
+#     foo(0)
+# except ArithmeticError:
+#     m += 2
+# except:
+#     m += 1
+# print(m) #1? Why???
+
+#W12 D1 T3
+# - `print(e)` calls `__str__`
+# - `str(e)` calls `__str__`
+# - `repr(e)` calls `__repr__` (default: `ClassName(args)`)
+# - `print(type(e).__name__)` → class name string
+
+
+# class AppError(Exception):
+#     def __init__(self, msg):
+#         super().__init__(msg)
+#         self.code = 500
+
+#     def __str__(self):
+#         return f"AppError[{self.code}]"
+
+# try:
+#     raise AppError("server down")
+# except AppError as e:
+#     print(e) #AppError[500]
+#     print(str(e)) #AppError[500]
+#     print(e.args[0]) #server down - THIS IS VERY UNINTUITIVE
+#     print(type(e).__name__) #AppError
+#     print(e.args) #('server down',) 
+
+
+
+# class AppError(Exception):
+#     def __init__(self, msg):
+#         self.code = 500          # no super().__init__()
+#     def __str__(self):
+#         return f"AppError[{self.code}]"
+
+# try:
+#     raise AppError("server down")
+# except AppError as e:
+#     print(e) #AppError[500]
+#     print(e.args) #('server down',)
+
+
+# class InvalidPriceError(Exception):
+#     def __init__(self, price: float, reason: str):
+#         self.reason = reason
+#         self.price = price
+    
+#     def __str__(self):
+#         return f'Invalid price {self.price}: {self.reason}'
+    
+
+# def mock_func(a):
+#     if a < 0:
+#         raise InvalidPriceError((a), 'Lol')
+
+# mock_func(-1)
+
+
+
+#W12 D1 T4
+
+
+# class A:
+#     x = 10
+#     def __init__(self):
+#         self.y = 20
+
+# class B(A):
+#     pass
+
+# class C(A):
+#     pass
+
+# class D(B, C):
+#     pass
+
+# d = D()
+
+# print(D.__bases__) #<class '__main__.B'>, <class '__main__.C'>
+# print(d.__class__)
+# print(D.__mro__) #(<class '__main__.D'>, <class '__main__.B'>, <class '__main__.C'>, <class '__main__.A'>, <class 'object'>)
+# print(D.__dict__) #{'__module__': '__main__', '__firstlineno__': 12978, '__static_attributes__': (), '__doc__': None}
+# print(A.__dict__) #{'__module__': '__main__', '__firstlineno__': 12967, 'x': 10, '__init__': <function A.__init__ at 0x00000192DF197C40>, '__static_attributes__': ('y',), '__dict__': <attribute '__dict__' of 'A' objects>, '__weakref__': <attribute '__weakref__' of 'A' objects>, '__doc__': None}
+# print(d.__dict__)
+
+#W12 D1 T5 - Lambdas edge cases
+
+# "Cannot return None"              → FALSE — lambdas CAN return None
+# "Cannot be defined without params"→ FALSE — lambda: 42 is valid
+# "Must contain return keyword"     → FALSE — return is implicit
+# "Are anonymous functions"         → TRUE
+# "Can be defined without params"   → TRUE
+
+
+
+# def foo(x, y, z):          # x here is the FUNCTION
+#     return x(y) - x(z)     # x(y) = call that function with y
+
+# print(foo(lambda x: x % 2, 2, 1))
+
+#return foo(2) - foo(1)
+#0 - 1 = -1
+
+
+# 1. lambda: 42               — valid Python? #Yes
+# 2. lambda x: print(x)      — can this return None? #
+# 3. f = lambda: None; f()   — what does f() return?
+# 4. lambda x, y: x + y      — valid (multi-param)?
+# 5. lambda x: return x + 1  — valid Python?
+# 6. result = (lambda x: x**2)(5) — what is result?
+
+# lambda: 42
+# print(lambda: 42)
+
+# x = None
+# f = lambda: None
+# print(f()) #Works propelry
+
+# result = (lambda x: x**2)(5) #25
+# print(result)
+
+# def apply(fn, a, b):
+#     return fn(a) + fn(b)
+
+# print(apply(lambda x: x ** 2, 3, 4)) #fn(3) + fn(4) = 9 + 16 = 25
+# print(apply(lambda x: x % 2, 7, 4)) #fn(7) + fn(4) = 1 + 0 = 1
+
+# def foo(x, y, z):
+#     return x(y) - x(z)
+
+# print(foo(lambda x: x % 2, 2, 1)) # foo(2) - foo(1) = 0 - 1 = -1
+# print(foo(lambda x: x * 3, 5, 2)) # foo(5) - foo(2) = 15 - 6 = 9
+
+#W12 D1 T6
+# range(4, 0, -1) → iterates: 4, 3, 2, 1 (DESCENDING)
+# # Result preserves ITERATION ORDER, not sorted order
+# # If you iterate 4→3→2→1 and pick odds: 3, 1 → output [3, 1] not [1, 3]
+
+
+# #File I/O
+# Default mode    → 'r' (NOT 'w'!)
+# 'w' mode        → truncates all previous content
+# 'a' mode        → appends (safe for logs)
+# 'x' mode        → fails if file already exists
+# 'r+' mode       → read+write, file MUST exist
+
+# my_list = [0, 1, 2, 3, 4]
+# m = [my_list[i] for i in range(4, 0, -1) if my_list[i] % 2 != 0]
+# print(m) #[3, 1]
+
+# evens = [x for x in range(10, 0, -2)]
+# print(evens) #[10, 8, 6, 4, 2]
+
+# squares = [x**2 for x in range(5, 0, -1) if x % 2 == 0]
+# print(squares) #[16, 4]
+
+
+#W12 D1 T7
+
+# 2.          # float: 2.0       ← real exam trap
+# 1_000_000   # int with underscores
+# 0xFF        # hex int: 255
+# 0o77        # octal int: 63
+# 0b1010      # binary int: 10
+# 3+2j        # complex number
+
+#The above cause NO ERRORS whatsoever
+
+# import platform
+# print(platform.platform())     # full platform string: 'Windows-10-...'
+# print(platform.system())        # just OS name: 'Windows'
+# print(platform.uname())         # namedtuple with ALL info — NOT just platform name
+# print(platform.python_version())# Python version: '3.11.4'
+
+# print(type(1_000_000))
+# print(1_000_000) #prints as normal int, 1000000
+
+# x = 8 ** (1/3) #8 ** (1/3) - pierwiastek szescienny z 8 inaczej
+# # print(x) #2.0
+# y = 2. if x < 2.3 else 3.
+# print(y) #2.0
+# print(type(y)) #float
+
+
+#W12 D1 T8 - Name mangling + inheritance traps
+
+# class A:
+#     __x = 1           # stored as _A__x
+#     def get(self): return self.__x   # compiled: self._A__x
+
+# class B(A):
+#     __x = 2           # stored as _B__x
+#     def get(self): return self.__x   # compiled: self._B__x
+
+# class C(B):
+#     __x = 3           # stored as _C__x
+#     # NO get() method defined here!
+    
+# #MRO = C -> B -> A -> object
+# x = C()
+# print(x)
+# print(C.__mro__)
+# print(x.__dict__)
+
+#There is no get() method in C, so the x.get() method resolves to B.get(). In there, self.__x was compiled as self._B__x = 2
+#THIS IS VERY WEIRD AND DIFFICULT, DEFINITELY A SNEAKY TRAP AND WE NEED TO LEARN THIS WELL
+
+
+
+# class A:
+#     __VarA = 1
+#     def get(self): return self.__VarA
+
+# class B(A):
+#     __VarA = 2
+#     def get(self): return self.__VarA
+
+# class C(B):
+#     __VarA = 3
+
+# obj_a = A() #MRO: A
+# obj_b = B() #MRO: B -> A -> obj
+# obj_c = C() #MRO: C -> B -> A -> obj
+
+# print(obj_a.get()) #1
+# print(obj_b.get()) #2
+# print(obj_c.get()) #2 AGAIN, AS THERE'S NO get() method here, so the last get is taken from the B object
+# print(obj_c._C__VarA) #3
+# print(obj_c._B__VarA) #2
+
+
+#hasattr(B, 'get')                  # True
+#obj_c.get() == 2                   # True
+#isinstance(obj_b, C)               # False - obj_b is not an instance of C class, but rather of B
+#C._C__VarA == 3                    # True
+#obj_c._A__VarA == 1                # True
+
+# print(isinstance(obj_b, C)) #False
+# print(isinstance(obj_b, A)) #But as it inherits from A, it's an instance of A as well, True
+
+
+#W12 D2 T1
+
+# x = 0
+
+# def bar(n):
+#     assert n > 0, "must be positive"
+#     try:
+#         return 100 / n
+#     except ZeroDivisionError:
+#         return -1
+
+# try:
+#     result = bar(0)
+# except AssertionError:
+#     x = 1
+# except:
+#     x = 2
+# print(x) #1
+
+
+#bar() is called with 0
+#assertion fails, but it's not handled in the function, so it's propagated outside to the outer try.
+#it's handled there and x is set to 1
+
+# count = 0
+
+# def process(val):
+#     assert isinstance(val, int), "not int"
+#     try:
+#         return val * 2
+#     except TypeError:
+#         return 0
+
+# try:
+#     process("hello")
+# except TypeError:
+#     count = 10
+# except AssertionError:
+#     count = 20
+# except:
+#     count = 30
+# print(count) #20
+
+#process is called with 'hello' string as an argument
+#the assertion fails, and it's not handled in the process function, so it would normally crash the code, but it's in the outer try block instead
+#TypeError is ignored, as it's not the error type raised here
+#It's handled by the except with AssertionError, setting the count to 20
+
+
+# def inner(x):
+#     if x < 0:
+#         raise ValueError("negative")
+#     return x
+
+# def outer(x):
+#     try:
+#         return inner(x) * 2
+#     except TypeError:
+#         return -1
+
+# try:
+#     outer(-5)
+# except ValueError as e:
+#     print("caught:", e)
+# except:
+#     print("bare caught")
+    
+
+#outer is called with -5 as an argument
+#outer calls inner with -5 as an argument in a try block
+#inner does a check and since -5 is lower than 0, it raises ValueError with 'negative'
+#since everything is put in a try/except block with ValueError handling, it prints caught: nagative
+
+
+# m = 0
+
+# def foo(n):
+#     global m
+#     assert n > 0
+#     try:
+#         return 10 / n
+#     except ArithmeticError:
+#         raise RuntimeError("math fail")
+
+# try:
+#     foo(-1)
+# except RuntimeError:
+#     m += 10
+# except AssertionError:
+#     m += 5
+# except:
+#     m += 1
+# print(m)
+
+#foo is called with -1 as an argument
+#foo properly grabs the value of m with global keyword
+#foo runs an assertion for the argument, which fails, as -1 is lower than 0 
+#It's NOT handled by the foo function , as it's put outside the try/except block there, so it propagates to the outside
+#Since the whole foo call is put into a try/except block - there is a chance it will handle that exception
+#It's handled by the except AssertionError handle, putting m at 5
+
+
+#W12 D2 T2
+
+# class Vehicle:
+#     wheels = 4
+#     engine = "V6"
+
+#     def __init__(self, brand, year):
+#         self.brand = brand
+#         self.year = year
+#         self._speed = 0
+
+#     def accelerate(self):
+#         self._speed += 10
+
+# v = Vehicle("Toyota", 2020)
+
+# print('wheels' in Vehicle.__dict__)      #True
+# print('engine' in Vehicle.__dict__)      #True
+# print('accelerate' in Vehicle.__dict__)  #True
+# print('brand' in Vehicle.__dict__)       #False
+# print('brand' in v.__dict__)             #True
+# print('_speed' in v.__dict__)            #True
+# print('wheels' in v.__dict__)            #False
+# print('__init__' in Vehicle.__dict__)    #True
+
+
+# v.accelerate()
+# v.accelerate()
+# print(v.__dict__)    # predict the full output
+
+
+# {'brand': 'Toyota', 'year': 2020, '_speed': 20}
+
+
+# class A:
+#     x = 1
+#     def __init__(self):
+#         self.x = 2       # shadows the class attr
+
+# a = A()
+# print('x' in A.__dict__)    #True
+# print('x' in a.__dict__)    #True
+# print(a.x)                  #2
+# print(A.x)                  #1
+
+
+#W12 D2 T3
+
+# type(obj) is SomeClass    → EXACT match only — ignores inheritance
+# isinstance(obj, SomeClass) → True if obj is SomeClass OR any subclass
+
+# class Animal: pass
+# class Dog(Animal): pass
+# class GuideDog(Dog): pass
+
+# g = GuideDog()
+
+
+# print(type(g) is GuideDog)      # True
+# print(type(g) is Dog)           # False
+# print(type(g) is Animal)        # False
+# print(isinstance(g, GuideDog))  # True
+# print(isinstance(g, Dog))       # True
+# print(isinstance(g, Animal))    # True
+# print(isinstance(g, object))    # True
+
+
+# class X: pass
+# class Y(X): pass
+# obj = Y()
+
+# print(type(obj) is X) #False
+# print(type(obj) is Y) #True
+# print(isinstance(obj, X)) #True
+# print(type(obj) == isinstance(obj, Y)) #False
+
+
+# print(type(42) is int) #True
+# print(type(42) is float) #False
+# print(isinstance(42, (int, float)))  #True
+# print(isinstance(True, int))        #True
+# print(type(True) is int)        #False
+
+#W12 D2 T4
+
+# class Base:
+#     __secret = "base"
+#     def reveal(self):
+#         return self.__secret          # compiled: self._Base__secret
+
+# class Middle(Base):
+#     __secret = "middle"
+#     def reveal(self):
+#         return self.__secret          # compiled: self._Middle__secret
+
+# class Top(Middle):
+#     __secret = "top"
+    
+    
+
+# b = Base()
+# m = Middle()
+# t = Top()
+
+# print(b.reveal())           # 'base'
+# print(m.reveal())           # 'middle'
+# print(t.reveal())           # 'middle' - there's no reveal in Top, so Middle's reveal() runs
+# print(t._Top__secret)       # top
+# print(t._Middle__secret)    # middle
+# print(t._Base__secret)      # base
+
+
+# print(hasattr(Top, 'reveal'))         # False
+# print(hasattr(Top, '_Top__secret'))   # True
+# print(Top.__bases__ == (Middle,))     # True
+# print(Middle in Top.__mro__)          # True
+# print(Base in Top.__mro__)            # True
+# print(len(Top.__mro__))               # 4
+# print(Top.__mro__)
+
+#W12 D2 T5
+
+# class A: pass
+# class B(A): pass
+# class C(A): pass
+# class D(B): pass
+# class E(C, D): pass
+
+# print(E.__bases__)          #C, D
+# print(E.__mro__)            #E -> C -> D -> B -> A -> object
+# print(len(E.__mro__))       # 6
+# print(A in E.__bases__)     # False
+# print(A in E.__mro__)       # True
+# print(B in E.__bases__)     # False
+
+
+# class X: pass
+# class Y(X): pass
+# class Z(X, Y): pass    # ← is this valid? - NO!
+
+#TypeError, this is flase
+
+
+#W12 D2 T6
+# import platform
+# platform.platform()       # 'Windows-10-10.0.19041-SP0' — full string
+# platform.system()         # 'Windows' — just OS name
+# platform.node()           # hostname of machine
+# platform.python_version() # '3.11.4'
+# platform.uname()          # named tuple with ALL: system, node, release, version...
+
+# import os
+# path = os.getcwd()               # current working directory string
+# os.listdir(path)          # list of filenames in directory
+# os.path.exists(path)      # True/False
+# os.path.join('xd', 'pd')        # safe path joining (handles slashes)
+# print(os.path.basename(path))    # last component: '/foo/bar.txt' → 'bar.txt'
+# print(os.path.dirname(path))     # directory part: '/foo/bar.txt' → '/foo'
+# os.sep                    # path separator: '\\' on Windows, '/' on Unix
+# os.name                   # 'nt' on Windows, 'posix' on Unix/Mac
+
+#Which platform funciton returns these?
+# 1. The string `'Windows'` (OS name only, no version)
+# 2. A namedtuple with system, node, release, version, machine, processor
+# 3. The Python version as a string like `'3.11.4'`
+# 4. The full platform description string including version numbers
+
+# 1 - platform.system()
+# 2 - platform.uname()
+# 3 - platform.python_version()
+# 4 - platform.platform()
+
+#True or False about `os`:
+
+# import os
+# # assume running on Windows
+# print(os.name == 'nt')           # True
+# print(os.sep == '\\')            # True
+# print(os.sep == '/')             # False - this is on UNIX
+# print(type(os.getcwd()) is str)  # True
+
+
+# import os
+# path = '/home/user/projects/algo/data/prices.csv'
+# print(os.path.basename(path))   # prices.csv
+# print(os.path.dirname(path))    # /home/user/projects/algo/data
+# print(os.path.exists(path))     # False
+
+
+
+#W12 D2 T7
+
+# # bytes — IMMUTABLE sequence of integers 0-255
+# b = b"hello"
+# b[0]          # 104 (ASCII code of 'h')
+# b[0] = 65     # TypeError! bytes is immutable
+
+# # bytearray — MUTABLE bytes
+# ba = bytearray(b"hello")
+# ba[0] = 72    # OK → bytearray(b'Hello')
+# ba[0]         # 72
+
+# # Creating:
+# bytes(5)              # b'\x00\x00\x00\x00\x00' — 5 zero bytes
+# bytes([72, 101, 108]) # b'Hel' — from int list
+# bytearray(b"abc")     # mutable copy of bytes literal
+
+# # Encoding / decoding:
+# "hello".encode('utf-8')        # b'hello'
+# b"hello".decode('utf-8')       # 'hello'
+
+# b = b"Python"
+# print(b[0])                  # 80 - but I had to check that  - I won't remember it by heart, this shouldn't be the goal of this
+# print(type(b[0]))            # int
+# print(len(b))                # 6
+# b[0] = 80                    # Error!
+
+
+# ba = bytearray(b"Python")
+# ba[0] = 112                  # lowercase 'p' = 112 
+# print(ba)                    # #bytearray(b'python')
+# print(ba.decode('utf-8'))    # python
+
+
+# data = bytearray(b"hello")
+# data.append(33)         # 33 = '!'
+# print(data.decode())    # 'hello!'
+# print(list(data))       # 'h', 'e', 'l', 'l', 'o', '!' #in byte codes, which I don't know and DON'T EXPECT ME TO KNOW THEM BY HEART
+
+
+
+#W12 D3 T1
+
+# str.find(sub)      → returns index or -1  (no exception)
+# str.index(sub)     → returns index or raises ValueError
+# str.count(sub)     → non-overlapping occurrences
+# str.split(sep)     → default sep=None splits on ANY whitespace, strips leading/trailing
+# str.split(' ')     → splits on single space only — '' entries for multiple spaces!
+# str.strip()        → removes BOTH ends
+# str.lstrip()       → left only
+# str.rstrip()       → right only
+# str.replace(a, b)  → replaces ALL occurrences by default
+# str.replace(a, b, n) → replaces at most n occurrences
+
+
+# s = "  hello world  "
+# print(s.strip()) #"hello world"
+# print(s.lstrip()) #"hello world  "
+# print(s.rstrip()) #"  hello world"
+# print(len(s))  #15
+# print(len(s.strip())) #11
+
+
+# s = "a  b  c"
+# print(s.split())    #['a', 'b', 'c']
+# print(s.split(' '))   #['a', '', 'b', '', 'c']
+# print(s.count('a')) #1
+# print(s.find('z')) #-1
+# print(s.index('b')) #3
+
+
+# s = "banana"
+# print(s.replace('a', 'o'))  #bonono
+# print(s.replace('a', 'o', 2)) #bonona
+# print(s.count('a')) #3
+# print(s.count('an')) #2
+
+
+#W12 D3 T2
+
+# \n   → newline
+# \t   → tab
+# \\   → literal backslash
+# \'   → literal single quote (inside single-quoted string)
+# \"   → literal double quote
+# \r   → carriage return (cursor to start of line, does NOT add newline)
+
+# print("hello\rworld")   # 'world' overwrites 'hello' from position 0
+# # Output on most terminals: 'world'
+# # But len("hello\rworld") = 11  — \r is ONE character
+
+
+# print("line1\nline2") #line1(new line)line2
+# print("col1\tcol2") #col1   col2
+# print("back\\slash") #back\slash
+# print(len("a\tb")) #a   b
+# print(len("a\\b")) #a\b
+# print(len("\n")) # '(new line)'
+
+# s1 = '\'' #"'"", 1
+# s2 = "\"" # """, 1
+# s3 = '\\\'' # "\'" 2
+# s4 = "\\\"" # "\""2
+
+# print(len(s1), s1)
+# print(len(s2), s2)
+# print(len(s3), s3)
+# print(len(s4), s4)
+
+
+# print("AAAA\rBB") #BBAA - this is a bit weird
+# print(len("AAAA\rBB")) #7 -- also werid, we count all characters + /r as 1
+
+
+#W12 D3 T3
+# def make_adder(n):
+#     def add(x):
+#         return x + n    # n is captured by reference
+#     return add
+
+# add5 = make_adder(5)
+# print(add5) #funciton memory object
+# print(add5(3))    # 8 — n=5 is still alive in the closure
+
+# def outer():
+#     count = 0
+#     def increment():
+#         nonlocal count
+#         count += 1
+#         return count
+#     return increment
+
+# f = outer()
+# print(f) #function memory object
+# print(f()) #1
+# print(f()) #2
+# print(f()) #3
+
+
+# string = str(1/3)
+# dummy = ''
+# for character in string:
+#     dummy = dummy + character
+# print(dummy[-1])  #3
+# print(dummy)
+
+
+# string = 'REPTILE'[:3:] #REPILE #E + LE
+# print(string) #REP - this is actually weird - it's a confusing pattern, as the second : is there to just deceive us and confuse - WE NEED TO TAKE THIS INTO ACCOUNT
+# string = string[-1] + string[-2::-1]
+# print(string)
+
+
+# def outer():
+#     x = 10
+#     def inner():
+#         x = 20        # creates LOCAL x, does NOT modify outer x
+#         return x
+#     inner()
+#     return x
+
+# print(outer()) #10
+
+
+# funcs = []
+# for i in range(4):
+#     funcs.append(lambda: i)
+
+# print(funcs[0]()) #3
+# print(funcs[2]()) #3
+# print(funcs[3]()) #3
+
+
+# funcs = []
+# for i in range(4):
+#     funcs.append(lambda i=i: i)   # i=i captures current value
+
+# print(funcs[0]()) #0
+# print(funcs[2]()) #2
+# print(funcs[3]()) #3
+
+
+#W12 D3 T4
+# def gen():
+#     yield 1
+#     yield 2
+#     yield 3
+
+# g = gen()
+# print(g) #gen memory object
+# next(g)   # 1
+# next(g)   # 2
+# next(g)   # 3
+# next(g)   # StopIteration raised
+
+
+
+# def gen():
+#     yield 1
+#     return          # legal — causes StopIteration immediately
+#     yield 2         # NEVER reached
+
+# print(list(gen()))    # [1]
+
+# def countdown(n):
+#     while n > 0:
+#         yield n
+#         n -= 1
+
+# list(countdown(3))   # [3, 2, 1]
+
+
+
+# def gen():
+#     print("start")
+#     yield 1
+#     print("middle")
+#     yield 2
+#     print("end")
+
+# g = gen() #start
+# print(next(g)) #1
+# print(next(g)) #middle\n2
+# print("done") #done
+
+# def gen(flag):
+#     yield 1
+#     if flag:
+#         return
+#     yield 2
+#     yield 3
+
+# print(list(gen(True))) #[1]
+# print(list(gen(False))) #[1, 2, 3]
+
+
+
+
+# def evens_up_to(n):
+#     i = 0
+#     while i <= n:
+#         if i % 2 == 0:
+#             yield i
+#         i += 1
+
+# result = list(evens_up_to(8)) #[0, 2, 4, 6, 8]
+# print(result) #[0, 2, 4, 6, 8]
+# print(sum(evens_up_to(6))) #12
+
+
+#W12 D3 T5
+# hasattr(obj, 'name')          # checks the full MRO chain — inherited counts!
+# 'name' in SomeClass.__dict__  # checks ONLY this class's own namespace
+
+
+# class A:
+#     def foo(self): pass
+
+# class B(A): pass
+
+# hasattr(B, 'foo')        # True — inherited from A
+# 'foo' in B.__dict__      # False — not defined IN B
+# 'foo' in A.__dict__      # True — defined IN A
+
+
+# class Shape:
+#     color = 'red'
+#     def area(self): return 0
+
+# class Circle(Shape):
+#     def __init__(self, r):
+#         self.radius = r
+#     def area(self):
+#         return 3.14 * self.radius ** 2
+
+# c = Circle(5)
+
+# print(hasattr(c, 'color'))           # True
+# print(hasattr(c, 'area'))            # True
+# print(hasattr(c, 'radius'))          # True
+# print('color' in Circle.__dict__)    # False
+# print('area' in Circle.__dict__)     # True
+# print('area' in Shape.__dict__)      # True
+# print('radius' in Circle.__dict__)   # False - this is very tricky! It's not instantiated so it's not present there
+# print('radius' in c.__dict__)        # True
+
+
+# print('color' in c.__dict__)         # False
+# print('color' in Shape.__dict__)     # True
+# print(hasattr(Shape, 'area'))        # True
+# print(hasattr(Circle, 'color'))      # True
+
+
+#W12 D3 T6
+
+# def f(x=[]):
+#     x.append(1)
+#     return x
+
+# print(f()) #[1]
+# print(f()) #[1, 1]
+# print(f()) #[1, 1, 1]
+
+
+# def gen():
+#     yield 1
+#     yield 2
+#     yield 3
+    
+# x = gen()
+# print(x())
+
+#W12 D3 T7
+
+# def f():
+#     try:
+#         return "try"
+#     except:
+#         return "except"
+#     finally:
+#         return "finally"
+
+# print(f()) #finally
+
+# def g():
+#     try:
+#         return 10
+#     finally:
+#         print("cleanup") #cleanup
+
+# print(g()) #10
+
+
+
+# def h():
+#     try:
+#         raise RuntimeError("boom")
+#     except RuntimeError:
+#         return "caught"
+#     finally:
+#         print("always")
+
+# print(h())
+#always, caught
+
+
+#W12 D4 T1
+# s = 'REPTILE'
+# print(s[:3:]) #REP
+# print(s[:3:1])     #REP     
+# print(s[::2])          #RPIE
+# print(s[::-1])        #ELITPER
+# print(s[-1] + s[-2::-1])  #E + LITPER [od drugiej litery, do tyłu]
+
+# s = 'PYTHON'
+# print(s[-1] + s[-2::-1])  #N + OHTYP -> NOHTYP
+# print(s[2:5]) #THO
+# print(s[2:5:])    #THO        
+# print(s[1::2])     #YHN   
+# print(s[-3:])      #HON 
+
+# s = 'abcdef'
+# print(s[-1]) #f
+# print(s[-3:-1]) #de
+# print(s[-3::1])    #def
+# print(s[-1:-4:-1])  #fed
+
+
+#W12 D4 T2
+
+# s = "banana"
+# print(s.find('a'))     # 1
+# print(s.rfind('a'))    # 5
+# print(s.index('a'))    # 1
+# print(s.rindex('a'))   # 5
+# print(s.find('z'))     # -1
+# print(s.rfind('z'))    # -1
+
+# s = "hello"
+# print(s.index('l'))    # 2
+# print(s.rindex('l'))   # 3
+
+# try:
+#     print(s.index('z'))
+# except ValueError as e:
+#     print(f"ValueError: {e}") #ValueError: substring not found
+# try:
+#     print(s.rindex('z'))
+# except ValueError as e:
+#     print(f"ValueError: {e}") #ValueError: substring not found
+
+
+#W12 D4 T3
+
+
+# import sys
+# sys.argv          # list of command-line args: argv[0] = script name
+# sys.path          # list of directories Python searches for modules
+# sys.modules       # dict of all currently imported modules (cached)
+# sys.stdin         # standard input stream
+# sys.stdout        # standard output stream
+# sys.stderr        # standard error stream
+# sys.exit(code)    # exit interpreter; code=0 is clean exit
+# sys.version       # Python version string: '3.11.4 (main, ...)'
+# sys.platform      # 'win32', 'linux', 'darwin'
+
+
+# import mymodule          # loads, executes, caches in sys.modules
+# import mymodule          # does NOT reload — returns cached version
+# # State mutations from first import PERSIST on re-import
+
+
+# 1. sys.argv[0] is the first argument passed to the script (not the script name) #FALSE
+# 2. sys.path can be modified at runtime to add new import directories #True
+# 3. import X twice always re-executes the module code #False
+# 4. sys.exit(0) raises SystemExit #True
+# 5. sys.platform returns 'windows' on Windows #False, win32
+# 6. sys.modules is a dictionary #True
+
+
+# import sys
+# print(sys.argv) #practice.py
+# print(sys.argv[0]) #practice.py
+# #print(sys.argv[1]) #IndexError
+# print(len(sys.argv)) #1
+
+
+# import sys
+
+# import os
+# import os    # second import
+# print(len([k for k in sys.modules if 'os' in k]))   # how many 'os'-related entries? #2
+# print('os' in sys.modules) #True
+# print(type(sys.modules['os'])) #module
+
+# print(sys.modules)
+
+#W12 D4 T4 - os review
+
+'''import os
+
+os.getcwd()                  # current working directory
+os.chdir(path)               # change working directory
+os.listdir(path)             # list contents of directory
+os.mkdir(path)               # create directory (fails if exists)
+os.makedirs(path)            # create dirs recursively
+os.remove(path)              # delete a FILE
+os.rmdir(path)               # delete an empty DIRECTORY
+os.rename(src, dst)          # rename file or directory
+
+os.path.exists(path)         # True/False
+os.path.isfile(path)         # True only if it's a file
+os.path.isdir(path)          # True only if it's a directory
+os.path.join(a, b, c)        # OS-safe path join
+os.path.split(path)          # returns (dir, filename) tuple
+os.path.splitext(path)       # returns (path_without_ext, ext) tuple
+os.path.basename(path)       # filename only
+os.path.dirname(path)        # directory only
+os.path.abspath(path)        # absolute path
+
+os.sep                       # '\\' Windows, '/' Unix
+os.name                      # 'nt' Windows, 'posix' Unix
+os.linesep                   # '\r\n' Windows, '\n' Unix'''
+
+
+#W12 D4 T5
+
+# def f():
+#     try:
+#         raise ValueError("first") 
+#     except ValueError:
+#         raise RuntimeError("second") 
+#     finally:
+#         print("finally")
+
+# try:
+#     f()
+# except RuntimeError as e:
+#     print(f"caught: {e}")
+    
+    
+# 1. inner raise is carried out by the ValueError handler - it raises RuntimeError (which is caught by the outer try/except block)
+# 2. At the same time, finally is printed, as it always is.
+# 3. The outer except RuntimeError handle catches the Runtime Error and prints caught: second (the msg from the handle + the message from the raise)
+
+#finally
+#caught: second
+
+# def g():
+#     try:
+#         raise KeyError("missing")
+#     except ValueError:
+#         return "value error caught"
+#     finally:
+#         print("cleanup")
+
+# try:
+#     g()
+# except KeyError as e:
+#     print(f"key error: {e}")
+    
+#1 - KeyError is raised but there's no handler for it in the g() function
+#2 - it propagates to the outside and is handler by the KeyError handler there printing - key error: missing
+#3 cleanup is printed, as the last element of the g() function from the finally block
+
+#I'm wrong with the order - it's actualy cleanup -> key error: 'missing'.
+#I don't understand why though - how to determine what is first - the inner finally or the outer message?
+
+
+# try:
+#     try:
+#         1 / 0
+#     except ZeroDivisionError as e:
+#         raise ValueError("bad input") from e
+# except ValueError as e:
+#     print(type(e).__name__)
+#     print(type(e.__cause__).__name__)
+    
+
+#The division raises the handler with ZeroDivisionError, but the handler raises ValueError found in the outer try/except block.
+#The outer block prints ZeroDivisionError , ZeroDivisionError
+#I was FUCKING WRONG AGAIN, BUT WHY!!!
+#In the exam trap there was a KeyError handled by the BaseException handler, but it still fucking printed KeyError there....
+#Here it's different. It's so FUCKING CONFUSING AND EASY TO GET LOST HERE....
+
+
+#W12 D4 T6
+
+# import sys
+
+# print(sys.modules) #dict
+# print(sys.path) #list
+# print(sys.version) #str
+# print(sys.platform) #literal string
+
+
+#W12 D4 T7
+
+# ', '.join(['a', 'b', 'c'])      # 'a, b, c' — separator is the string, not argument
+# 'hello'.startswith('he')        # True
+# 'hello'.endswith('lo')          # True
+# 'hello'.startswith(('he', 'wo'))  # True — accepts tuple of prefixes!
+
+
+# words = ['Python', 'is', 'great']
+# print(' '.join(words)) #Python is great
+# print('-'.join(words)) #Python-is-great
+# print(''.join(words)) #Pythonisgreat
+# print(', '.join(str(i) for i in range(5))) #0, 1, 2, 3, 4
+
+# s = "hello.py"
+# print(s.startswith('hello')) #True
+# print(s.endswith('.py')) #True
+# print(s.endswith(('.py', '.txt', '.csv')))  #True
+# print(s.startswith(('foo', 'bar', 'hello'))) #True
+
+# files = ['data.csv', 'model.py', 'notes.txt', 'train.py']
+# py_files = [f for f in files if f.endswith('.py')]
+# print(py_files) #['model.py', 'train.py']
+# print(', '.join(py_files)) #'model.py, train.py'
+
+#W12 D5 T1
+'''str comparisons review
+
+Comparison is character by character using Unicode ordinal (ord()) values.
+First differing character determines the result.
+If one string runs out of characters first → shorter string is "less than".
+
+'A'–'Z' = 65–90     (uppercase)
+'a'–'z' = 97–122    (lowercase)
+'0'–'9' = 48–57     (digits)
+
+D < U < L
+
+Rules:
+  digits < uppercase < lowercase
+  'A' < 'B' < ... < 'Z' < ... < 'a' < 'b' < ... < 'z'
+  'a' > 'A'   (97 > 65)
+  '9' < 'A'   (57 < 65)
+  
+Examples:
+
+'abc' vs 'abd'
+  'a'=='a' → tie, next
+  'b'=='b' → tie, next
+  'c' < 'd' → 'abc' < 'abd'
+
+'aa' vs 'aaa'
+  'a'=='a' → tie, next
+  'a'=='a' → tie, next
+  left runs out → 'aa' < 'aaa'
+'''
+
+# print('abc' < 'abd')        # True
+# print('aa' < 'aaa')         #  True
+# print('aa' > 'aaa')         # False
+# print('abc' == 'abc')       # True
+# print('A' < 'a')            # True
+# print('Z' < 'a')            # True
+# print('9' < 'A')            # True
+# print('banana' > 'apple')   # True
+# print('Python' > 'python')  # False
+
+# 'z', 'A', '9', 'aa', 'aA', 'AA', 'Aa'
+
+# #from lowest to highest:
+
+# '9', 'A', 'AA', 'Aa', 'aA', 'aa', 'z'
+# x = ['z', 'A', '9', 'aa', 'aA', 'AA', 'Aa']
+# print(sorted(x))
+
+
+# words = ['banana', 'Apple', 'cherry', 'apple', 'Banana']
+# print(sorted(words))   #'Apple', 'Banana', 'apple', 'banana', 'cherry'
+
+
+#W12 D5 T2
+
+# def f():
+#     try:
+#         int("abc")
+#     except ValueError as original: #cause
+#         raise TypeError("bad type") from original #raised
+
+# try:
+#     f()
+# except TypeError as e:
+#     print(type(e).__name__)            # TypeError
+#     print(type(e.__cause__).__name__)  # ValueError
+#     print(str(e))                      # bad type
+#     print(str(e.__cause__))            # Value Error's message
+
+# try:
+#     try:
+#         1/0
+#     except ZeroDivisionError: #triggered
+#         raise RuntimeError("failed")   #causes this
+# except RuntimeError as e: #triggered
+#     print(type(e).__name__) #RuntimeError
+#     print(e.__cause__)       #None
+#     print(e.__context__)     #division by zero - this is weird though - i hope there will be no such examples
+
+#W12 D5 T3 - outer except vs finally order trap
+
+# finally belongs to the function it's WRITTEN IN.
+# It runs before control leaves that function — whether via return, raise, or fall-through.
+# The outer caller only gets control AFTER the inner function is done (including its finally).
+
+# def inner():
+#     try:
+#         raise IndexError #1. raised
+#     except ValueError:
+#         print("inner except")
+#     finally:
+#         print("inner finally") #2. printed, as we're going out of the inner function now, as the inexerror is not handled here
+
+# try:
+#     inner() 
+# except IndexError: #raised
+#     print("outer except") #printed
+    
+#inner finally
+#outer except
+
+
+# def process():
+#     try:
+#         return "ok" #1. returned
+#     finally:
+#         print("process finally") #2. still printed
+
+
+# result = process() #process finally - it prints first
+# print(result) #ok
+
+
+# def compute():
+#     try:
+#         return "try result"
+#     finally:
+#         return "finally result"   
+
+# print(compute()) #finally result
+
+
+# def a():
+#     try:
+#         raise RuntimeError #1. raised and propagated outside
+#     finally:
+#         print("a-finally") #2 printed first, as we're leaving A
+
+# def b():
+#     try:
+#         a() 
+#     except RuntimeError: #3. raised, as we're handling the RuntimeError from a() which propagates to the outside
+#         print("b-except") #4. printed
+#     finally:
+#         print("b-finally") #5. printed
+
+# b()
+
+
+#W12 D5 T4 - ABCD
+
+
+'''
+**Q1.** `type(e)` when catching `FileNotFoundError` with `except OSError` returns:
+- A: `OSError`
+- B: `FileNotFoundError`
+- C: `Exception`
+- D: Depends on how it was raised
+
+B
+
+
+**Q2.** `'hello'[1:4:2]` evaluates to:
+- A: `'ell'`
+- B: `'el'`
+- C: `'eo'`  ← careful
+- D: `'hlo'`
+
+B
+
+**Q3.** Which is True about `__bases__`?
+- A: Contains the full MRO chain
+- B: Contains only direct parent classes
+- C: Is a list, not a tuple
+- D: Always contains `object` as the first element
+
+B
+
+**Q4.** `'banana'.rindex('a')` returns:
+- A: `1`
+- B: `3`
+- C: `5`
+- D: `-1`
+
+C
+
+
+**Q5.** What does `sys.exit(1)` raise?
+- A: `RuntimeError`
+- B: `SystemExit`
+- C: `ExitError`
+- D: Nothing — it silently exits
+
+B
+
+
+**Q6.** `isinstance(True, int)` is:
+- A: `False` — bool is not int
+- B: `True` — bool is a subclass of int
+- C: `TypeError`
+- D: Depends on Python version
+
+B
+
+**Q7.** `os.path.split('/foo/bar.txt')` returns:
+- A: `['/foo', 'bar.txt']`
+- B: `('/foo', 'bar.txt')`
+- C: `('/foo/bar', '.txt')`
+- D: `('/foo/bar.txt', '')`
+
+B
+
+**Q8.** `lambda: 42` is:
+- A: SyntaxError — lambda needs parameters
+- B: Valid — returns 42 when called
+- C: Valid — but always returns None
+- D: Valid — but cannot be assigned to a variable
+
+B
+
+**Q9.** After `raise ValueError("x") from KeyError("y")`, caught as `e`:
+- `type(e).__name__` is `'ValueError'` — True or False?
+- `e.__cause__` is `None` — True or False?
+- `type(e.__cause__).__name__` is `'KeyError'` — True or False?
+
+True, False, True
+
+**Q10.** `'aa' > 'aaa'` is:
+- A: `True`
+- B: `False`
+- C: `TypeError`
+- D: Depends on locale
+
+B
+
+**Q11.** `[x for x in range(5, 0, -1) if x % 2 == 0]` gives:
+- A: `[2, 4]`
+- B: `[4, 2]`
+- C: `[2, 4, 0]`
+- D: `[]`
+
+B
+
+**Q12.** `hasattr(Child, 'method')` where `method` is only defined in `Parent(Child inherits from)`:
+- A: `False` — not defined in Child
+- B: `True` — inherited
+- C: `AttributeError`
+- D: Depends on the method type
+
+A
+
+
+**Q13.** `b"hello"[0]` returns:
+- A: `'h'`
+- B: `104` (int)
+- C: `b'h'`
+- D: `TypeError`
+
+B
+
+**Q14.** Default mode of `open('file.txt')`:
+- A: `'w'`
+- B: `'a'`
+- C: `'r'`
+- D: `'x'`
+
+C
+
+
+**Q15.** Which correctly imports platform and gets the OS name string only (e.g., `'Windows'`):
+- A: `platform.platform()`
+- B: `platform.uname()`
+- C: `platform.system()`
+- D: `platform.os()`
+
+C
+
+
+**Q16.** Name mangling: `class Foo` with `__x = 1` — the attribute is stored as:
+- A: `__x`
+- B: `_x`
+- C: `_Foo__x`
+- D: `Foo__x`
+
+C
+
+**Q17.** `nonlocal x` inside a nested function:
+- A: Makes `x` global
+- B: Allows writing to the enclosing (non-global) scope's `x`
+- C: Creates a new local `x`
+- D: Is only valid if `x` is a list or dict
+
+B
+
+**Q18.** A generator function with `yield` — when is its body first executed?
+- A: When the function is defined
+- B: When the function is called (returns generator object)
+- C: When `next()` is first called on the returned generator
+- D: When the generator is assigned to a variable
+
+C
+
+**Q19.** `os.name` on Windows returns:
+- A: `'windows'`
+- B: `'win32'`
+- C: `'nt'`
+- D: `'Windows'`
+
+C
+
+**Q20.** `'Python'[0] > 'python'[0]` is:
+- A: `True`
+- B: `False`  ← 'P'=80, 'p'=112
+- C: `TypeError`
+- D: Depends on encoding
+
+B
+
+'''
+#W12 D5 T5 - string comparisons
+
+# print('abc' < 'b')         # True
+# print('ABC' < 'abc')       # True
+# print('abc' < 'abcd')      # True
+# print('abcd' < 'abce')     # True
+# print('1python' < 'Python') # True
+# print('' < 'a')            # True
+
+
+# items = ['cherry', 'Apple', 'banana', 'CHERRY', '1apple']
+# print(sorted(items)) # ['1apple', 'Apple', 'CHERRY', 'banana', 'cherry']
+
+# print(min('a', 'A', '1', 'z')) #1
+# print(max('a', 'A', '1', 'z')) #z
+
+
+#W12 D5 T7 
+
+# class MyError(Exception):
+#     def __init__(self, msg):
+#         self.msg = msg          # no super().__init__()
+#     def __str__(self):
+#         return f"MyError: {self.msg}"
+
+# try:
+#     raise MyError("oops")
+# except MyError as e:
+#     print(e) #MyError: oops
+#     print(e.args) #('oops',)
+    
+
+
+# class A:
+#     __v = 10
+#     def get(self): return self.__v
+
+# class B(A):
+#     __v = 20
+#     def get(self): return self.__v
+
+# class C(B):
+#     __v = 30
+
+# obj_c = C()
+# print(obj_c.get()) #20
+
+
+# def gen():
+#     yield 1
+#     yield 2
+#     return
+#     yield 3
+
+# print(list(gen())) #[1, 2]
+
+# m = 0
+# def foo(n):
+#     global m
+#     assert n > 0 #1. AssertionError, unhandled in foo, propagates to the outside
+#     try:
+#         return 10 / n
+#     except ArithmeticError:
+#         raise RuntimeError
+
+# try:
+#     foo(0) 
+# except RuntimeError:
+#     m = 10
+# except AssertionError: #2. Handled here
+#     m = 5 #sets the value to 5
+# except:
+#     m = 1
+    
+    
+# print(m) #5
+
+
+# class Parent:
+#     def __init__(self):
+#         self.__x = 10
+
+# class Child(Parent):
+#     def __init__(self):
+#         super().__init__()
+#         self.__x = 99
+
+#     def show(self):
+#         print(self._Parent__x)
+#         print(self._Child__x)
+
+# Child().show() #10, 99
+
+# import sys
+# print(sys.modules)
+
+
+# def risky():
+#     raise ValueError("inner")
+
+# try:
+#     risky()
+# except ValueError as e:
+#     raise RuntimeError("outer") from e
+#
+
+#W13 D1 T1 - custom __str__ on exceptions, predicting outputs
+
+'''
+print(e)  →  calls e.__str__()
+str(e)    →  calls e.__str__()
+repr(e)   →  calls e.__repr__() — default is ClassName(args)
+e.args    →  tuple from super().__init__() — unaffected by __str__
+'''
+
+
+# class AppError(Exception):
+#     def __init__(self, code, msg):
+#         super().__init__(msg)
+#         self.code = code
+
+#     def __str__(self):
+#         return f"[{self.code}] error occurred"
+
+# try:
+#     raise AppError(404, "not found")
+# except AppError as e:
+#     print(e)              #[404] error occurred
+#     print(str(e))         #[404] error occurred
+#     print(repr(e))        #code: 404
+#     print(e.args)         #code: 404
+#     print(e.code)         # 404
+    
+    
+
+# class AppError(Exception):
+#     def __init__(self, code, msg):
+#         super().__init__(msg)
+#         self.code = code
+
+# try:
+#     raise AppError(404, "not found")
+# except AppError as e:
+#     print(e)              #'not found'
+#     print(e.args)         #('not found', ) #THIS FEELS STILL SUPER FUCKING DIFFICULT...
+
+
+#W13 D1 T2
+'''
+Mode   | Creates? | Truncates? | Pointer start | Read? | Write?
+'r'    | No (fail)| No         | Beginning     | Yes   | No
+'w'    | Yes      | Yes        | Beginning     | No    | Yes
+'a'    | Yes      | No         | END           | No    | Yes
+'x'    | No(fail) | No         | Beginning     | No    | Yes  ← exclusive create
+'r+'   | No (fail)| No         | Beginning     | Yes   | Yes  ← read+write, no truncate
+'w+'   | Yes      | Yes        | Beginning     | Yes   | Yes  ← truncates!
+'a+'   | Yes      | No         | END (writes)  | Yes   | Yes  ← writes always at end
+'''
+
+# 1. open('f', 'r+') truncates the file - NO
+# 2. open('f', 'w+') truncates the file - Yes
+# 3. open('f', 'a+') allows reading # Yes
+# 4. open('f', 'a') allows reading #No
+# 5. open('f', 'r+') raises an error if the file doesn't exist #Yes
+# 6. open('f', 'x') raises FileExistsError if file already exists #Yes
+# 7. open('f', 'a') always writes at the end, regardless of seek() #Yes
+# 8. open('f') is the same as open('f', 'r') #Yes
+
+
+# 1. Read + write, no truncate, pointer at start, file must exist  → r+
+# 2. Write only, always appends, creates if missing                → a
+# 3. Read + write, truncates first, creates if missing             → w+
+# 4. Exclusive create, fails if exists                             → x
+# 5. Read + write + append, writes always go to end               → a+
+
+
+
+#W13 D1 T3 - random module
+
+'''import random
+random.seed(n)          # set seed → reproducible sequence
+random.random()         # float in [0.0, 1.0)  — NEVER >= 1
+random.randint(a, b)    # int in [a, b] inclusive — CAN return b
+random.choice(seq)      # random element from non-empty sequence
+random.sample(seq, k)   # k unique elements from seq, returns list
+random.shuffle(lst)     # shuffles list IN PLACE, returns None
+
+random.seed(1); v1 = random.random()
+random.seed(1); v2 = random.random()
+v1 == v2   # True — same seed → same sequence
+
+random.random() >= 1   # ALWAYS False — range is [0.0, 1.0)
+random.choice([1,2,3]) >= 1  # ALWAYS True — min value is 1
+len(random.sample([1,2,3], 2)) > 2  # ALWAYS False — len==2
+'''
+
+# import random
+# random.seed(99)
+# a = random.random()
+# random.seed(99)
+# b = random.random()
+
+# print(a == b)                           #True
+# print(a < 1)                            #False
+# print(a >= 0)                           #True
+# print(random.choice([5, 10, 15]) >= 5) #True
+# print(len(random.sample([1,2,3], 2)) == 3)  #False
+
+
+#W13 D1 T4 - PCAP simulation - in tasks.md
+
+# y = lambda x: None
+# print(y(1))
+
+#W13 D1 T5
+
+# class Engine:
+#     horsepower = 200
+#     def start(self): pass
+
+# class Car(Engine):
+#     def __init__(self, brand):
+#         self.brand = brand
+#     def drive(self): pass
+
+# c = Car('Toyota')
+
+
+# print(hasattr(c, 'horsepower'))          #True
+# print(hasattr(c, 'start'))               #True
+# print(hasattr(Car, 'start'))            #True
+# print('start' in Car.__dict__)           #False
+# print('start' in Engine.__dict__)        #True
+# print('horsepower' in Car.__dict__)      #False
+# print('brand' in Car.__dict__)          #False
+# print('brand' in c.__dict__)           #True
+# print('drive' in Car.__dict__)          #True
+
+# > `hasattr(X, 'name')` returns True if `'name'` exists anywhere in the mro
+# > `'name' in X.__dict__` returns True only if `'name'` is defined in a given Class instance
+
+#CD Python tasks - Pandas basics - I didn't paste all of the tasks here, as they're rather similar, but I've pasted some of them to show examples
+#I'll most likely return to pasting all of the tasks here once we start doing more complex Pandas tasks
+
+# import pandas as pd
+# from collections import Counter
+
+# url = "https://drive.google.com/uc?id=1zHvNI4WpLlRm-rvBZxKKUlYls_UuGHFv"
+# df = pd.read_csv(url)
+
+# pd.set_option('display.max_rows', 20)
+# pd.set_option('display.max_columns', None)
+# print(df.describe())
+# s = df['price']
+# print(type(s))
+# mini_df=df[['price', 'area', 'rooms_no']]
+# print(mini_df)
+
+# offer_build_type = df['build_type'].iloc[-7]
+# print(offer_build_type)
+
+
+# c = Counter(df['market_type'])
+# print(c)
+# top_market_type = 'secondary'
+
+# import pandas as pd
+# url = "https://drive.google.com/uc?id=10YhzOgkUaOvhAXZIEzRdakgU6uSfKbhR"
+# df = pd.read_excel(url, sheet_name='2021') #tu bardzo ważne to sheet_name!!
+# print(df.head)
+
+# rows = df.shape[0]
+# print(rows)
+
+#W13 D2 T1
+
+'''
+e.args     → a TUPLE. Set by Exception.__init__() via super().__init__(*stuff).
+             Whatever you pass to super().__init__() becomes e.args.
+             If you don't call super().__init__(), e.args = ().
+
+str(e)     → calls __str__. If you defined __str__, that runs.
+print(e)   → same as str(e).
+             If NO __str__ defined, Python falls back to str(e.args[0]) if len==1,
+             or str(e.args) if multiple.
+
+repr(e)    → calls __repr__. Default is: ClassName(arg1, arg2, ...)
+             where the args come from e.args — NOT from __str__.
+             __str__ has ZERO effect on repr().
+'''
+
+# e.args = ('not found',)
+# repr(e) → "AppError('not found')"
+#            ^^^^^^^^  ^^^^^^^^^^^
+#            class     e.args unpacked
+
+# e.args = ('not found', 404)
+# repr(e) → "AppError('not found', 404)"
+
+# e.args = ()   (no super().__init__() called)
+# repr(e) → "AppError()"
+
+
+# class E1(Exception):
+#     def __init__(self, msg):
+#         super().__init__(msg)   # msg goes into e.args
+
+# e = E1("something broke")
+# print(str(e))     # 'something broke'   ← e.args[0] since len==1
+# print(repr(e))    # "E1('something broke')"
+# print(e.args)     # ('something broke',)
+
+
+# class E2(Exception):
+#     def __init__(self, msg):
+#         super().__init__(msg)
+#     def __str__(self):
+#         return "CUSTOM MESSAGE"
+
+# e = E2("something broke")
+# print(str(e))     # 'CUSTOM MESSAGE'        ← __str__ wins
+# print(repr(e))    # "E2('something broke')" ← __str__ has NO effect on repr
+# print(e.args)     # ('something broke',)    ← unaffected by __str__
+
+
+# class E3(Exception):
+#     def __init__(self, code, msg):
+#         super().__init__(code, msg)   # BOTH go into e.args
+
+# e = E3(404, "not found")
+# print(str(e))     # '(404, \'not found\')'  ← multiple args: str(e.args)
+# print(repr(e))    # "E3(404, 'not found')"  ← both args in repr
+# print(e.args)     # (404, 'not found')
+
+
+# class E4(Exception):
+#     def __init__(self, code, msg):
+#         super().__init__(msg)   # only msg goes to super → e.args = (msg,)
+#         self.code = code        # code is just an instance attr, NOT in e.args
+
+# e = E4(404, "not found")
+# print(str(e))     # 'not found'           ← e.args[0]
+# print(repr(e))    # "E4('not found')"     ← only msg in args
+# print(e.args)     # ('not found',)        ← code NOT here
+# print(e.code)     # 404                   ← separate instance attr
+
+
+# class E5(Exception):
+#     def __init__(self, msg):
+#         self.msg = msg          # super() NOT called → e.args = ()
+
+# e = E5("something broke")
+# print(str(e))     # ''                    ← empty args → empty str
+# print(repr(e))    # "E5()"               ← empty args
+# print(e.args)     # ()
+# print(e.msg)      # 'something broke'    ← only reachable as e.msg
+
+
+
+# class PriceError(Exception):
+#     def __init__(self, price, reason):
+#         super().__init__(reason)    # only reason goes to super
+#         self.price = price
+#     def __str__(self):
+#         return f"Bad price {self.price}: {self.args[0]}"
+
+# e = PriceError(-5, "negative")
+# print(str(e)) #Bad price -5: negative
+# print(repr(e)) #PriceError('negative')
+# print(e.args) #('negative',)
+# print(e.price) #-5
+
+
+# class ConnError(Exception):
+#     def __init__(self, host, port, msg):
+#         super().__init__(host, port, msg)   # all three to super
+
+# e = ConnError("localhost", 5432, "timeout")
+# print(str(e)) #('localhost', 5432, 'timeout)
+# print(repr(e)) #ConnError('localhost', 5432, 'timeout)
+# print(e.args) #('localhost', 5432, 'timeout)
+# print(len(e.args)) #3
+
+# class SimpleError(Exception): #this example is very unintuitive still
+#     pass   # no __init__, no __str__
+
+# e = SimpleError("oops")
+# print(str(e)) #oops
+# print(repr(e)) #SimpleError('oops')
+# print(e.args) #('oops',)
+
+# class E(Exception):
+#     def __str__(self):
+#         return 'hi'
+
+# e = E('ignored')
+
+# print(repr(e))
+# print(e.args)
+# print(str(e))
+
+
+#W13 D2 T2
+
+# s = "abracadabra"
+# print(s.find('a'))      #0
+# print(s.rfind('a'))     #10
+# print(s.index('a'))     #0
+# print(s.rindex('a'))    #10
+# print(s.find('z'))      #-1
+# print(s.rfind('z'))     #-1
+# print(s.index('z'))     #valueError
+# print(s.rindex('z'))    #valueError
+
+
+
+#W13 D2 T3
+
+# class X:
+#     __val = 'x'
+#     def show(self): return self.__val
+
+# class Y(X):
+#     __val = 'y'
+#     def show(self): return self.__val
+
+# class Z(Y):
+#     __val = 'z'
+
+# obj = Z()
+# print(obj.show())   #y
+# print(obj._Z__val) #'z'
+# print(obj._Y__val) #'y'
+# print(obj._X__val) #'x'
+
+
+# print(hasattr(Z, 'show'))       #True
+# print('show' in Z.__dict__)     #False
+# print('show' in Y.__dict__)     #True
+# print(Z.__bases__ == (Y,))      #True
+# print(Y in Z.__mro__)           #True
+
+#W13 D2 T4
+
+# result = 0
+# def compute(n):
+#     assert n > 0 #1.This assertion fails inside -> raises AssertionError
+#     try:
+#         return 100 / n
+#     except ZeroDivisionError:
+#         raise RuntimeError("div fail")
+
+# try:
+#     compute(0) # 2. The error is unhandled inside the compute function, so it propagates to the outside
+# except RuntimeError:
+#     result = 1
+# except AssertionError: # 3. This handle handles the AssertionError
+#     result = 2
+# except:
+#     result = 3
+# print(result) #2
+
+
+# result = 0
+# def compute(n):
+#     assert n > 0
+#     try:
+#         return 100 / n
+#     except ZeroDivisionError:
+#         raise RuntimeError("div fail")
+
+# try:
+#     compute(-1) #basically the same as above
+# except RuntimeError:
+#     result = 1
+# except AssertionError:
+#     result = 2
+# except:
+#     result = 3
+# print(result) #2
+
+
+
+# result = 0
+# def compute(n):
+#     assert n > 0 #1. this time the assertion is correct
+#     try:
+#         return 100 / n #This works properly, returning the result (20)
+#     except ZeroDivisionError:
+#         raise RuntimeError("div fail")
+
+# try:
+#     compute(5) 
+# except RuntimeError:
+#     result = 1
+# except AssertionError:
+#     result = 2
+# except:
+#     result = 3
+# print(result) #0, the result is not updated with the result of compute() function
+
+
+#W13 D2 T5
+
+# print('abc' > 'ABC')          # True
+# print('abc' == 'ABC'.lower()) # True
+# print('Z' > 'a')              # False
+# print('' < 'a')               # True
+# print('aa' == 'aa ')          # False
+# print('1abc' < 'abc')         # True
+
+
+# lst = [i for i in range(6)]
+# result = [lst[i] for i in range(5, -1, -1) if lst[i] % 2 == 0]
+# print(result) #[4, 2, 0]
+
+#[lst[5] if lst[5] % 2 == 0] -> X (5 not divided by 2 without extra 1)
+#[lst[4] if lst[4] % 2 == 0] -> 4 
+#-> etc... 2, 0
+
+# result = [x ** 2 for x in range(4, 0, -1) if x % 2 != 0]
+# print(result) #[9, 1]
+
+#W13 D2 T6 - PCAP select two simulation
+
+'''**Q1.** Which expressions always evaluate to True? (Select two)
+```python
+import random
+random.seed(5)
+v = random.random()
+```
+- A: `v >= 1`
+- B: `v < 1`
+- C: `v >= 0`
+- D: `v == 1`
+
+B, C
+
+**Q2.** Which of the following are true about exception classes? (Select two)
+```python
+class AppError(Exception):
+    def __init__(self, msg):
+        super().__init__(msg)
+    def __str__(self):
+        return "app error"
+
+e = AppError("details")
+```
+- A: `str(e) == "app error"`
+- B: `e.args == ()`
+- C: `repr(e) == "app error"`
+- D: `e.args == ("details",)`
+
+A, D
+
+**Q3.** Which expressions evaluate to True? (Select two)
+```python
+class A: pass
+class B(A): pass
+class C(B): pass
+```
+- A: `B in C.__bases__`
+- B: `A in C.__bases__`
+- C: `A in C.__mro__`
+- D: `object in C.__bases__`
+
+A, C
+
+**Q4.** Which are valid Python? (Select two)
+- A: `lambda: 42`
+- B: `lambda x: return x`
+- C: `lambda x, y=0: x + y`
+- D: `lambda x: x if x > 0 else -x`
+
+A, D
+
+**Q5.** What is true about the following code? (Select two)
+```python
+class P:
+    __x = 1
+    def get(self): return self.__x
+
+class Q(P):
+    __x = 2
+
+obj = Q()
+```
+- A: `obj.get() == 1`
+- B: `obj.get() == 2`
+- C: `obj._P__x == 1`
+- D: `obj._Q__x == 1`
+
+A, C
+'''
+
+
+#W13 D2 T7
+
+# try:
+#     {}['missing']
+# except Exception as e:
+#     print(type(e).__name__)           # KeyError
+#     print(isinstance(e, KeyError))    # True
+#     print(isinstance(e, Exception))   # True
+#     print(type(e) is Exception)       # False
+#     print(type(e) is KeyError)        # True
+
+
+#Crappy Data Python tasks
+
+'''
+Jaki jest 99-ty percentyl wartości w kolumnie score?
+
+Użyj notebooka, żeby znaleźć odpowiedź na powyższe pytanie
+i przypisz ręcznie wartość z dokładnością 2 cyfry po przecinku do zmiennej score_99.
+'''
+
+# import pandas as pd
+# import random
+
+# random.seed(42)
+# names = ["Anna", "Piotr", "Kasia", "Tomasz", "Marta", "Jan", "Ola", "Michał"]
+# countries = ["PL", "UK", "US", "DE"]
+# data = []
+# for i in range(20):
+#     row = {
+#         "user_id": i + 1,
+#         "name": random.choice(names),
+#         "age": random.randint(18, 60),
+#         "country": random.choice(countries),
+#         "score": round(random.uniform(0, 100), 2)
+#     }
+#     data.append(row)
+# df = pd.DataFrame(data)
+# x = df.describe(percentiles = [0.99])
+# print(x)
+# score_99 = 84.41
+
+
+
+#Crappy Data Python tasks 
+'''
+Która z kolumn dataframe df zdaje się mieć podejrzane dane?
+
+Użyj notebooka, żeby znaleźć odpowiedź na powyższe pytanie
+i przypisz ręcznie nazwę kolumny do zmiennej suspicious_column.
+'''
+
+# import pandas as pd
+# url = "https://drive.google.com/uc?id=11mTxuLJGLDAbqS71P90hwAgWgZuqozWY"
+# df = pd.read_csv(url)
+# pd.set_option('display.max_columns', None)
+# print(df.shape)
+# print(df.dtypes) 
+# print(df.head(5))
+# print(df.tail(5))
+# print(df.describe(percentiles = [0.05, 0.1, 0.25, 0.50, 0.75, 0.9, 0.95, 0.99]))
+# print(df.describe(include = 'all'))
+
+# suspicious_column = "heating"
+
+
+
+'''
+Uporządkuj nazwy kolumn w dataframe df:
+
+zamień wszystkie litery na małe
+zamień spacje na _
+usuń znaki specjalne (znaki interpunkcyjne, nawiasy itd.)
+Na końcu przypisz zmienione nazwy z powrotem do dataframe df, możesz skorzystać z poniższego schematu:
+
+df.columns = ["col1", "col2", "col3"]
+'''
+
+# import pandas as pd
+# import random
+
+# random.seed(42)
+# data = {
+#     "User ID": [i for i in range(1, 11)],
+#     "First Name": [random.choice(["Anna", "Piotr", "Kasia", "Jan"]) for _ in range(10)],
+#     "Last Name!": [random.choice(["Nowak", "Kowalski", "Wiśniewski"]) for _ in range(10)],
+#     "Age (Years)": [random.randint(18, 60) for _ in range(10)],
+#     "Country-Code": [random.choice(["PL", "UK", "US"]) for _ in range(10)],
+#     "Score 2023": [round(random.uniform(0, 100), 2) for _ in range(10)],
+#     "Score 2024!": [round(random.uniform(0, 100), 2) for _ in range(10)],
+#     "E-mail Address": [f"user{i}@mail.com" for i in range(10)]
+# }
+# df = pd.DataFrame(data)
+
+# new_names = []
+# to_delete = ["-", "!", "(", ")"]
+# for col in df.columns:
+#     col = [char for char in col if char not in to_delete]
+#     col = ''.join(col)
+#     new_col = col.lower()
+#     new_col = new_col.replace(' ', '_')
+#     new_names.append(new_col)
+# df.columns = new_names
+# print(df.columns)
+
+
+
+# string = 'PYTHON'[:3:]
+# string = string[-1] + string[-2::-1] #T + YP
+# print(string) #TYP
+
+# print(len(""""""))
+# print('1' + '2')
+
+# print('a' * 3 > 'a' * 2)
+# print('ABC'.lower() > 'ABC')
+
+
+# the_string = ',,'.join(('left', 'right')) #left,,right
+# the_list = the_string.split(',') #left, ' ', right
+# print(len(the_list)) #3
+
+#W13 D3 T2
+
+# import sys
+# print(sys.path) #LIST
+# print(sys.modules) #DICT
+# print(sys.argv)
+
+# print(type(sys.path) is list) #True
+# print(type(sys.modules) is dict) #True
+# print(isinstance(sys.path, list)) #True
+# print(type(sys.argv) is list) #True
+# print(type(sys.argv[0]) is str) #True
+
+# #Given: script run as `python myscript.py alpha 42`
+
+# import sys
+# print(sys.argv[0])         #myscript.py -> here it's practice.py as I run it in here
+# print(sys.argv[1])         #alpha # here it would be IndexError, same below
+# print(sys.argv[2])         #42
+# print(type(sys.argv[2]))   #str
+# print(len(sys.argv))       #3
+
+# import sys
+# # 'sys' is already imported
+# print('sys' in sys.modules)          #True
+# print('os' in sys.modules)           #False
+# import os
+# print('os' in sys.modules)           #True
+
+
+#W13 D3 T3
+
+'''
+Default __str__(obj)   → '<ClassName object at 0x7f...>'  (NOT the var name, NOT class name alone)
+Default __repr__(obj)  → same as __str__ if __repr__ not defined
+str(obj) == 'obj'      → ALWAYS False (default repr is memory address, not variable name)
+
+When __str__ IS defined: str(obj) calls it, repr(obj) does NOT use it (uses __repr__).
+'''
+
+# class Box:
+#     pass
+
+# b = Box()
+# print(str(b) == 'b')                  #False
+# print(str(b) == 'Box')                #False
+# print('Box' in str(b))                #True <Box object at ....>
+# print('object' in str(b))             #True
+# print(str(b) == repr(b))              #True
+
+
+# class Animal:
+#     def __init__(self, name):
+#         self.name = name
+#     def __str__(self):
+#         return f"Animal({self.name})"
+
+# a = Animal("cat")
+# print(str(a))          #Animal(cat)
+# print(repr(a))         #<main.Animal object at ...>
+# print(str(a) == repr(a))  #False
+
+
+#W13 D3 T4
+
+'''
+lambda           → valid, zero params: lambda: 42
+lambda x:        → must have body: lambda x: x
+lambda x, y=0:   → default args valid: lambda x, y=0: x + y
+lambda *args:    → *args valid: lambda *args: sum(args)
+return keyword   → FORBIDDEN inside lambda body (SyntaxError)
+lambda CAN return None → lambda: None is perfectly valid
+'''
+
+# f1 = lambda: 42 #Valid
+# f2 = lambda x: return x #Invalid
+# f3 = lambda x, y=0: x + y #Valid
+# f4 = lambda x: x if x > 0 else -x #Valid
+# f5 = lambda x, y: x * y #Valid
+# f6 = lambda: None #Valid
+# f7 = lambda x: print(x) #valid
+
+
+# f = lambda: None
+# print(f() is None)    #True
+# print(f() == None)    #True
+# print(bool(f()))      #False
+
+
+#W13 D3 T5 - I/O modes
+
+# 1. Read-only, file must exist, pointer at start:              r
+# 2. Read+write, no truncate, file must exist, pointer at start:  r+
+# 3. Creates/truncates, write-only:                              w
+# 4. Creates/truncates, read+write:                              w+
+# 5. Appends only, creates if missing:                          a
+# 6. Read+write appends, creates if missing:                    a+
+# 7. Exclusive create, fails if file exists:                    x
+
+
+# Assume 'data.txt' already exists with content "hello"
+# f = open('data.txt', 'r+')
+# # Which statements are True?
+# ```
+# - A: `f.read()` works → True
+# - B: `f.write('x')` works → True
+# - C: `f.write('x')` truncates the file first → False
+# - D: The pointer starts at the beginning → True
+# - E: If file doesn't exist, `FileNotFoundError` is raised → True
+
+
+#W13 D3 T6 
+
+# class P:
+#     speed = 100
+#     def move(self): pass
+
+# class Q(P):
+#     def stop(self): pass
+
+# class R(Q):
+#     pass
+
+# r = R()
+
+# print(hasattr(r, 'speed')) #True, full MRO check
+# print(hasattr(r, 'move'))#True, full MRO check - methods also pertrain to this
+
+# s = '--'.join(('a', 'b', 'c'))
+# parts = s.split('-')
+# print(parts)
+# print(len(parts))
+
+
+#W13 D4 T1
+
+# f1 = lambda x: x * 2 #valid
+#f2 = lambda x: if x > 0: x else -x #SyntaxError
+# f3 = lambda x: x if x > 0 else -x #VALID
+#f4 = lambda x: [i for i in range(x)] #valid
+# f5 = lambda x: for i in range(x): print(i) #syntaxerr
+# f6 = lambda x: (x, x * 2) #VALID
+# f7 = lambda x: return x + 1 #SyntaxErorr
+# f8 = lambda x: assert x > 0 #SyntaxErorr
+# f9 = lambda x: print(x) or x #Valid
+# f10 = lambda x, y=[], z=0: x + z #Valid
+
+
+# ops = {
+#     'add': lambda x, y: x + y,
+#     'sub': lambda x, y: x - y,
+#     'mul': lambda x, y: x * y,
+# }
+# print(ops['add'](3, 4)) #7
+# print(ops['mul'](ops['sub'](10, 4), 2)) #12
+
+
+
+#W13 D4 T2
+
+# def outer():
+#     count = 0
+#     def increment():
+#         nonlocal count
+#         count += 1
+#     increment()
+#     increment()
+#     increment()
+#     return count
+
+# print(outer()) #3
+
+
+# def make_counter():
+#     n = 0
+#     def up():   nonlocal n; n += 1
+#     def down(): nonlocal n; n -= 1
+#     def get():  return n
+#     return up, down, get 
+
+# up, down, get = make_counter()
+# up(); up(); up() #1, 2, 3
+# down() #2
+# print(get()) #2
+
+
+# x = 10
+# def outer():
+#     x = 20
+#     def inner():
+#         x = 30
+#         print(x) 
+#     inner() #30
+#     print(x) #20
+# outer() #30, 20
+# print(x) #10
+
+#W13 D4 T3 - inner/outer exception chains output tracing
+
+# try:
+#     try:
+#         x = 1 / 0 #1. zDiv Error
+#     except ZeroDivisionError: #2. Handled here 
+#         print('inner caught') #2. Prints
+#         raise ValueError('from inner') #3. This is raised
+#     print('after inner try') #4. This is printed, as we propagate to the outside try/except block
+# except ValueError:
+#     print('outer caught ValueError') #5. this handle causes the ValueError raised in the inner block - outer caught ValueError prints
+# except ZeroDivisionError:
+#     print('outer caught ZeroDivision')
+# print('end') #6. This prints
+
+#print wise:
+#1. inner caught
+#2. after inner try
+#3. outer caught ValueError
+#4. end
+
+
+
+# def f():
+#     try:
+#         return 'try' 
+#     finally:
+#         return 'finally'
+
+# def g():
+#     try:
+#         raise RuntimeError('boom') #2. this is called and propagated to the outside
+#     finally:
+#         print('finally runs') #3. this is printed BEFORE we handle the Runtime error outside
+
+# print(f()) #1. finally prints
+# try:
+#     g()
+# except RuntimeError:
+#     print('caught runtime') #4. this is printed.
+    
+#1. finally
+#2. finally runs
+#3. caught runtime
+
+
+# try:
+#     try:
+#         raise TypeError('t') #1. This is raised, no handle so it's propagated to the outside
+#     except ValueError:
+#         print('inner ValueError')
+#     else:
+#         print('inner else')
+#     finally:
+#         print('inner finally') #2. This prints, as w're leaving the inner block
+# except TypeError: #3. This block handles the TypeError from the inner try/except
+#     print('outer TypeError') #3. This prints
+# finally:
+#     print('outer finally') #4. This prints
+    
+#1. inner finally
+#2. outer TypeError
+#3. outer finally
+
+
+# def risky(n):
+#     try:
+#         result = 10 / n
+#     except ZeroDivisionError:
+#         print('zero!')
+#         result = 0
+#     except (TypeError, ValueError) as e:
+#         print(f'bad input: {type(e).__name__}')
+#         result = -1
+#     else:
+#         print(f'ok: {result}') 
+#     finally:
+#         print('done')
+#     return result
+
+# print(risky(2)) #ok: 5.0 -> done -> 5.0
+# print(risky(0)) #zero! -> done -> 0
+# print(risky('x')) #bad input: TypeError -> done -> -1
+
+
+#W13 D4 T4 - str vs repr traps
+
+'''
+str(obj)   → __str__ if defined, else falls back to __repr__
+repr(obj)  → __repr__ if defined, else '<ClassName object at 0x...>'
+print(obj) → calls str(obj)
+
+If ONLY __repr__ defined:
+  str(obj)  → uses __repr__  ← TRAP
+  repr(obj) → uses __repr__
+
+If ONLY __str__ defined:
+  str(obj)  → uses __str__
+  repr(obj) → default '<ClassName object at 0x...>'
+
+Exception repr(e) → always "ClassName(arg1, arg2)" — uses e.args, ignores __str__
+'''
+
+
+# class Token:
+#     def __init__(self, val):
+#         self.val = val
+#     def __repr__(self):
+#         return f"Token({self.val!r})"
+
+# t = Token("hello")
+# print(str(t)) #Token(hello)
+# print(repr(t)) #Token(hello)
+# print(str(t) == repr(t)) #True
+
+
+# class Tag:
+#     def __init__(self, name):
+#         self.name = name
+#     def __str__(self):
+#         return f"<{self.name}>"
+
+# g = Tag("div") 
+# print(str(g)) #<div>
+# print(repr(g)) #<__main__.Tag object at XXXX...>
+# print(str(g) == repr(g)) #False
+
+#Czyli jak mamy str zdefiniowane, to repr go nie używa
+#W odwrotną stronę, jak mamy repr zdefiniowane a nie mamy repr, to str printuje repr
+
+
+
+# class A:
+#     def __init__(self):
+#         self.x = 1
+
+# class B(A):
+#     def __init__(self):
+#         super().__init__()
+#         self.x = 2
+
+# class C(B):
+#     pass
+
+# obj = C()
+# print(obj.x) #2
+
+# try:
+#     try:
+#         raise ValueError('bad')
+#     except ValueError as e:
+#         raise TypeError('worse')
+#     except TypeError:
+#         print('caught type error') #THIS ERROR REMAINS UNHANDLED HERE - EACH LEVEL CAN HANDLE 1 ERROR ONLY!
+# except TypeError:
+#     print('caught the type error in the outer block') #It only gets handled here
+
+
+# class Counter:
+#     _count = 0
+#     def __init__(self):
+#         Counter._count += 1
+#     @classmethod
+#     def get_count(cls):
+#         return cls._count
+
+# a = Counter()
+# b = Counter()
+# c = Counter()
+# print(Counter.get_count())
+
+# x = [1, 2, 3]
+# y = x
+# y += [4]
+# print(x) #[1, 2, 3, 4]
+# print(y is x) #True
+
+# class Base:
+#     __secret = 42
+#     def reveal(self):
+#         return self.__secret
+
+# class Child(Base):
+#     __secret = 99
+
+# obj = Child()
+# print(obj.reveal()) #42
+
+
+# class Animal:
+#     sound = 'generic'
+#     def __init__(self, name):
+#         self.name = name
+#     def speak(self):
+#         return f'{self.name} says {self.sound}'
+
+# class Dog(Animal):
+#     sound = 'woof'
+
+# class Cat(Animal):
+#     def speak(self):
+#         return f'{self.name} meows'
+
+# animals = [Dog('Rex'), Cat('Mimi'), Animal('Thing')]
+# for a in animals:
+#     print(a.speak()) #Rex says woof, 'Mimi meows, 'Thing says generic
+
+
+# def process(items, fn=lambda x: x):
+#     return [fn(item) for item in items]
+
+# nums = [3, -1, 4, -1, 5]
+# print(process(nums)) #[3, -1, 4, -1, 5]
+# print(process(nums, abs)) #[3, 1, 4, 1, 5]
+# print(process(nums, lambda x: x * 2 if x > 0 else 0)) #[6, 0, 8, 0, 10]
+
+
+# def countdown(n):
+#     while n > 0:
+#         yield n
+#         n -= 1
+
+# g = countdown(5) 
+# print(next(g)) #5
+# print(next(g)) #4
+# for x in g: 
+#     print(x) #3, 2, 1
+# print('done') #done
+
+# print('python'.rfind('o'))
+
+
+#CD Python
+
+'''
+Przypisz do zmiennej common_cols nazwy kolumn (w postaci listy lub zbioru), 
+które występują zarówno w df1 jak i df2.
+'''
+
+# import pandas as pd
+
+# df1 = pd.read_csv("df1.csv")
+# df2 = pd.read_csv("df2.csv")
+# common_cols = set(df1.columns).intersection(set(df2.columns))
+
+# import pandas as pd
+
+# x = pd.DataFrame()
+# x = pd.read_csv()
+
+
+# import pandas as pd
+# from collections import Counter
+
+# url = "https://drive.google.com/uc?id=1zHvNI4WpLlRm-rvBZxKKUlYls_UuGHFv"
+# df = pd.read_csv(url)
+
+# pd.set_option('display.max_rows', 20)
+# pd.set_option('display.max_columns', None)
+# print(df.head(5))
+
+# are_equal_rows = df.shape[0] == len(df)
+# print(are_equal_rows)
+
+
+# s = df[df.columns[0]]
+# are_equal_rows = len(df) == len(s)
+# print(are_equal_rows)
+
+
+#CD Python - task 120 
+
+
+'''
+Zadanie
+Zmień index dataframe df na wartości kolumny url. 
+Nie zachowuj kolumny z pierwotnym indeksem.
+'''
+
+
+# import pandas as pd
+# df = pd.read_csv("mini-df.csv")
+
+# df.set_index('url', drop = True, inplace=True)
+# print(df)
+
+#CD Python - task 121
+
+'''Stwórz nowe zmienne o typie DataFrame na podstawie df:
+
+df2 - zawiera pierwsze 50 wierszy oraz wszystkie kolumny
+df3 - zawiera wszystkie wiersze oraz kolumny: price_per_m, rooms_no
+df4 - zawiera wiersze od 4 do 10 oraz kolumny od 6 do 10 (według kolejności występowania)'''
+
+
+# import pandas as pd
+# df = pd.read_csv("mini-df.csv")
+# df2 = df.iloc[:50]
+# df3 = df.loc[:, ['price_per_m', 'rooms_no']]
+# df4 = df.iloc[3:10, 5:10]
+
+#CD Python - task 122
+
+'''
+Ile ofert ma przynajmniej 3 pokoje (rooms_no)?
+'''
+
+# import pandas as pd
+# df = pd.read_csv("mini-df.csv")
+# big_flats = len(df[df['rooms_no'] >= 3])
+
+
+#CD Python - task 123
+
+'''
+Ile procent mieszkań wśród mieszkań z przynajmniej 3 pokojami (rooms_no) ma centralne (urban) ogrzewanie?
+
+Przypisz procent zaokrąglony do 2 miejsc po przecinku do zmiennej urban_perc
+'''
+
+# import pandas as pd
+# df = pd.read_csv("mini-df.csv")
+# pd.set_option('display.max_columns', None)
+# df.info
+
+# filtered_df = df[df['rooms_no'] >= 3]
+# urban_perc = round(len(filtered_df[df['heating'] == 'urban'])/(len(filtered_df)) * 100, 2)
+# print(urban_perc)
+
+
+# x = 'adi'
+# x[0] = 'ba'
+# print(x)
+
+# import os
+# path = 'reports/2024/summary.csv'
+# head, tail = os.path.split(path)
+# root, ext = os.path.splitext(tail)
+# print(root)
+# print(ext)
+
+# class Foo:
+#     def __init__(self, x):
+#         self.x = x
+
+#     def __eq__(self, other):
+#         return self.x == other.x
+
+#     def __str__(self):
+#         return f'Foo({self.x})'
+
+# a = Foo(3)
+# b = Foo(3)
+# print(a == b) #True
+# print(str(a)) #Foo(3)
+# print(a is b) #False
+
+# data = [0, '', None, 1, 'a', [], [0]]
+# result = list(filter(bool, data))
+# print(len(result)) #3
+
+# class Formatter:
+#     def format(self, val):
+#         return str(val)
+
+#     def render(self):
+#         return f'[{self.format(42)}]'
+
+# class HexFormatter(Formatter):
+#     def format(self, val):
+#         return hex(val)
+
+# f = HexFormatter()
+# print(f.render())
+
+#CD Python - task 124 
+
+
+'''
+Możemy odwoływać się do kolumn w DataFrame nie tylko poprzez df["column_name"] , lecz również używając składni: df.column_name.
+
+Zapis df.column_name jest jednak trochę podchwytliwy, ponieważ może prowadzić do błędów, jeśli:
+
+nazwa kolumny pokrywa się z istniejącą metodą (np. count, mean)
+nazwa kolumny zawiera spacje lub znaki specjalne
+nazwa kolumny pokrywa się z inną zmienną w kodzie
+Przypisz do zmiennej dates daty zamówienia z df w postaci pd.Series.
+'''
+
+
+# import pandas as pd
+
+# data = {
+#     "id": [1, 2, 3, 4, 5],
+#     "order date": ["2024-01-01", "2024-01-03", "2024-01-05", "2024-01-07", "2024-01-10"],
+#     "value": [100, 150, 120, 180, 130]
+# }
+# df = pd.DataFrame(data)
+
+# values = df.value
+# print(values)
+
+# dates = None
+# df['order_date'] = df['order date'] #tu w razie co możnaby jeszcze użyć pd.to_datetime
+# dates = df.order_date
+# print(dates)
+
+
+#CD Python - task 125
+
+'''
+Ile mieszkań w danych df ma taras lub ogród?
+
+Przypisz liczbę mieszkań do zmiennej cosy_flats
+'''
+
+# import pandas as pd
+# df = pd.read_csv("mini-df.csv")
+
+# df.describe()
+# cosy_flats = len(df[(df['garden'] == True) | (df['terrace'] == True)])
+# print(cosy_flats)
+
+
+#CD Python - task 126
+
+'''
+Skonwertuj kolumny w DataFrame df na odpowiednie typy numeryczne i daty. Niepoprawne dane tekstowe zamień na NaN.
+'''
+
+# import pandas as pd
+
+# data = {
+#     "delivery_date": ["2024-01-10", "2024-02-15", "2024-03-20"],
+#     "price": ["100.5", "200", "408"],
+#     "discount": ["0.1", "0.25", None],
+#     "rating": ["4.5", "3", "not available"]
+# }
+
+# df = pd.DataFrame(data)
+# print(df.dtypes)
+# df['delivery_date'] = pd.to_datetime(df["delivery_date"], errors = 'coerce', format = '%Y-%m-%d')
+# df['price'] = pd.to_numeric(df['price'], errors = 'coerce')
+# df['discount'] = pd.to_numeric(df['discount'], errors = 'coerce')
+# df['rating'] = pd.to_numeric(df['rating'], errors = 'coerce')
+# print(df.dtypes)
+
+
+
+#CD Python - task 127
+
+'''
+Posortuj oferty mieszkań w df na podstawie lokalizacji geograficznej: od zachodu do wschodu i od północy do południa.
+'''
+
+
+#W14 D2 - Mock PCAP exams 
+
+# import pandas as pd
+# df = pd.read_csv("mini-df.csv")
+
+# pd.set_option('display.max_columns', None)
+# print(df.head())
+# df = df.sort_values(['longitude', 'latitude'], ascending = [True, False])
+
+# def gen():
+#     yield 1
+#     yield 2
+#     yield 3
+
+# g = gen()
+# print(next(g))
+# print(next(g))
+# g2 = gen()
+# print(next(g2))
+
+# data = [None, 0, '', 'hello', [], {1: 2}, False]
+# result = list(filter(None, data))
+# print(result) #['hello', {1: 2}]
+
+# names = ['Charlie', 'Alice', 'Bob']
+# result = sorted(names, key=lambda s: s[-1])
+# print(result[0])
+# print(result[-1])
+# print(result)
+
+# import os
+# p = '/var/log/app/errors.log'
+# print(os.path.basename(p))
+# print(os.path.dirname(p).split('/')) #['', 'var', 'log', 'app]
+
+# class Tracker:
+#     __slots__ = ['value']
+
+#     def __init__(self, v):
+#         self.value = v
+
+# t = Tracker(10)
+# print(t.value)
+# print(hasattr(t, '__dict__')) #False
+
+
+# with open('test.txt', 'r+') as f:
+#     f.seek(0, 2)
+#     f.write('!')
+# f2 = open('test.txt', 'r')
+# print(f2.read())
+# f2.close()
+
+# ops = [lambda x: x + 1, lambda x: x * 2, lambda x: x ** 2]
+# result = ops[0](ops[1](ops[2](2)))
+# print(result) #9
+
+#CD Python - task 128
+
+'''
+Zadanie
+Ile jest mieszkań, które zostały wybudowane między 2000 a 2012 rokiem (włącznie)
+i nie mają podanego właściciela budynku (build_owner)?
+
+Odpowiedź przypisz do zmiennej count_flats.
+'''
+
+# import pandas as pd
+# df = pd.read_csv("mini-df.csv")
+# pd.set_option('display.max_columns', None)
+# df.head(5)
+# df = df[((df['build_year'] >= 2000) & (df['build_year'] <= 2012)) & df['build_owner'].isna()]
+# count_flats = len(df)
+
+
+#CD Python - task 129
+
+'''
+Zadanie
+Jaka jest średnia cena za metr 10 mieszkań, które mają najmniejszą powierzchnię?
+
+Przypisz średnią zaokrągloną do 2 miejsc po przecinku do zmiennej avg_price.
+'''
+
+# import pandas as pd
+# df = pd.read_csv("mini-df.csv")
+# pd.set_option('display.max_columns', None)
+# df.head(5)
+# df = df.sort_values('area')
+# first_ten = df[:10]
+# avg_price = first_ten.describe()
+# avg_price = 13012.50
+
+
+#CD Python - task 130
+
+'''
+Więcej ogłoszeń o pracę zawiera w kolumnie z technologiami słowo SQL czy Python?
+Zachowaj wielkość liter.
+
+Jeżeli jest to SQL, przypisz wartość True do zmiennej sql_more_often, w innym przypadku przypisz wartość False.
+'''
+
+# import pandas as pd
+# df = pd.read_csv("offers.csv")
+# pd.set_option('display.max_columns', None)
+# print(df.head(5))
+
+# print(df.columns)
+# counters = {'Python': 0, 'SQL': 0}
+# sql_more_often = None
+# for index, row in df.iterrows():
+#     # techs = str(row['TECHNOLOGIE']).split()
+#     # print(techs)
+#     if 'Python' in str(row['TECHNOLOGIE']).split():
+#         counters['Python'] += 1
+#     elif 'SQL' in str(row['TECHNOLOGIE']).split():
+#         counters['SQL'] += 1
+
+# if counters['Python'] > counters['SQL']:
+#     sql_more_often = False
+# else:
+#     sql_more_often = True
+
+# print(counters)
+# print(sql_more_often)
+
+#CD Python - task 131
+
+'''
+Ile ofert pracy zawiera w technologiach słowo Python i ma zdalny tryb pracy?
+
+Przypisz ilość ofert do zmiennej cnt_offers.
+'''
+
+# import pandas as pd
+# df = pd.read_csv("offers.csv")
+# pd.set_option('display.max_columns', None)
+# print(df.columns)
+
+# df = df[df['TYP PRACY'] == 'Remote']
+# print(df.head(5))
+
+# df = df[df['TECHNOLOGIE'].str.contains('Python')]
+# print(df.head(5))
+# cnt_offers = len(df)
+
+
+
+
+#W14 D3 - PCAP Mock exams exercises
+
+# class Animal:
+#     def __init__(self, name):
+#         self.name = name
+
+#     def speak(self):
+#         return f'{self.name} speaks'
+
+# class Dog(Animal):
+#     def speak(self):
+#         return f'{self.name} barks'
+
+#     def describe(self):
+#         return self.speak()
+
+# d = Dog('Rex')
+# print(d.describe())
+
+
+
+# class Printer:
+#     def output(self, text):
+#         return text
+
+#     def print_all(self, items):
+#         return [self.output(i) for i in items]
+
+# class UpperPrinter(Printer):
+#     def output(self, text):
+#         return text.upper()
+
+# up = UpperPrinter()
+
+# print(up.print_all(['hello', 'world']))
+
+# class Shape:
+#     def area(self):
+#         return 0
+
+#     def summary(self):
+#         return f'Area: {self.area()}'
+
+# class Square(Shape):
+#     def __init__(self, side):
+#         self.side = side
+
+#     def area(self):
+#         return self.side ** 2
+
+# s = Square(4)
+# print(s.summary())
+
+# with open('log.txt', 'w') as f:
+#     f.write('ERROR: timeout')
+
+# with open('log.txt', 'r') as f:
+#     line = f.readline()
+#     rest = f.read()
+
+# print(repr(line))
+# print(repr(rest))
+
+
+# data = ['apple', 'banana', 'cherry', 'date']
+# result = sorted(data, key=lambda s: (len(s), s))
+# print(result[0])
+# print(result[-1])
+
+
+# import sys
+
+# print(type(sys.modules) is dict)
+# print(type(sys.argv) is list)
+
+# try:
+#     x = None + 1
+# except TypeError as e:
+#     print(type(e).__name__) #TypeError
+#     print('caught') #caught
+
+# class Money:
+#     def __init__(self, amount):
+#         self.amount = amount
+
+#     def __add__(self, other):
+#         return Money(self.amount + other.amount)
+
+#     def __str__(self):
+#         return f'${self.amount}'
+
+# a = Money(10)
+# b = Money(5)
+# print(a + b) #$15
+# print(str(a)) #$10
+
+
+# class Base:
+#     def greet(self):
+#         return 'base'
+
+#     def run(self):
+#         return self.greet()
+
+# class Sub(Base):
+#     def greet(self):
+#         return 'sub'
+
+# s = Sub()
+# print(s.greet())
+
+
+
+# class A:
+#     pass
+
+# class B(A):
+#     pass
+
+# print(B.__bases__) #(<class '__main__.A'>,)
+# print(A.__bases__) #(<class 'object'>,)
+
+
+#CD Python - task 132
+
+'''Zimportuj dane z pliku clients.csv.
+
+Ogranicz dane tylko do kobiet, posortuj według alfabetycznie według nazwiska oraz zapisz kolumnę z nr pesel jako indeks.'''
+
+# import pandas as pd
+
+# df = pd.read_csv('clients.csv')
+# df = df[df['plec'] == 'K']
+# df.set_index('pesel', inplace = True)
+# df.sort_values('nazwisko', inplace = True)
+# print(df.head)
+
+
+#CD Python - task 133
+
+'''Zadanie
+Ile kosztuje najmniejsze mieszkanie, które zawiera piwnicę lub garaż? Przypisz cenę do zmiennej price.'''
+
+# import pandas as pd
+# df = pd.read_csv("mini-df.csv")
+# df.head()
+
+# conditions =  (df['garage'] == 1) | (df['basement'] == 1)
+# df = df[conditions]
+# pd.set_option('display.max_columns', None)
+# df = df.sort_values('area')
+# price = df.iloc[0]['price']
+# print(price)
+
+#CD Python - task 134
+
+'''Zadanie
+Jaki odsetek ofert pracy zawiera w wymaganych technologiach AI lub ML?
+
+Wynik zaokrąglony do 2 miejsc po przecinku zapisz w zmiennej ai_share.
+'''
+
+# import pandas as pd
+# df = pd.read_csv("offers.csv")
+
+# pd.set_option('display.max_columns', None)
+# ai_offers = df[(df['TECHNOLOGIE'].str.contains('AI')) | (df['TECHNOLOGIE'].str.contains('ML'))]
+# ai_share = round(len(ai_offers) / len(df) * 100, 2)
+# print(ai_share)
+
+# print(len(""""""))
+# print(len('\''))
+# print(chr(ord('A') + 1) == 'B')
+
+
+# class Renderer:
+#     def render(self, text):
+#         return text
+
+#     def output(self):
+#         return self.render('data')
+
+# class HtmlRenderer(Renderer):
+#     def render(self, text):
+#         return f'<p>{text}</p>'
+
+# hr = HtmlRenderer()
+# print(hr.output())
+
+
+# def logger(prefix):
+#     messages = []
+#     def log(msg):
+#         messages.append(f'{prefix}: {msg}')
+#         return messages[:]
+#     return log
+
+# info = logger('INFO')
+# warn = logger('WARN')
+# print(info('start'))
+# print(warn('alert'))
+# print(info('end'))
+
+
+
+# def countdown(n):
+#     while n >= 0:
+#         yield n
+#         n -= 1
+
+# g = countdown(3)
+# vals = list(g)
+# print(vals)
+# print(next(g, 'done'))
+
+# fns = [lambda x, k=k: x * k for k in [2, 3, 5]]
+# results = [f(4) for f in fns]
+# print(results)
+
+#CD Python - task 135
+
+'''
+Przefiltruj df, wybierając oferty mieszkań, których wartość w kolumnie date
+należy do: '2020-12-16', '2020-09-07', '2020-12-21', '2020-10-06', '2020-10-18'.
+
+Wynik przypisz do zmiennej df_limited.
+'''
+
+
+# import pandas as pd 
+# df = pd.read_csv("mini-df.csv")
+# df.head()
+
+# pd.set_option('display.max_columns', None)
+# df_limited = df[df['date'].str.contains('2020-12-16|2020-09-07|2020-12-21|2020-10-06|2020-10-18')]
+# print(df_limited)
+
+
+#CD Python - task 136
+
+'''Zamień typy danych we wszystkich kolumnach df na dane numeryczne.'''
+
+# import pandas as pd
+
+# df = pd.DataFrame({
+#     "price": ["450000", "520000", "610000", None, "480000"],
+#     "area": ["45.5", "60.0", "72.3", "50.0", None],
+#     "rooms": ["2", "3", "3", "2", "4"],
+#     "floor": ["1", "2", "parter", "4", "3"],
+#     "year_built": ["2005", "2010", "brak", "1998", "2001"],
+# })
+
+# columns_to_convert = ['price', 'area', 'rooms', 'floor', 'year_built']
+
+# for column in columns_to_convert:
+#     df[column] = pd.to_numeric(df[column], errors = 'coerce')
+# print(df.head)
+# print(df.dtypes)
+
+
+#CD Python - task 137
+
+'''
+Jaką powierzchnię ma mieszkanie z rynku pierwotnego o najwyższej cenie za metr kwadratowy?
+
+Przypisz powierzchnię do zmiennej area.
+'''
+
+# import pandas as pd
+# df = pd.read_csv("mini-df.csv")
+# df.head()
+
+# df.sort_values('price_per_m', ascending = False, inplace = True)
+# area = df.iloc[0]['area']
+# print(area)
+
+
+
+#CD Python - task 138
+
+'''
+Policz liczbę wierszy, dla których build_owner
+nie jest pusty oraz co najmniej jedna z kolumn build_type lub build_status nie jest pusta.
+'''
+
+# import pandas as pd
+# df = pd.read_csv("mini-df.csv")
+# df.head()
+# condition = df['build_owner'].notna() & (df['build_type'].notna() | df['build_status'].notna())
+# df = df[df['build_owner'].notna() & (df['build_type'].notna() | df['build_status'].notna())]
+# number = len(df)
+# print(number)
+
+
+
+
+#PCAP MOCK EXAMS - some qs to confirm AFTER answering
+
+# a = [1, 2, 3]
+# b = ['x', 'y']
+# result = list(zip(a, b))
+# print(result) #[(1, 'x'), (2, 'y')] - SO ONLY THE ELEMENTS THAT CAN BE ZIPPED AND HAVE A PAIR
+# print(len(result)) #2
+
+
+# values = [0, '', None, 1, 'hello', [], False, 42]
+# result = list(filter(None, values))
+# print(result) #[1, 'hello', 42]
+# print(len(result)) #3
+
+
+# class Strict:
+#     pass
+
+# try:
+#     raise Strict()
+# except TypeError:
+#     print('type error')
+# except Exception:
+#     print('exception')
+
+
+# items = [1, 'two', 3.0, None]
+# print(f'{items!r}') #[1, 'two', 3.0, None]
+# print(f'{len(items)!s}') #4
+
+
+# class Team:
+#     members = []
+
+# t1 = Team()
+# t2 = Team()
+# t1.members.append('Alice')
+
+# print(t1.__dict__) #{}
+# print(t2.__dict__) #{}
+# print(t1.members)#['Alice]
+# print(t2.members) #['Alice]
+# print(t1.members is t2.members) #True
+
+
+# data = [3, 1, 4, 1, 5, 9, 2, 6]
+# unique_sorted = sorted(set(data))
+# print(unique_sorted)
+# print(unique_sorted[-1])
+
+
+#CD Python - 20.04.2026
+
+# import pandas as pd
+# df = pd.read_csv('ohlc_mock_data.csv', index_col ='timestamp')
+# print(df.head)
+# print(df.shape)
+# print(len(df.iloc[0:5, :]))
+
+# import pandas as pd 
+# data = {
+#     "id": [1, 2, 3, 4, 5],
+#     "full_name": [
+#         "Anna Kowalska",
+#         "Jan Nowak",
+#         "Kasia Zielińska",
+#         "Piotr Wiśniewski",
+#         "Ola Mazur"
+#     ]
+# }
+
+# df = pd.DataFrame(data)
+# df.head()
+
+# df['first_name'] = df['full_name'].apply(lambda x: x.split()[0])
+# df['last_name'] = df['full_name'].apply(lambda x: x.split()[1])
+# print(df)
+
+# def get_gender(full_name):
+#     first_name = full_name.split()[0]
+#     if first_name.endswith('a'):
+#         gender = 'female'
+#     else:
+#         gender = 'male'
+#     return gender
+
+# df['gender'] = df['full_name'].apply(get_gender)
+# print(df)
+
+
+#CD Python - 21.04 - task 
+
+'''
+Dodaj kolumnę build_age, która liczy wiek budynku w latach. Usuń kolumnę build_year.
+'''
+
+
+# import pandas as pd
+
+# df = pd.read_csv("mini-df.csv")
+# df.head()
+
+# from datetime import datetime
+# today = datetime.today() #można by było tak, ale w zasadzie po co
+
+
+# pd.set_option('display.max_columns', None)
+# df['build_age'] = 2026 - df['build_year']
+# df.drop(columns = ['build_year'], inplace = True)
+
+
+#CD Python - 21.04 - task2
+
+'''
+Stwórz kolumnę requires_python, w której są wartości True/False. 
+Ustaw wartość True dla wierszy zawierających słowo Python w kolumnie TECHNOLOGIE lub OPIS. 
+Pomiń wielkość liter (uwzględniaj zarówno Python jak i python).
+
+Następnie przypisz do zmiennej python_share proporcję ile ofert z wszystkich wymaga Pythona. 
+Zaokrąglij do 2 cyfr po przecinku.
+'''
+
+
+# import pandas as pd
+# df = pd.read_csv("offers.csv")
+# df.head()
+
+# condition1 = df['OPIS'].str.lower().str.contains('python')
+# condition2 = df['TECHNOLOGIE'].str.lower().str.contains('python')
+
+# python_offers = df[condition1 | condition2]
+# pd.set_option('display.max_columns', None)
+# print(python_offers.head())
+# python_share = round(len(python_offers) / len(df), 2)
+# print(python_share)
+
+
+#CD Python - 21.04 - task3
+
+'''
+Zmień precyzję w kolumnie price_per_m, aby wartości miały 4 cyfry po przecinku.
+
+Oblicz je na podstawie kolumn area i price.
+'''
+# import pandas as pd
+# df = pd.read_csv("mini-df.csv")
+# df.head()
+# df['price_per_m'] = round(df['price'] / df['area'], 4)
+# pd.set_option('display.max_columns', None)
+# print(df.head())
+
+#CD Python - 21.04 - task4
+
+'''
+Uzupełnij brakujące wartości w kolumnie build_year medianą z tej kolumny.
+
+Oblicz średnią wartość w tej kolumnie i przypisz ją do zmiennej mean_build_year.
+'''
+
+# import pandas as pd
+# df = pd.read_csv("mini-df.csv")
+# df.head()
+
+# print(df['build_year'].isna().sum())
+# df['build_year'] = df['build_year'].fillna(df['build_year'].median())
+# mean_build_year = df['build_year'].mean()
+# print(mean_build_year)
+
+
+#CD Python - 21.04 - task5
+'''
+Jeżeli mieszkanie zawiera jedno z poniższych typów ogrzewania: 
+"electrical", "boiler_room", "gas", zwiększ jego cenę (kolumnę price) o 500.
+
+'''
+# import pandas as pd
+# df = pd.read_csv("mini-df.csv")
+# df.head()
+# pd.set_option('display.max_columns', None)
+
+# heating_to_change = ["electrical", "boiler_room", "gas"]
+# df.loc[df["heating"].isin(heating_to_change), "price"] += 500
+
+
+
+#CD Python - 21.04 - task6
+'''
+Jaki jest najbardziej popularna wartość w kolumnie build_type?
+
+Przypisz odpowiedź do zmiennej top_build_type.
+'''
+
+
+# import pandas as pd
+# df = pd.read_csv("mini-df.csv")
+# top_build_type = df['build_type'].value_counts().head(1).index
+# print(top_build_type)
+
+
+#CD Python - 21.04 - task7
+
+'''
+Stwórz kolumnę cnt_benefits, która sumuje ile benefitów ma każde mieszkanie.
+
+Benefity znajdują się w kolumnach z wartościami 0/1 pojawiających się w df po kolumnie date
+
+Przypisz wartość indexu mieszkania z największą ilością benefitów do zmiennej best_flat_id.
+'''
+
+# import pandas as pd
+# df = pd.read_csv("mini-df.csv")
+# pd.set_option('display.max_columns', None)
+
+# benefit_columns = 'air_conditioning	balcony	basement	garage	garden	lift	nan	separate_kitchen	terrace	two_storey	usable_room	alarm	anti_burglary_door	closed_area	entryphone	monitoring	roller_shutters'.split()
+
+# df['cnt_benefits'] = df[benefit_columns].sum(axis = 1)
+# best_flat_id = df[df['cnt_benefits'] == df['cnt_benefits'].max()].index
+# print(best_flat_id)
+
+
+
+#CD Python - 22.04 - task 1
+
+'''
+Zastąp wartości boiler_room w kolumnie heating wartościami gas.
+
+Jaką proporcję wszystkich niebrakujących wierszy stanowią wiersze z wartością gas?
+Zaokrąglij do 2 cyfr po przecinku i przypisz do zmiennej gas_share.
+'''
+
+
+# import pandas as pd
+# df = pd.read_csv("mini-df.csv")
+# df.head()
+
+# df['heating'] = df['heating'].replace('boiler_room', 'gas')
+# length_without_nans = df['heating'].isna().sum()
+# gas_share = round(df['heating'].value_counts()['gas'] / (len(df) - length_without_nans), 2)
+# print(gas_share)
+
+
+#CD Python - 22.04 - task 2
+
+'''Stwórz w DataFrame df kolumnę build_category w której wierszami z wartościami block, apartment, 
+tenement w kolumnie build_type przypiszesz wartość shared, a dla wierszy z wartością house -> standalone.'''
+
+# import pandas as pd
+# df = pd.read_csv("mini-df.csv")
+# df.head()
+
+# mask_plan = {
+#     'block': 'shared',
+#     'apartment': 'shared',
+#     'tenement': 'shared',
+#     'house': 'standalone'
+#     }
+# df['build_category'] = df['build_type'].map(mask_plan)
+# print(df['build_category'])
+
+
+#CD Python - 22.04 - task 3
+
+'''
+Stwórz w DataFrame df kolumnę price_category.
+
+Kolumna powinna przyjmować następujące kategorie na podstawie wartości kolumny price_per_m:
+
+poniżej 8000 -> cheap
+8000-9999 -> moderate
+10000 - 12999 -> expensive
+powyżej 13000 -> very expensive
+Ile mieszkań przyjmuje najczęściej spotykaną kategorię? Przypisz odpowiedź do zmiennej cnt_top
+'''
+
+# import pandas as pd
+# df = pd.read_csv("mini-df.csv")
+# df.head()
+
+# def check_category(price):
+#     if price < 8000:
+#         return 'cheap'
+#     elif 8000 <= price <= 9999:
+#         return 'moderate'
+#     elif 10000 <= price <= 12999:
+#         return 'expensive'
+#     else:
+#         return 'very expensive'
+
+# df['price_category'] = df['price_per_m'].apply(check_category)
+# print(df['price_category'])
+
+# cnt_top = df['price_category'].value_counts().head(1).item()
+# print(cnt_top)
+
+
+#CD Python - 22.04 - task 4
+
+'''
+Która z kolumn, poza kolumną url zawiera największą liczbę unikalnych wartości?
+
+Przypisz nazwę kolumny do zmiennej most_unique_col
+'''
+
+
+# import pandas as pd
+# df = pd.read_csv("mini-df.csv")
+# df.head()
+
+# pd.set_option('display.max_columns', None)
+# most_unique_col = df.nunique()[1:].head(1).index.item() # TU ŹLE - tu ogólnie wydziubałem to, ALE WCALE ONE NIE SĄ POSORTOWANE, WIĘC WYNIK BYŁ ZŁY - to była po prostu druga kolumna - akurat tam ułożyły się posortowane i tak sięwydawało xd
+
+
+# pd.set_option('display.max_columns', None)
+# unique_col_numbers = list(df.nunique()[1:].items()) #lista oprócz urla, akurat był w pozycji 0
+# most_unique_col = sorted(unique_col_numbers, key = lambda x: x[1], reverse = True)[0][0]
+# print(most_unique_col)
