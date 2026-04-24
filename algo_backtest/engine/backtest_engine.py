@@ -160,6 +160,74 @@ class BacktestEngine:
             return completed_trades_by_strategy
         
     
+    def process_tick(self, ticker: str, price: float, side: str, tick_time: Optional[str] = None) -> list:
+        """
+        Process a single tick against all open positions for a given ticker.
+
+        Uses bid/ask side semantics to resolve SL/TP:
+          - BUY position  SL: 'A' tick (aggressive seller) at price <= stop_loss
+          - BUY position  TP: 'B' tick (aggressive buyer)  at price >= take_profit
+          - SELL position SL: 'B' tick (aggressive buyer)  at price >= stop_loss
+          - SELL position TP: 'A' tick (aggressive seller) at price <= take_profit
+
+        Args:
+            ticker: Instrument symbol.
+            price: Tick price.
+            side: 'B' (aggressive buyer) or 'A' (aggressive seller).
+            tick_time: ISO timestamp string of the tick, used as exit_time on the trade.
+
+        Returns:
+            List of newly closed Trade objects (empty if none closed).
+        """
+        newly_closed: list = []
+        triggered = []
+
+        for position in list(self.position_manager.positions):
+            if position.ticker != ticker:
+                continue
+
+            exit_reason: Optional[str] = None
+
+            if position.side == 'BUY':
+                if side == 'A' and price <= position.stop_loss:
+                    exit_reason = 'Buy SL hit'
+                elif side == 'B' and price >= position.take_profit:
+                    exit_reason = 'Buy TP hit'
+            elif position.side == 'SELL':
+                if side == 'B' and price >= position.stop_loss:
+                    exit_reason = 'Sell SL hit'
+                elif side == 'A' and price <= position.take_profit:
+                    exit_reason = 'Sell TP hit'
+
+            if exit_reason:
+                triggered.append((position, exit_reason))
+
+        for position, exit_reason in triggered:
+            self.position_manager.remove_position(position)
+            trade = Trade(
+                position.position_id,
+                position.ticker,
+                position.side,
+                position.entry_price,
+                price,
+                position.quantity,
+                stop_loss=position.stop_loss,
+                take_profit=position.take_profit,
+                exit_reason=exit_reason,
+                strategy_id=position.strategy_id,
+                strategy_name=position.strategy_name,
+                entry_time=position.open_time,
+                exit_time=tick_time,
+            )
+            logger.info(
+                f'@Strategy {position.strategy_id}, {position.strategy_name} || '
+                f'Position {trade.position_id} @ {position.ticker} closed at {price} ({side} tick) as {exit_reason}'
+            )
+            newly_closed.append(trade)
+            self.completed_trades.append(trade)
+
+        return newly_closed
+
     def force_close_all(self, ticker: str, strategy_id: str, price: float, candle_time: Optional[str] = None) -> None:
         '''Force close all open positions on a given ticker'''
         filtered_positions = [position for position in self.position_manager.positions if (ticker == position.ticker and position.strategy_id == strategy_id)]
